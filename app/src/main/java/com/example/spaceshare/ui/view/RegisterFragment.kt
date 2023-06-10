@@ -1,4 +1,4 @@
-package com.example.spaceshare.ui.register
+package com.example.spaceshare.ui.view
 
 import android.os.Bundle
 import android.util.Log

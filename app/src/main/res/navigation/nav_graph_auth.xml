@@ -7,7 +7,7 @@
     <!-- Login Fragment -->
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.spaceshare.ui.login.LoginFragment"
+        android:name="com.example.spaceshare.ui.view.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login">
         <action
@@ -20,7 +20,7 @@
     <!-- Register Fragment -->
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.spaceshare.ui.register.RegisterFragment"
+        android:name="com.example.spaceshare.ui.view.RegisterFragment"
         android:label="Register"
         tools:layout="@layout/fragment_register">
         <action

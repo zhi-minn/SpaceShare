@@ -1,4 +1,4 @@
-package com.example.spaceshare.ui.login
+package com.example.spaceshare.ui.view
 
 import android.content.Intent
 import android.os.Bundle
