@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "635336192404",
+    "project_id": "spaceshare-244fe",
+    "storage_bucket": "spaceshare-244fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635336192404:android:5dfab8201b2f8e66985f81",
+        "android_client_info": {
+          "package_name": "com.example.spaceshare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "635336192404-h6qhc9clijr5tf454f8ngblt6o1jsrs7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.spaceshare",
+            "certificate_hash": "15a5404bf6c71f59a8cc04c45fecdc0552f2b439"
+          }
+        },
+        {
+          "client_id": "635336192404-714smj49dlgn30poq24413h1kkcsq1bi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOHG8AKbFEvQTcvvVcrypB3oRQGb2_EHc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "635336192404-714smj49dlgn30poq24413h1kkcsq1bi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
