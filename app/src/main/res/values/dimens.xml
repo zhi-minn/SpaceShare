@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="button_text">16sp</dimen>
+    <dimen name="bottom_navigation_margin">24dp</dimen>
+    <dimen name="bottom_navigation_corner_radius">10dp</dimen>
 </resources>
