@@ -86,4 +86,7 @@ dependencies {
 
     // Password strength
     implementation 'com.nulab-inc:zxcvbn:1.7.0'
+
+    // Views
+    implementation("androidx.cardview:cardview:1.0.0")
 }
