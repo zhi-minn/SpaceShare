@@ -15,6 +15,7 @@
             app:destination="@id/profileFragment" />
     </fragment>
 
+    <!-- Profile Fragment -->
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.spaceshare.ui.view.ProfileFragment"
@@ -23,5 +24,17 @@
         <action
             android:id="@+id/action_profileFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_listingFragment"
+            app:destination="@id/listingFragment" />
     </fragment>
+
+    <!-- Listing Fragment -->
+    <fragment
+        android:id="@+id/listingFragment"
+        android:name="com.example.spaceshare.ui.view.ListingFragment"
+        android:label="Listing"
+        tools:layout="@layout/fragment_listing" >
+    </fragment>
+
 </navigation>
