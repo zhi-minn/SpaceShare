@@ -10,4 +10,5 @@
     <dimen name="bottom_navigation_margin">24dp</dimen>
     <dimen name="bottom_navigation_corner_radius">10dp</dimen>
     <dimen name="textbox_corner_radius">20dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>
