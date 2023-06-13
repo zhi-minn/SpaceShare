@@ -53,6 +53,7 @@ class RegisterFragment : Fragment() {
         val passwordScore = Zxcvbn().measure(password).score
         if (passwordScore == 0) {
             ToastUtil.showShortToast(requireContext(), "Please use a more secure password")
+            return
         }
 
         auth.createUserWithEmailAndPassword(email, password)
