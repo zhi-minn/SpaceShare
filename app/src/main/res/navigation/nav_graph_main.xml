@@ -23,5 +23,15 @@
         <action
             android:id="@+id/action_profileFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_createListingFragment"
+            app:destination="@id/createListingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createListingFragment"
+        android:name="com.example.spaceshare.ui.view.CreateListingFragment"
+        android:label="CreateListing"
+        tools:layout="@layout/fragment_create_listing" >
     </fragment>
 </navigation>
