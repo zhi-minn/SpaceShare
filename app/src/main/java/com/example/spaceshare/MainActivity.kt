@@ -1,5 +1,6 @@
 package com.example.spaceshare
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var sharedPreferencesListener: SharedPreferences.OnSharedPreferenceChangeListener
+
     companion object {
         private val TAG = this::class.simpleName
     }
@@ -52,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.selectedItemId = if (SharedPreferencesManager.isHostMode())
             R.id.action_listings else
             R.id.action_search
-        SharedPreferencesManager.registerListener(::updateUI)
+        sharedPreferencesListener = SharedPreferencesManager.registerListener(::updateUI)
         updateUI(SharedPreferencesManager.isHostMode())
     }
 
@@ -69,6 +72,11 @@ class MainActivity : AppCompatActivity() {
             searchTab.isVisible = true
             listingsTab.isVisible = false
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        SharedPreferencesManager.unregisterListener(sharedPreferencesListener)
     }
 
     override fun onSupportNavigateUp(): Boolean {
