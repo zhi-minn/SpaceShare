@@ -4,5 +4,5 @@ import com.example.spaceshare.models.Listing
 
 interface ListingRepository {
 
-    fun createListing(listing: Listing)
+    fun createListing(listing: Listing) : String
 }
