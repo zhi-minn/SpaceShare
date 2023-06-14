@@ -10,7 +10,9 @@ import com.example.spaceshare.ui.view.ListingFragment
 import com.example.spaceshare.ui.view.ProfileFragment
 import com.example.spaceshare.ui.view.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController

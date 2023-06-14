@@ -11,4 +11,7 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_auth">AuthActivity</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="placeholder_title">Placeholder title</string>
+    <string name="placeholder_description">Placeholder description</string>
+    <string name="post">Post</string>
 </resources>

@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.NavController
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentProfileBinding
 import com.example.spaceshare.manager.SharedPreferencesManager
