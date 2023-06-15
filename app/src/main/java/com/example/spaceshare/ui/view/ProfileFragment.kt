@@ -1,33 +1,71 @@
 package com.example.spaceshare.ui.view
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.findNavController
 import com.example.spaceshare.R
+import com.example.spaceshare.databinding.FragmentProfileBinding
+import com.example.spaceshare.manager.SharedPreferencesManager
+import com.example.spaceshare.ui.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
+    private lateinit var binding: FragmentProfileBinding
+    private lateinit var sharedPreferencesListener: SharedPreferences.OnSharedPreferenceChangeListener
     private lateinit var navController: NavController
+    @Inject
+    lateinit var mainViewModel: MainViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = findNavController()
 
-        val btnSwitchMode = view.findViewById<TextView>(R.id.btnSwitchMode)
-        btnSwitchMode.setOnClickListener {
-            navController.navigate(R.id.action_profileFragment_to_createListingFragment)
+        navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
+
+        // UI Setup
+        configureUI()
+    }
+
+    private fun configureUI() {
+        mainViewModel.isHostModeLiveData.observe(viewLifecycleOwner) { isHostMode ->
+            updateUI(isHostMode)
+        }
+        updateUI(SharedPreferencesManager.isHostMode())
+        binding.btnSwitchMode.setOnClickListener {
+            SharedPreferencesManager.switchMode()
+            if (SharedPreferencesManager.isHostMode()) {
+                navController.navigate(R.id.action_profileFragment_to_listingFragment)
+            } else {
+                navController.navigate(R.id.action_profileFragment_to_searchFragment)
+            }
         }
     }
 
+    private fun updateUI(isHostMode: Boolean) {
+        binding.btnSwitchMode.text = if (isHostMode)
+            "Switch to client" else
+            "Switch to host"
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mainViewModel.isHostModeLiveData.removeObservers(viewLifecycleOwner)
+    }
 }

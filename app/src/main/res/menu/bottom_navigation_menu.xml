@@ -1,14 +1,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Client-specific Items -->
     <item
-        android:id="@+id/action_search"
+        android:id="@+id/searchFragment"
         android:enabled="true"
         android:icon="@drawable/search"
         android:title="Search"
         app:showAsAction="always" />
 
+    <!-- Host-specific Items -->
     <item
-        android:id="@+id/action_profile"
+        android:id="@+id/listingFragment"
+        android:enabled="true"
+        android:icon="@drawable/list"
+        android:title="Listings"
+        app:showAsAction="always" />
+
+    <!-- Common Items -->
+    <item
+        android:id="@+id/profileFragment"
         android:enabled="true"
         android:icon="@drawable/settings"
         android:title="Profile"

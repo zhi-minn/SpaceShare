@@ -4,7 +4,7 @@ import java.util.Date
 
 data class Listing(
     val id: String? = null,
-    val hostID: String? = null,
+    val hostId: String? = null,
     val photos: List<String>? = null,
     val title: String? = null,
     val price: Double = 0.00,

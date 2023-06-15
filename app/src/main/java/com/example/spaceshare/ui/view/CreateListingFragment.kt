@@ -50,7 +50,7 @@ class CreateListingFragment : Fragment() {
 
         val hostID = firebaseUser?.uid
 
-        val listing = Listing(title = title, price = price, description = description, hostID = hostID)
+        val listing = Listing(title = title, price = price, description = description, hostId = hostID)
 
         db.collection("listings").add(listing)
     }
