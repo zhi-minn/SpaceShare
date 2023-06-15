@@ -21,7 +21,6 @@ class ListingViewModel @Inject constructor(
     fun fetchListings(user: User) {
         viewModelScope.launch {
             val listings = repo.fetchListings(user)
-            Log.i("tag", "Fetched $listings")
             _listingsLiveData.value = listings
         }
     }

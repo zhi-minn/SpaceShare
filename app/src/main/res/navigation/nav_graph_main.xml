@@ -35,6 +35,9 @@
         android:name="com.example.spaceshare.ui.view.ListingFragment"
         android:label="Listing"
         tools:layout="@layout/fragment_listing" >
+        <action
+            android:id="@+id/action_listingFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 
 </navigation>

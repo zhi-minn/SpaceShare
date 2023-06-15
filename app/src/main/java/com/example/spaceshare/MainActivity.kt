@@ -1,24 +1,23 @@
 package com.example.spaceshare
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import com.example.spaceshare.manager.SharedPreferencesManager
-import com.example.spaceshare.ui.view.ListingFragment
-import com.example.spaceshare.ui.view.ProfileFragment
-import com.example.spaceshare.ui.view.SearchFragment
+import com.example.spaceshare.ui.viewmodel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var sharedPreferencesListener: SharedPreferences.OnSharedPreferenceChangeListener
+    @Inject
+    lateinit var mainViewModel: MainViewModel
 
     companion object {
         private val TAG = this::class.simpleName
@@ -33,59 +32,34 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         // Set up the BottomNavigationView
+        setupBottomNavigation()
+    }
+
+    private fun setupBottomNavigation() {
         bottomNavigationView = findViewById(R.id.bottom_navigation_view)
 
-        bottomNavigationView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.action_search -> {
-                    navigateToFragment(SearchFragment())
-                    true
-                }
-                R.id.action_listings -> {
-                    navigateToFragment(ListingFragment())
-                    true
-                }
-                R.id.action_profile -> {
-                    navigateToFragment(ProfileFragment())
-                    true
-                }
-                else -> false
-            }
-        }
+        // UI listeners
+        NavigationUI.setupWithNavController(bottomNavigationView, navController, false)
         bottomNavigationView.selectedItemId = if (SharedPreferencesManager.isHostMode())
-            R.id.action_listings else
-            R.id.action_search
-        sharedPreferencesListener = SharedPreferencesManager.registerListener(::updateUI)
+            R.id.listingFragment else
+            R.id.searchFragment
+        SharedPreferencesManager.isHostMode.observe(this) { isHostMode ->
+            mainViewModel.setIsHostMode(isHostMode)
+        }
+        mainViewModel.isHostModeLiveData.observe(this) { isHostMode ->
+            updateUI(isHostMode)
+        }
+
         updateUI(SharedPreferencesManager.isHostMode())
     }
 
     private fun updateUI(isHostMode: Boolean) {
         val menu = bottomNavigationView.menu
-        // Client-specific tabs
-        val searchTab = menu.findItem(R.id.action_search)
-        // Host-specific tabs
-        val listingsTab = menu.findItem(R.id.action_listings)
-        if (isHostMode) {
-            searchTab.isVisible = false
-            listingsTab.isVisible = true
-        } else {
-            searchTab.isVisible = true
-            listingsTab.isVisible = false
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        SharedPreferencesManager.unregisterListener(sharedPreferencesListener)
+        menu.findItem(R.id.searchFragment).isVisible = !isHostMode
+        menu.findItem(R.id.listingFragment).isVisible = isHostMode
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
-    }
-
-    private fun navigateToFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_nav_host_fragment, fragment)
-            .commit()
     }
 }
