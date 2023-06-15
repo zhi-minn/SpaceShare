@@ -14,7 +14,7 @@ import dagger.hilt.android.components.FragmentComponent
 
 interface ListingRepository {
 
-    fun createListing(listing: Listing)
+    fun createListing(listing: Listing) : String
 
     suspend fun fetchListings(user: User): List<Listing>
 }

@@ -19,7 +19,17 @@ class ListingRepoImpl @Inject constructor(
     }
     private val listingsCollection = db.collection("listings")
     override fun createListing(listing: Listing) {
-        TODO("Not yet implemented")
+        var newListingID = ""
+        listingsCollection.add(listing)
+            .addOnSuccessListener { documentReference ->
+                Log.d("listings", "Added listing with id ${documentReference.id}")
+                newListingID = documentReference.id
+            }
+            .addOnFailureListener { e ->
+                Log.w("listings", "Error adding document", e)
+            }
+
+        return newListingID
     }
 
     override suspend fun fetchListings(user: User): List<Listing> = withContext(Dispatchers.IO){
