@@ -1,60 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/login_page"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="32dp"
-    android:orientation="vertical">
+<layout>
 
-    <ImageView
-        android:id="@+id/logo"
-        android:contentDescription="@string/logo"
-        android:layout_width="93dp"
-        android:layout_height="152dp"
-        android:layout_gravity="center"
-        android:src="@drawable/logo" />
-
-    <EditText
-        android:id="@+id/email"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/login_page"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/edittext_bg"
-        android:drawableStart="@drawable/username_32dp"
-        android:drawablePadding="8dp"
-        android:hint="@string/prompt_email"
-        android:padding="8dp"
-        android:textSize="16sp"
-        android:autofillHints="emailAddress" />
+        android:layout_height="match_parent"
+        android:padding="32dp"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:layout_marginTop="8dp"
-        android:drawableStart="@drawable/password_32dp"
-        android:drawablePadding="8dp"
-        android:padding="8dp"
-        android:background="@drawable/edittext_bg"
-        android:textSize="16sp"
-        android:hint="@string/prompt_password"
-        android:autofillHints="password"/>
+        <ImageView
+            android:id="@+id/logo"
+            android:contentDescription="@string/logo"
+            android:layout_width="93dp"
+            android:layout_height="152dp"
+            android:layout_gravity="center"
+            android:src="@drawable/logo" />
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/action_login"
-        android:textSize="@dimen/button_text" />
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edittext_bg"
+            android:drawableStart="@drawable/username_32dp"
+            android:drawablePadding="8dp"
+            android:hint="@string/prompt_email"
+            android:padding="@dimen/drawable_start_padding"
+            android:textSize="16sp"
+            android:autofillHints="emailAddress" />
 
-    <Button
-        android:id="@+id/btnSignupNav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/action_sign_up"
-        android:textSize="@dimen/button_text"/>
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:layout_marginTop="8dp"
+            android:drawableStart="@drawable/password_32dp"
+            android:drawablePadding="@dimen/drawable_start_padding"
+            android:padding="8dp"
+            android:background="@drawable/edittext_bg"
+            android:textSize="16sp"
+            android:hint="@string/prompt_password"
+            android:autofillHints="password"/>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/action_login"
+            android:textSize="@dimen/button_text" />
+
+        <Button
+            android:id="@+id/btnSignupNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_sign_up"
+            android:textSize="@dimen/button_text"/>
+
+    </LinearLayout>
+
+</layout>

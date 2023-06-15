@@ -1,5 +1,6 @@
 package com.example.spaceshare.ui.view
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,8 +11,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.spaceshare.R
+import com.example.spaceshare.SplashActivity
 import com.example.spaceshare.databinding.FragmentProfileBinding
 import com.example.spaceshare.manager.SharedPreferencesManager
+import com.example.spaceshare.ui.viewmodel.AuthViewModel
 import com.example.spaceshare.ui.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -20,10 +23,11 @@ import javax.inject.Inject
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
-    private lateinit var sharedPreferencesListener: SharedPreferences.OnSharedPreferenceChangeListener
     private lateinit var navController: NavController
     @Inject
     lateinit var mainViewModel: MainViewModel
+    @Inject
+    lateinit var authViewModel: AuthViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +43,7 @@ class ProfileFragment : Fragment() {
 
         // UI Setup
         configureUI()
+        configureButtons()
     }
 
     private fun configureUI() {
@@ -46,6 +51,10 @@ class ProfileFragment : Fragment() {
             updateUI(isHostMode)
         }
         updateUI(SharedPreferencesManager.isHostMode())
+    }
+
+    private fun configureButtons() {
+        // Switching modes
         binding.btnSwitchMode.setOnClickListener {
             SharedPreferencesManager.switchMode()
             if (SharedPreferencesManager.isHostMode()) {
@@ -53,6 +62,14 @@ class ProfileFragment : Fragment() {
             } else {
                 navController.navigate(R.id.action_profileFragment_to_searchFragment)
             }
+        }
+
+        // Logout
+        binding.btnLogout.setOnClickListener {
+            authViewModel.logout()
+            val intent = Intent(requireContext(), SplashActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
         }
     }
 
