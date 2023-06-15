@@ -23,7 +23,7 @@
 * Minn - 3 hours (2023-06-15) [PR](https://github.com/zhi-minn/SpaceShare/pull/1)
   + Includes above commit
   + Finally fixed BottomNavigationView not working when switching between modes (something related to navigation backstack)
-* Chang 1.5 hour (2023-06-15) [PR](https://github.com/zhi-minn/SpaceShare/pull/2)
+* Chang 1.5 hours (2023-06-15) [PR](https://github.com/zhi-minn/SpaceShare/pull/2)
   + Added basic functionality to create a listing and add it to the Firestore database
   + Added functionality to ListingRepo
   + Fixed merge conflicts
