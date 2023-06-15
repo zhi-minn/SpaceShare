@@ -1,6 +1,7 @@
 package com.example.spaceshare.ui.view
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.spaceshare.MainActivity
 import com.example.spaceshare.R
+import com.example.spaceshare.manager.SharedPreferencesManager
 import com.example.spaceshare.utils.ToastUtil
 import com.google.firebase.auth.FirebaseAuth
 
