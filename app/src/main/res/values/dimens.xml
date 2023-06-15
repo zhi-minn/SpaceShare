@@ -11,4 +11,5 @@
     <dimen name="bottom_navigation_corner_radius">10dp</dimen>
     <dimen name="textbox_corner_radius">20dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="drawable_start_padding">8dp</dimen>
 </resources>

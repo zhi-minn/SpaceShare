@@ -61,6 +61,17 @@
                 android:layout_marginTop="@dimen/standard_component_margin"
                 android:background="@drawable/text_background_curved" />
 
+            <TextView
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/standard_component_margin"
+                android:text="Log out"
+                android:textSize="@dimen/button_text"
+                android:drawableStart="@drawable/logout"
+                android:drawablePadding="@dimen/drawable_start_padding"
+                android:gravity="center_vertical"/>
+
         </LinearLayout>
 
     </ScrollView>
