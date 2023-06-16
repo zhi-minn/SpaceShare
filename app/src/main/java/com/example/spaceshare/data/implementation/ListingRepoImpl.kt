@@ -18,7 +18,7 @@ class ListingRepoImpl @Inject constructor(
         private val TAG = this::class.simpleName
     }
     private val listingsCollection = db.collection("listings")
-    override fun createListing(listing: Listing) {
+    override fun createListing(listing: Listing): String {
         var newListingID = ""
         listingsCollection.add(listing)
             .addOnSuccessListener { documentReference ->
