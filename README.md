@@ -27,3 +27,6 @@
   + Added basic functionality to create a listing and add it to the Firestore database
   + Added publish functionality to ListingRepo
   + Fixed merge conflicts
+* Minn 8 hours (2023-06-16 & 2023-06-19) [PR](https://github.com/zhi-minn/SpaceShare/pull/4)
+  + Integrated publish listing feature into app workflow
+  + Imported and implemented a few libraries to improve UX (Image cropper and Image Carousel)
