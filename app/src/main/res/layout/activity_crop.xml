@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <include layout="@layout/merge_crop_toolbar" />
+
+        <com.takusemba.cropme.CropLayout
+            android:id="@+id/crop_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cropme_background_alpha="80%"
+            app:cropme_frame_height_percent="80%"
+            app:cropme_frame_width_percent="80%"
+            app:cropme_max_scale="3.0"
+            app:cropme_overlay_shape="rectangle"
+            app:cropme_with_border="true"
+            app:layout_constraintBottom_toTopOf="@+id/select"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            >
+
+        </com.takusemba.cropme.CropLayout>
+
+        <include layout="@layout/merge_crop_button" />
+
+        <include layout="@layout/merge_crop_progress" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -108,6 +108,9 @@ dependencies {
     // Dependency Injection
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-android-compiler:2.44"
+
+    // Image cropping
+    implementation 'com.github.takusemba:cropme:2.0.8'
 }
 
 kapt {

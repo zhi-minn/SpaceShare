@@ -40,7 +40,6 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
 
         // UI Setup
