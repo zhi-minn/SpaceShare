@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/box_margin">
+        android:layout_height="match_parent">
 
-        <LinearLayout android:id="@+id/listing_page"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/box_margin">
 
-    </ScrollView>
+            <LinearLayout android:id="@+id/listing_page"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </ScrollView>
+
+        <ImageButton
+            android:id="@+id/btnAddListing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="@dimen/standard_component_margin"
+            android:layout_marginBottom="64dp"
+            android:src="@drawable/add" />
+
+    </FrameLayout>
+
 
 </layout>
