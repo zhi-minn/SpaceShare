@@ -65,11 +65,19 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-                <ImageView
-                    android:id="@+id/imageView"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:src="@drawable/placeholder_image_icon" />
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="20dp">
+
+                    <com.aemerse.slider.ImageCarousel
+                        android:id="@+id/carousel"
+                        android:layout_width="match_parent"
+                        android:layout_height="256dp" />
+
+                </androidx.cardview.widget.CardView>
 
                 <Button
                     android:id="@+id/btnAddPhoto"
@@ -111,7 +119,8 @@
                         android:layout_height="50dp"
                         android:layout_marginTop="10dp"
                         android:hint="Price"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:inputType="numberDecimal"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout

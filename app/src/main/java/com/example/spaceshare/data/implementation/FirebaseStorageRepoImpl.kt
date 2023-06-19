@@ -12,7 +12,7 @@ import javax.inject.Inject
 class FirebaseStorageRepoImpl @Inject constructor(
     private val storage: FirebaseStorage
 ): FirebaseStorageRepository {
-    override suspend fun uploadFile(folderPath: String, fileUri: Uri) {
+    override suspend fun uploadFile(folderPath: String, fileUri: Uri): String {
         return withContext(Dispatchers.IO) {
             val fileName = "${fileUri.lastPathSegment}_${UUID.randomUUID()}"
             val storageRef = storage

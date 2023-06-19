@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.data.repository.FirebaseStorageRepository
 import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.models.Listing
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,13 +30,26 @@ class CreateListingViewModel @Inject constructor(
 
     fun publishListing(listing: Listing) {
         viewModelScope.launch {
-            listingRepo.createListing(listing)
+            val imageUris = imageUris.value
 
-            if (imageUris.value != null) {
-                imageUris.value!!.forEach { imageUri ->
-                    firebaseStorageRepo.uploadFile("spaces", imageUri)
+            if (!imageUris.isNullOrEmpty()) {
+                val uploadTasks = imageUris.map { imageUri ->
+                    viewModelScope.async {
+                        try {
+                            firebaseStorageRepo.uploadFile("spaces", imageUri)
+                        } catch (e: Exception) {
+                            // TODO: Handle file upload exception here
+                            null
+                        }
+                    }
                 }
+
+                val imageNames = uploadTasks.awaitAll().filterNotNull()
+
+                listing.photos.addAll(imageNames)
             }
+
+            listingRepo.createListing(listing)
         }
     }
 }

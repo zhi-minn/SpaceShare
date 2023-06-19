@@ -54,9 +54,6 @@ android {
 }
 
 dependencies {
-    // Versions
-    def dagger_version = "2.40"
-
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.0')
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
@@ -104,6 +101,7 @@ dependencies {
     implementation "androidx.cardview:cardview:1.0.0"
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'com.github.bumptech.glide:glide:4.15.1'
+    implementation 'com.github.akshaaatt:Sliding-Carousel:1.0.4'
 
     // Dependency Injection
     implementation "com.google.dagger:hilt-android:2.44"
