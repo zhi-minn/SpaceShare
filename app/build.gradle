@@ -108,6 +108,10 @@ dependencies {
     // Dependency Injection
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-android-compiler:2.44"
+
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0-alpha10")
+    // To use constraintlayout in compose
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha10")
 }
 
 kapt {
