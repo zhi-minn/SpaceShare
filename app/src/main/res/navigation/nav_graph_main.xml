@@ -27,16 +27,6 @@
         <action
             android:id="@+id/action_profileFragment_to_listingFragment"
             app:destination="@id/listingFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_createListingFragment"
-            app:destination="@id/createListingFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/createListingFragment"
-        android:name="com.example.spaceshare.ui.view.CreateListingFragment"
-        android:label="CreateListing"
-        tools:layout="@layout/fragment_create_listing" >
     </fragment>
 
     <!-- Listing Fragment -->
@@ -48,6 +38,17 @@
         <action
             android:id="@+id/action_listingFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_listingFragment_to_createListingFragment"
+            app:destination="@id/createListingFragment" />
+    </fragment>
+
+    <!-- Create Listing Fragment -->
+    <fragment
+        android:id="@+id/createListingFragment"
+        android:name="com.example.spaceshare.ui.view.CreateListingFragment"
+        android:label="CreateListing"
+        tools:layout="@layout/fragment_create_listing" >
     </fragment>
 
 </navigation>

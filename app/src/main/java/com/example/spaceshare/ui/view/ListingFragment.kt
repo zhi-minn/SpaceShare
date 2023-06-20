@@ -1,6 +1,7 @@
 package com.example.spaceshare.ui.view
 
 import android.os.Bundle
+import android.view.AttachedSurfaceControl
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,9 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentListingBinding
@@ -21,7 +25,7 @@ import javax.inject.Inject
 class ListingFragment : Fragment() {
 
     private lateinit var binding: FragmentListingBinding
-
+    private lateinit var navController: NavController
     @Inject
     lateinit var viewModel: ListingViewModel
 
@@ -35,8 +39,15 @@ class ListingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
 
+        displayListings()
+        configureButtons()
+    }
+
+    private fun displayListings() {
         viewModel.listingsLiveData.observe(viewLifecycleOwner) { listings ->
+            binding.listingPage.removeAllViews()
             for (listing in listings) {
                 val cardView = layoutInflater.inflate(R.layout.listing_item, null) as CardView
                 val viewPager: ViewPager2 = cardView.findViewById(R.id.view_pager_listing_images)
@@ -59,5 +70,11 @@ class ListingFragment : Fragment() {
             }
         }
         viewModel.fetchListings(User("j577YevJRoZHgsKCRC9i1RLACZL2"))
+    }
+
+    private fun configureButtons() {
+        binding.btnAddListing.setOnClickListener {
+            navController.navigate(R.id.action_listingFragment_to_createListingFragment)
+        }
     }
 }

@@ -14,4 +14,6 @@
     <string name="placeholder_title">Placeholder title</string>
     <string name="placeholder_description">Placeholder description</string>
     <string name="post">Post</string>
+    <string name="dialog_title_result">Result</string>
+    <string name="dialog_button_close">Close</string>
 </resources>
