@@ -30,3 +30,6 @@
 * Minn 8 hours (2023-06-16 & 2023-06-19) [PR](https://github.com/zhi-minn/SpaceShare/pull/4)
   + Integrated publish listing feature into app workflow
   + Imported and implemented a few libraries to improve UX (Image cropper and Image Carousel)
+* Minn 2 hours (2023-06-20) [Commit](https://github.com/zhi-minn/SpaceShare/commit/afe103dff8eb470131625dc7ee3822b25fd18c17)
+  + Add pop up features when click on image
+  + Add margin between listings and made listing cards rounded to define a more polished UI
