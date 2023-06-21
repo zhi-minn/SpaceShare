@@ -43,6 +43,7 @@ class CropActivity: AppCompatActivity() {
         }
 
         selectButton.setOnClickListener { contentLauncher.launch("image/*") }
+        selectButton.callOnClick()
 
         binding.cropView.addOnCropListener(object : OnCropListener {
             override fun onSuccess(bitmap: Bitmap) {
@@ -69,6 +70,7 @@ class CropActivity: AppCompatActivity() {
             progressBar.visibility = View.VISIBLE
             binding.cropView.crop()
         })
+
     }
 
     private fun createImageFile(): File {
