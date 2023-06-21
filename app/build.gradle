@@ -102,6 +102,7 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     implementation 'com.github.akshaaatt:Sliding-Carousel:1.0.4'
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
     // Dependency Injection
     implementation "com.google.dagger:hilt-android:2.44"

@@ -3,12 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#262432">
-
-    <ImageView
+    
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/listing_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
 
 </RelativeLayout>

@@ -1,15 +1,14 @@
 package com.example.spaceshare.ui.view
 
 import android.os.Bundle
-import android.view.AttachedSurfaceControl
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -66,6 +65,13 @@ class ListingFragment : Fragment() {
                 }
 
                 // Add the CardView to the LinearLayout
+                val layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                layoutParams.setMargins(8, 32, 8, 32)
+                cardView.layoutParams = layoutParams
+                cardView.radius = 25.0F
                 binding.listingPage.addView(cardView)
             }
         }
