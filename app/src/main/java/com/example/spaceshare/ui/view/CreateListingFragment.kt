@@ -1,5 +1,6 @@
 package com.example.spaceshare.ui.view
 
+import MapDialogFragment
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -23,12 +24,15 @@ import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
 import com.example.spaceshare.utils.DecimalInputFilter
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class CreateListingFragment : Fragment() {
 
-    private var auth = FirebaseAuth.getInstance()
+    private lateinit var auth: FirebaseAuth
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+    private var permissionDenied = false
     private lateinit var navController: NavController
     private lateinit var binding: FragmentCreateListingBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
@@ -64,6 +68,12 @@ class CreateListingFragment : Fragment() {
         // Add photo button
         binding.btnAddPhoto.setOnClickListener {
             startForResult.launch(Intent(requireActivity(), CropActivity::class.java))
+        }
+
+        //
+        binding.btnOpenMaps.setOnClickListener {
+            val mapDialogFragment = MapDialogFragment()
+            mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
 
         // Publish button
