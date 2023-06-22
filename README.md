@@ -36,3 +36,5 @@
   * Integrated Google Maps SDK into create listing feature
   * Integrated Google Maps AutoComplete search into Maps
   * Integrated Google Maps moving marker to allow user to pinpoint location
+* Minn 2 hours (2023-06-22) [Commit](https://github.com/zhi-minn/SpaceShare/commit/3f114b2e3dea51586535340a63d202420138b62a)
+  + Prettify login and sign up page
