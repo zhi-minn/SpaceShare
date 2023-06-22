@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">SpaceShare</string>
     <string name="logo">Logo</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
+    <string name="prompt_email">your_email@gmail.com</string>
+    <string name="prompt_password">********</string>
     <string name="action_login">Login</string>
     <string name="action_sign_up">Sign Up</string>
     <string name="action_register">Register</string>
