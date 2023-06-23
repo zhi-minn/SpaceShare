@@ -8,6 +8,7 @@ import androidx.navigation.ui.NavigationUI
 import com.example.spaceshare.manager.SharedPreferencesManager
 import com.example.spaceshare.ui.viewmodel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        SharedPreferencesManager.init(this)
+        SharedPreferencesManager.init(this, FirebaseAuth.getInstance().currentUser?.uid)
         setContentView(R.layout.activity_main)
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_nav_host_fragment) as NavHostFragment
