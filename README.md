@@ -41,3 +41,5 @@
 * Minn 1.5 hours (2023-06-23) [Commit](https://github.com/zhi-minn/SpaceShare/commit/f6474ac38fe34e505611876f46784e3e57773eeb)
   + Prettify create listing fragment
   + Link location selected to create listing fragment and geocode LatLng into address
+* Minn 3.5 hours (2023-06-23) [Commit](https://github.com/zhi-minn/SpaceShare/commit/99f26037052ae3d4a3b8ae67a5d3df1b11201ce4)
+  + Added preferences page and setup relevant fragments and view models for persistences
