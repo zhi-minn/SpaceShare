@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.data.repository.FirebaseStorageRepository
 import com.example.spaceshare.data.repository.ListingRepository
+import com.example.spaceshare.interfaces.LocationInterface
 import com.example.spaceshare.models.Listing
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.GeoPoint
@@ -18,7 +19,7 @@ import javax.inject.Inject
 class CreateListingViewModel @Inject constructor(
     private val listingRepo: ListingRepository,
     private val firebaseStorageRepo: FirebaseStorageRepository
-): ViewModel() {
+): ViewModel(), LocationInterface {
 
     private val _imageUris: MutableLiveData<List<Uri>> = MutableLiveData()
     val imageUris: LiveData<List<Uri>> = _imageUris
@@ -33,7 +34,7 @@ class CreateListingViewModel @Inject constructor(
         _imageUris.value = newImageUris
     }
 
-    fun setLocation(location: LatLng) {
+    override fun setLocation(location: LatLng) {
         _location.value = location
     }
 

@@ -14,7 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
-import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
+import com.example.spaceshare.interfaces.LocationInterface
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -33,11 +33,9 @@ import com.google.android.libraries.places.api.model.RectangularBounds
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 class MapDialogFragment(
-    private val createListingViewModel: CreateListingViewModel
+    private val locationInterface: LocationInterface
 ) : DialogFragment(), OnMapReadyCallback {
 
     private lateinit var googleMap: GoogleMap
@@ -118,7 +116,7 @@ class MapDialogFragment(
         btnConfirmLocation.setOnClickListener {
             val location = selectedLocation
             if (location != null) {
-                createListingViewModel.setLocation(location)
+                locationInterface.setLocation(location)
             }
             dialog?.dismiss()
         }
