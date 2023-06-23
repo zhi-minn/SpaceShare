@@ -17,6 +17,7 @@ import com.example.spaceshare.databinding.FragmentListingBinding
 import com.example.spaceshare.models.User
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
 import com.example.spaceshare.utils.ImageAdapter
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -75,7 +76,7 @@ class ListingFragment : Fragment() {
                 binding.listingPage.addView(cardView)
             }
         }
-        viewModel.fetchListings(User("j577YevJRoZHgsKCRC9i1RLACZL2"))
+        viewModel.fetchListings(User(FirebaseAuth.getInstance().currentUser?.uid!!))
     }
 
     private fun configureButtons() {

@@ -3,6 +3,7 @@ package com.example.spaceshare.ui.view
 import MapDialogFragment
 import android.app.Activity
 import android.content.Intent
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputFilter
@@ -38,6 +39,8 @@ class CreateListingFragment : Fragment() {
     private lateinit var startForResult: ActivityResultLauncher<Intent>
     @Inject
     lateinit var createListingViewModel: CreateListingViewModel
+    // Utils
+    private lateinit var geocoder: Geocoder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,6 +55,7 @@ class CreateListingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
         auth = FirebaseAuth.getInstance()
+        geocoder = Geocoder(requireContext())
 
         configureButtons()
         configureFilters()
@@ -72,7 +76,7 @@ class CreateListingFragment : Fragment() {
 
         //
         binding.btnOpenMaps.setOnClickListener {
-            val mapDialogFragment = MapDialogFragment()
+            val mapDialogFragment = MapDialogFragment(createListingViewModel)
             mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
 
@@ -96,6 +100,14 @@ class CreateListingFragment : Fragment() {
                 list.add(CarouselItem(imageUrl = uri.toString()))
             }
             binding.carousel.setData(list)
+        }
+
+        createListingViewModel.location.observe(viewLifecycleOwner) { location ->
+            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            if (!addresses.isNullOrEmpty()) {
+                val address = addresses[0]
+                binding.parsedLocation.text = address.getAddressLine(0)
+            }
         }
     }
 

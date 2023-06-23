@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.data.repository.FirebaseStorageRepository
 import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.models.Listing
+import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
@@ -21,11 +23,18 @@ class CreateListingViewModel @Inject constructor(
     private val _imageUris: MutableLiveData<List<Uri>> = MutableLiveData()
     val imageUris: LiveData<List<Uri>> = _imageUris
 
+    private val _location: MutableLiveData<LatLng> = MutableLiveData<LatLng>()
+    val location: LiveData<LatLng> = _location
+
     fun addImageUri(imageUri: Uri) {
         val curImageUris = _imageUris.value ?: emptyList()
         val newImageUris = curImageUris.toMutableList()
         newImageUris.add(imageUri)
         _imageUris.value = newImageUris
+    }
+
+    fun setLocation(location: LatLng) {
+        _location.value = location
     }
 
     fun publishListing(listing: Listing) {
@@ -49,6 +58,11 @@ class CreateListingViewModel @Inject constructor(
                 listing.photos.addAll(imageNames)
             }
 
+            val locationValue = _location.value
+            if (locationValue != null) {
+                val geoPoint = GeoPoint(locationValue.latitude, locationValue.longitude)
+                listing.location = geoPoint
+            }
             listingRepo.createListing(listing)
         }
     }

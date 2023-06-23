@@ -25,7 +25,7 @@
             android:layout_gravity="bottom|end"
             android:layout_marginRight="32dp"
             android:layout_marginBottom="64dp"
-            android:background="@drawable/round_button"
+            android:background="@drawable/round_button_blue_gradient"
             android:src="@drawable/add" />
 
     </FrameLayout>

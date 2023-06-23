@@ -8,11 +8,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
+import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -31,9 +33,12 @@ import com.google.android.libraries.places.api.model.RectangularBounds
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
-class MapDialogFragment : DialogFragment(), OnMapReadyCallback {
+class MapDialogFragment(
+    private val createListingViewModel: CreateListingViewModel
+) : DialogFragment(), OnMapReadyCallback {
 
     private lateinit var googleMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -45,6 +50,8 @@ class MapDialogFragment : DialogFragment(), OnMapReadyCallback {
     // Search bar
     private lateinit var autocompleteFragment: AutocompleteSupportFragment
     private var selectedPlace: Place? = null
+    // Views
+    private lateinit var btnConfirmLocation: ImageButton
     // Consts
     private val KW_MIN_LAT = 43.3474
     private val KW_MAX_LAT = 43.5709
@@ -61,31 +68,23 @@ class MapDialogFragment : DialogFragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.dialog_map, container, false)
+        val view = inflater.inflate(R.layout.dialog_map, container, false)
 
+        // Initialize google maps
         val mapFragment = childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+        configureAutoCompleteFragment()
 
-        // Initialize the AutocompleteSupportFragment.
-        val autocompleteFragment = childFragmentManager.findFragmentById(R.id.autocompleteFragment)
-                    as AutocompleteSupportFragment
+        // Initialize views
+        btnConfirmLocation = view.findViewById(R.id.btnConfirmLocation)
 
-        // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+        return view
+    }
 
-        // Set up a PlaceSelectionListener to handle the response.
-        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-            override fun onPlaceSelected(place: Place) {
-                Log.i(TAG, "Place: ${place.name}, ${place.id}")
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-            override fun onError(status: Status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: $status")
-            }
-        })
-
-        return rootView
+        configureButtons()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,32 +114,35 @@ class MapDialogFragment : DialogFragment(), OnMapReadyCallback {
         mapFragment?.onActivityCreated(savedInstanceState)
     }
 
-    override fun onResume() {
-        super.onResume()
-        mapFragment?.onResume()
+    private fun configureButtons() {
+        btnConfirmLocation.setOnClickListener {
+            val location = selectedLocation
+            if (location != null) {
+                createListingViewModel.setLocation(location)
+            }
+            dialog?.dismiss()
+        }
     }
 
-    override fun onPause() {
-        super.onPause()
-        mapFragment?.onPause()
-    }
+    private fun configureAutoCompleteFragment() {
+        // Initialize the AutocompleteSupportFragment.
+        val autocompleteFragment = childFragmentManager.findFragmentById(R.id.autocompleteFragment)
+                as AutocompleteSupportFragment
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mapFragment?.onDestroy()
-    }
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
 
-    override fun onLowMemory() {
-        super.onLowMemory()
-        mapFragment?.onLowMemory()
-    }
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                Log.i(TAG, "Place: ${place.name}, ${place.id}")
+            }
 
-    override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-        enableMyLocation()
-        setupSearchBar()
-        setupMapListeners()
-        zoomToUserLocation()
+            override fun onError(status: Status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: $status")
+            }
+        })
     }
 
     private fun enableMyLocation() {
@@ -165,7 +167,7 @@ class MapDialogFragment : DialogFragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setupSearchBar() {
+    private fun configureSearchBar() {
         // Create a new Places client instance.
         val placesClient = Places.createClient(requireContext())
 
@@ -211,7 +213,7 @@ class MapDialogFragment : DialogFragment(), OnMapReadyCallback {
         })
     }
 
-    private fun setupMapListeners() {
+    private fun configureMapListeners() {
         googleMap.setOnCameraMoveListener {
             selectedLocation = googleMap.cameraPosition.target
             updateMarkerPosition()
@@ -296,6 +298,34 @@ class MapDialogFragment : DialogFragment(), OnMapReadyCallback {
             e.printStackTrace()
         }
         return ""
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapFragment?.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapFragment?.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapFragment?.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapFragment?.onLowMemory()
+    }
+
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+        enableMyLocation()
+        configureSearchBar()
+        configureMapListeners()
+        zoomToUserLocation()
     }
 
     override fun onRequestPermissionsResult(

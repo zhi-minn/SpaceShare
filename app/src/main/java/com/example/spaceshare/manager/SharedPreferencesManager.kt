@@ -28,7 +28,7 @@ object SharedPreferencesManager {
 
     fun isHostMode(): Boolean {
         if (!sharedPreferences.contains(HOST_MODE_KEY)) {
-            sharedPreferences.edit().putBoolean(HOST_MODE_KEY, false)
+            sharedPreferences.edit().putBoolean(HOST_MODE_KEY, false).apply()
         }
         return sharedPreferences.getBoolean(HOST_MODE_KEY, false)
     }
