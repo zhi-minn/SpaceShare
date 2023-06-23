@@ -38,3 +38,6 @@
   * Integrated Google Maps moving marker to allow user to pinpoint location
 * Minn 2 hours (2023-06-22) [Commit](https://github.com/zhi-minn/SpaceShare/commit/3f114b2e3dea51586535340a63d202420138b62a)
   + Prettify login and sign up page
+* Minn 1.5 hours (2023-06-23) [Commit](https://github.com/zhi-minn/SpaceShare/commit/f6474ac38fe34e505611876f46784e3e57773eeb)
+  + Prettify create listing fragment
+  + Link location selected to create listing fragment and geocode LatLng into address
