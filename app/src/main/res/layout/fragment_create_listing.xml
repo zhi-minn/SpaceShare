@@ -80,45 +80,71 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/closeListingButton" />
 
-                <com.google.android.material.textfield.TextInputLayout
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/button_text"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    app:layout_constraintTop_toBottomOf="@id/logo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="Title" />
+
+                <EditText
+                    android:id="@+id/titleTextInput"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="50dp"
+                    android:inputType="text"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/edittext_bg"
+                    android:hint="Basement storage"
+                    android:paddingLeft="@dimen/standard_component_margin"
+                    android:textSize="16sp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/titleTextInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="10dp"
-                        android:hint="Title"
-                        android:singleLine="true" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/button_text"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="Description" />
 
-                <com.google.android.material.textfield.TextInputLayout
+                <EditText
+                    android:id="@+id/descriptionTextInput"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="50dp"
+                    android:inputType="text"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/edittext_bg"
+                    android:hint="Well-cleaned"
+                    android:paddingLeft="@dimen/standard_component_margin"
+                    android:textSize="16sp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/priceTextInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="10dp"
-                        android:hint="Price"
-                        android:singleLine="true"
-                        android:inputType="numberDecimal"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/button_text"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    app:layout_constraintTop_toBottomOf="@id/logo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="Price" />
 
-                <com.google.android.material.textfield.TextInputLayout
+                <EditText
+                    android:id="@+id/priceInput"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/descriptionTextInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:hint="Description\n\n\n"
-                        android:singleLine="false" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="50dp"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/edittext_bg"
+                    android:hint="$"
+                    android:paddingLeft="@dimen/standard_component_margin"
+                    android:textSize="16sp"
+                    android:autofillHints="emailAddress" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

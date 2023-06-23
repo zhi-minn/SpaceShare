@@ -83,13 +83,13 @@ class CreateListingFragment : Fragment() {
         // Publish button
         binding.btnPublish.setOnClickListener {
             publishListing(binding.titleTextInput.text.toString(),
-                binding.priceTextInput.text.toString().toDouble(),
+                binding.priceInput.text.toString().toDouble(),
                 binding.descriptionTextInput.text.toString())
         }
     }
 
     private fun configureFilters() {
-        binding.priceTextInput.filters = arrayOf<InputFilter>(DecimalInputFilter)
+        binding.priceInput.filters = arrayOf<InputFilter>(DecimalInputFilter)
     }
 
     private fun configureObservers() {
