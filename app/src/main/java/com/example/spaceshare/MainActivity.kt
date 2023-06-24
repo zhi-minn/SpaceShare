@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
 
             true
         }
+
         bottomNavigationView.selectedItemId = if (SharedPreferencesManager.isHostMode())
             R.id.listingFragment else
             R.id.searchFragment
@@ -74,14 +75,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (navController.currentDestination?.id != navController.graph.startDestinationId) {
+        val curr = navController.currentDestination?.id
+        if (curr != navController.graph.startDestinationId) {
             val isCurrentDestinationMenu = when (navController.currentDestination?.id) {
                 R.id.searchFragment, R.id.listingFragment, R.id.profileFragment -> true
                 else -> false
             }
-            if (isCurrentDestinationMenu) {
+            if (curr == R.id.listingFragment && SharedPreferencesManager.isHostMode()) {
+                finish()
+            }
+            else if (curr == R.id.profileFragment && SharedPreferencesManager.isHostMode()) {
+                navController.navigate(R.id.listingFragment)
+            }
+            else if (isCurrentDestinationMenu) {
                 navController.navigate(navController.graph.startDestinationId)
-            } else {
+            }
+            else {
                 navController.popBackStack()
             }
         } else {
