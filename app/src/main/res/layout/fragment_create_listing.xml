@@ -8,6 +8,17 @@
         android:layout_height="match_parent"
         tools:context=".ui.view.CreateListingFragment">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/black" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/topBar"
             android:layout_width="0dp"
@@ -45,10 +56,12 @@
         <ScrollView
             android:id="@+id/scrollView"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topBar">
+            app:layout_constraintTop_toBottomOf="@+id/topBar"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,8 +78,8 @@
 
                     <com.aemerse.slider.ImageCarousel
                         android:id="@+id/carousel"
-                        android:layout_width="match_parent"
-                        android:layout_height="256dp" />
+                        android:layout_width="402dp"
+                        android:layout_height="266dp" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -97,7 +110,7 @@
                     android:layout_height="50dp"
                     android:inputType="text"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/edittext_bg"
+                    android:background="@drawable/rounded_rectangle_bg"
                     android:hint="Basement storage"
                     android:paddingLeft="@dimen/standard_component_margin"
                     android:textSize="16sp" />
@@ -118,7 +131,7 @@
                     android:layout_height="50dp"
                     android:inputType="text"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/edittext_bg"
+                    android:background="@drawable/rounded_rectangle_bg"
                     android:hint="Well-cleaned"
                     android:paddingLeft="@dimen/standard_component_margin"
                     android:textSize="16sp" />
@@ -140,7 +153,7 @@
                     android:layout_height="50dp"
                     android:inputType="numberDecimal"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/edittext_bg"
+                    android:background="@drawable/rounded_rectangle_bg"
                     android:hint="$"
                     android:paddingLeft="@dimen/standard_component_margin"
                     android:textSize="16sp"
@@ -192,7 +205,7 @@
 
                 <TextView
                     android:id="@+id/termsAndPrivacyAgreementTextView"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="@dimen/standard_component_margin"
@@ -201,6 +214,9 @@
                     android:textAlignment="center" />
 
             </LinearLayout>
+
         </ScrollView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
