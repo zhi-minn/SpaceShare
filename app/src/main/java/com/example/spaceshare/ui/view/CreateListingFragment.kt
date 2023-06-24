@@ -10,6 +10,7 @@ import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
@@ -48,6 +49,7 @@ class CreateListingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_listing, container, false)
+        binding.progressBar.visibility = View.GONE
         return binding.root
     }
 
@@ -83,7 +85,7 @@ class CreateListingFragment : Fragment() {
         // Publish button
         binding.btnPublish.setOnClickListener {
             publishListing(binding.titleTextInput.text.toString(),
-                binding.priceInput.text.toString().toDouble(),
+                binding.priceInput.text.toString(),
                 binding.descriptionTextInput.text.toString())
         }
     }
@@ -109,6 +111,10 @@ class CreateListingFragment : Fragment() {
                 binding.parsedLocation.text = address.getAddressLine(0)
             }
         }
+
+        createListingViewModel.listingPublished.observe(viewLifecycleOwner) {
+            navController.popBackStack()
+        }
     }
 
     private fun configureCropActivity() {
@@ -125,9 +131,23 @@ class CreateListingFragment : Fragment() {
         }
     }
 
-    private fun publishListing(title: String, price: Double, description: String) {
-        val hostID = auth.currentUser?.uid
-        val listing = Listing(title = title, price = price, description = description, hostId = hostID)
-        createListingViewModel.publishListing(listing)
+    private fun validateListing(title: String, description: String, price: String): Boolean {
+        if (title.isNullOrEmpty() || description.isNullOrEmpty() ||
+            price.isNullOrEmpty() || createListingViewModel.location.value == null) {
+            Toast.makeText(requireContext(), "Please enter all mandatory details", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
+
+    private fun publishListing(title: String, price: String, description: String) {
+        val hostId = auth.currentUser?.uid
+        if (validateListing(title, description, price)) {
+            val listing = Listing(title = title, description = description, price = price.toDouble(),
+            hostId = hostId)
+            createListingViewModel.publishListing(listing)
+            binding.scrollView.visibility = View.GONE
+            binding.progressBar.visibility = View.VISIBLE
+        }
     }
 }

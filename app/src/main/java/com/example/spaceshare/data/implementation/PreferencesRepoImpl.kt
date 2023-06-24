@@ -2,8 +2,10 @@ package com.example.spaceshare.data.implementation
 
 import android.util.Log
 import com.example.spaceshare.data.repository.PreferencesRepository
+import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Preferences
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -19,7 +21,7 @@ class PreferencesRepoImpl @Inject constructor(
         private val TAG = this::class.simpleName
     }
 
-    override suspend fun fetchPreferences(userId: String): Preferences? = withContext(Dispatchers.IO) {
+    override suspend fun getPreferences(userId: String): Preferences? = withContext(Dispatchers.IO) {
         try {
             val result = preferencesCollection
                 .whereEqualTo("userId", userId)
@@ -49,6 +51,28 @@ class PreferencesRepoImpl @Inject constructor(
             }
 
             deferred.await()
+        }
+    }
+
+    override suspend fun getAllPreferences(): List<Preferences> = withContext(Dispatchers.IO) {
+        // TODO: Implement pagination
+        try {
+            val result = preferencesCollection
+                .limit(500)
+                .get()
+                .await()
+
+            return@withContext result.documents.mapNotNull { document ->
+                try {
+                    document.toObject(Preferences::class.java)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error casting document to Preferences object: ${e.message}")
+                    null
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error reading preferences document: ${e.message}")
+            return@withContext emptyList()
         }
     }
 }

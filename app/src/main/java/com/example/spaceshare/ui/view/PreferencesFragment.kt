@@ -1,5 +1,7 @@
 package com.example.spaceshare.ui.view
 
+import MapDialogFragment
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +13,9 @@ import androidx.navigation.findNavController
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentPreferencesBinding
 import com.example.spaceshare.ui.viewmodel.PreferencesViewModel
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -21,18 +25,22 @@ class PreferencesFragment : Fragment() {
     private lateinit var navController: NavController
     @Inject
     lateinit var viewModel: PreferencesViewModel
+    private lateinit var geocoder: Geocoder
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_preferences, container, false)
+        // Set container to invisible first while data loading
+        binding.container.visibility = View.GONE
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
+        geocoder = Geocoder(requireContext())
 
         configureButtons()
         configureObservers()
@@ -41,6 +49,11 @@ class PreferencesFragment : Fragment() {
     private fun configureButtons() {
         binding.btnBack.setOnClickListener {
             navController.popBackStack()
+        }
+
+        binding.location.setOnClickListener {
+            val mapDialogFragment = MapDialogFragment(viewModel)
+            mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
 
         binding.btn1km.setOnClickListener {
@@ -62,13 +75,39 @@ class PreferencesFragment : Fragment() {
     }
 
     private fun configureObservers() {
+        viewModel.preferencesLoaded.observe(viewLifecycleOwner) { isLoaded ->
+            if (isLoaded) {
+             binding.progressBar.visibility = View.GONE
+             binding.container.visibility = View.VISIBLE
+            } else {
+             binding.progressBar.visibility = View.VISIBLE
+             binding.progressBar.visibility = View.GONE
+            }
+        }
+
         viewModel.preferencesLiveData.observe(viewLifecycleOwner) { preferences ->
             preferences?.let {
+                // Location
+                val location = preferences.location
+                if (location != null) {
+                    // TODO: Refactor geocoder into single utility class
+                    val addresses =
+                        geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                    if (!addresses.isNullOrEmpty()) {
+                        val address = addresses[0]
+                        binding.location.text = address.getAddressLine(0)
+                    }
+                }
+
+                // Radius
                 val radius = preferences.radius
                 binding.btn1km.isSelected = radius == 1
                 binding.btn5km.isSelected = radius == 5
                 binding.btn10km.isSelected = radius == 10
             }
         }
+
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) viewModel.fetchPreferences(userId)
     }
 }
