@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="FullScreenDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+    </style>
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">#5C9EAD</item>
+        <item name="colorPrimaryVariant">#326273</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#E39774</item>
+        <item name="colorSecondaryVariant">#E39774</item>
+        <item name="colorOnSecondary">#EEEEEE</item>
+        <item name="android:fontFamily">@font/sans_serif</item>
+    </style>
+</resources>

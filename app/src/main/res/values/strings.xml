@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">SpaceShare</string>
     <string name="logo">Logo</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
+    <string name="prompt_email">your_email@gmail.com</string>
+    <string name="prompt_password">********</string>
     <string name="action_login">Login</string>
     <string name="action_sign_up">Sign Up</string>
     <string name="action_register">Register</string>
@@ -16,4 +16,7 @@
     <string name="post">Post</string>
     <string name="dialog_title_result">Result</string>
     <string name="dialog_button_close">Close</string>
+    <string name="location_permission_denied">Location permission denied</string>
+    <string name="permission_required_toast">Location permission is required to pinpoint property location</string>
+    <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
 </resources>

@@ -65,6 +65,11 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        // Preferences
+        binding.btnPreferences.setOnClickListener {
+            navController.navigate(R.id.action_profileFragment_to_preferencesFragment)
+        }
+
         // Logout
         binding.btnLogout.setOnClickListener {
             authViewModel.logout()

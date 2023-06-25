@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -15,8 +16,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentListingBinding
 import com.example.spaceshare.models.User
+import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
 import com.example.spaceshare.utils.ImageAdapter
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -26,7 +29,9 @@ class ListingFragment : Fragment() {
     private lateinit var binding: FragmentListingBinding
     private lateinit var navController: NavController
     @Inject
-    lateinit var viewModel: ListingViewModel
+    lateinit var listingViewModel: ListingViewModel
+    @Inject
+    lateinit var createListingViewModel: CreateListingViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +50,7 @@ class ListingFragment : Fragment() {
     }
 
     private fun displayListings() {
-        viewModel.listingsLiveData.observe(viewLifecycleOwner) { listings ->
+        listingViewModel.listingsLiveData.observe(viewLifecycleOwner) { listings ->
             binding.listingPage.removeAllViews()
             for (listing in listings) {
                 val cardView = layoutInflater.inflate(R.layout.listing_item, null) as CardView
@@ -75,12 +80,22 @@ class ListingFragment : Fragment() {
                 binding.listingPage.addView(cardView)
             }
         }
-        viewModel.fetchListings(User("j577YevJRoZHgsKCRC9i1RLACZL2"))
+        listingViewModel.fetchListings(User(FirebaseAuth.getInstance().currentUser?.uid!!))
     }
 
     private fun configureButtons() {
         binding.btnAddListing.setOnClickListener {
             navController.navigate(R.id.action_listingFragment_to_createListingFragment)
+        }
+    }
+
+    private fun configureObservers() {
+        createListingViewModel.listingPublished.observe(viewLifecycleOwner) { published ->
+            if (published) {
+                Toast.makeText(requireContext(), "Listing successfully published", Toast.LENGTH_SHORT)
+            } else {
+                Toast.makeText(requireContext(), "Error publishing listing. Please try again later", Toast.LENGTH_SHORT)
+            }
         }
     }
 }
