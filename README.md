@@ -26,10 +26,15 @@
 * Chang 1.5 hours (2023-06-15) [PR](https://github.com/zhi-minn/SpaceShare/pull/2)
   + Added basic functionality to create a listing and add it to the Firestore database
   + Added publish functionality to ListingRepo
-  + Fixed merge conflicts
 * Minn 8 hours (2023-06-16 & 2023-06-19) [PR](https://github.com/zhi-minn/SpaceShare/pull/4)
   + Integrated publish listing feature into app workflow
   + Imported and implemented a few libraries to improve UX (Image cropper and Image Carousel)
 * Minn 2 hours (2023-06-20) [Commit](https://github.com/zhi-minn/SpaceShare/commit/afe103dff8eb470131625dc7ee3822b25fd18c17)
   + Add pop up features when click on image
   + Add margin between listings and made listing cards rounded to define a more polished UI
+* Minn 4 hours (2023-06-22) [Commit](https://github.com/zhi-minn/SpaceShare/commit/bf48ab35e41d3e4afb1cc6b549f6f23f465c3f0b)
+  * Integrated Google Maps SDK into create listing feature
+  * Integrated Google Maps AutoComplete search into Maps
+  * Integrated Google Maps moving marker to allow user to pinpoint location
+* Minn 2 hours (2023-06-22) [Commit](https://github.com/zhi-minn/SpaceShare/commit/3f114b2e3dea51586535340a63d202420138b62a)
+  + Prettify login and sign up page
