@@ -6,6 +6,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/spaces_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Orders"
+            android:textSize="40sp"
+            android:translationX="20dp"
+            android:translationY="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -14,7 +25,9 @@
             <LinearLayout android:id="@+id/reservation_page"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical" >
+
+            </LinearLayout>
 
         </ScrollView>
 
