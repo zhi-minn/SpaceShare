@@ -19,7 +19,7 @@ class ReservationViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _reservationLiveData: MutableLiveData<List<Reservation>> = MutableLiveData()
-    val listingsLiveData: LiveData<List<Reservation>> = _reservationLiveData
+    val reservationLiveData: LiveData<List<Reservation>> = _reservationLiveData
 
     fun fetchReservations(user: User) {
         viewModelScope.launch {
