@@ -15,11 +15,8 @@
   + Made ViewPager2 adapter to enable user to swipe between space images
   + Fetch listing functionality now works on dummy data
   + TODO:
-    * Merge Chang's publish listing functionality into ListingRepository
-    * Add logout button
     * Configure User model to be dependency injected so it is accessible from any Fragment
     * Complete fetch listing functionality to fetch from dynamic user data instead of hard-coded ID
-    * It's 1.32AM and I am tired
 * Minn - 3 hours (2023-06-15) [PR](https://github.com/zhi-minn/SpaceShare/pull/1)
   + Includes above commit
   + Finally fixed BottomNavigationView not working when switching between modes (something related to navigation backstack)

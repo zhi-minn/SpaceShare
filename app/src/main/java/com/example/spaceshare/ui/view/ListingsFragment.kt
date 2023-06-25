@@ -13,7 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.spaceshare.R
-import com.example.spaceshare.databinding.FragmentListingBinding
+import com.example.spaceshare.databinding.FragmentListingsBinding
 import com.example.spaceshare.models.User
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
 import com.example.spaceshare.utils.ImageAdapter
@@ -21,9 +21,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ListingFragment : Fragment() {
+class ListingsFragment : Fragment() {
 
-    private lateinit var binding: FragmentListingBinding
+    private lateinit var binding: FragmentListingsBinding
     private lateinit var navController: NavController
     @Inject
     lateinit var viewModel: ListingViewModel
@@ -32,7 +32,7 @@ class ListingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_listing, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_listings, container, false)
         return binding.root
     }
 
