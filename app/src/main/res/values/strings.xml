@@ -16,4 +16,7 @@
     <string name="post">Post</string>
     <string name="dialog_title_result">Result</string>
     <string name="dialog_button_close">Close</string>
+    <string name= "reservation_status">Completed\Pending\Aproved\Cancled</string>
+    <string name= "reservation_period">YYYY/MM/DD</string>
+    <string name= "reservation_title">Street Name</string>
 </resources>
