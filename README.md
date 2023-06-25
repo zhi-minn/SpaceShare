@@ -38,3 +38,5 @@
   * Integrated Google Maps moving marker to allow user to pinpoint location
 * Minn 2 hours (2023-06-22) [Commit](https://github.com/zhi-minn/SpaceShare/commit/3f114b2e3dea51586535340a63d202420138b62a)
   + Prettify login and sign up page
+* William 4 hours (2023-06-24) [Commit](https://github.com/zhi-minn/SpaceShare/commit/592a4a40a51642cbec2361ea6105ec8615ea6d90)
+  + Fix navigation and some ui work
