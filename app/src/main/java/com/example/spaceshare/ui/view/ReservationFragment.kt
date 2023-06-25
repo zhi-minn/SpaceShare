@@ -5,31 +5,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.spaceshare.R
-import com.example.spaceshare.databinding.FragmentListingBinding
 import com.example.spaceshare.databinding.FragmentReservationBinding
-import com.example.spaceshare.models.Listing
-import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.User
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import com.example.spaceshare.utils.ImageAdapter
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.util.Date
 import com.google.firebase.Timestamp
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class ReserveFragment : Fragment() {
@@ -51,39 +44,82 @@ class ReserveFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_reservation, container, false)
     }
 
-//    private fun displayReservations() {
-//        viewModel.listingsLiveData.observe(viewLifecycleOwner) { listings ->
-//            binding.listingPage.removeAllViews()
-//            for (listing in listings) {
-//                val cardView = layoutInflater.inflate(R.layout.listing_item, null) as CardView
-//                val viewPager: ViewPager2 = cardView.findViewById(R.id.view_pager_listing_images)
-//                val title: TextView = cardView.findViewById(R.id.listing_title)
-//                val description: TextView = cardView.findViewById(R.id.listing_description)
-//                val price: TextView = cardView.findViewById(R.id.listing_price)
-//
-//                // Set the listing data to the views
-//                title.text = listing.title
-//                description.text = listing.description
-//                price.text = listing.price.toString()
-//
-//                // Load the listing image from Firebase Storage into the ImageView
-//                if (listing.photos != null) {
-//                    viewPager.adapter = ImageAdapter(listing.photos)
-//                }
-//
-//                // Add the CardView to the LinearLayout
-//                val layoutParams = LinearLayout.LayoutParams(
-//                    LinearLayout.LayoutParams.MATCH_PARENT,
-//                    LinearLayout.LayoutParams.WRAP_CONTENT
-//                )
-//                layoutParams.setMargins(8, 32, 8, 32)
-//                cardView.layoutParams = layoutParams
-//                cardView.radius = 25.0F
-//                binding.listingPage.addView(cardView)
-//            }
-//        }
-//        viewModel.fetchListings(User("j577YevJRoZHgsKCRC9i1RLACZL2"))
-//    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun formatDatePeriod(start: Timestamp, end: Timestamp): String {
+        val startDate = start.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        val endDate = end.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        val formatter = DateTimeFormatter.ofPattern("dd MMM")
+        val formattedStart = startDate.format(formatter)
+        val formattedEnd = endDate.format(formatter)
+        return "$formattedStart $formattedEnd"
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun displayReservations() {
+        viewModel.reservationLiveData.observe(viewLifecycleOwner) { reservations ->
+            binding.reservationPage.removeAllViews()
+            for (reservation in reservations) {
+                val cardView = layoutInflater.inflate(R.layout.listing_item, null) as CardView
+                val viewPager: ViewPager2 = cardView.findViewById(R.id.view_pager_listing_images)
+                val location: TextView = cardView.findViewById(R.id.reservation_location)
+                val period: TextView = cardView.findViewById(R.id.reservation_period)
+                val status: TextView = cardView.findViewById(R.id.reservation_status)
+
+                // get listing reference
+                lateinit var geoLocation : String?
+                lateinit var previewPhoto : List<String>?
+
+                val documentId = reservation.listingId
+                val documentRef = db.collection("listings").document(documentId ?: "")
+                documentRef.get()
+                    .addOnSuccessListener { documentSnapshot ->
+                        if (documentSnapshot.exists()) {
+                            val data = documentSnapshot.data
+                            geoLocation = data?.get("location")?.toString() ?: null
+                            previewPhoto = data?.get("photos") as? List<String>?
+                        } else {
+                            throw Exception("Listing not found")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        throw exception
+                    }
+
+
+                location.text = geoLocation // TODO: get city by geo or add city to Listing model
+                if (reservation.startDate != null || reservation.endDate != null) {
+                    period.text =
+                        formatDatePeriod(reservation.startDate ?: Timestamp(0, 0),
+                        reservation.endDate ?: Timestamp(0, 0))
+                } else {
+                    period.text = "N/A"
+                }
+                status.text = when (reservation.status) {
+                    0 -> "Pending"
+                    1 -> "Approved"
+                    2 -> "Declined"
+                    3 -> "Completed"
+                    4 -> "Cancelled"
+                    else -> "ERROR"
+                }
+
+                if (previewPhoto != null) {
+                    viewPager.adapter = ImageAdapter(previewPhoto!!)
+                }
+
+                // Add the CardView to the LinearLayout
+                val layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                layoutParams.setMargins(8, 32, 8, 32)
+                cardView.layoutParams = layoutParams
+                cardView.radius = 25.0F
+                binding.reservationPage.addView(cardView)
+            }
+        }
+        viewModel.fetchReservations(User("j577YevJRoZHgsKCRC9i1RLACZL2"))
+    }
 
 //    @RequiresApi(Build.VERSION_CODES.O) // TODO: Remove after Date (Calendar Date Picker) is finalized on the frontend
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
