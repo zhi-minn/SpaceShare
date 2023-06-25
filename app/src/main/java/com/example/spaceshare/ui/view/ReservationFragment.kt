@@ -11,12 +11,19 @@ import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentReservationBinding
 import com.example.spaceshare.models.User
+import com.example.spaceshare.ui.orders.AllOrdersFragment
+import com.example.spaceshare.ui.orders.PendingOrdersFragment
+import com.example.spaceshare.ui.orders.SuccessfulOrdersFragment
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import com.example.spaceshare.utils.ImageAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -25,7 +32,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-class ReserveFragment : Fragment() {
+class ReservationFragment : Fragment() {
 
     private val db = Firebase.firestore
     private var auth = FirebaseAuth.getInstance()
@@ -44,6 +51,7 @@ class ReserveFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_reservation, container, false)
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun formatDatePeriod(start: Timestamp, end: Timestamp): String {
         val startDate = start.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
@@ -53,6 +61,37 @@ class ReserveFragment : Fragment() {
         val formattedEnd = endDate.format(formatter)
         return "$formattedStart $formattedEnd"
     }
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+//        val tabLayout = view.findViewById<TabLayout>(R.id.tabLayout)
+//        val viewPager = view.findViewById<ViewPager2>(R.id.viewPager)
+
+//        val fragmentList = arrayListOf<Fragment>(
+//            AllOrdersFragment(),
+//            SuccessfulOrdersFragment(),
+//            PendingOrdersFragment()
+//        )
+
+//        val adapter = object : FragmentStateAdapter(childFragmentManager, lifecycle) {
+//            override fun getItemCount() = fragmentList.size
+//            override fun createFragment(position: Int) = fragmentList[position]
+//        }
+
+//        viewPager.adapter = adapter
+
+//        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+//            tab.text = when(position) {
+//                0 -> "All Orders"
+//                1 -> "Successful Orders"
+//                else -> "Pending Orders"
+//            }
+//        }.attach()
+        navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
+//        displayReservations()
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun displayReservations() {
@@ -66,8 +105,8 @@ class ReserveFragment : Fragment() {
                 val status: TextView = cardView.findViewById(R.id.reservation_status)
 
                 // get listing reference
-                lateinit var geoLocation : String?
-                lateinit var previewPhoto : List<String>?
+                lateinit var geoLocation : String
+                lateinit var previewPhoto : List<String>
 
                 val documentId = reservation.listingId
                 val documentRef = db.collection("listings").document(documentId ?: "")
@@ -75,8 +114,8 @@ class ReserveFragment : Fragment() {
                     .addOnSuccessListener { documentSnapshot ->
                         if (documentSnapshot.exists()) {
                             val data = documentSnapshot.data
-                            geoLocation = data?.get("location")?.toString() ?: null
-                            previewPhoto = data?.get("photos") as? List<String>?
+                            geoLocation = (data?.get("location")?.toString() ?: null) as String
+                            previewPhoto = (data?.get("photos") as? List<String>?)!!
                         } else {
                             throw Exception("Listing not found")
                         }
