@@ -1,6 +1,8 @@
 package com.example.spaceshare
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -61,13 +63,14 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.isHostModeLiveData.observe(this) { isHostMode ->
             updateUI(isHostMode)
         }
-
+        
         updateUI(SharedPreferencesManager.isHostMode())
     }
 
     private fun updateUI(isHostMode: Boolean) {
         val menu = bottomNavigationView.menu
         menu.findItem(R.id.listingFragment).isVisible = isHostMode
+        menu.findItem(R.id.searchFragment).isVisible = !isHostMode
     }
 
     override fun onSupportNavigateUp(): Boolean {
