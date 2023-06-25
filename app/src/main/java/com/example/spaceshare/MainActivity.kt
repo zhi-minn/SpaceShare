@@ -1,6 +1,8 @@
 package com.example.spaceshare
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -52,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
             true
         }
+
         bottomNavigationView.selectedItemId = if (SharedPreferencesManager.isHostMode())
             R.id.listingFragment else
             R.id.searchFragment
@@ -61,13 +64,14 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.isHostModeLiveData.observe(this) { isHostMode ->
             updateUI(isHostMode)
         }
-
+        
         updateUI(SharedPreferencesManager.isHostMode())
     }
 
     private fun updateUI(isHostMode: Boolean) {
         val menu = bottomNavigationView.menu
         menu.findItem(R.id.listingFragment).isVisible = isHostMode
+        menu.findItem(R.id.searchFragment).isVisible = !isHostMode
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -75,14 +79,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (navController.currentDestination?.id != navController.graph.startDestinationId) {
+        val curr = navController.currentDestination?.id
+        if (curr != navController.graph.startDestinationId) {
             val isCurrentDestinationMenu = when (navController.currentDestination?.id) {
                 R.id.searchFragment, R.id.listingFragment, R.id.profileFragment -> true
                 else -> false
             }
-            if (isCurrentDestinationMenu) {
+            if (curr == R.id.listingFragment && SharedPreferencesManager.isHostMode()) {
+                finish()
+            }
+            else if (curr == R.id.profileFragment && SharedPreferencesManager.isHostMode()) {
+                navController.navigate(R.id.listingFragment)
+            }
+            else if (isCurrentDestinationMenu) {
                 navController.navigate(navController.graph.startDestinationId)
-            } else {
+            }
+            else {
                 navController.popBackStack()
             }
         } else {

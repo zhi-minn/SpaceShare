@@ -32,6 +32,8 @@
 * Minn 2 hours (2023-06-20) [Commit](https://github.com/zhi-minn/SpaceShare/commit/afe103dff8eb470131625dc7ee3822b25fd18c17)
   + Add pop up features when click on image
   + Add margin between listings and made listing cards rounded to define a more polished UI
+* Chang 0.25 hours (2023-06-21) [PR](https://github.com/zhi-minn/SpaceShare/pull/7)
+  + Refined user flow by making image selector pop up immediately when clicking add photo button
 * Minn 4 hours (2023-06-22) [Commit](https://github.com/zhi-minn/SpaceShare/commit/bf48ab35e41d3e4afb1cc6b549f6f23f465c3f0b)
   * Integrated Google Maps SDK into create listing feature
   * Integrated Google Maps AutoComplete search into Maps
@@ -48,3 +50,5 @@
   + Notify users by email when location matching preference posted
   + Smooth transition when publishing listing
   + Fix minor layout issues
+* William 4 hours (2023-06-24) [Commit](https://github.com/zhi-minn/SpaceShare/commit/592a4a40a51642cbec2361ea6105ec8615ea6d90)
+  + Fix navigation and some ui work

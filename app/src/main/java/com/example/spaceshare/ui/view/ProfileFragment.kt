@@ -83,6 +83,9 @@ class ProfileFragment : Fragment() {
         binding.btnSwitchMode.text = if (isHostMode)
             "Switch to client" else
             "Switch to host"
+        binding.uiMode.text = if (isHostMode)
+            "You are in host mode" else
+            "You are in client mode"
     }
 
     override fun onDestroyView() {

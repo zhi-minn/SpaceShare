@@ -54,12 +54,23 @@
 
             <TextView
                 android:id="@+id/btnSwitchMode"
+                android:text=""
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="16dp"
                 android:paddingHorizontal="32dp"
                 android:layout_marginTop="@dimen/standard_component_margin"
                 android:background="@drawable/text_background_curved" />
+
+            <TextView
+                android:id="@+id/uiMode"
+                android:text=""
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="16dp"
+                android:paddingHorizontal="32dp"
+                android:layout_marginTop="@dimen/standard_component_margin" />
 
             <TextView
                 android:id="@+id/btnPreferences"
