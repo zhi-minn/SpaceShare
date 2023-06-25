@@ -24,4 +24,11 @@
         android:icon="@drawable/settings"
         android:title="Profile"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/reservationFragment"
+        android:icon="@drawable/order"
+        android:title="Spaces"
+        android:visible="false"/>
+
 </menu>
