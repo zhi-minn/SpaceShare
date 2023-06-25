@@ -16,7 +16,7 @@
     <string name="post">Post</string>
     <string name="dialog_title_result">Result</string>
     <string name="dialog_button_close">Close</string>
-    <string name="location_permission_denied">Location permission denied</string>
-    <string name="permission_required_toast">Location permission is required to pinpoint property location</string>
-    <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
+    <string name= "reservation_status">Completed\Pending\Aproved\Cancled</string>
+    <string name= "reservation_period">YYYY/MM/DD</string>
+    <string name= "reservation_title">Street Name</string>
 </resources>
