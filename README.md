@@ -37,3 +37,5 @@
   + Prettify login and sign up page
 * William 4 hours (2023-06-24) [Commit](https://github.com/zhi-minn/SpaceShare/commit/592a4a40a51642cbec2361ea6105ec8615ea6d90)
   + Fix navigation and some ui work
+* Chang 1 hour (2023-06-25) 
+  + Add layout for search functionality (incomplete)
