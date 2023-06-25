@@ -50,7 +50,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".CropActivity"
             android:exported="false"

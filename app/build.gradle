@@ -8,6 +8,18 @@ plugins {
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
+def getUsername() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("SPACESHARE_EMAIL");
+}
+
+def getSpacesharePassword() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("SPACESHARE_PASSWORD");
+}
+
 android {
     namespace 'com.example.spaceshare'
     compileSdk 33
@@ -23,6 +35,9 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        buildConfigField "String", "SPACESHARE_EMAIL", "\""+getUsername()+"\""
+        buildConfigField "String", "SPACESHARE_PASSWORD", "\""+getSpacesharePassword()+"\""
     }
 
     buildTypes {
@@ -113,6 +128,10 @@ dependencies {
 
     // Image cropping
     implementation 'com.github.takusemba:cropme:2.0.8'
+
+    // Java Mail
+    implementation 'com.sun.mail:android-mail:1.6.2'
+    implementation 'com.sun.mail:android-activation:1.6.2'
 
     // MUI
     implementation 'com.google.android.material:material:1.9.0'

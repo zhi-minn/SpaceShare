@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_profileFragment_to_listingFragment"
             app:destination="@id/listingFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_preferencesFragment"
+            app:destination="@id/preferencesFragment" />
     </fragment>
 
     <!-- Listing Fragment -->
@@ -50,6 +53,14 @@
         android:name="com.example.spaceshare.ui.view.CreateListingFragment"
         android:label="CreateListing"
         tools:layout="@layout/fragment_create_listing" >
+    </fragment>
+
+    <!-- Preferences Fragment -->
+    <fragment
+        android:id="@+id/preferencesFragment"
+        android:name="com.example.spaceshare.ui.view.PreferencesFragment"
+        android:label="Preferences"
+        tools:layout="@layout/fragment_preferences" >
     </fragment>
 
 </navigation>
