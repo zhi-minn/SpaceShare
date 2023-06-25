@@ -1,5 +1,12 @@
 package com.example.spaceshare.models
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.GeoPoint
 
-class SearchCriteria {
-    // TODO: Insert relevant search criteria that fits the format expected by Google Maps SDK
-}
+data class SearchCriteria (
+    val hostID: String = "",
+    val unitNum: Double = 0.0,
+    val price: Double = 0.0,
+    val location: GeoPoint,
+    val startDate: Timestamp,
+    val endDate: Timestamp
+)
