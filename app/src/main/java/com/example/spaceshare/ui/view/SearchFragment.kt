@@ -1,5 +1,7 @@
 package com.example.spaceshare.ui.view
 
+import MapDialogFragment
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,12 +18,15 @@ import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import java.util.Objects
 
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
     private lateinit var navController: NavController
     private val searchViewModel : SearchViewModel by viewModels()
+
+    private lateinit var geocoder: Geocoder
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +39,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
+        geocoder = Geocoder(requireContext())
 
         configureCards()
     }
@@ -42,8 +48,16 @@ class SearchFragment : Fragment() {
         // Where
         binding.whereCard.setOnClickListener {
             hideWhatSelectorCard()
+            val mapDialogFragment = MapDialogFragment(searchViewModel)
+            mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
-
+        searchViewModel.location.observe(viewLifecycleOwner) { location ->
+            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            if (!addresses.isNullOrEmpty()) {
+                val address = addresses[0]
+                binding.searchLocation.text = address.getAddressLine(0)
+            }
+        }
 
         // When
         val constraintsBuilder = CalendarConstraints.Builder()
@@ -60,7 +74,6 @@ class SearchFragment : Fragment() {
             dateRangePicker.show(parentFragmentManager, "tag")
             hideWhatSelectorCard()
         }
-
 
         // What
         binding.whatCard.setOnClickListener {
