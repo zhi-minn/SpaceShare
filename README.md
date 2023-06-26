@@ -37,6 +37,8 @@
   * Integrated Google Maps moving marker to allow user to pinpoint location
 * Minn 2 hours (2023-06-22) [Commit](https://github.com/zhi-minn/SpaceShare/commit/3f114b2e3dea51586535340a63d202420138b62a)
   + Prettify login and sign up page
+* Chang 1 hour (2023-06-23) [PR](https://github.com/zhi-minn/SpaceShare/pull/10)
+  + Add basic layout for search functionality 
 * Minn 1.5 hours (2023-06-23) [Commit](https://github.com/zhi-minn/SpaceShare/commit/f6474ac38fe34e505611876f46784e3e57773eeb)
   + Prettify create listing fragment
   + Link location selected to create listing fragment and geocode LatLng into address
@@ -51,7 +53,14 @@
   + Add search function backend basic logic
 * William 4 hours (2023-06-24) [Commit](https://github.com/zhi-minn/SpaceShare/commit/592a4a40a51642cbec2361ea6105ec8615ea6d90)
   + Fix navigation and some ui work
-* Chang 1 hour (2023-06-25) [PR](https://github.com/zhi-minn/SpaceShare/pull/10)
-  + Add basic layout for search functionality
 * Youming 6 hours (2023-06-25) [Commit](https://github.com/zhi-minn/SpaceShare/commit/13b0d66d08eec3bb02302ae6908724874cec2452)
   + Add orders bot navigate and corrsbonging UI
+* Chang 7.5 hours (2023-06-25) [PR](https://github.com/zhi-minn/SpaceShare/pull/12)
+  * Made the search page UI functional
+  * Added:
+    * Google Maps Dialog for choosing location
+    * MUI DateRangePicker for choosing date range
+    * Component to select space required in cubic metres
+    * ViewModel to store it all
+
+    
