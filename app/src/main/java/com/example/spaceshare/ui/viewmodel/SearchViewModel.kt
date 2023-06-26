@@ -2,10 +2,16 @@ package com.example.spaceshare.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.interfaces.LocationInterface
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchViewModel : ViewModel(), LocationInterface {
+class SearchViewModel @Inject constructor(
+    private val listingRepo: ListingRepository
+) : ViewModel(), LocationInterface {
 
     var spaceRequired = MutableLiveData<Double>(0.0)
 
@@ -36,7 +42,9 @@ class SearchViewModel : ViewModel(), LocationInterface {
     }
 
     fun submitSearch() {
-
+        viewModelScope.launch {
+            listingRepo.searchListings()
+        }
     }
 
     override fun setLocation(latLng: LatLng) {
