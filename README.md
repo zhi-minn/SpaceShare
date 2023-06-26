@@ -43,7 +43,7 @@
   + Prettify create listing fragment
   + Link location selected to create listing fragment and geocode LatLng into address
 * Minn 3.5 hours (2023-06-23) [Commit](https://github.com/zhi-minn/SpaceShare/commit/99f26037052ae3d4a3b8ae67a5d3df1b11201ce4)
-  + Added preferences page and setup relevant fragments and view models for persistences
+  + Added preferences page and setup relevant fragments and view models for persistence
 * Minn 4 hours (2023-06-24) [Commit](https://github.com/zhi-minn/SpaceShare/commit/69bc5cbb51395490d0d53e8e012257a18876dc87)
   + Add location field to preferences and bind it to selected location on Google Maps SDK
   + Notify users by email when location matching preference posted
@@ -54,13 +54,13 @@
 * William 4 hours (2023-06-24) [Commit](https://github.com/zhi-minn/SpaceShare/commit/592a4a40a51642cbec2361ea6105ec8615ea6d90)
   + Fix navigation and some ui work
 * Youming 6 hours (2023-06-25) [Commit](https://github.com/zhi-minn/SpaceShare/commit/13b0d66d08eec3bb02302ae6908724874cec2452)
-  + Add orders bot navigate and corrsbonging UI
+  + Add orders bot navigate and corresponding UI
 * Chang 7.5 hours (2023-06-25) [PR](https://github.com/zhi-minn/SpaceShare/pull/12)
   * Made the search page UI functional
   * Added:
-    * Google Maps Dialog for choosing location
+    * Google Maps Dialog for choosing a location (thanks Minn)
     * MUI DateRangePicker for choosing date range
-    * Component to select space required in cubic metres
+    * Custom card to select space required in cubic metres
     * ViewModel to store it all
 
     
