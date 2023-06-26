@@ -5,8 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.interfaces.LocationInterface
+import com.example.spaceshare.models.SearchCriteria
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.launch
+import java.sql.Date
 import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(
@@ -18,10 +22,16 @@ class SearchViewModel @Inject constructor(
     private val spaceLowerLimit: Double = 0.0
     private val spaceUpperLimit: Double = 100.0
 
-    var location: MutableLiveData<LatLng?>? = null
+    var location = MutableLiveData<LatLng>()
 
     var startTime = MutableLiveData<Long>()
     var endTime = MutableLiveData<Long>()
+
+    init {
+        location.value = LatLng(0.0,0.0)
+        startTime.value = 0
+        endTime.value = 0
+    }
 
     fun incrementSpaceRequired() {
         if (spaceRequired.value?.plus(0.5)!! < spaceUpperLimit)
@@ -43,7 +53,15 @@ class SearchViewModel @Inject constructor(
 
     fun submitSearch() {
         viewModelScope.launch {
-            listingRepo.searchListings()
+            val searchLoc: LatLng = location.value!!
+            val searchGeopoint = GeoPoint(searchLoc.latitude, searchLoc.longitude)
+            val startDate = Date(startTime.value!!)
+            val endDate = Date(endTime.value!!)
+            val startTimestamp = Timestamp(startDate)
+            val endTimestamp = Timestamp(endDate)
+            val criteria =
+                SearchCriteria(spaceRequired.value!!, searchGeopoint, startTimestamp, endTimestamp)
+            listingRepo.searchListings(criteria)
         }
     }
 
