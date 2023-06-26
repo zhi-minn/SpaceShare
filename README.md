@@ -65,5 +65,7 @@
 * Chang 1 hour (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/13)
   * Refined create listing layout hints to be more user friendly
   * Resolved search fragment crashing on app startup
-
+* Minn 2 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/14)
+  + Added delete functionality to host listings
+  + Note: Can not implement RecyclerView swipe to delete functionality. Issue because ViewPager2 within RecyclerView also needs to handle swipe events
     
