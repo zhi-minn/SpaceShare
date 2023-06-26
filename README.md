@@ -57,5 +57,5 @@
   + Add basic layout for search functionality
 * Youming 6 hours (2023-06-25) [Commit](https://github.com/zhi-minn/SpaceShare/commit/13b0d66d08eec3bb02302ae6908724874cec2452)
   + Add orders bot navigate and corrsbonging UI
-* Chang 5 hours (2023-06-25) [PR](https://github.com/zhi-minn/SpaceShare/pull/12)
+* Chang 6 hours (2023-06-25) [PR](https://github.com/zhi-minn/SpaceShare/pull/12)
   + Add proper layout for search functionality
