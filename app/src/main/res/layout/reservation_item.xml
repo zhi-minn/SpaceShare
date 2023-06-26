@@ -44,7 +44,7 @@
         </LinearLayout>
 
         <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/view_pager_listing_images"
+            android:id="@+id/view_pager_reservation_images"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_weight="0.7"
