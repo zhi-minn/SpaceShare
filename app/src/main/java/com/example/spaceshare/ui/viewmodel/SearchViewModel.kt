@@ -1,14 +1,28 @@
 package com.example.spaceshare.ui.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.spaceshare.models.Listing
 
 class SearchViewModel : ViewModel() {
 
-    private val _searchResults = MutableLiveData<List<Listing>>()
-    val searchResults: LiveData<List<Listing>> get() = _searchResults
+    var spaceRequired = MutableLiveData<Double>(0.0)
 
-    // TODO: Any business logic for searching
+    private var spaceLowerLimit: Double = 0.0
+    private var spaceUpperLimit: Double = 100.0
+
+
+    fun incrementSpaceRequired() {
+        if (spaceRequired.value?.plus(0.5)!! < spaceUpperLimit)
+            spaceRequired.value = spaceRequired.value?.plus(0.5)
+    }
+
+    fun decrementSpaceRequired() {
+        if (spaceRequired.value?.minus(0.5)!! >= spaceLowerLimit)
+            spaceRequired.value = spaceRequired.value?.minus(0.5)
+    }
+
+    fun getSpaceRequiredText(): String {
+        return spaceRequired.toString()
+    }
+
 }

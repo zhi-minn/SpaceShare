@@ -183,8 +183,8 @@
 
                     <ImageButton
                         android:id="@+id/whatSelectorAddSize"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginEnd="16dp"
                         android:background="@drawable/icons8_add_50"
                         app:layout_constraintBottom_toBottomOf="@+id/whatSelectorItem1Description"
@@ -193,7 +193,7 @@
 
                     <TextView
                         android:id="@+id/whatSelectorSizeText"
-                        android:layout_width="25dp"
+                        android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:text="0"
@@ -205,8 +205,8 @@
 
                     <ImageButton
                         android:id="@+id/whatSelectorMinusSize"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/icons8_minus_50"
                         app:layout_constraintBottom_toBottomOf="@+id/whatSelectorAddSize"
