@@ -63,10 +63,8 @@ class PreferencesViewModel @Inject constructor(
             val preferences = repo.getPreferences(userId)
             if (preferences != null) {
                 _preferencesLiveData.value = preferences
-                _preferencesLoaded.value = true
-            } else {
-                // TODO: Display preferences fetching error
             }
+            _preferencesLoaded.value = true
         }
     }
 

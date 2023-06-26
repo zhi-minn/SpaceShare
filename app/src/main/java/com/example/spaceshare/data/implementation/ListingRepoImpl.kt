@@ -22,10 +22,11 @@ class ListingRepoImpl @Inject constructor(
     override suspend fun createListing(listing: Listing): String {
         return withContext(Dispatchers.IO) {
             val deferred = CompletableDeferred<String>()
-            listingsCollection.add(listing)
-                .addOnSuccessListener { documentReference ->
-                    Log.d("listings", "Added listing with id ${documentReference.id}")
-                    deferred.complete(documentReference.id)
+            listingsCollection.document(listing.id!!)
+                .set(listing)
+                .addOnSuccessListener {
+                    Log.d("listings", "Added listing with id ${listing.id}")
+                    deferred.complete(listing.id!!)
                 }
                 .addOnFailureListener { e ->
                     Log.w("listings", "Error adding document", e)
@@ -46,7 +47,9 @@ class ListingRepoImpl @Inject constructor(
 
             return@withContext result.documents.mapNotNull { document ->
                 try {
-                    document.toObject(Listing::class.java)
+                    val listing = document.toObject(Listing::class.java)
+                    listing?.id = document.id
+                    listing
                 } catch (e: Exception) {
                     Log.e(TAG, "Error casting document to Listing object: ${e.message}")
                     null
@@ -60,5 +63,13 @@ class ListingRepoImpl @Inject constructor(
 
     override suspend fun searchListings() {
 
+    }
+
+    override suspend fun deleteListing(listingId: String): Unit = withContext(Dispatchers.IO) {
+        try {
+            listingsCollection.document(listingId).delete().await()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error deleting listing with ID $listingId: ${e.message}", e)
+        }
     }
 }

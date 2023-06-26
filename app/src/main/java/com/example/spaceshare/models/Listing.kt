@@ -3,7 +3,7 @@ package com.example.spaceshare.models
 import com.google.firebase.firestore.GeoPoint
 
 data class Listing(
-    val id: String? = null,
+    var id: String? = null,
     val hostId: String? = null,
     val photos: MutableList<String> = mutableListOf(),
     val title: String? = null,
