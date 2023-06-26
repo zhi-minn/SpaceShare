@@ -81,3 +81,7 @@
 * Chang 3.5 hours (2023-06-27) [PR](https://github.com/zhi-minn/SpaceShare/pull/20)
   * Moved current search UI into search dialog
   * Added new search page (that uses the search dialog + displays results)
+* Wenyu 1 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/commit/a69d7d422cc7f986019621edd51250ce9613a18c) 
+  + Added the message data class
+* Chang 2 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/16)
+  * Made search button actually search the database
