@@ -51,5 +51,7 @@
   + Add search function backend basic logic
 * William 4 hours (2023-06-24) [Commit](https://github.com/zhi-minn/SpaceShare/commit/592a4a40a51642cbec2361ea6105ec8615ea6d90)
   + Fix navigation and some ui work
-* Chang 1 hour (2023-06-25) [PR1](https://github.com/zhi-minn/SpaceShare/pull/10)
-  + Add layout for search functionality (incomplete)
+* Chang 1 hour (2023-06-25) [PR](https://github.com/zhi-minn/SpaceShare/pull/10)
+  + Add basic layout for search functionality
+* Youming 6 hours (2023-06-25) [Commit](https://github.com/zhi-minn/SpaceShare/commit/13b0d66d08eec3bb02302ae6908724874cec2452)
+  + Add orders bot navigate and corrsbonging UI
