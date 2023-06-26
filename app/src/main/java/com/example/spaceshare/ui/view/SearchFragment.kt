@@ -18,8 +18,11 @@ import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
 
     companion object {
@@ -28,7 +31,8 @@ class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
     private lateinit var navController: NavController
-    private val searchViewModel : SearchViewModel by viewModels()
+    @Inject
+    lateinit var searchViewModel : SearchViewModel
 
     private lateinit var geocoder: Geocoder
 
