@@ -62,5 +62,8 @@
     * MUI DateRangePicker for choosing date range
     * Custom card to select space required in cubic metres
     * ViewModel to store it all
+* Chang 1 hour (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/13)
+  * Refined create listing layout hints to be more user friendly
+  * Resolved search fragment crashing on app startup
 
     
