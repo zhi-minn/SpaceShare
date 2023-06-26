@@ -22,6 +22,10 @@ import java.util.Objects
 
 class SearchFragment : Fragment() {
 
+    companion object {
+        private val TAG = this::class.simpleName
+    }
+
     private lateinit var binding: FragmentSearchBinding
     private lateinit var navController: NavController
     private val searchViewModel : SearchViewModel by viewModels()
@@ -42,6 +46,7 @@ class SearchFragment : Fragment() {
         geocoder = Geocoder(requireContext())
 
         configureCards()
+        configureButtons()
     }
 
     private fun configureCards() {
@@ -51,11 +56,15 @@ class SearchFragment : Fragment() {
             val mapDialogFragment = MapDialogFragment(searchViewModel)
             mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
-        searchViewModel.location.observe(viewLifecycleOwner) { location ->
-            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-            if (!addresses.isNullOrEmpty()) {
-                val address = addresses[0]
-                binding.searchLocation.text = address.getAddressLine(0)
+        searchViewModel.location?.observe(viewLifecycleOwner) { location ->
+            if (location != null) {
+                val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                if (!addresses.isNullOrEmpty()) {
+                    val address = addresses[0]
+                    binding.searchLocation.text = address.getAddressLine(0)
+                }
+            } else {
+                binding.searchLocation.text = "Anywhere"
             }
         }
 
@@ -69,10 +78,16 @@ class SearchFragment : Fragment() {
                 .build()
         dateRangePicker.addOnPositiveButtonClickListener {
             binding.searchTime.text = dateRangePicker.headerText
+            searchViewModel.startTime.value = dateRangePicker.selection?.first
+            searchViewModel.endTime.value = dateRangePicker.selection?.second
         }
         binding.whenCard.setOnClickListener {
-            dateRangePicker.show(parentFragmentManager, "tag")
+            dateRangePicker.show(parentFragmentManager, TAG)
             hideWhatSelectorCard()
+        }
+        searchViewModel.endTime.observe(viewLifecycleOwner) {
+            if (it == System.currentTimeMillis())
+                binding.searchTime.text = "Anytime"
         }
 
         // What
@@ -88,6 +103,20 @@ class SearchFragment : Fragment() {
         }
         searchViewModel.spaceRequired.observe(viewLifecycleOwner) { spaceRequired ->
             binding.whatSelectorSizeText.text = spaceRequired.toString()
+            if (spaceRequired == 0.0)
+                binding.searchSize.text = "Anysize"
+            else
+                binding.searchSize.text = spaceRequired.toString() + " cubic metres"
+        }
+    }
+
+    private fun configureButtons() {
+        binding.btnClear.setOnClickListener {
+            searchViewModel.clearAllData()
+        }
+
+        binding.btnSearch.setOnClickListener {
+            searchViewModel.submitSearch()
         }
     }
 
