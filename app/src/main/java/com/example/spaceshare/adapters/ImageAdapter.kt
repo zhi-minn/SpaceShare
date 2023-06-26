@@ -1,4 +1,4 @@
-package com.example.spaceshare.utils
+package com.example.spaceshare.adapters
 
 import android.app.Dialog
 import android.content.Context

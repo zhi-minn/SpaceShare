@@ -27,6 +27,7 @@ import com.example.spaceshare.utils.DecimalInputFilter
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
+import java.util.UUID
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -143,8 +144,8 @@ class CreateListingFragment : Fragment() {
     private fun publishListing(title: String, price: String, description: String) {
         val hostId = auth.currentUser?.uid
         if (validateListing(title, description, price)) {
-            val listing = Listing(title = title, description = description, price = price.toDouble(),
-            hostId = hostId)
+            val listing = Listing(id = UUID.randomUUID().toString(), title = title,
+                description = description, price = price.toDouble(), hostId = hostId)
             createListingViewModel.publishListing(listing)
             binding.scrollView.visibility = View.GONE
             binding.progressBar.visibility = View.VISIBLE

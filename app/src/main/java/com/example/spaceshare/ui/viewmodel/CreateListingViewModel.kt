@@ -80,7 +80,6 @@ class CreateListingViewModel @Inject constructor(
                 // Inform users whose preferences matches listing
                 if (listing.location != null) {
                     preferencesRepo.getAllPreferences().forEach { preferences ->
-                        Log.i("TAG", "Analyzing preference ${preferences}")
                         if (preferences.location != null && preferences.email != null) {
                             val distance = MathUtil.calculateDistanceInKilometers(listing.location!!, preferences.location!!)
                             if (distance <= preferences.radius) {
