@@ -76,7 +76,7 @@ class CreateListingFragment : Fragment() {
             startForResult.launch(Intent(requireActivity(), CropActivity::class.java))
         }
 
-        //
+        // Maps
         binding.btnOpenMaps.setOnClickListener {
             val mapDialogFragment = MapDialogFragment(createListingViewModel)
             mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
