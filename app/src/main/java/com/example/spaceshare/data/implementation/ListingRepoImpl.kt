@@ -57,4 +57,8 @@ class ListingRepoImpl @Inject constructor(
             return@withContext emptyList()
         }
     }
+
+    override suspend fun searchListings() {
+
+    }
 }
