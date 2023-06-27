@@ -9,6 +9,13 @@
         android:title="Search"
         app:showAsAction="always" />
 
+    <!-- reservation -->
+    <item
+        android:id="@+id/reservationFragment"
+        android:icon="@drawable/order"
+        android:title="Spaces"
+        android:visible="false"/>
+
     <!-- Host-specific Items -->
     <item
         android:id="@+id/listingFragment"
@@ -24,4 +31,7 @@
         android:icon="@drawable/settings"
         android:title="Profile"
         app:showAsAction="always" />
+
+
+
 </menu>
