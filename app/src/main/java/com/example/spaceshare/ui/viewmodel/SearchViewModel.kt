@@ -6,11 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.consts.ListingConsts.SPACE_BOOKING_LOWER_LIMIT
 import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
 import com.example.spaceshare.data.repository.ListingRepository
-import com.example.spaceshare.interfaces.ListingAdapterInterface
 import com.example.spaceshare.interfaces.LocationInterface
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.SearchCriteria
-import com.example.spaceshare.models.User
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
@@ -38,7 +36,7 @@ class SearchViewModel @Inject constructor(
         fetchInitialListings()
     }
 
-    fun fetchInitialListings() {
+    private fun fetchInitialListings() {
         viewModelScope.launch {
             val results = listingRepo.getAllListings()
             listings.value = results
@@ -73,12 +71,11 @@ class SearchViewModel @Inject constructor(
             val endTimestamp = Timestamp(endDate)
             val criteria =
                 SearchCriteria(spaceRequired.value!!, searchGeopoint, startTimestamp, endTimestamp)
-            listingRepo.searchListings(criteria)
+            listings.value = listingRepo.searchListings(criteria)
         }
     }
 
     override fun setLocation(latLng: LatLng) {
         location?.value = latLng
     }
-
 }
