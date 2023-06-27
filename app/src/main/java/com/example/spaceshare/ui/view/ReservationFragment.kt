@@ -163,23 +163,4 @@ class ReservationFragment : Fragment() {
         viewModel.fetchReservations(User("j577YevJRoZHgsKCRC9i1RLACZL2"))
     }
 
-    fun reserveListing(hostId: String, listingId: String, startDate: Timestamp, endDate: Timestamp, unit: Int) {
-        val clientId = auth.currentUser?.uid
-
-        if (hostId == listingId) {
-            throw Exception("hostId cannot be the same as clientId")
-        }
-
-        val reservation =
-            Reservation(
-                hostId = hostId, clientId = clientId, listingId = listingId,
-                startDate = startDate, endDate = endDate, unit = unit, status = ReservationStatus.PENDING.toInt())
-        db.collection("reservations")
-            .add(reservation)
-            .addOnFailureListener { e ->
-                // Failed to add reservation
-                throw Exception("Database failed to add reservation: ${e.message}", e)
-            }
-        println("after")
-    }
 }
