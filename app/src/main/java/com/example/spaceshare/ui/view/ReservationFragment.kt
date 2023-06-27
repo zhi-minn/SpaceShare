@@ -13,26 +13,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentReservationBinding
+import com.example.spaceshare.models.Reservation
+import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
-import com.example.spaceshare.ui.orders.AllOrdersFragment
-import com.example.spaceshare.ui.orders.PendingOrdersFragment
-import com.example.spaceshare.ui.orders.SuccessfulOrdersFragment
-import com.example.spaceshare.ui.viewmodel.ListingViewModel
+import com.example.spaceshare.models.toInt
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import com.example.spaceshare.utils.ImageAdapter
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.tasks.await
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -113,8 +106,6 @@ class ReservationFragment : Fragment() {
                 val status: TextView = cardView.findViewById(R.id.reservation_status)
 
                 // get listing reference
-//                lateinit var geoLocation : String
-//                lateinit var previewPhoto : List<String>
                 val geoLocation = "[80° N, 70° E]" // TODO: replace dummy values when listing detail is done
                 val previewPhoto = listOf("JPEG_20230619_181925_5939538432909368723.jpg_179d1f4f-856a-47e9-ae15-4466ca4fb64b")
 
@@ -172,43 +163,23 @@ class ReservationFragment : Fragment() {
         viewModel.fetchReservations(User("j577YevJRoZHgsKCRC9i1RLACZL2"))
     }
 
-//    @RequiresApi(Build.VERSION_CODES.O) // TODO: Remove after Date (Calendar Date Picker) is finalized on the frontend
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//        navController = findNavController()
-//        auth = FirebaseAuth.getInstance()
-//
-//        val reserveButton = view.findViewById<Button>(R.id.reserveButton)
-//        reserveButton.setOnClickListener {
-//
-//            val startDate = Date(2023, 6, 1)
-//            val endDate = Date(2023, 6, 30)
-//
-//            val unit = view.findViewById<EditText>(R.id.unitTextInput).text.toString().toInt()
-//
-//            reserveListing(Timestamp(startDate), Timestamp(endDate), unit)
-//        }
-//    }
+    fun reserveListing(hostId: String, listingId: String, startDate: Timestamp, endDate: Timestamp, unit: Int) {
+        val clientId = auth.currentUser?.uid
 
-//    fun reserveListing(startDate: Timestamp, endDate: Timestamp, unit: Int) {
-//        val clientId = auth.currentUser?.uid
-//        val hostId = "host" // TODO: Replace dummy values
-//        val listingId = "listing"
-//
-//        if (hostId == listingId) {
-//            throw Exception("hostId cannot be the same as clientId")
-//        }
-//        println("before")
-//        val reservation =
-//            Reservation(hostId = hostId, clientId = clientId, listingId = listingId,
-//                startDate = startDate, endDate = endDate, unit = unit,
-//                isPending = true, isApproved = false)
-//        db.collection("reservations")
-//            .add(reservation)
-//            .addOnFailureListener { e ->
-//                // Failed to add reservation
-//                throw Exception("Database failed to add reservation: ${e.message}", e)
-//            }
-//        println("after")
-//    }
+        if (hostId == listingId) {
+            throw Exception("hostId cannot be the same as clientId")
+        }
+
+        val reservation =
+            Reservation(
+                hostId = hostId, clientId = clientId, listingId = listingId,
+                startDate = startDate, endDate = endDate, unit = unit, status = ReservationStatus.PENDING.toInt())
+        db.collection("reservations")
+            .add(reservation)
+            .addOnFailureListener { e ->
+                // Failed to add reservation
+                throw Exception("Database failed to add reservation: ${e.message}", e)
+            }
+        println("after")
+    }
 }
