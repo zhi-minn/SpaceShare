@@ -3,6 +3,8 @@ package com.example.spaceshare.ui.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spaceshare.consts.ListingConsts.SPACE_BOOKING_LOWER_LIMIT
+import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
 import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.interfaces.LocationInterface
 import com.example.spaceshare.models.SearchCriteria
@@ -34,12 +36,12 @@ class SearchViewModel @Inject constructor(
     }
 
     fun incrementSpaceRequired() {
-        if (spaceRequired.value?.plus(0.5)!! < spaceUpperLimit)
+        if (spaceRequired.value?.plus(0.5)!! < SPACE_UPPER_LIMIT)
             spaceRequired.value = spaceRequired.value?.plus(0.5)
     }
 
     fun decrementSpaceRequired() {
-        if (spaceRequired.value?.minus(0.5)!! >= spaceLowerLimit)
+        if (spaceRequired.value?.minus(0.5)!! >= SPACE_BOOKING_LOWER_LIMIT)
             spaceRequired.value = spaceRequired.value?.minus(0.5)
     }
 
