@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_searchFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_reservationFragment"
+            app:destination="@id/reservationFragment" />
     </fragment>
 
     <!-- Profile Fragment -->
@@ -27,6 +30,9 @@
         <action
             android:id="@+id/action_profileFragment_to_listingFragment"
             app:destination="@id/listingFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_reservationFragment"
+            app:destination="@id/reservationFragment" />
         <action
             android:id="@+id/action_profileFragment_to_preferencesFragment"
             app:destination="@id/preferencesFragment" />
@@ -53,6 +59,19 @@
         android:name="com.example.spaceshare.ui.view.CreateListingFragment"
         android:label="CreateListing"
         tools:layout="@layout/fragment_create_listing" >
+    </fragment>
+
+    <!-- Reservation Fragment -->
+    <fragment
+        android:id="@+id/reservationFragment"
+        android:name="com.example.spaceshare.ui.view.ReservationFragment"
+        android:label="Reservation Fragment">
+        <action
+            android:id="@+id/action_reservationFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_reservationFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 
     <!-- Preferences Fragment -->
