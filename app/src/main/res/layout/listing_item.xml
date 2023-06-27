@@ -37,24 +37,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:textAppearance="?android:textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/listing_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/placeholder_description"
-                android:textAppearance="?android:textAppearanceSmall"
-                app:layout_constraintTop_toBottomOf="@id/listing_title"/>
-
-            <TextView
-                android:id="@+id/listing_price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="0.00"
-                android:textAppearance="?android:textAppearanceMedium"
-                app:layout_constraintTop_toBottomOf="@id/listing_description"/>
-
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btnDelete"
                 android:layout_width="wrap_content"
