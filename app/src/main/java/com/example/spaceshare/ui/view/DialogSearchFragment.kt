@@ -17,12 +17,11 @@ import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
-import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
-import javax.inject.Inject
 
-@AndroidEntryPoint
-class DialogSearchFragment : DialogFragment() {
+class DialogSearchFragment(
+    private val searchViewModel: SearchViewModel
+) : DialogFragment() {
 
     companion object {
         private val TAG = this::class.simpleName
@@ -30,8 +29,6 @@ class DialogSearchFragment : DialogFragment() {
 
     private lateinit var binding: DialogSearchBinding
     private lateinit var navController: NavController
-    @Inject
-    lateinit var searchViewModel : SearchViewModel
 
     private lateinit var geocoder: Geocoder
 
@@ -50,6 +47,11 @@ class DialogSearchFragment : DialogFragment() {
 
         configureCards()
         configureButtons()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Light_NoTitleBar_Fullscreen)
     }
 
     private fun configureCards() {
@@ -89,7 +91,7 @@ class DialogSearchFragment : DialogFragment() {
             hideWhatSelectorCard()
         }
         searchViewModel.endTime.observe(viewLifecycleOwner) {
-            if (it == System.currentTimeMillis())
+            if (it.equals(0))
                 binding.searchTime.text = "Anytime"
         }
 
@@ -114,8 +116,9 @@ class DialogSearchFragment : DialogFragment() {
     }
 
     private fun configureButtons() {
-        binding.btnClear.setOnClickListener {
-            searchViewModel.clearAllData()
+        binding.btnCancel.setOnClickListener {
+            searchViewModel.clearAllDialogData()
+            dialog?.dismiss()
         }
 
         binding.btnSearch.setOnClickListener {
