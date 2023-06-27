@@ -2,11 +2,11 @@ package com.example.spaceshare.ui.view
 
 import android.location.Geocoder
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,9 +26,10 @@ class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
     private lateinit var navController: NavController
-    @Inject
-    lateinit var searchViewModel : SearchViewModel
 
+    @Inject
+    lateinit var searchViewModel: SearchViewModel
+    private lateinit var adapter: ListingAdapter
     private lateinit var geocoder: Geocoder
 
     override fun onCreateView(
@@ -44,19 +45,27 @@ class SearchFragment : Fragment() {
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
         geocoder = Geocoder(requireContext())
 
-        configureCards()
+        configureSearchBar()
+        configureRecyclerView()
+        configureListingObservers()
     }
 
-    private fun configureCards() {
+    private fun configureSearchBar() {
         binding.searchBarCard.setOnClickListener {
             val searchDialogFragment = DialogSearchFragment(searchViewModel)
             searchDialogFragment.show(Objects.requireNonNull(childFragmentManager), "searchDialog")
         }
     }
 
-    private fun configureRecylcerView() {
-        //var adapter = ListingAdapter(searchViewModel)
-        //binding.recyclerView.adapter = adapter
+    private fun configureRecyclerView() {
+        adapter = ListingAdapter()
+        binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun configureListingObservers() {
+        searchViewModel.listings.observe(viewLifecycleOwner) { listings ->
+            adapter.submitList(listings)
+        }
     }
 }

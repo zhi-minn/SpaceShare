@@ -123,6 +123,7 @@ class DialogSearchFragment(
 
         binding.btnSearch.setOnClickListener {
             searchViewModel.submitSearch()
+            dialog?.dismiss()
         }
     }
 
