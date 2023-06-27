@@ -106,7 +106,7 @@ class ReservationFragment : Fragment() {
                 val status: TextView = cardView.findViewById(R.id.reservation_status)
 
                 // get listing reference
-                val geoLocation = "[80° N, 70° E]" // TODO: replace dummy values when listing detail is done
+                val geoLocation = "Waterloo" // TODO: replace dummy values when listing detail is done
                 val previewPhoto = listOf("JPEG_20230619_181925_5939538432909368723.jpg_179d1f4f-856a-47e9-ae15-4466ca4fb64b")
 
 //                val documentId = reservation.listingId
@@ -140,8 +140,8 @@ class ReservationFragment : Fragment() {
                     0 -> "Pending"
                     1 -> "Approved"
                     2 -> "Declined"
-                    3 -> "Completed"
-                    4 -> "Cancelled"
+                    3 -> "Cancelled"
+                    4 -> "Completed"
                     else -> "ERROR"
                 }
 

@@ -10,7 +10,7 @@
             android:id="@+id/spaces_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Orders"
+            android:text="Spaces"
             android:textSize="40sp"
             android:translationX="20dp"
             android:translationY="20dp"
@@ -18,14 +18,16 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/box_margin">
+            android:layout_width="368dp"
+            android:layout_height="633dp"
+            android:layout_margin="@dimen/box_margin"
+            android:translationY="60dp">
 
-            <LinearLayout android:id="@+id/reservation_page"
+            <LinearLayout
+                android:id="@+id/reservation_page"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
             </LinearLayout>
 
