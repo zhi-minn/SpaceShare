@@ -68,6 +68,7 @@
 * Minn 2 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/14)
   + Added delete functionality to host listings
   + Note: Can not implement RecyclerView swipe to delete functionality. Issue because ViewPager2 within RecyclerView also needs to handle swipe events
-* Chang 2 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/16)
-  * Made search button actually search the database
+* Chang 2.5 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/16)
+  * Refactored search functionality into listings repo
+  * Made search button trigger search from SearchViewModel
     
