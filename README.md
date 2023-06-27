@@ -75,5 +75,6 @@
 * Chang 2.5 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/16)
   * Refactored search functionality into listings repo
   * Made search button trigger search from SearchViewModel
-    
->>>>>>> 590ee5d (Update README.md)
+* Minn 1.25 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/18)
+  * Added storage space available details to create listing fragment
+  * Refactor fragment_create_listing to use `TextInputLayout` for better UI
