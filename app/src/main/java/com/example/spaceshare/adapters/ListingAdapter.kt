@@ -86,8 +86,6 @@ class ListingAdapter(
         fun bind(listing: Listing) {
             // Bind the listing data to the views
             binding.listingTitle.text = listing.title
-            binding.listingDescription.text = listing.description
-            binding.listingPrice.text = listing.price.toString()
 
             // Load the listing image from Firebase Storage into the ImageView
             if (listing.photos != null) {
