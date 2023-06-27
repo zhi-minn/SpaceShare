@@ -40,42 +40,6 @@ class ListingAdapter(
         }
     }
 
-    private fun createItemTouchHelperCallback(): ItemTouchHelper.Callback {
-        return object : ItemTouchHelper.Callback() {
-
-            override fun isItemViewSwipeEnabled(): Boolean {
-                return true
-            }
-
-            override fun getMovementFlags(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder
-            ): Int {
-                return makeMovementFlags(0, ItemTouchHelper.LEFT)
-            }
-
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.bindingAdapterPosition
-                val listing = getItem(position)
-
-                // Perform delete operation for the swiped item
-                listingAdapterInterface.removeItem(listing, position)
-                notifyItemRemoved(position)
-
-                // Adjust remaining items
-                notifyItemRangeChanged(position, itemCount - position)
-            }
-        }
-    }
-
     class ViewHolder(private val binding: ListingItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -90,6 +54,7 @@ class ListingAdapter(
             // Load the listing image from Firebase Storage into the ImageView
             if (listing.photos != null) {
                 binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos)
+                binding.imageIndicator.setViewPager(binding.viewPagerListingImages)
             }
         }
     }
