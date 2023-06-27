@@ -33,6 +33,10 @@ class ImageAdapter(
             Glide.with(holder.itemView)
                 .load(storageRef)
                 .into(holder.image)
+
+            holder.image.setOnClickListener {
+                showImagePopup(holder.image.context, images, position)
+            }
         } catch (e: Exception) {
             Log.e(TAG, "Error loading image with reference $imageUrl", e)
         }
