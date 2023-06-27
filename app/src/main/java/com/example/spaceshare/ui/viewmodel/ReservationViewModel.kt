@@ -8,7 +8,10 @@ import com.example.spaceshare.data.repository.ReservationRepository
 import com.example.spaceshare.manager.SharedPreferencesManager.isHostMode
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
+import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
+import com.example.spaceshare.models.toInt
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,8 +22,8 @@ class ReservationViewModel @Inject constructor(
     private val _reservationLiveData: MutableLiveData<List<Reservation>> = MutableLiveData()
     val reservationLiveData: LiveData<List<Reservation>> = _reservationLiveData
 
-    private val _listingLiveData: MutableLiveData<List<Listing>> = MutableLiveData()
-    val listingLiveData: LiveData<List<Listing>> = _listingLiveData
+    private val _listingReserved: MutableLiveData<Boolean> = MutableLiveData()
+    val listingReserved: LiveData<Boolean> = _listingReserved
 
     fun fetchReservations(user: User) {
         viewModelScope.launch {
@@ -29,7 +32,20 @@ class ReservationViewModel @Inject constructor(
         }
     }
 
-//    fun fetchListingsBasedOnReservations() {
-//
-//    }
+    fun reserveListing(reservation: Reservation) {
+        viewModelScope.launch {
+            if (reservation.hostId == reservation.listingId) {
+                throw Exception("hostId cannot be the same as clientId")
+            }
+
+            try {
+                repo.createReservation(reservation)
+                _listingReserved.value = true
+
+            } catch (e: Exception) {
+                _listingReserved.value = false
+                null
+            }
+        }
+    }
 }
