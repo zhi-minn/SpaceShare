@@ -12,11 +12,8 @@ class DetailedPageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_detailed_page)
-
         // Get house from intent extras
 //        val intent = Intent(requireContext(), SplashActivity::class.java)
-        DetailedPage =  //TODO
 
         // TODO: Populate views with listing data
     }
