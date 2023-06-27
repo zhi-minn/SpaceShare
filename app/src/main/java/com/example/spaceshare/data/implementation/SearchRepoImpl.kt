@@ -18,11 +18,11 @@ class SearchRepoImpl @Inject constructor(
     companion object {
         private val TAG = this::class.simpleName
     }
-    private val searchDB = db.collection("Search Example")
+    private val searchDB = db.collection("listings")
     override suspend fun search(criteria : SearchCriteria) : List<SearchCriteria> {
         return withContext(Dispatchers.IO) {
             try {
-                val res = searchDB.whereGreaterThanOrEqualTo("UnitNum", criteria.unitNum)
+                val res = searchDB.whereGreaterThanOrEqualTo("UnitNum", criteria.spaceRequired)
                     .whereLessThanOrEqualTo("Time.0", criteria.startDate)
                     .whereGreaterThanOrEqualTo("Time.1", criteria.endDate)
                     .orderBy("Price", Query.Direction.ASCENDING)

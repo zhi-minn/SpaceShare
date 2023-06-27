@@ -2,10 +2,8 @@ package com.example.spaceshare.data.implementation
 
 import android.util.Log
 import com.example.spaceshare.data.repository.PreferencesRepository
-import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Preferences
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
