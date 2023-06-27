@@ -2,13 +2,22 @@ package com.example.spaceshare.models
 
 import com.google.firebase.Timestamp
 
-enum class ReservationStatus(i: Int) {
-    PENDING(0),
-    APPROVED(1),
-    DECLINED(2),
-    COMPLETED(3),
-    CANCELLED(4)
+enum class ReservationStatus {
+    PENDING,
+    APPROVED,
+    DECLINED,
+    CANCELLED,
+    COMPLETED
 }
+
+inline fun <reified T : Enum<T>> Int.toEnum(): T? {
+    return enumValues<T>().firstOrNull { it.ordinal == this }
+}
+
+inline fun <reified T : Enum<T>> T.toInt(): Int {
+    return this.ordinal
+}
+
 data class Reservation(
     val id: String? = null,
     val hostId: String? = null,
