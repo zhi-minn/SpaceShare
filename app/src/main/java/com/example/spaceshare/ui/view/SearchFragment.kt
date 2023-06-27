@@ -8,11 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spaceshare.R
-import com.example.spaceshare.databinding.DialogSearchBinding
+import com.example.spaceshare.adapters.ListingAdapter
 import com.example.spaceshare.databinding.FragmentSearchBinding
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,23 +39,24 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
+        geocoder = Geocoder(requireContext())
+
+        configureCards()
+    }
+
+    private fun configureCards() {
+        binding.searchBarCard.setOnClickListener {
+            val searchDialogFragment = DialogSearchFragment(searchViewModel)
+            searchDialogFragment.show(Objects.requireNonNull(childFragmentManager), "searchDialog")
+        }
+    }
+
+    private fun configureRecylcerView() {
+        //var adapter = ListingAdapter(searchViewModel)
+        //binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 }
