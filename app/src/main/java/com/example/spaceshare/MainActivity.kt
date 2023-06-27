@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateUI(isHostMode: Boolean) {
         val menu = bottomNavigationView.menu
         menu.findItem(R.id.listingFragment).isVisible = isHostMode
+        menu.findItem(R.id.reservationFragment).isVisible = !isHostMode
         menu.findItem(R.id.searchFragment).isVisible = !isHostMode
     }
 
