@@ -22,8 +22,7 @@
                 android:layout_height="200dp"
                 android:clipToPadding="false"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:pageMargin="8dp" />
+                android:paddingEnd="16dp" />
 
             <!-- Detailed description and other info -->
             <TextView
@@ -46,6 +45,5 @@
         android:layout_gravity="bottom"
         android:text="Reserve"
         android:textAllCaps="false"
-        app:layout_anchorGravity="bottom"
-        style="@style/Widget.MaterialComponents.Button.Colored" />
+        app:layout_anchorGravity="bottom" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
