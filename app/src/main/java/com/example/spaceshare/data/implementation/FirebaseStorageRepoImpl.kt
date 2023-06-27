@@ -1,6 +1,7 @@
 package com.example.spaceshare.data.implementation
 
 import android.net.Uri
+import android.util.Log
 import com.example.spaceshare.data.repository.FirebaseStorageRepository
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +32,19 @@ class FirebaseStorageRepoImpl @Inject constructor(
 
     override suspend fun downloadFile(folderPath: String, fileUri: Uri) {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteFile(folderPath: String, fileName: String) {
+        return withContext(Dispatchers.IO) {
+            val imageRef = storage.reference.child("$folderPath/$fileName")
+            imageRef.delete()
+                .addOnSuccessListener {
+                    Log.i("FirebaseStorageRepoImpl", "File successfully deleted")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("FirebaseStorageRepoImpl", "Error deleting file: ${e.message}", e)
+                }
+        }
     }
 
 }

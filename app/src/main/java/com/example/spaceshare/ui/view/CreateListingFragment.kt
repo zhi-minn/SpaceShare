@@ -1,13 +1,16 @@
 package com.example.spaceshare.ui.view
 
+import MapDialogFragment
 import android.app.Activity
 import android.content.Intent
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
@@ -23,17 +26,23 @@ import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
 import com.example.spaceshare.utils.DecimalInputFilter
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Objects
+import java.util.UUID
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class CreateListingFragment : Fragment() {
 
-    private var auth = FirebaseAuth.getInstance()
+    private lateinit var auth: FirebaseAuth
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+    private var permissionDenied = false
     private lateinit var navController: NavController
     private lateinit var binding: FragmentCreateListingBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
     @Inject
     lateinit var createListingViewModel: CreateListingViewModel
+    // Utils
+    private lateinit var geocoder: Geocoder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +50,7 @@ class CreateListingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_listing, container, false)
+        binding.progressBar.visibility = View.GONE
         return binding.root
     }
 
@@ -48,6 +58,7 @@ class CreateListingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
         auth = FirebaseAuth.getInstance()
+        geocoder = Geocoder(requireContext())
 
         configureButtons()
         configureFilters()
@@ -66,19 +77,34 @@ class CreateListingFragment : Fragment() {
             startForResult.launch(Intent(requireActivity(), CropActivity::class.java))
         }
 
+        // Space increment/decrement buttons
+        binding.btnMinusSpace.setOnClickListener {
+            createListingViewModel.decrementSpaceAvailable()
+        }
+        binding.btnAddSpace.setOnClickListener {
+            createListingViewModel.incrementSpaceAvailable()
+        }
+
+        // Maps
+        binding.btnOpenMaps.setOnClickListener {
+            val mapDialogFragment = MapDialogFragment(createListingViewModel)
+            mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
+        }
+
         // Publish button
         binding.btnPublish.setOnClickListener {
             publishListing(binding.titleTextInput.text.toString(),
-                binding.priceTextInput.text.toString().toDouble(),
+                binding.priceInput.text.toString(),
                 binding.descriptionTextInput.text.toString())
         }
     }
 
     private fun configureFilters() {
-        binding.priceTextInput.filters = arrayOf<InputFilter>(DecimalInputFilter)
+        binding.priceInput.filters = arrayOf<InputFilter>(DecimalInputFilter)
     }
 
     private fun configureObservers() {
+        // Images
         createListingViewModel.imageUris.observe(viewLifecycleOwner) { uris ->
             binding.carousel.registerLifecycle(lifecycle)
             val list = mutableListOf<CarouselItem>()
@@ -86,6 +112,25 @@ class CreateListingFragment : Fragment() {
                 list.add(CarouselItem(imageUrl = uri.toString()))
             }
             binding.carousel.setData(list)
+        }
+
+        // Spaces
+        createListingViewModel.spaceAvailable.observe(viewLifecycleOwner) { spaces ->
+            binding.spaceText.text = spaces.toString()
+        }
+
+        // Location
+        createListingViewModel.location.observe(viewLifecycleOwner) { location ->
+            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            if (!addresses.isNullOrEmpty()) {
+                val address = addresses[0]
+                binding.parsedLocation.text = address.getAddressLine(0)
+            }
+        }
+
+        // Navigation
+        createListingViewModel.listingPublished.observe(viewLifecycleOwner) {
+            navController.popBackStack()
         }
     }
 
@@ -103,9 +148,24 @@ class CreateListingFragment : Fragment() {
         }
     }
 
-    private fun publishListing(title: String, price: Double, description: String) {
-        val hostID = auth.currentUser?.uid
-        val listing = Listing(title = title, price = price, description = description, hostId = hostID)
-        createListingViewModel.publishListing(listing)
+    private fun validateListing(title: String, description: String, price: String): Boolean {
+        if (title.isNullOrEmpty() || description.isNullOrEmpty() ||
+            price.isNullOrEmpty() || createListingViewModel.location.value == null) {
+            Toast.makeText(requireContext(), "Please enter all mandatory details", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
+
+    private fun publishListing(title: String, price: String, description: String) {
+        val hostId = auth.currentUser?.uid
+        if (validateListing(title, description, price)) {
+            val listing = Listing(id = UUID.randomUUID().toString(), title = title,
+                description = description, price = price.toDouble(), spaceAvailable = createListingViewModel.spaceAvailable.value,
+                hostId = hostId)
+            createListingViewModel.publishListing(listing)
+            binding.scrollView.visibility = View.GONE
+            binding.progressBar.visibility = View.VISIBLE
+        }
     }
 }

@@ -57,8 +57,12 @@ class RegisterFragment : Fragment() {
     }
 
     private fun configureButtons() {
-        binding.btnRegister.setOnClickListener {
-            authViewModel.register(binding.registerEmail.text.toString(), binding.registerPassword.text.toString())
+        binding.btnBack.setOnClickListener {
+            navController.popBackStack()
+        }
+
+        binding.btnSignup.setOnClickListener {
+            authViewModel.register(binding.email.text.toString(), binding.password.text.toString())
         }
     }
 }

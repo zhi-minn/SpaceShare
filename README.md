@@ -15,11 +15,8 @@
   + Made ViewPager2 adapter to enable user to swipe between space images
   + Fetch listing functionality now works on dummy data
   + TODO:
-    * Merge Chang's publish listing functionality into ListingRepository
-    * Add logout button
     * Configure User model to be dependency injected so it is accessible from any Fragment
     * Complete fetch listing functionality to fetch from dynamic user data instead of hard-coded ID
-    * It's 1.32AM and I am tired
 * Minn - 3 hours (2023-06-15) [PR](https://github.com/zhi-minn/SpaceShare/pull/1)
   + Includes above commit
   + Finally fixed BottomNavigationView not working when switching between modes (something related to navigation backstack)
@@ -32,3 +29,48 @@
 * Minn 2 hours (2023-06-20) [Commit](https://github.com/zhi-minn/SpaceShare/commit/afe103dff8eb470131625dc7ee3822b25fd18c17)
   + Add pop up features when click on image
   + Add margin between listings and made listing cards rounded to define a more polished UI
+* Chang 0.25 hours (2023-06-21) [PR](https://github.com/zhi-minn/SpaceShare/pull/7)
+  + Refined user flow by making image selector pop up immediately when clicking add photo button
+* Minn 4 hours (2023-06-22) [Commit](https://github.com/zhi-minn/SpaceShare/commit/bf48ab35e41d3e4afb1cc6b549f6f23f465c3f0b)
+  * Integrated Google Maps SDK into create listing feature
+  * Integrated Google Maps AutoComplete search into Maps
+  * Integrated Google Maps moving marker to allow user to pinpoint location
+* Minn 2 hours (2023-06-22) [Commit](https://github.com/zhi-minn/SpaceShare/commit/3f114b2e3dea51586535340a63d202420138b62a)
+  + Prettify login and sign up page
+* Chang 1 hour (2023-06-23) [PR](https://github.com/zhi-minn/SpaceShare/pull/10)
+  + Add basic layout for search functionality 
+* Minn 1.5 hours (2023-06-23) [Commit](https://github.com/zhi-minn/SpaceShare/commit/f6474ac38fe34e505611876f46784e3e57773eeb)
+  + Prettify create listing fragment
+  + Link location selected to create listing fragment and geocode LatLng into address
+* Minn 3.5 hours (2023-06-23) [Commit](https://github.com/zhi-minn/SpaceShare/commit/99f26037052ae3d4a3b8ae67a5d3df1b11201ce4)
+  + Added preferences page and setup relevant fragments and view models for persistence
+* Minn 4 hours (2023-06-24) [Commit](https://github.com/zhi-minn/SpaceShare/commit/69bc5cbb51395490d0d53e8e012257a18876dc87)
+  + Add location field to preferences and bind it to selected location on Google Maps SDK
+  + Notify users by email when location matching preference posted
+  + Smooth transition when publishing listing
+  + Fix minor layout issues
+* Wenyu 6.5 hours (2023-06-24) [Commit](https://github.com/zhi-minn/SpaceShare/commit/5dd65c145d37174ee481fb2a321a23c7dad34d33)
+  + Add search function backend basic logic
+* William 4 hours (2023-06-24) [Commit](https://github.com/zhi-minn/SpaceShare/commit/592a4a40a51642cbec2361ea6105ec8615ea6d90)
+  + Fix navigation and some ui work
+* Youming 6 hours (2023-06-25) [Commit](https://github.com/zhi-minn/SpaceShare/commit/13b0d66d08eec3bb02302ae6908724874cec2452)
+  + Add orders bot navigate and corresponding UI
+* Chang 7.5 hours (2023-06-25) [PR](https://github.com/zhi-minn/SpaceShare/pull/12)
+  * Made the search page UI functional
+  * Added:
+    * Google Maps Dialog for choosing a location (thanks Minn)
+    * MUI DateRangePicker for choosing date range
+    * Custom card to select space required in cubic metres
+    * ViewModel to store it all
+* Chang 1 hour (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/13)
+  * Refined create listing layout hints to be more user friendly
+  * Resolved search fragment crashing on app startup
+* Minn 2 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/14)
+  + Added delete functionality to host listings
+  + Note: Can not implement RecyclerView swipe to delete functionality. Issue because ViewPager2 within RecyclerView also needs to handle swipe events
+* Chang 2.5 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/16)
+  * Refactored search functionality into listings repo
+  * Made search button trigger search from SearchViewModel
+* Minn 1.25 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/18)
+  * Added storage space available details to create listing fragment
+  * Refactor fragment_create_listing to use `TextInputLayout` for better UI

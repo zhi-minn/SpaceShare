@@ -65,6 +65,11 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        // Preferences
+        binding.btnPreferences.setOnClickListener {
+            navController.navigate(R.id.action_profileFragment_to_preferencesFragment)
+        }
+
         // Logout
         binding.btnLogout.setOnClickListener {
             authViewModel.logout()
@@ -78,6 +83,9 @@ class ProfileFragment : Fragment() {
         binding.btnSwitchMode.text = if (isHostMode)
             "Switch to client" else
             "Switch to host"
+        binding.uiMode.text = if (isHostMode)
+            "You are in host mode" else
+            "You are in client mode"
     }
 
     override fun onDestroyView() {
