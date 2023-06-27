@@ -29,19 +29,13 @@ class ImageAdapter(
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val imageUrl = images[position]
         val storageRef = FirebaseStorage.getInstance().reference.child("spaces/$imageUrl")
-        storageRef.downloadUrl
-            .addOnSuccessListener { uri ->
-                Glide.with(holder.itemView)
-                    .load(uri)
-                    .into(holder.image)
-
-                holder.image.setOnClickListener {
-                    showImagePopup(holder.image.context, images, position)
-                }
-            }
-            .addOnFailureListener { e ->
-                Log.e(TAG, "Error retrieving image: ${e.message}")
-            }
+        try {
+            Glide.with(holder.itemView)
+                .load(storageRef)
+                .into(holder.image)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error loading image with reference $imageUrl", e)
+        }
     }
 
     override fun getItemCount(): Int {
