@@ -21,7 +21,7 @@ import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
 import com.example.spaceshare.models.toInt
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
-import com.example.spaceshare.utils.ImageAdapter
+//import com.example.spaceshare.utils.ImageAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -145,9 +145,9 @@ class ReservationFragment : Fragment() {
                     else -> "ERROR"
                 }
 
-                if (previewPhoto != null) {
-                    viewPager.adapter = ImageAdapter(previewPhoto)
-                }
+//                if (previewPhoto != null) {
+//                    viewPager.adapter = ImageAdapter(previewPhoto)
+//                }
 
                 // Add the CardView to the LinearLayout
                 val layoutParams = LinearLayout.LayoutParams(
