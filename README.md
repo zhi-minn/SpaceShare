@@ -68,4 +68,5 @@
 * Minn 2 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/14)
   + Added delete functionality to host listings
   + Note: Can not implement RecyclerView swipe to delete functionality. Issue because ViewPager2 within RecyclerView also needs to handle swipe events
-    
+* Wenyu 1 hours (2023-06-27) [PR](https://github.com/zhi-minn/SpaceShare/commit/a69d7d422cc7f986019621edd51250ce9613a18c) 
+  + Added the message data class
