@@ -74,6 +74,6 @@
 * Minn 1.25 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/18)
   * Added storage space available details to create listing fragment
   * Refactor fragment_create_listing to use `TextInputLayout` for better UI
-* Chang 2 hours (2023-06-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/20)
+* Chang 3 hours (2023-06-27) [PR](https://github.com/zhi-minn/SpaceShare/pull/20)
   * Moved current search UI into search dialog
-  * Create start of new search results page (that uses the search dialog + displays results)
+  * Added new search page (that uses the search dialog + displays results)
