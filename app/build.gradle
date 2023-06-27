@@ -124,6 +124,7 @@ dependencies {
     implementation 'com.github.akshaaatt:Sliding-Carousel:1.0.4'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation("androidx.recyclerview:recyclerview:1.3.0")
+    implementation 'me.relex:circleindicator:2.1.6'
 
     // Dependency Injection
     implementation "com.google.dagger:hilt-android:2.44"

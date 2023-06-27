@@ -89,7 +89,7 @@ class MapDialogFragment(
         super.onCreate(savedInstanceState)
         MapsInitializer.initialize(requireContext())
         Places.initialize(requireContext(), getApiKeyFromManifest(requireContext()))
-        setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
+        setStyle(STYLE_NORMAL, R.style.MapDialogStyle)
     }
 
     override fun onStart() {

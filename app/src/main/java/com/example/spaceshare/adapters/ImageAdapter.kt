@@ -2,16 +2,19 @@ package com.example.spaceshare.adapters
 
 import android.app.Dialog
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.spaceshare.R
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.firebase.storage.FirebaseStorage
+import me.relex.circleindicator.CircleIndicator3
 
 class ImageAdapter(
     private val images: List<String>
@@ -47,14 +50,15 @@ class ImageAdapter(
     }
 
     private fun showImagePopup(context: Context, images: List<String>, currentPosition: Int) {
-        val dialog = Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        val dialog = Dialog(context, R.style.ImageDialogStyle)
         dialog.setContentView(R.layout.dialog_image_popup)
-        dialog.setCanceledOnTouchOutside(true)
 
         val viewPager = dialog.findViewById<ViewPager2>(R.id.popup_view_pager)
         val adapter = ImagePopupAdapter(context, images)
         viewPager.adapter = adapter
         viewPager.setCurrentItem(currentPosition, false)
+        val indicator = dialog.findViewById<CircleIndicator3>(R.id.imageIndicator)
+        indicator.setViewPager(viewPager)
 
         dialog.show()
     }

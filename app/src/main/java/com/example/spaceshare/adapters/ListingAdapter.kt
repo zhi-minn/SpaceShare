@@ -32,6 +32,7 @@ class ListingAdapter : ListAdapter<Listing, ListingAdapter.ViewHolder>(DiffCallb
             // Load the listing image from Firebase Storage into the ImageView
             if (listing.photos != null) {
                 binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos)
+                binding.imageIndicator.setViewPager(binding.viewPagerListingImages)
             }
         }
     }

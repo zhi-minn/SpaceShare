@@ -13,12 +13,24 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/view_pager_listing_images"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            tools:itemCount="3"
-            tools:orientation="horizontal" />
+            android:layout_height="match_parent">
+            
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/view_pager_listing_images"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                tools:itemCount="3"
+                tools:orientation="horizontal" />
+            
+            <me.relex.circleindicator.CircleIndicator3
+                android:id="@+id/imageIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="bottom" />
+            
+        </FrameLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/textContainer"
