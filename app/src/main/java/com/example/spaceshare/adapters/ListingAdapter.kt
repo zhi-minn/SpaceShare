@@ -25,10 +25,6 @@ class ListingAdapter : ListAdapter<Listing, ListingAdapter.ViewHolder>(DiffCallb
     class ViewHolder(private val binding: ListingItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun getBinding(): ListingItemBinding {
-            return binding
-        }
-
         fun bind(listing: Listing) {
             // Bind the listing data to the views
             binding.listingTitle.text = listing.title
