@@ -44,13 +44,13 @@ class ListingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
 
-        configureRecylcerView()
+        configureRecyclerView()
         configureButtons()
         configureObservers()
     }
 
-    private fun configureRecylcerView() {
-        adapter = ListingAdapter(listingViewModel)
+    private fun configureRecyclerView() {
+        adapter = ListingAdapter()
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
