@@ -77,6 +77,14 @@ class CreateListingFragment : Fragment() {
             startForResult.launch(Intent(requireActivity(), CropActivity::class.java))
         }
 
+        // Space increment/decrement buttons
+        binding.btnMinusSpace.setOnClickListener {
+            createListingViewModel.decrementSpaceAvailable()
+        }
+        binding.btnAddSpace.setOnClickListener {
+            createListingViewModel.incrementSpaceAvailable()
+        }
+
         // Maps
         binding.btnOpenMaps.setOnClickListener {
             val mapDialogFragment = MapDialogFragment(createListingViewModel)
@@ -96,6 +104,7 @@ class CreateListingFragment : Fragment() {
     }
 
     private fun configureObservers() {
+        // Images
         createListingViewModel.imageUris.observe(viewLifecycleOwner) { uris ->
             binding.carousel.registerLifecycle(lifecycle)
             val list = mutableListOf<CarouselItem>()
@@ -105,6 +114,12 @@ class CreateListingFragment : Fragment() {
             binding.carousel.setData(list)
         }
 
+        // Spaces
+        createListingViewModel.spaceAvailable.observe(viewLifecycleOwner) { spaces ->
+            binding.spaceText.text = spaces.toString()
+        }
+
+        // Location
         createListingViewModel.location.observe(viewLifecycleOwner) { location ->
             val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
             if (!addresses.isNullOrEmpty()) {
@@ -113,6 +128,7 @@ class CreateListingFragment : Fragment() {
             }
         }
 
+        // Navigation
         createListingViewModel.listingPublished.observe(viewLifecycleOwner) {
             navController.popBackStack()
         }
@@ -145,7 +161,8 @@ class CreateListingFragment : Fragment() {
         val hostId = auth.currentUser?.uid
         if (validateListing(title, description, price)) {
             val listing = Listing(id = UUID.randomUUID().toString(), title = title,
-                description = description, price = price.toDouble(), hostId = hostId)
+                description = description, price = price.toDouble(), size = createListingViewModel.spaceAvailable.value,
+                hostId = hostId)
             createListingViewModel.publishListing(listing)
             binding.scrollView.visibility = View.GONE
             binding.progressBar.visibility = View.VISIBLE

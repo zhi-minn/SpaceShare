@@ -6,14 +6,12 @@ data class Listing(
     var id: String? = null,
     val hostId: String? = null,
     val photos: MutableList<String> = mutableListOf(),
-    val title: String? = null,
-    val price: Double = 0.00,
-    val description: String? = null,
+    var title: String? = "",
+    var price: Double? = 0.00,
+    var description: String? = "",
+    var size: Double? = 0.0
     // val availability: Availability? = null,
-    // val size: String? = null,
-
     // val amenities: List<String>? = null,
-
     // val ratings: List<Rating>? = null
 ) {
     var location: GeoPoint? = null
