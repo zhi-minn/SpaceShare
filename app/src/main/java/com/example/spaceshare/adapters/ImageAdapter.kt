@@ -2,12 +2,12 @@ package com.example.spaceshare.adapters
 
 import android.app.Dialog
 import android.content.Context
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.spaceshare.R
 import com.github.chrisbanes.photoview.PhotoView
@@ -22,7 +22,7 @@ class ImageAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.listing_image, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.dialog_image_popup_item, parent, false)
         return ImageViewHolder(view)
     }
 
@@ -36,7 +36,7 @@ class ImageAdapter(
                     .into(holder.image)
 
                 holder.image.setOnClickListener {
-                    showImagePopup(holder.image.context, uri)
+                    showImagePopup(holder.image.context, images, position)
                 }
             }
             .addOnFailureListener { e ->
@@ -48,20 +48,20 @@ class ImageAdapter(
         return images.size
     }
 
-    private fun showImagePopup(context: Context, imageUrl: Uri) {
-        val dialog = Dialog(context, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
+    private fun showImagePopup(context: Context, images: List<String>, currentPosition: Int) {
+        val dialog = Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         dialog.setContentView(R.layout.dialog_image_popup)
         dialog.setCanceledOnTouchOutside(true)
 
-        val photoView = dialog.findViewById<PhotoView>(R.id.popup_photo_view)
-        Glide.with(context)
-            .load(imageUrl)
-            .into(photoView)
+        val viewPager = dialog.findViewById<ViewPager2>(R.id.popup_view_pager)
+        val adapter = ImagePopupAdapter(context, images)
+        viewPager.adapter = adapter
+        viewPager.setCurrentItem(currentPosition, false)
 
         dialog.show()
     }
 
     inner class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val image: PhotoView = itemView.findViewById(R.id.listing_image)
+        val image: PhotoView = itemView.findViewById(R.id.popup_photo_view)
     }
 }
