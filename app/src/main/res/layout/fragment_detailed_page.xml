@@ -32,6 +32,24 @@
                 android:layout_margin="16dp"
                 android:textSize="16sp" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginTop="@dimen/standard_component_margin"
+                android:hint="#Unit"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:hintEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/unitNumberInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_rectangle_bg"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!-- Other widgets (like ImageViews, TextViews, etc) for the rest of your details -->
 
         </LinearLayout>
