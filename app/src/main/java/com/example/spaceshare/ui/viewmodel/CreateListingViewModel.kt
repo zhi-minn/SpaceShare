@@ -20,6 +20,9 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+import com.example.spaceshare.consts.ListingConsts.SPACE_OFFERING_LOWER_LIMIT
+import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
+
 class CreateListingViewModel @Inject constructor(
     private val listingRepo: ListingRepository,
     private val preferencesRepo: PreferencesRepository,
@@ -31,6 +34,9 @@ class CreateListingViewModel @Inject constructor(
 
     private val _location: MutableLiveData<LatLng> = MutableLiveData<LatLng>()
     val location: LiveData<LatLng> = _location
+
+    private val _spaceAvailable: MutableLiveData<Double> = MutableLiveData(0.5)
+    val spaceAvailable: LiveData<Double> = _spaceAvailable
 
     private val _listingPublished: MutableLiveData<Boolean> = MutableLiveData()
     val listingPublished: LiveData<Boolean> = _listingPublished
@@ -46,7 +52,20 @@ class CreateListingViewModel @Inject constructor(
         _location.value = location
     }
 
+    fun incrementSpaceAvailable() {
+        if (_spaceAvailable.value?.plus(0.5)!! < SPACE_UPPER_LIMIT) {
+            _spaceAvailable.value = _spaceAvailable.value?.plus(0.5)
+        }
+    }
+
+    fun decrementSpaceAvailable() {
+        if (_spaceAvailable.value?.minus(0.5)!! >= SPACE_OFFERING_LOWER_LIMIT) {
+            _spaceAvailable.value = _spaceAvailable.value?.minus(0.5)
+        }
+    }
+
     fun publishListing(listing: Listing) {
+        // Upload images
         viewModelScope.launch {
             val imageUris = imageUris.value
 
@@ -67,11 +86,9 @@ class CreateListingViewModel @Inject constructor(
                 listing.photos.addAll(imageNames)
             }
 
-            val locationValue = _location.value
-            if (locationValue != null) {
-                val geoPoint = GeoPoint(locationValue.latitude, locationValue.longitude)
-                listing.location = geoPoint
-            }
+            // Upload listing
+            val geoPoint = GeoPoint(_location.value!!.latitude, _location.value!!.longitude)
+            listing.location = geoPoint
 
             try {
                 listingRepo.createListing(listing)
