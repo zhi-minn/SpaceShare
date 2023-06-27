@@ -68,13 +68,9 @@ class ListingRepoImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             try {
                 val queryResult = listingsCollection
+                        // TODO: Filter for space available being greater than spaceRequired
+                        // TODO: Filter for available dates (need reservations to be finished)
                     .get()
-                    .addOnSuccessListener { result ->
-                        Log.d(TAG. "Got the listings")
-                        for (document in result) {
-                            Log.d(TAG, "${document.id} => ${document.data}")
-                        }
-                    }
                     .addOnFailureListener { exception ->
                         Log.d(TAG, "Error getting documents: ", exception)
                     }
@@ -90,13 +86,17 @@ class ListingRepoImpl @Inject constructor(
                         null
                     }
                 }
-
                 val sortedByDistance = castedToListings.sortedBy { listing ->
-                    val dist = MathUtil.calculateDistanceInKilometers(
-                        criteria.location,
-                        listing.location!!
-                    )
-                    dist
+                    try {
+                        val dist = MathUtil.calculateDistanceInKilometers(
+                            criteria.location,
+                            listing.location!!
+                        )
+                        dist
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error calculating Listing distance for id ${listing.id}: ${e.message}")
+                        null
+                    }
                 }
 
                 return@withContext sortedByDistance
