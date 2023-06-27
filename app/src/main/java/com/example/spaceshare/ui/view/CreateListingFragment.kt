@@ -161,7 +161,7 @@ class CreateListingFragment : Fragment() {
         val hostId = auth.currentUser?.uid
         if (validateListing(title, description, price)) {
             val listing = Listing(id = UUID.randomUUID().toString(), title = title,
-                description = description, price = price.toDouble(), size = createListingViewModel.spaceAvailable.value,
+                description = description, price = price.toDouble(), spaceAvailable = createListingViewModel.spaceAvailable.value,
                 hostId = hostId)
             createListingViewModel.publishListing(listing)
             binding.scrollView.visibility = View.GONE
