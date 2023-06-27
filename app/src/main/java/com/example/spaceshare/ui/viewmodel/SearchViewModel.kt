@@ -7,6 +7,7 @@ import com.example.spaceshare.consts.ListingConsts.SPACE_BOOKING_LOWER_LIMIT
 import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
 import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.interfaces.LocationInterface
+import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.SearchCriteria
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Timestamp
@@ -21,8 +22,7 @@ class SearchViewModel @Inject constructor(
 
     var spaceRequired = MutableLiveData<Double>(0.0)
 
-    private val spaceLowerLimit: Double = 0.0
-    private val spaceUpperLimit: Double = 100.0
+    var listings = MutableLiveData<List<Listing>>()
 
     var location = MutableLiveData<LatLng>()
 
@@ -33,6 +33,14 @@ class SearchViewModel @Inject constructor(
         location.value = LatLng(0.0,0.0)
         startTime.value = 0
         endTime.value = 0
+        fetchInitialListings()
+    }
+
+    private fun fetchInitialListings() {
+        viewModelScope.launch {
+            val results = listingRepo.getAllListings()
+            listings.value = results
+        }
     }
 
     fun incrementSpaceRequired() {
@@ -45,12 +53,12 @@ class SearchViewModel @Inject constructor(
             spaceRequired.value = spaceRequired.value?.minus(0.5)
     }
 
-    fun clearAllData() {
+    fun clearAllDialogData() {
         // TODO: Find some way to reset the date range picker
         location?.value = null
         spaceRequired.value = 0.0
-        startTime.value = System.currentTimeMillis()
-        endTime.value = System.currentTimeMillis()
+        startTime.value = 0
+        endTime.value = 0
     }
 
     fun submitSearch() {
@@ -63,12 +71,11 @@ class SearchViewModel @Inject constructor(
             val endTimestamp = Timestamp(endDate)
             val criteria =
                 SearchCriteria(spaceRequired.value!!, searchGeopoint, startTimestamp, endTimestamp)
-            listingRepo.searchListings(criteria)
+            listings.value = listingRepo.searchListings(criteria)
         }
     }
 
     override fun setLocation(latLng: LatLng) {
         location?.value = latLng
     }
-
 }

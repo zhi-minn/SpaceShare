@@ -10,6 +10,8 @@ interface ListingRepository {
 
     suspend fun fetchListings(user: User): List<Listing>
 
+    suspend fun getAllListings(): List<Listing>
+
     suspend fun searchListings(criteria: SearchCriteria): List<Listing>
 
     suspend fun deleteListing(listingId: String)
