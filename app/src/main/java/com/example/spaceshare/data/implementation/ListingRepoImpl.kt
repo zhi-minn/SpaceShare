@@ -64,6 +64,28 @@ class ListingRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun getAllListings(): List<Listing> = withContext(Dispatchers.IO) {
+        try {
+            val result = listingsCollection
+                .get()
+                .await()
+
+            return@withContext result.documents.mapNotNull { document ->
+                try {
+                    val listing = document.toObject(Listing::class.java)
+                    listing?.id = document.id
+                    listing
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error casting document to Listing object: ${e.message}")
+                    null
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error reading listings document: ${e.message}")
+            return@withContext emptyList()
+        }
+    }
+
     override suspend fun searchListings(criteria: SearchCriteria): List<Listing> =
         withContext(Dispatchers.IO) {
             try {
