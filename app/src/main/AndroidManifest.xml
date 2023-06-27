@@ -21,6 +21,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
+        <meta-data
+            android:name="com.example.spaceshare.modules.SpaceShareGlideModule"
+            android:value="AppGlideModule" />
+
         <activity
             android:name=".SplashActivity"
             android:exported="true"
