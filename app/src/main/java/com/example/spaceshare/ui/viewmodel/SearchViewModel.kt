@@ -11,7 +11,9 @@ import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.SearchCriteria
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import java.sql.Date
 import javax.inject.Inject
@@ -39,7 +41,9 @@ class SearchViewModel @Inject constructor(
     private fun fetchInitialListings() {
         viewModelScope.launch {
             val results = listingRepo.getAllListings()
-            listings.value = results
+            listings.value = results.filter { listing ->
+                listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
+            }
         }
     }
 
@@ -71,7 +75,9 @@ class SearchViewModel @Inject constructor(
             val endTimestamp = Timestamp(endDate)
             val criteria =
                 SearchCriteria(spaceRequired.value!!, searchGeopoint, startTimestamp, endTimestamp)
-            listings.value = listingRepo.searchListings(criteria)
+            listings.value = listingRepo.searchListings(criteria).filter { listing ->
+                listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
+            }
         }
     }
 
