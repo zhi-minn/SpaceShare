@@ -22,6 +22,8 @@ import javax.inject.Inject
 
 import com.example.spaceshare.consts.ListingConsts.SPACE_OFFERING_LOWER_LIMIT
 import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
+import com.example.spaceshare.utils.GeocoderUtil
+import java.lang.StringBuilder
 
 class CreateListingViewModel @Inject constructor(
     private val listingRepo: ListingRepository,
@@ -100,8 +102,8 @@ class CreateListingViewModel @Inject constructor(
                         if (preferences.location != null && preferences.email != null) {
                             val distance = MathUtil.calculateDistanceInKilometers(listing.location!!, preferences.location!!)
                             if (distance <= preferences.radius) {
-                                val body = "There is a new listing matching your preferences: ${listing.location}"
-                                MailUtil.sendEmail(preferences.email, "New Listing Alert", body)
+                                MailUtil.sendEmail(preferences.email, "New Listing Alert",
+                                    getEmailBody(listing, distance))
                             }
                         }
                     }
@@ -112,5 +114,20 @@ class CreateListingViewModel @Inject constructor(
                 _listingPublished.value = false
             }
         }
+    }
+
+    private fun getEmailBody(listing: Listing, distance: Double): String {
+        val sb = StringBuilder()
+        val address = GeocoderUtil.getAddress(listing.location!!.latitude, listing.location!!.longitude)
+
+        sb.append("There is a new listing matching your preferences at the following address:\n")
+        sb.append("$address\n\n")
+        sb.append("Here are some basic information regarding the listing:\n")
+        sb.append("Title: ${listing.title}\n")
+        sb.append("Description: ${listing.description}\n")
+        sb.append("Price: ${listing.price} CAD/day\n")
+        sb.append("Approximate distance to preferred location: ${String.format("%.2f", distance)} km")
+
+        return sb.toString()
     }
 }
