@@ -68,8 +68,9 @@ class DialogSearchFragment(
                     val address = addresses[0]
                     binding.searchLocation.text = address.getAddressLine(0)
                 }
-            } else {
-                binding.searchLocation.text = "Anywhere"
+                else {
+                    binding.searchLocation.text = "Anywhere"
+                }
             }
         }
 
