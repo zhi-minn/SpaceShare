@@ -6,7 +6,6 @@ import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.SearchCriteria
 import com.example.spaceshare.models.User
 import com.example.spaceshare.utils.MathUtil
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
@@ -42,7 +41,7 @@ class ListingRepoImpl @Inject constructor(
 
     }
 
-    override suspend fun fetchListings(user: User): List<Listing> = withContext(Dispatchers.IO) {
+    override suspend fun fetchOwnListings(user: User): List<Listing> = withContext(Dispatchers.IO) {
         try {
             val result = listingsCollection
                 .whereEqualTo("hostId", user.id)
