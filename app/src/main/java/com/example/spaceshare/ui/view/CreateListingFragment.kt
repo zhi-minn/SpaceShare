@@ -24,6 +24,7 @@ import com.example.spaceshare.databinding.FragmentCreateListingBinding
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
 import com.example.spaceshare.utils.DecimalInputFilter
+import com.example.spaceshare.utils.GeocoderUtil
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
@@ -41,8 +42,6 @@ class CreateListingFragment : Fragment() {
     private lateinit var startForResult: ActivityResultLauncher<Intent>
     @Inject
     lateinit var createListingViewModel: CreateListingViewModel
-    // Utils
-    private lateinit var geocoder: Geocoder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,7 +57,6 @@ class CreateListingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
         auth = FirebaseAuth.getInstance()
-        geocoder = Geocoder(requireContext())
 
         configureButtons()
         configureFilters()
@@ -121,11 +119,7 @@ class CreateListingFragment : Fragment() {
 
         // Location
         createListingViewModel.location.observe(viewLifecycleOwner) { location ->
-            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-            if (!addresses.isNullOrEmpty()) {
-                val address = addresses[0]
-                binding.parsedLocation.text = address.getAddressLine(0)
-            }
+            binding.parsedLocation.text = GeocoderUtil.getAddress(location.latitude, location.longitude)
         }
 
         // Navigation
