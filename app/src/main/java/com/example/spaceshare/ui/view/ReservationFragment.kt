@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.spaceshare.R
+import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.FragmentReservationBinding
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
@@ -98,6 +99,10 @@ class ReservationFragment : Fragment() {
     private fun displayReservations() {
         viewModel.reservationLiveData.observe(viewLifecycleOwner) { reservations ->
             binding.reservationPage.removeAllViews()
+            val photoList = listOf(
+                listOf("JPEG_20230619_181925_5939538432909368723.jpg_179d1f4f-856a-47e9-ae15-4466ca4fb64b"),
+                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"))
+            var current = 0
             for (reservation in reservations) {
                 val cardView = layoutInflater.inflate(R.layout.reservation_item, null) as CardView
                 val viewPager: ViewPager2 = cardView.findViewById(R.id.view_pager_reservation_images)
@@ -107,7 +112,8 @@ class ReservationFragment : Fragment() {
 
                 // get listing reference
                 val geoLocation = "Waterloo" // TODO: replace dummy values when listing detail is done
-                val previewPhoto = listOf("JPEG_20230619_181925_5939538432909368723.jpg_179d1f4f-856a-47e9-ae15-4466ca4fb64b")
+                val previewPhoto = photoList[current]
+                current++
 
 //                val documentId = reservation.listingId
 //                val documentRef = db.collection("listings").document(documentId ?: "")
@@ -145,9 +151,9 @@ class ReservationFragment : Fragment() {
                     else -> "ERROR"
                 }
 
-//                if (previewPhoto != null) {
-//                    viewPager.adapter = ImageAdapter(previewPhoto)
-//                }
+                if (previewPhoto != null) {
+                    viewPager.adapter = ImageAdapter(previewPhoto)
+                }
 
                 // Add the CardView to the LinearLayout
                 val layoutParams = LinearLayout.LayoutParams(
