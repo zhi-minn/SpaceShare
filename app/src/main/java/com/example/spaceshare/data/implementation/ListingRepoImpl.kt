@@ -6,7 +6,6 @@ import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.SearchCriteria
 import com.example.spaceshare.models.User
 import com.example.spaceshare.utils.MathUtil
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
@@ -109,7 +108,6 @@ class ListingRepoImpl @Inject constructor(
                         null
                     }
                 }
-
                 val sortedByDistance = castedToListings.sortedBy { listing ->
                     try {
                         val dist = MathUtil.calculateDistanceInKilometers(
@@ -122,8 +120,6 @@ class ListingRepoImpl @Inject constructor(
                         null
                     }
                 }
-
-
 
                 return@withContext sortedByDistance
 
