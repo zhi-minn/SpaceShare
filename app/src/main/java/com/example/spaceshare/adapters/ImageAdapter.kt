@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.compose.ui.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -59,6 +60,11 @@ class ImageAdapter(
         viewPager.setCurrentItem(currentPosition, false)
         val indicator = dialog.findViewById<CircleIndicator3>(R.id.imageIndicator)
         indicator.setViewPager(viewPager)
+
+        val dismissButton = dialog.findViewById<ImageButton>(R.id.dismissButton)
+        dismissButton.setOnClickListener {
+            dialog.dismiss()
+        }
 
         dialog.show()
     }
