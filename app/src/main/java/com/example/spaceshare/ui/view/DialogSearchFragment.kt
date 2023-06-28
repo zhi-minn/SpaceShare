@@ -114,7 +114,6 @@ class DialogSearchFragment(
 
     private fun configureButtons() {
         binding.btnCancel.setOnClickListener {
-            searchViewModel.clearAllDialogData()
             dialog?.dismiss()
         }
 
