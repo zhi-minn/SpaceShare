@@ -14,7 +14,6 @@ import androidx.navigation.findNavController
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogSearchBinding
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
-import com.example.spaceshare.utils.GeocoderUtil
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -31,6 +30,8 @@ class DialogSearchFragment(
     private lateinit var binding: DialogSearchBinding
     private lateinit var navController: NavController
 
+    private lateinit var geocoder: Geocoder
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,6 +43,7 @@ class DialogSearchFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
+        geocoder = Geocoder(requireContext())
 
         configureCards()
         configureButtons()
@@ -61,9 +63,14 @@ class DialogSearchFragment(
         }
         searchViewModel.location?.observe(viewLifecycleOwner) { location ->
             if (location != null) {
-                binding.searchLocation.text = GeocoderUtil.getAddress(location.latitude, location.longitude)
-            } else {
-                binding.searchLocation.text = "Anywhere"
+                val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                if (!addresses.isNullOrEmpty()) {
+                    val address = addresses[0]
+                    binding.searchLocation.text = address.getAddressLine(0)
+                }
+                else {
+                    binding.searchLocation.text = "Anywhere"
+                }
             }
         }
 
