@@ -10,7 +10,10 @@
 
     <style name="ImageDialogStyle" parent="android:Theme.Black.NoTitleBar.Fullscreen">
         <item name="android:windowAnimationStyle">@style/FadeInOutDialogAnimation</item>
+    </style>
 
+    <style name="ListingDialogStyle" parent="android:Theme.Light.NoTitleBar.Fullscreen">
+        <item name="android:windowAnimationStyle">@style/FadeInOutDialogAnimation</item>
     </style>
 
     <style name="FadeInOutDialogAnimation" parent="android:Theme.Black.NoTitleBar.Fullscreen">

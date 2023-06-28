@@ -20,7 +20,7 @@ import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.Objects
 
-class DialogSearchFragment(
+class SearchDialogFragment(
     private val searchViewModel: SearchViewModel
 ) : DialogFragment() {
 

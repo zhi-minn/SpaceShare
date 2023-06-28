@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ListingAdapter
 import com.example.spaceshare.databinding.FragmentSearchBinding
+import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
@@ -50,13 +51,17 @@ class SearchFragment : Fragment() {
 
     private fun configureSearchBar() {
         binding.searchBarCard.setOnClickListener {
-            val searchDialogFragment = DialogSearchFragment(searchViewModel)
+            val searchDialogFragment = SearchDialogFragment(searchViewModel)
             searchDialogFragment.show(Objects.requireNonNull(childFragmentManager), "searchDialog")
         }
     }
 
     private fun configureRecyclerView() {
-        adapter = ListingAdapter()
+        adapter = ListingAdapter(object : ListingAdapter.ItemClickListener {
+            override fun onItemClick(listing: Listing) {
+                TODO("Handle item click")
+            }
+        })
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
