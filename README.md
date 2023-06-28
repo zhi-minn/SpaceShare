@@ -81,3 +81,6 @@
   * [Commit](https://github.com/zhi-minn/SpaceShare/commit/5038764e2e16ca5c7027a66cc8c9114138d1809b) - Add filter for listing search
   * [Commit](https://github.com/zhi-minn/SpaceShare/commit/5629599f9af07d9e93f1035894103acd268ac9ff) - Refactor Geocoder to utility class
   * [Commit](https://github.com/zhi-minn/SpaceShare/commit/75b7a5488739899f25d92d053b0083ad8ba9dc5f) - Create dialog fragment for detailed host listing
+* Chang 0.5 hours (2023-06-28) [PR](https://github.com/zhi-minn/SpaceShare/pull/26) [PR](https://github.com/zhi-minn/SpaceShare/pull/27) [PR](https://github.com/zhi-minn/SpaceShare/pull/28)
+  * Fix search dialog location being empty
+  * Fix search dialog crashing app when empty is clicked
