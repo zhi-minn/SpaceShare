@@ -27,5 +27,6 @@
     <string name="sample_rating">30</string>
     <string name="sample_location">Waterloo, ON, Canada</string>
     <string name="sample_price">9.89 CAD/day</string>
+    <string name="sample_space_available">3.5 cubic metres</string>
     <string name="listing_price_template">%.2f CAD/day</string>
 </resources>

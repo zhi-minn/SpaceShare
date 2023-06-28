@@ -21,6 +21,7 @@ import com.aemerse.slider.model.CarouselItem
 import com.example.spaceshare.CropActivity
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentCreateListingBinding
+import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
 import com.example.spaceshare.utils.DecimalInputFilter
@@ -154,12 +155,22 @@ class CreateListingFragment : Fragment() {
     private fun publishListing(title: String, price: String, description: String) {
         val hostId = auth.currentUser?.uid
         if (validateListing(title, description, price)) {
-            val listing = Listing(id = UUID.randomUUID().toString(), title = title,
-                description = description, price = price.toDouble(), spaceAvailable = createListingViewModel.spaceAvailable.value,
-                hostId = hostId)
+            val listing = Listing(id = UUID.randomUUID().toString(), hostId = hostId,
+                title = title, description = description, price = price.toDouble(),
+                spaceAvailable = createListingViewModel.spaceAvailable.value, amenities = getCheckedAmenities())
             createListingViewModel.publishListing(listing)
             binding.scrollView.visibility = View.GONE
             binding.progressBar.visibility = View.VISIBLE
         }
+    }
+
+    private fun getCheckedAmenities(): MutableList<Amenity> {
+        val amenities = mutableListOf<Amenity>()
+        if (binding.surveillance.isChecked) amenities.add(Amenity.SURVEILLANCE)
+        if (binding.climateControlled.isChecked) amenities.add(Amenity.CLIMATE_CONTROLLED)
+        if (binding.lighting.isChecked) amenities.add(Amenity.WELL_LIT)
+        if (binding.accessibility.isChecked) amenities.add(Amenity.ACCESSIBILITY)
+        if (binding.cleanliness.isChecked) amenities.add(Amenity.WEEKLY_CLEANING)
+        return amenities
     }
 }

@@ -5,8 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.spaceshare.R
 import com.example.spaceshare.databinding.ListingItemBinding
 import com.example.spaceshare.models.Listing
+import com.example.spaceshare.utils.GeocoderUtil
 
 class ListingAdapter(
     private val itemClickListener: ItemClickListener
@@ -29,7 +31,11 @@ class ListingAdapter(
 
         fun bind(listing: Listing) {
             // Bind the listing data to the views
-            binding.listingTitle.text = listing.title
+            binding.location.text = listing.location?.let { location ->
+                GeocoderUtil.getGeneralLocation(location.latitude, location.longitude)
+            }
+            binding.price.text = String.format("%.2f CAD/day", listing.price)
+            binding.spaceAvailable.text = "${listing.spaceAvailable} cubic metres"
 
             // Load the listing image from Firebase Storage into the ImageView
             if (listing.photos != null) {

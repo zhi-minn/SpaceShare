@@ -49,7 +49,7 @@
             app:destination="@id/profileFragment" />
         <action
             android:id="@+id/action_listingFragment_to_createListingFragment"
-            app:popEnterAnim="@anim/fui_slide_out_left"
+            app:enterAnim="@anim/slide_up"
             app:destination="@id/createListingFragment" />
     </fragment>
 
