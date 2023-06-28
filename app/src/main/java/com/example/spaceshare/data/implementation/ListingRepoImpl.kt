@@ -91,7 +91,7 @@ class ListingRepoImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             try {
                 val queryResult = listingsCollection
-                        // TODO: Filter for space available being greater than spaceRequired
+                    .whereGreaterThanOrEqualTo("spaceAvailable", criteria.spaceRequired)
                         // TODO: Filter for available dates (need reservations to be finished)
                     .get()
                     .addOnFailureListener { exception ->
