@@ -1,7 +1,6 @@
 package com.example.spaceshare.ui.view
 
 import MapDialogFragment
-import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import androidx.navigation.findNavController
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentPreferencesBinding
 import com.example.spaceshare.ui.viewmodel.PreferencesViewModel
+import com.example.spaceshare.utils.GeocoderUtil
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
@@ -25,7 +25,6 @@ class PreferencesFragment : Fragment() {
     private lateinit var navController: NavController
     @Inject
     lateinit var viewModel: PreferencesViewModel
-    private lateinit var geocoder: Geocoder
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +39,6 @@ class PreferencesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
-        geocoder = Geocoder(requireContext())
 
         configureButtons()
         configureObservers()
@@ -90,13 +88,7 @@ class PreferencesFragment : Fragment() {
                 // Location
                 val location = preferences.location
                 if (location != null) {
-                    // TODO: Refactor geocoder into single utility class
-                    val addresses =
-                        geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                    if (!addresses.isNullOrEmpty()) {
-                        val address = addresses[0]
-                        binding.location.text = address.getAddressLine(0)
-                    }
+                    binding.location.text = GeocoderUtil.getAddress(location.latitude, location.longitude)
                 }
 
                 // Radius

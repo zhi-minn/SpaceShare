@@ -30,7 +30,6 @@ class SearchFragment : Fragment() {
     @Inject
     lateinit var searchViewModel: SearchViewModel
     private lateinit var adapter: ListingAdapter
-    private lateinit var geocoder: Geocoder
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +42,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
-        geocoder = Geocoder(requireContext())
 
         configureSearchBar()
         configureRecyclerView()
