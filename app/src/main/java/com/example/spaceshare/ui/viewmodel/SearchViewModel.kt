@@ -13,7 +13,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.GeoPoint
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import java.sql.Date
 import javax.inject.Inject
@@ -41,9 +40,7 @@ class SearchViewModel @Inject constructor(
     private fun fetchInitialListings() {
         viewModelScope.launch {
             val results = listingRepo.getAllListings()
-            listings.value = results.filter { listing ->
-                listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
-            }
+            listings.value = filterForNonOwnListings(results)
         }
     }
 
@@ -67,9 +64,14 @@ class SearchViewModel @Inject constructor(
             val endTimestamp = Timestamp(endDate)
             val criteria =
                 SearchCriteria(spaceRequired.value!!, searchGeopoint, startTimestamp, endTimestamp)
-            listings.value = listingRepo.searchListings(criteria).filter { listing ->
-                listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
-            }
+            val searchResults = listingRepo.searchListings(criteria)
+            listings.value = filterForNonOwnListings(searchResults)
+        }
+    }
+
+    private fun filterForNonOwnListings(listings: List<Listing>) : List<Listing> {
+        return listings.filter { listing ->
+            listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
         }
     }
 

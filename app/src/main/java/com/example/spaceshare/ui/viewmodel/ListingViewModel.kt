@@ -23,7 +23,7 @@ class ListingViewModel @Inject constructor(
 
     fun fetchListings(user: User) {
         viewModelScope.launch {
-            val listings = repo.fetchListings(user)
+            val listings = repo.fetchOwnListings(user)
             _listingsLiveData.value = listings
         }
     }
