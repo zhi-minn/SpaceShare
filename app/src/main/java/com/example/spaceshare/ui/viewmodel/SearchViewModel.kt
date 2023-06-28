@@ -57,14 +57,6 @@ class SearchViewModel @Inject constructor(
             spaceRequired.value = spaceRequired.value?.minus(0.5)
     }
 
-    fun clearAllDialogData() {
-        // TODO: Find some way to reset the date range picker
-        location?.value = null
-        spaceRequired.value = 0.0
-        startTime.value = 0
-        endTime.value = 0
-    }
-
     fun submitSearch() {
         viewModelScope.launch {
             val searchLoc: LatLng = location.value!!
