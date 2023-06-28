@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogSearchBinding
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
+import com.example.spaceshare.utils.GeocoderUtil
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -61,17 +62,12 @@ class DialogSearchFragment(
             val mapDialogFragment = MapDialogFragment(searchViewModel)
             mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
-        searchViewModel.location?.observe(viewLifecycleOwner) { location ->
-            if (location != null) {
-                val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                if (!addresses.isNullOrEmpty()) {
-                    val address = addresses[0]
-                    binding.searchLocation.text = address.getAddressLine(0)
-                }
-                else {
-                    binding.searchLocation.text = "Anywhere"
-                }
-            }
+        searchViewModel.location.observe(viewLifecycleOwner) { location ->
+            val address = GeocoderUtil.getAddress(location.latitude, location.longitude)
+            if (address != "")
+                binding.searchLocation.text = address
+            else
+                binding.searchLocation.text = "Anywhere"
         }
 
         // When
