@@ -38,24 +38,24 @@ class ListingViewModel @Inject constructor(
         _listingsLiveData.value = currentList
     }
 
-     fun removeItem(listing: Listing, position: Int) {
-        val updatedList = _listingsLiveData.value?.toMutableList()
-        updatedList?.removeAt(position)
-        _listingsLiveData.value = updatedList ?: emptyList()
-        viewModelScope.launch {
-            // Delete listing
-            repo.deleteListing(listing.id!!)
+     fun removeItem(listing: Listing) {
+         val updatedList = _listingsLiveData.value?.toMutableList()
+         updatedList?.remove(listing)
+         _listingsLiveData.value = updatedList ?: emptyList()
+         viewModelScope.launch {
+             // Delete listing
+             repo.deleteListing(listing.id!!)
 
-            // Delete corresponding images
-            for (filePath in listing.photos) {
-                viewModelScope.async {
-                    try {
-                        firebaseStorageRepo.deleteFile("spaces", filePath)
-                    } catch (e: Exception) {
-                        Log.e("ListingViewModel", "Error deleting image: ${e.message}", e)
-                    }
-                }
-            }
-        }
-    }
+             // Delete corresponding images
+             for (filePath in listing.photos) {
+                 viewModelScope.async {
+                     try {
+                         firebaseStorageRepo.deleteFile("spaces", filePath)
+                     } catch (e: Exception) {
+                         Log.e("ListingViewModel", "Error deleting image: ${e.message}", e)
+                     }
+                 }
+             }
+         }
+     }
 }

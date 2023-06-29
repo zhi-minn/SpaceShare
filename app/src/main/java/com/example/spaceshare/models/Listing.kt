@@ -4,7 +4,6 @@ import com.example.spaceshare.enums.Amenity
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ServerTimestamp
-import java.util.Date
 
 data class Listing(
     var id: String? = null,
@@ -15,6 +14,7 @@ data class Listing(
     var description: String? = "",
     var spaceAvailable: Double? = 0.0,
     val amenities: MutableList<Amenity> = mutableListOf(),
+    var isActive: Boolean = true,
     @ServerTimestamp
     val createdAt: Timestamp? = null,
     @ServerTimestamp

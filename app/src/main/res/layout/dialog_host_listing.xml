@@ -203,15 +203,16 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- (Reactivate/Deactivate) & Delete Buttons -->
-            <androidx.appcompat.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnChangeStatus"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/box_padding"
                 android:paddingVertical="4dp"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="@dimen/standard_component_margin"
                 android:layout_marginBottom="8dp"
                 android:text="Deactivate"
+                android:textAllCaps="false"
                 android:textSize="@dimen/title_text"
                 android:textAlignment="center"
                 android:background="@drawable/rounded_rectangle_bg"
@@ -221,15 +222,16 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnDelete"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/box_padding"
                 android:paddingVertical="4dp"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="@dimen/standard_component_margin"
                 android:layout_marginBottom="8dp"
                 android:text="Delete"
+                android:textAllCaps="false"
                 android:textSize="@dimen/title_text"
                 android:textAlignment="center"
                 android:background="@drawable/rounded_rectangle_bg"

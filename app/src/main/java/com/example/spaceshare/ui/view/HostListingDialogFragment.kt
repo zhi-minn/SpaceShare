@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
@@ -90,6 +91,21 @@ class HostListingDialogFragment(
     private fun configureButtons() {
         binding.btnBack.setOnClickListener {
             this.dismiss()
+        }
+
+        binding.btnDelete.setOnClickListener {
+            // TODO: Check no upcoming reservations
+
+            AlertDialog.Builder(requireContext())
+                .setTitle("Confirm Delete")
+                .setMessage("Are you sure you want to delete this listing?")
+                .setPositiveButton("Delete") { _, _ ->
+                    listingViewModel.removeItem(listing)
+                    this.dismiss()
+                }
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show()
         }
     }
 
