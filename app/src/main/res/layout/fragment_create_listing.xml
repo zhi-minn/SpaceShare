@@ -120,7 +120,7 @@
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     app:hintEnabled="true"
-                    android:hint="Price">
+                    android:hint="Price (per day)">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/priceInput"
@@ -146,7 +146,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:background="@drawable/rounded_rectangle_bg"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        android:singleLine="false" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -171,7 +172,6 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="16dp"
                             android:text="Space available"
-                            android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
