@@ -44,7 +44,7 @@
                         android:layout_height="match_parent"
                         android:src="@drawable/username"
                         android:scaleType="centerCrop"
-                        android:tint="@color/light_gray"
+                        android:tint="@color/medium_light_gray"
                         android:layout_margin="6dp"
                         tools:ignore="UseAppTint" />
 
