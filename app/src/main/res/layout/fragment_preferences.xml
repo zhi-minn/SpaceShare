@@ -81,42 +81,26 @@
                 app:layout_constraintTop_toBottomOf="@id/location"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn1km"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/distanceIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_component_margin"
-                android:layout_marginHorizontal="@dimen/standard_component_margin"
-                android:text="1 km"
-                app:layout_constraintStart_toStartOf="parent"
-                android:background="@drawable/rounded_rectangle_bg"
-                android:backgroundTint="@color/button_selector"
-                app:layout_constraintEnd_toStartOf="@id/btn5km"
-                app:layout_constraintTop_toBottomOf="@id/distanceTitle" />
+                android:text="x km"
+                android:textSize="@dimen/standard_text"
+                app:layout_constraintTop_toTopOf="@id/distanceTitle"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn5km"
-                android:layout_width="wrap_content"
+            <com.google.android.material.slider.Slider
+                android:id="@+id/searchRadiusSlider"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/standard_component_margin"
-                android:text="5 km"
-                android:background="@drawable/rounded_rectangle_bg"
-                android:backgroundTint="@color/button_selector"
-                app:layout_constraintStart_toEndOf="@id/btn1km"
-                app:layout_constraintEnd_toStartOf="@id/btn10km"
-                app:layout_constraintTop_toBottomOf="@id/distanceTitle" />
+                android:stepSize="1"
+                android:value="5"
+                android:valueFrom="1"
+                android:valueTo="25"
+                app:layout_constraintTop_toBottomOf="@+id/distanceTitle" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn10km"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_component_margin"
-                android:layout_marginLeft="@dimen/standard_component_margin"
-                android:text="10 km"
-                android:background="@drawable/rounded_rectangle_bg"
-                android:backgroundTint="@color/button_selector"
-                app:layout_constraintStart_toEndOf="@id/btn5km"
-                app:layout_constraintTop_toBottomOf="@id/distanceTitle" />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btnSave"
