@@ -235,8 +235,66 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Dates Available -->
-                
+                <View
+                    android:id="@+id/divider1"
+                    style="@style/Divider"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <CheckBox
+                            android:id="@+id/surveillance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Surveillance-enabled" />
+
+                        <CheckBox
+                            android:id="@+id/lighting"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Well-lit" />
+
+                        <CheckBox
+                            android:id="@+id/cleanliness"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Cleaned weekly" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <CheckBox
+                            android:id="@+id/climateControlled"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Climate-controlled" />
+
+                        <CheckBox
+                            android:id="@+id/accessibility"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Accessibility-friendly" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

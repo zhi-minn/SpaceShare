@@ -22,4 +22,11 @@
     <string name="location_permission_denied">Location permission denied</string>
     <string name="permission_required_toast">Location permission is required to pinpoint property location</string>
     <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
+    <string name="sample_title">Air-conditioned Basement Storage</string>
+    <string name="sample_description">Working adult looking to earn side income from renting my basement out. I clean this place every day to ensure no pests such as silverfish will damage your belongings. It also climate-controlled, sharing the same environment as the rest of my house.</string>
+    <string name="sample_rating">30</string>
+    <string name="sample_location">Waterloo, ON, Canada</string>
+    <string name="sample_price">9.89 CAD/day</string>
+    <string name="sample_space_available">3.5 cubic metres</string>
+    <string name="listing_price_template">%.2f CAD/day</string>
 </resources>
