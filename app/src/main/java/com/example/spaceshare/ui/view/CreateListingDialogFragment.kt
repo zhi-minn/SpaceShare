@@ -2,8 +2,8 @@ package com.example.spaceshare.ui.view
 
 import MapDialogFragment
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputFilter
@@ -14,13 +14,13 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.aemerse.slider.model.CarouselItem
 import com.example.spaceshare.CropActivity
 import com.example.spaceshare.R
-import com.example.spaceshare.databinding.FragmentCreateListingBinding
+import com.example.spaceshare.databinding.DialogCreateListingBinding
 import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
@@ -33,30 +33,45 @@ import java.util.UUID
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateListingFragment : Fragment() {
+class CreateListingDialogFragment : DialogFragment() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
-    private var permissionDenied = false
-    private lateinit var navController: NavController
-    private lateinit var binding: FragmentCreateListingBinding
+    private lateinit var binding: DialogCreateListingBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
     @Inject
     lateinit var createListingViewModel: CreateListingViewModel
+    private var listener: CreateListingViewModel.CreateListingDialogListener? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_FRAME, R.style.ListingDialogStyle)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val parentFragment = parentFragment
+        if (parentFragment is CreateListingViewModel.CreateListingDialogListener) {
+            listener = parentFragment
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_listing, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.dialog_create_listing, container, false)
         binding.progressBar.visibility = View.GONE
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = findNavController()
         auth = FirebaseAuth.getInstance()
 
         configureButtons()
@@ -68,7 +83,7 @@ class CreateListingFragment : Fragment() {
     private fun configureButtons() {
         // Close button
         binding.btnCloseListing.setOnClickListener {
-            navController.popBackStack()
+            this.dismiss()
         }
 
         // Add photo button
@@ -124,8 +139,13 @@ class CreateListingFragment : Fragment() {
         }
 
         // Navigation
-        createListingViewModel.listingPublished.observe(viewLifecycleOwner) {
-            navController.popBackStack()
+        createListingViewModel.publishResult.observe(viewLifecycleOwner) { result ->
+            if (result.isSuccess && result.listing != null) {
+                listener?.onListingCreated(result.listing)
+            } else {
+                listener?.onListingCreated(null)
+            }
+            this.dismiss()
         }
     }
 

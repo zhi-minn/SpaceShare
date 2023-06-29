@@ -28,6 +28,16 @@ class ListingViewModel @Inject constructor(
         }
     }
 
+    fun addItem(listing: Listing) {
+        val currentList = _listingsLiveData.value.orEmpty().toMutableList()
+        currentList.add(0, listing)
+        Log.i("tag", "Added $listing to currentList")
+        for (list in currentList) {
+            Log.i("tag", "$list")
+        }
+        _listingsLiveData.value = currentList
+    }
+
      fun removeItem(listing: Listing, position: Int) {
         val updatedList = _listingsLiveData.value?.toMutableList()
         updatedList?.removeAt(position)
