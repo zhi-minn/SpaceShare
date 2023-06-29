@@ -22,7 +22,9 @@ import javax.inject.Inject
 
 import com.example.spaceshare.consts.ListingConsts.SPACE_OFFERING_LOWER_LIMIT
 import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
+import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.utils.GeocoderUtil
+import com.google.firebase.auth.FirebaseAuth
 import java.lang.StringBuilder
 
 class CreateListingViewModel @Inject constructor(
@@ -31,8 +33,8 @@ class CreateListingViewModel @Inject constructor(
     private val firebaseStorageRepo: FirebaseStorageRepository
 ): ViewModel(), LocationInterface {
 
-    private val _imageUris: MutableLiveData<List<Uri>> = MutableLiveData()
-    val imageUris: LiveData<List<Uri>> = _imageUris
+    private val _imageUris: MutableLiveData<MutableList<Uri>> = MutableLiveData()
+    val imageUris: LiveData<MutableList<Uri>> = _imageUris
 
     private val _location: MutableLiveData<LatLng> = MutableLiveData<LatLng>()
     val location: LiveData<LatLng> = _location
@@ -44,8 +46,7 @@ class CreateListingViewModel @Inject constructor(
     val listingPublished: LiveData<Boolean> = _listingPublished
 
     fun addImageUri(imageUri: Uri) {
-        val curImageUris = _imageUris.value ?: emptyList()
-        val newImageUris = curImageUris.toMutableList()
+        val newImageUris = _imageUris.value ?: mutableListOf()
         newImageUris.add(imageUri)
         _imageUris.value = newImageUris
     }
@@ -99,6 +100,10 @@ class CreateListingViewModel @Inject constructor(
                 // Inform users whose preferences matches listing
                 if (listing.location != null) {
                     preferencesRepo.getAllPreferences().forEach { preferences ->
+                        if (FirebaseAuth.getInstance().currentUser?.email.equals(preferences.email)) {
+                            return@forEach
+                        }
+
                         if (preferences.location != null && preferences.email != null) {
                             val distance = MathUtil.calculateDistanceInKilometers(listing.location!!, preferences.location!!)
                             if (distance <= preferences.radius) {

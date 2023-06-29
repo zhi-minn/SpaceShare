@@ -16,9 +16,11 @@ import com.example.spaceshare.models.User
 import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
 import com.example.spaceshare.adapters.ListingAdapter
+import com.example.spaceshare.adapters.ListingAdapter.ItemClickListener
 import com.example.spaceshare.models.Listing
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,7 +52,13 @@ class ListingsFragment : Fragment() {
     }
 
     private fun configureRecyclerView() {
-        adapter = ListingAdapter()
+        adapter = ListingAdapter(object : ItemClickListener {
+            override fun onItemClick(listing: Listing) {
+                val hostListingDialogFragment = HostListingDialogFragment(listing, listingViewModel)
+                hostListingDialogFragment.show(Objects.requireNonNull(childFragmentManager),
+                    "hostListingDialog")
+            }
+        })
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }

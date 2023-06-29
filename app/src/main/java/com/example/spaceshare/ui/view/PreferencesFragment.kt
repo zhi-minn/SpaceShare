@@ -50,7 +50,7 @@ class PreferencesFragment : Fragment() {
         }
 
         binding.location.setOnClickListener {
-            val mapDialogFragment = MapDialogFragment(viewModel)
+            val mapDialogFragment = MapDialogFragment(viewModel, null)
             mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
 

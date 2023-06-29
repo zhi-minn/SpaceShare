@@ -1,39 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/mapView"
-        tools:context=".MainActivity"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
+        android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/standard_component_margin"
-        android:layout_marginLeft="@dimen/standard_component_margin"
-        android:layout_marginRight="60dp"
-        android:background="@android:color/white">
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mapView"
+            tools:context=".MainActivity"
+            android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-        <fragment
-            android:id="@+id/autocompleteFragment"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/searchBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
+            android:layout_marginTop="@dimen/standard_component_margin"
+            android:layout_marginLeft="@dimen/standard_component_margin"
+            android:layout_marginRight="60dp"
+            android:background="@android:color/white">
 
-    </androidx.cardview.widget.CardView>
+            <fragment
+                android:id="@+id/autocompleteFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
 
-    <ImageButton
-        android:id="@+id/btnConfirmLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom"
-        android:layout_marginBottom="64dp"
-        android:background="@drawable/round_button_black"
-        android:src="@drawable/check" />
+        </androidx.cardview.widget.CardView>
 
-</FrameLayout>
+        <ImageButton
+            android:id="@+id/btnConfirmLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="64dp"
+            android:background="@drawable/round_button_black"
+            android:src="@drawable/check" />
+
+    </FrameLayout>
+
+</layout>

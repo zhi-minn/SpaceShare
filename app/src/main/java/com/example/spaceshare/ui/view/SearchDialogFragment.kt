@@ -21,7 +21,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.slider.Slider
 import java.util.Objects
 
-class DialogSearchFragment(
+class SearchDialogFragment(
     private val searchViewModel: SearchViewModel
 ) : DialogFragment() {
 
@@ -60,7 +60,7 @@ class DialogSearchFragment(
         // Where
         binding.whereCard.setOnClickListener {
             hideWhatSelectorCard()
-            val mapDialogFragment = MapDialogFragment(searchViewModel)
+            val mapDialogFragment = MapDialogFragment(searchViewModel, null)
             mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
         searchViewModel.location.observe(viewLifecycleOwner) { location ->
