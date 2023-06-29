@@ -1,6 +1,7 @@
 package com.example.spaceshare.ui.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,20 +12,21 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spaceshare.R
+import com.example.spaceshare.adapters.ListingAdapter
+import com.example.spaceshare.adapters.ListingAdapter.ItemClickListener
 import com.example.spaceshare.databinding.FragmentListingsBinding
+import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.User
 import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
-import com.example.spaceshare.adapters.ListingAdapter
-import com.example.spaceshare.adapters.ListingAdapter.ItemClickListener
-import com.example.spaceshare.models.Listing
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
 import javax.inject.Inject
+import com.example.spaceshare.ui.viewmodel.CreateListingViewModel.CreateListingDialogListener
 
 @AndroidEntryPoint
-class ListingsFragment : Fragment() {
+class ListingsFragment : Fragment(), CreateListingDialogListener {
 
     private lateinit var binding: FragmentListingsBinding
     private lateinit var navController: NavController
@@ -65,7 +67,8 @@ class ListingsFragment : Fragment() {
 
     private fun configureButtons() {
         binding.btnAddListing.setOnClickListener {
-            navController.navigate(R.id.action_listingFragment_to_createListingFragment)
+            val createListingDialogFragment = CreateListingDialogFragment()
+            createListingDialogFragment.show(Objects.requireNonNull(childFragmentManager), "createListingDialog")
         }
     }
 
@@ -74,13 +77,15 @@ class ListingsFragment : Fragment() {
             adapter.submitList(listings)
         }
         listingViewModel.fetchListings(User(FirebaseAuth.getInstance().currentUser?.uid!!))
+    }
 
-        createListingViewModel.listingPublished.observe(viewLifecycleOwner) { published ->
-            if (published) {
-                Toast.makeText(requireContext(), "Listing successfully published", Toast.LENGTH_SHORT)
-            } else {
-                Toast.makeText(requireContext(), "Error publishing listing. Please try again later", Toast.LENGTH_SHORT)
-            }
+    override fun onListingCreated(listing: Listing?) {
+        if (listing != null) {
+            listingViewModel.addItem(listing)
+            binding.recyclerView.scrollToPosition(0)
+            Toast.makeText(requireContext(), "Listing successfully published", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(requireContext(), "Error publishing listing. Please try again later", Toast.LENGTH_SHORT).show()
         }
     }
 }

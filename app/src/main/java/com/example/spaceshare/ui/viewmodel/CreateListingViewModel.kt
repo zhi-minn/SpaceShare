@@ -22,7 +22,6 @@ import javax.inject.Inject
 
 import com.example.spaceshare.consts.ListingConsts.SPACE_OFFERING_LOWER_LIMIT
 import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
-import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.utils.GeocoderUtil
 import com.google.firebase.auth.FirebaseAuth
 import java.lang.StringBuilder
@@ -42,8 +41,12 @@ class CreateListingViewModel @Inject constructor(
     private val _spaceAvailable: MutableLiveData<Double> = MutableLiveData(0.5)
     val spaceAvailable: LiveData<Double> = _spaceAvailable
 
-    private val _listingPublished: MutableLiveData<Boolean> = MutableLiveData()
-    val listingPublished: LiveData<Boolean> = _listingPublished
+    data class PublishResult(
+        val isSuccess: Boolean,
+        val listing: Listing? = null
+    )
+    private val _publishResult: MutableLiveData<PublishResult> = MutableLiveData()
+    val publishResult: LiveData<PublishResult> = _publishResult
 
     fun addImageUri(imageUri: Uri) {
         val newImageUris = _imageUris.value ?: mutableListOf()
@@ -95,7 +98,8 @@ class CreateListingViewModel @Inject constructor(
 
             try {
                 listingRepo.createListing(listing)
-                _listingPublished.value = true
+                _publishResult.value = PublishResult(true, listing)
+                Log.i("tag", "Updated to ${_publishResult.value}")
 
                 // Inform users whose preferences matches listing
                 if (listing.location != null) {
@@ -116,7 +120,7 @@ class CreateListingViewModel @Inject constructor(
             } catch (e: Exception) {
                 // TODO: Inform user error creating listing in UI
                 Log.e("CreateListing", "Error creating listing or sending email preferences: ${e.message}")
-                _listingPublished.value = false
+                _publishResult.value = PublishResult(false)
             }
         }
     }
@@ -134,5 +138,9 @@ class CreateListingViewModel @Inject constructor(
         sb.append("Approximate distance to preferred location: ${String.format("%.2f", distance)} km")
 
         return sb.toString()
+    }
+
+    interface CreateListingDialogListener {
+        fun onListingCreated(listing: Listing?)
     }
 }
