@@ -109,7 +109,20 @@ class ListingRepoImpl @Inject constructor(
                     }
                 }
 
-                val sortedByDistance = castedToListings.sortedBy { listing ->
+                val filteredByDistance = castedToListings.filter { listing ->
+                    try {
+                        val dist = MathUtil.calculateDistanceInKilometers(
+                            criteria.location,
+                            listing.location!!
+                        )
+                        dist <= criteria.radius
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error calculating and filtering by Listing distance for id ${listing.id}: ${e.message}")
+                        false
+                    }
+                }
+
+                val sortedByDistance = filteredByDistance.sortedBy { listing ->
                     try {
                         val dist = MathUtil.calculateDistanceInKilometers(
                             criteria.location,
@@ -117,12 +130,10 @@ class ListingRepoImpl @Inject constructor(
                         )
                         dist
                     } catch (e: Exception) {
-                        Log.e(TAG, "Error calculating Listing distance for id ${listing.id}: ${e.message}")
+                        Log.e(TAG, "Error calculating and sorting by Listing distance for id ${listing.id}: ${e.message}")
                         null
                     }
                 }
-
-
 
                 return@withContext sortedByDistance
 
