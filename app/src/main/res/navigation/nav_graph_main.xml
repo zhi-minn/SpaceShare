@@ -47,18 +47,6 @@
         <action
             android:id="@+id/action_listingFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
-        <action
-            android:id="@+id/action_listingFragment_to_createListingFragment"
-            app:enterAnim="@anim/slide_up"
-            app:destination="@id/createListingFragment" />
-    </fragment>
-
-    <!-- Create Listing Fragment -->
-    <fragment
-        android:id="@+id/createListingFragment"
-        android:name="com.example.spaceshare.ui.view.CreateListingFragment"
-        android:label="CreateListing"
-        tools:layout="@layout/fragment_create_listing" >
     </fragment>
 
     <!-- Reservation Fragment -->

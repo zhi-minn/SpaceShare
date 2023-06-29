@@ -12,7 +12,7 @@
         <item name="android:windowAnimationStyle">@style/FadeInOutDialogAnimation</item>
     </style>
 
-    <style name="ListingDialogStyle" parent="android:Theme.Light.NoTitleBar.Fullscreen">
+    <style name="ListingDialogStyle" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/FadeInOutDialogAnimation</item>
     </style>
 

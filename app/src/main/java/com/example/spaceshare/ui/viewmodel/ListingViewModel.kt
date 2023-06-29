@@ -23,9 +23,19 @@ class ListingViewModel @Inject constructor(
 
     fun fetchListings(user: User) {
         viewModelScope.launch {
-            val listings = repo.fetchOwnListings(user)
+            val listings = repo.getUserListings(user)
             _listingsLiveData.value = listings
         }
+    }
+
+    fun addItem(listing: Listing) {
+        val currentList = _listingsLiveData.value.orEmpty().toMutableList()
+        currentList.add(0, listing)
+        Log.i("tag", "Added $listing to currentList")
+        for (list in currentList) {
+            Log.i("tag", "$list")
+        }
+        _listingsLiveData.value = currentList
     }
 
      fun removeItem(listing: Listing, position: Int) {

@@ -110,3 +110,6 @@
 * Chang 0.5 hours (2023-06-29) [PR](https://github.com/zhi-minn/SpaceShare/pull/35)
   * Hide search radius related UI unless a location is set
   * Fix search not returning results when no location is set
+* Minn 2.5 hours (2023-06-29) [PR](https://github.com/zhi-minn/SpaceShare/pull/38)[PR](https://github.com/zhi-minn/SpaceShare/pull/39)
+  * Smooth UI update when add new listing
+  * Add createdAt and updatedAt timestamps to Listing model
