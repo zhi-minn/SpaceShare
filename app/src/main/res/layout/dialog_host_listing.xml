@@ -97,12 +97,20 @@
                     android:textStyle="bold"
                     app:layout_constraintTop_toBottomOf="@id/location" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/spaceAvailable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/sample_space_available"
+                    app:layout_constraintTop_toBottomOf="@id/price" />
+
                 <View
                     android:id="@+id/divider1"
                     style="@style/HorizontalDivider"
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/standard_component_margin"
-                    app:layout_constraintTop_toBottomOf="@id/price" />
+                    app:layout_constraintTop_toBottomOf="@id/spaceAvailable" />
 
                 <!-- Amenities -->
                 <androidx.appcompat.widget.AppCompatTextView

@@ -62,6 +62,7 @@ class HostListingDialogFragment(
             GeocoderUtil.getGeneralLocation(location.latitude, location.longitude)
         }
         binding.price.text = getString(R.string.listing_price_template, listing.price)
+        binding.spaceAvailable.text = getString(R.string.space_available_template, listing.spaceAvailable)
 
         // If no amenities, we do not require a divider for this section
         if (listing.amenities.isEmpty()) {

@@ -21,20 +21,45 @@ class ListingViewModel @Inject constructor(
     private val _listingsLiveData: MutableLiveData<List<Listing>> = MutableLiveData()
     val listingsLiveData: LiveData<List<Listing>> = _listingsLiveData
 
+    private val _filteredListingsLiveData: MutableLiveData<List<Listing>> = MutableLiveData()
+    val filteredListingsLiveData: LiveData<List<Listing>> = _filteredListingsLiveData
+
+    private var curQuery: String = ""
+
     fun fetchListings(user: User) {
         viewModelScope.launch {
             val listings = repo.getUserListings(user)
             _listingsLiveData.value = listings
+            filterListings(curQuery)
+        }
+    }
+
+    fun filterListings(query: String) {
+        curQuery = query
+        if (query.isEmpty()) {
+            _filteredListingsLiveData.value = _listingsLiveData.value
+            return
+        }
+
+        // Filter by price or space available
+        val value = query.toDoubleOrNull()
+        if (value != null) {
+            _filteredListingsLiveData.value = _listingsLiveData.value.orEmpty().filter { listing ->
+                listing.price == value || listing.spaceAvailable == value
+            }
+            return
+        }
+
+        // Filter by title
+        _filteredListingsLiveData.value = _listingsLiveData.value.orEmpty().filter { listing ->
+            val title = listing.title ?: "Untitled"
+            title.contains(query)
         }
     }
 
     fun addItem(listing: Listing) {
         val currentList = _listingsLiveData.value.orEmpty().toMutableList()
         currentList.add(0, listing)
-        Log.i("tag", "Added $listing to currentList")
-        for (list in currentList) {
-            Log.i("tag", "$list")
-        }
         _listingsLiveData.value = currentList
     }
 
@@ -42,6 +67,7 @@ class ListingViewModel @Inject constructor(
          val updatedList = _listingsLiveData.value?.toMutableList()
          updatedList?.remove(listing)
          _listingsLiveData.value = updatedList ?: emptyList()
+         filterListings(curQuery)
          viewModelScope.launch {
              // Delete listing
              repo.deleteListing(listing.id!!)
