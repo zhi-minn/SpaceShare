@@ -19,6 +19,7 @@
                 android:id="@+id/whereCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="55dp"
                 app:cardCornerRadius="15dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -96,11 +97,13 @@
                 android:id="@+id/whenCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="55dp"
                 app:cardCornerRadius="15dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:minHeight="60dp">
 
                     <TextView
                         android:id="@+id/whenLabel"
@@ -139,11 +142,13 @@
                 android:id="@+id/whatCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="55dp"
                 app:cardCornerRadius="15dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:minHeight="60dp">
 
                     <TextView
                         android:id="@+id/whatLabel"

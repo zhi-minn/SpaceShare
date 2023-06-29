@@ -32,7 +32,7 @@ class SearchViewModel @Inject constructor(
     var endTime = MutableLiveData<Long>()
 
     init {
-        location.value = LatLng(0.0,0.0)
+        location.value = LatLng(0.0, 0.0)
         startTime.value = 0
         endTime.value = 0
         searchRadius.value = 1f
@@ -60,25 +60,35 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             val searchLoc: LatLng = location.value!!
             val searchGeopoint = GeoPoint(searchLoc.latitude, searchLoc.longitude)
+
             val startDate = Date(startTime.value!!)
             val endDate = Date(endTime.value!!)
             val startTimestamp = Timestamp(startDate)
             val endTimestamp = Timestamp(endDate)
+
+            // If location is not set, make query radius slightly larger than the longest possible
+            //  distance (basically don't filter by radius/get all results)
+            var queryRadius = searchRadius.value!!
+            if (location.value == LatLng(0.0, 0.0))
+                queryRadius = 20500f
+
             val criteria =
-                SearchCriteria(spaceRequired.value!!, searchGeopoint,
-                    searchRadius.value!!, startTimestamp, endTimestamp)
+                SearchCriteria(
+                    spaceRequired.value!!, searchGeopoint,
+                    queryRadius, startTimestamp, endTimestamp
+                )
             val searchResults = listingRepo.searchListings(criteria)
             listings.value = filterForNonOwnListings(searchResults)
         }
     }
 
-    private fun filterForNonOwnListings(listings: List<Listing>) : List<Listing> {
+    private fun filterForNonOwnListings(listings: List<Listing>): List<Listing> {
         return listings.filter { listing ->
             listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
         }
     }
 
     override fun setLocation(latLng: LatLng) {
-        location?.value = latLng
+        location.value = latLng
     }
 }
