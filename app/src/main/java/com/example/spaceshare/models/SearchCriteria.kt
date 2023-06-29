@@ -5,6 +5,7 @@ import com.google.firebase.firestore.GeoPoint
 data class SearchCriteria (
     val spaceRequired: Double = 0.0,
     val location: GeoPoint,
+    val radius: Float,
     val startDate: Timestamp,
     val endDate: Timestamp
 )

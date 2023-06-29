@@ -18,6 +18,7 @@ import com.example.spaceshare.utils.GeocoderUtil
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.slider.Slider
 import java.util.Objects
 
 class DialogSearchFragment(
@@ -68,6 +69,23 @@ class DialogSearchFragment(
                 binding.searchLocation.text = address
             else
                 binding.searchLocation.text = "Anywhere"
+        }
+        // Search Radius
+        binding.searchRadiusSlider.setLabelFormatter { value ->
+            "$value km"
+        }
+        binding.searchRadiusSlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) {
+                // Responds to when slider's touch event is being started
+            }
+
+            override fun onStopTrackingTouch(slider: Slider) {
+                // Responds to when slider's touch event is being stopped
+                searchViewModel.searchRadius.value = binding.searchRadiusSlider.value
+            }
+        })
+        searchViewModel.searchRadius.observe(viewLifecycleOwner) { radius ->
+            binding.searchRadiusIndicator.text = "$radius km"
         }
 
         // When

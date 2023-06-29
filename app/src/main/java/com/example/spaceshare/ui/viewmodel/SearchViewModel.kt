@@ -26,6 +26,7 @@ class SearchViewModel @Inject constructor(
     var listings = MutableLiveData<List<Listing>>()
 
     var location = MutableLiveData<LatLng>()
+    var searchRadius = MutableLiveData<Float>()
 
     var startTime = MutableLiveData<Long>()
     var endTime = MutableLiveData<Long>()
@@ -34,6 +35,7 @@ class SearchViewModel @Inject constructor(
         location.value = LatLng(0.0,0.0)
         startTime.value = 0
         endTime.value = 0
+        searchRadius.value = 1f
         fetchInitialListings()
     }
 
@@ -63,7 +65,8 @@ class SearchViewModel @Inject constructor(
             val startTimestamp = Timestamp(startDate)
             val endTimestamp = Timestamp(endDate)
             val criteria =
-                SearchCriteria(spaceRequired.value!!, searchGeopoint, startTimestamp, endTimestamp)
+                SearchCriteria(spaceRequired.value!!, searchGeopoint,
+                    searchRadius.value!!, startTimestamp, endTimestamp)
             val searchResults = listingRepo.searchListings(criteria)
             listings.value = filterForNonOwnListings(searchResults)
         }
