@@ -12,8 +12,10 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
+import com.example.spaceshare.databinding.DialogMapBinding
 import com.example.spaceshare.interfaces.LocationInterface
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -33,9 +35,14 @@ import com.google.android.libraries.places.api.model.RectangularBounds
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.example.spaceshare.consts.LocationConsts.KW_MIN_LAT
+import com.example.spaceshare.consts.LocationConsts.KW_MAX_LAT
+import com.example.spaceshare.consts.LocationConsts.KW_MIN_LONG
+import com.example.spaceshare.consts.LocationConsts.KW_MAX_LONG
 
 class MapDialogFragment(
-    private val locationInterface: LocationInterface
+    private val locationInterface: LocationInterface?,
+    private val location: LatLng?
 ) : DialogFragment(), OnMapReadyCallback {
 
     private lateinit var googleMap: GoogleMap
@@ -48,13 +55,8 @@ class MapDialogFragment(
     // Search bar
     private lateinit var autocompleteFragment: AutocompleteSupportFragment
     private var selectedPlace: Place? = null
-    // Views
-    private lateinit var btnConfirmLocation: ImageButton
-    // Consts
-    private val KW_MIN_LAT = 43.3474
-    private val KW_MAX_LAT = 43.5709
-    private val KW_MIN_LONG = -80.6480
-    private val KW_MAX_LONG = -80.3532
+    // Binding
+    private lateinit var binding: DialogMapBinding
 
     companion object {
         private val TAG = this::class.simpleName
@@ -66,17 +68,20 @@ class MapDialogFragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.dialog_map, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.dialog_map, container, false)
+
+        // Hide search bar if map is static
+        if (location != null) {
+            binding.searchBar.visibility = View.GONE
+            binding.btnConfirmLocation.visibility = View.GONE
+        }
 
         // Initialize google maps
         val mapFragment = childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
         configureAutoCompleteFragment()
 
-        // Initialize views
-        btnConfirmLocation = view.findViewById(R.id.btnConfirmLocation)
-
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -113,10 +118,10 @@ class MapDialogFragment(
     }
 
     private fun configureButtons() {
-        btnConfirmLocation.setOnClickListener {
+        binding.btnConfirmLocation.setOnClickListener {
             val location = selectedLocation
             if (location != null) {
-                locationInterface.setLocation(location)
+                locationInterface?.setLocation(location)
             }
             dialog?.dismiss()
         }
@@ -320,10 +325,15 @@ class MapDialogFragment(
 
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
-        enableMyLocation()
-        configureSearchBar()
-        configureMapListeners()
-        zoomToUserLocation()
+        if (location != null) {
+            map?.addMarker(MarkerOptions().position(location))
+            map?.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
+        } else {
+            enableMyLocation()
+            configureSearchBar()
+            configureMapListeners()
+            zoomToUserLocation()
+        }
     }
 
     override fun onRequestPermissionsResult(

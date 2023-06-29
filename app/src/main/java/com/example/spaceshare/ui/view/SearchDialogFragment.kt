@@ -56,7 +56,7 @@ class SearchDialogFragment(
         // Where
         binding.whereCard.setOnClickListener {
             hideWhatSelectorCard()
-            val mapDialogFragment = MapDialogFragment(searchViewModel)
+            val mapDialogFragment = MapDialogFragment(searchViewModel, null)
             mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
         searchViewModel.location?.observe(viewLifecycleOwner) { location ->

@@ -1,5 +1,6 @@
 package com.example.spaceshare.ui.view
 
+import MapDialogFragment
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import java.util.Objects
 
 class HostListingDialogFragment(
     private val listing: Listing,
@@ -119,10 +121,13 @@ class HostListingDialogFragment(
             val latLng = LatLng(location.latitude, location.longitude)
             map?.addMarker(MarkerOptions().position(latLng))
             map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+
+            map.setOnMapClickListener {
+                val mapDialogFragment = MapDialogFragment(null, latLng)
+                mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
+            }
         }
 
-        map.setOnMapClickListener {
-            TODO("Launch MapDialogFragment")
-        }
+
     }
 }

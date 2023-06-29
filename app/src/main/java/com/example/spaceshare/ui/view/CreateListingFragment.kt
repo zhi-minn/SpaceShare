@@ -86,7 +86,7 @@ class CreateListingFragment : Fragment() {
 
         // Maps
         binding.btnOpenMaps.setOnClickListener {
-            val mapDialogFragment = MapDialogFragment(createListingViewModel)
+            val mapDialogFragment = MapDialogFragment(createListingViewModel, null)
             mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
 

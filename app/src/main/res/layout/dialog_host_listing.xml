@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/box_padding"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/btnChangeStatus"
                 app:layout_constraintTop_toBottomOf="@id/imageContainer"
                 app:layout_constraintVertical_bias="0.0"
                 tools:layout_editor_absoluteX="0dp">
@@ -218,7 +218,6 @@
                 android:backgroundTint="@color/quantum_orange300"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btnDelete"
-                app:layout_constraintTop_toBottomOf="@id/detailsContainer"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread" />
 
