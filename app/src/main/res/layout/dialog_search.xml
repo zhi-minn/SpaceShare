@@ -196,7 +196,6 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:text="How much space do you need?"
-                        android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
