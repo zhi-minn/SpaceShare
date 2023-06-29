@@ -31,6 +31,8 @@ class SearchDialogFragment(
     private lateinit var binding: DialogSearchBinding
     private lateinit var navController: NavController
 
+    private lateinit var geocoder: Geocoder
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,6 +44,7 @@ class SearchDialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
+        geocoder = Geocoder(requireContext())
 
         configureCards()
         configureButtons()
@@ -59,12 +62,12 @@ class SearchDialogFragment(
             val mapDialogFragment = MapDialogFragment(searchViewModel, null)
             mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
-        searchViewModel.location?.observe(viewLifecycleOwner) { location ->
-            if (location != null) {
-                binding.searchLocation.text = GeocoderUtil.getAddress(location.latitude, location.longitude)
-            } else {
+        searchViewModel.location.observe(viewLifecycleOwner) { location ->
+            val address = GeocoderUtil.getAddress(location.latitude, location.longitude)
+            if (address != "")
+                binding.searchLocation.text = address
+            else
                 binding.searchLocation.text = "Anywhere"
-            }
         }
 
         // When
@@ -111,7 +114,6 @@ class SearchDialogFragment(
 
     private fun configureButtons() {
         binding.btnCancel.setOnClickListener {
-            searchViewModel.clearAllDialogData()
             dialog?.dismiss()
         }
 
