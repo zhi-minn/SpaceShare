@@ -60,7 +60,9 @@ class SearchFragment : Fragment() {
     private fun configureRecyclerView() {
         adapter = ListingAdapter(object : ListingAdapter.ItemClickListener {
             override fun onItemClick(listing: Listing) {
-                Log.i(TAG, "Implement me here")
+                val clientListingDialogFragment = ClientListingDialogFragment(listing)
+                clientListingDialogFragment.show(Objects.requireNonNull(childFragmentManager),
+                    "clientListingDialog")
             }
         })
         binding.recyclerView.adapter = adapter
