@@ -105,4 +105,5 @@
   * Added map view to detailed host listing page
 * Chang 1.5 hours (2023-06-29) [PR](https://github.com/zhi-minn/SpaceShare/pull/34)
   * Added slider to search dialog to let user input search radius around the chosen location
-  * Made search function in listing repo filter by distance 
+  * Made search function in listing repo filter by distance
+  * Made text in search dialog bigger for better UX
