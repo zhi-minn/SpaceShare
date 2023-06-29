@@ -65,10 +65,20 @@ class SearchDialogFragment(
         }
         searchViewModel.location.observe(viewLifecycleOwner) { location ->
             val address = GeocoderUtil.getAddress(location.latitude, location.longitude)
-            if (address != "")
+            if (address != "") {
                 binding.searchLocation.text = address
-            else
+                // Make radius related UI disappear
+                binding.searchRadiusSlider.isGone = false
+                binding.seachRadiusTextView.isGone = false
+                binding.searchRadiusIndicator.isGone = false
+            }
+            else {
                 binding.searchLocation.text = "Anywhere"
+                // Make radius related UI disappear
+                binding.searchRadiusSlider.isGone = true
+                binding.seachRadiusTextView.isGone = true
+                binding.searchRadiusIndicator.isGone = true
+            }
         }
         // Search Radius
         binding.searchRadiusSlider.setLabelFormatter { value ->
@@ -85,6 +95,7 @@ class SearchDialogFragment(
             }
         })
         searchViewModel.searchRadius.observe(viewLifecycleOwner) { radius ->
+            binding.searchRadiusSlider.value = radius
             binding.searchRadiusIndicator.text = "$radius km"
         }
 
