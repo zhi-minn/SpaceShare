@@ -74,7 +74,7 @@ class SearchDialogFragment(
             }
             else {
                 binding.searchLocation.text = "Anywhere"
-                // Make radius related UI disappear
+                // Make radius related UI appear
                 binding.searchRadiusSlider.isGone = true
                 binding.seachRadiusTextView.isGone = true
                 binding.searchRadiusIndicator.isGone = true
