@@ -67,7 +67,7 @@ class SearchViewModel @Inject constructor(
             val endTimestamp = Timestamp(endDate)
 
             // If location is not set, make query radius slightly larger than the longest possible
-            //  distance (basically don't filter by radius/get all results)
+            //  distance on Earth (basically don't filter by radius/get all results)
             var queryRadius = searchRadius.value!!
             if (location.value == LatLng(0.0, 0.0))
                 queryRadius = 20500f
