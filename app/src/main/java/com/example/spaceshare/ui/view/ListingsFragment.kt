@@ -82,8 +82,8 @@ class ListingsFragment : Fragment(), CreateListingDialogListener {
     override fun onListingCreated(listing: Listing?) {
         if (listing != null) {
             listingViewModel.addItem(listing)
-            binding.recyclerView.scrollToPosition(0)
             Toast.makeText(requireContext(), "Listing successfully published", Toast.LENGTH_SHORT).show()
+            binding.recyclerView.scrollToPosition(0)
         } else {
             Toast.makeText(requireContext(), "Error publishing listing. Please try again later", Toast.LENGTH_SHORT).show()
         }

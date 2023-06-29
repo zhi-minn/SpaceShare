@@ -7,6 +7,7 @@ import com.example.spaceshare.models.SearchCriteria
 import com.example.spaceshare.models.User
 import com.example.spaceshare.utils.MathUtil
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -41,12 +42,14 @@ class ListingRepoImpl @Inject constructor(
 
     }
 
-    override suspend fun fetchOwnListings(user: User): List<Listing> = withContext(Dispatchers.IO) {
+    override suspend fun getUserListings(user: User): List<Listing> = withContext(Dispatchers.IO) {
         try {
             val result = listingsCollection
                 .whereEqualTo("hostId", user.id)
+                .orderBy("updatedAt", Query.Direction.DESCENDING)
                 .get()
                 .await()
+
 
             return@withContext result.documents.mapNotNull { document ->
                 try {
