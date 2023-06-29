@@ -26,7 +26,9 @@ import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
 import com.example.spaceshare.utils.DecimalInputFilter
 import com.example.spaceshare.utils.GeocoderUtil
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
 import java.util.UUID
