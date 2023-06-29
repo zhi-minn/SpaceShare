@@ -13,6 +13,7 @@ import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentPreferencesBinding
 import com.example.spaceshare.ui.viewmodel.PreferencesViewModel
 import com.example.spaceshare.utils.GeocoderUtil
+import com.google.android.material.slider.Slider
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
@@ -54,17 +55,12 @@ class PreferencesFragment : Fragment() {
             mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
 
-        binding.btn1km.setOnClickListener {
-            viewModel.setRadius(1)
+        binding.searchRadiusSlider.setLabelFormatter { value ->
+            "$value km"
         }
-
-        binding.btn5km.setOnClickListener {
-            viewModel.setRadius(5)
-        }
-
-        binding.btn10km.setOnClickListener {
-            viewModel.setRadius(10)
-        }
+        binding.searchRadiusSlider.addOnChangeListener(Slider.OnChangeListener { _, value, _ ->
+            viewModel.setRadius(value.toInt())
+        })
 
         binding.btnSave.setOnClickListener {
             viewModel.updatePreferences()
@@ -91,11 +87,8 @@ class PreferencesFragment : Fragment() {
                     binding.location.text = GeocoderUtil.getAddress(location.latitude, location.longitude)
                 }
 
-                // Radius
-                val radius = preferences.radius
-                binding.btn1km.isSelected = radius == 1
-                binding.btn5km.isSelected = radius == 5
-                binding.btn10km.isSelected = radius == 10
+                binding.searchRadiusSlider.value = preferences.radius.toFloat()
+                binding.distanceIndicator.text = "${preferences.radius} km"
             }
         }
 
