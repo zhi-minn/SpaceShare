@@ -99,3 +99,7 @@
   * Fix search not filtering for available space
 * Chang 0.25 hours (2023-06-28) [PR](https://github.com/zhi-minn/SpaceShare/pull/32)
   * Added dismiss button to image popup 
+* Minn 4 hours (2023-06-28) [PR](https://github.com/zhi-minn/SpaceShare/pull/33)
+  * Added detailed host listing page
+  * Added amenities option to listing
+  * Added map view to detailed host listing page
