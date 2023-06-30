@@ -4,9 +4,10 @@ import com.example.spaceshare.enums.Amenity
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ServerTimestamp
+import java.util.UUID
 
 data class Listing(
-    var id: String? = null,
+    var id: String = UUID.randomUUID().toString(),
     val hostId: String? = null,
     val photos: MutableList<String> = mutableListOf(),
     var title: String = "",

@@ -224,7 +224,7 @@
                 android:textSize="@dimen/title_text"
                 android:textAlignment="center"
                 android:background="@drawable/rounded_rectangle_bg"
-                android:backgroundTint="@color/quantum_orange300"
+                android:backgroundTint="@color/light_orange"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btnDelete"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -243,7 +243,7 @@
                 android:textSize="@dimen/title_text"
                 android:textAlignment="center"
                 android:background="@drawable/rounded_rectangle_bg"
-                android:backgroundTint="@color/quantum_googred300"
+                android:backgroundTint="@color/light_red"
                 app:layout_constraintStart_toEndOf="@id/btnChangeStatus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />

@@ -85,6 +85,23 @@ class ListingViewModel @Inject constructor(
         }
     }
 
+    fun updateListing(listing: Listing) {
+        val newList = _listingsLiveData.value.orEmpty().toMutableList()
+
+        viewModelScope.launch {
+            if (repo.updateListing(listing)) {
+                for (index in 0 until newList.size) {
+                    if (newList[index].id == listing.id) {
+                        newList[index] = listing
+                    }
+                    _listingsLiveData.value = newList
+                    filterListings(curQuery, curCriteria)
+                    break
+                }
+            }
+        }
+    }
+
     fun addItem(listing: Listing) {
         val currentList = _listingsLiveData.value.orEmpty().toMutableList()
         currentList.add(0, listing)
