@@ -16,6 +16,10 @@
         <item name="android:windowAnimationStyle">@style/FadeInOutDialogAnimation</item>
     </style>
 
+    <style name="SearchAndFilterDialogStyle" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@style/FadeInOutDialogAnimation</item>
+    </style>
+
     <style name="FadeInOutDialogAnimation" parent="android:Theme.Black.NoTitleBar.Fullscreen">
         <item name="android:windowEnterAnimation">@anim/fade_in</item>
         <item name="android:windowExitAnimation">@anim/fade_out</item>
