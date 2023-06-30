@@ -118,3 +118,5 @@
 * Minn 6 hours (2023-06-28 -> 2023-06-29) [PR](https://github.com/zhi-minn/SpaceShare/pull/41)
   * Host can now search and filter through own listings
   * Host can update listing status (active or inactive)
+* William 6 hours (2023-06-30) [Commit](https://github.com/zhi-minn/SpaceShare/commit/1b0cfcd1470ff970d7fbc90f7192de39ab7fff65)
+  + User verification display, create user document to UserVerfieid collection when sign up
