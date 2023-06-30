@@ -7,6 +7,7 @@ import com.example.spaceshare.consts.ListingConsts.SPACE_BOOKING_LOWER_LIMIT
 import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
 import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.interfaces.LocationInterface
+import com.example.spaceshare.models.FilterCriteria
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.SearchCriteria
 import com.google.android.gms.maps.model.LatLng
@@ -31,6 +32,8 @@ class SearchViewModel @Inject constructor(
     var startTime = MutableLiveData<Long>()
     var endTime = MutableLiveData<Long>()
 
+    var filterCriteria = FilterCriteria()
+
     init {
         location.value = LatLng(0.0, 0.0)
         startTime.value = 0
@@ -42,7 +45,7 @@ class SearchViewModel @Inject constructor(
     private fun fetchInitialListings() {
         viewModelScope.launch {
             val results = listingRepo.getAllListings()
-            listings.value = filterForNonOwnListings(results)
+            listings.value = applyClientSearchFilters(results)
         }
     }
 
@@ -78,7 +81,30 @@ class SearchViewModel @Inject constructor(
                     queryRadius, startTimestamp, endTimestamp
                 )
             val searchResults = listingRepo.searchListings(criteria)
-            listings.value = filterForNonOwnListings(searchResults)
+            listings.value = applyClientSearchFilters(searchResults)
+        }
+    }
+
+    fun filterByFilterCriteria() {
+        val filteredByCriteriaListings = listings.value.orEmpty().filter { listing ->
+            listing.price >= filterCriteria.minPrice
+                    && listing.price <= filterCriteria.maxPrice
+                    && listing.spaceAvailable >= filterCriteria.minSpace
+                    && listing.spaceAvailable <= filterCriteria.maxSpace
+        }
+
+        listings.value = filteredByCriteriaListings
+    }
+
+    private fun applyClientSearchFilters(listings: List<Listing>): List<Listing> {
+        val nonOwnListings = filterForNonOwnListings(listings)
+        val activeListings = filterForActiveListings(nonOwnListings)
+        return activeListings
+    }
+
+    private fun filterForActiveListings(listings: List<Listing>): List<Listing> {
+        return listings.filter { listing ->
+            listing.isActive
         }
     }
 

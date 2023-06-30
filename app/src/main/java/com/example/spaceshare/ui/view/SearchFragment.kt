@@ -46,6 +46,7 @@ class SearchFragment : Fragment() {
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
 
         configureSearchBar()
+        configureFilterButton()
         configureRecyclerView()
         configureListingObservers()
     }
@@ -54,6 +55,13 @@ class SearchFragment : Fragment() {
         binding.searchBarCard.setOnClickListener {
             val searchDialogFragment = SearchDialogFragment(searchViewModel)
             searchDialogFragment.show(Objects.requireNonNull(childFragmentManager), "searchDialog")
+        }
+    }
+
+    private fun configureFilterButton() {
+        binding.btnFilter.setOnClickListener {
+            val filterDialogFragment = ClientFilterDialogFragment(searchViewModel)
+            filterDialogFragment.show(Objects.requireNonNull(childFragmentManager), "filterDialog")
         }
     }
 
