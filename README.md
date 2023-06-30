@@ -121,7 +121,7 @@
 * Chang 2 hours (2023-06-29 -> Incomplete) Low-Priority Bug
   * Investigate detailed client listing page crashing when reaching end of ScrollView
     * Detailed client listing page does not crash when on hardware Android device, still crashes on emulator
-    * Depriotizing since the problem is not as severe as initially thought and has already taken up a lot of time
+    * Deprioritizing since the problem is not as severe as initially thought and has already taken up a lot of time
 * William 6 hours (2023-06-30) [Commit](https://github.com/zhi-minn/SpaceShare/commit/1b0cfcd1470ff970d7fbc90f7192de39ab7fff65)
   + User verification display, create user document to UserVerfieid collection when sign up
 * Chang 2 hours (2023-06-30) [PR](https://github.com/zhi-minn/SpaceShare/pull/43)
