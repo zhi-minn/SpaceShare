@@ -14,5 +14,9 @@ interface ListingRepository {
 
     suspend fun searchListings(criteria: SearchCriteria): List<Listing>
 
+    suspend fun getListing(listingId: String): Listing?
+
+    suspend fun updateListing(listing: Listing): Boolean
+
     suspend fun deleteListing(listingId: String)
 }

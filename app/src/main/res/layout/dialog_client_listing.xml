@@ -97,7 +97,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
 
             <View
                 android:id="@+id/divider1"
-                style="@style/Divider"
+                style="@style/HorizontalDivider"
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/standard_component_margin"
                 app:layout_constraintTop_toBottomOf="@id/price" />
@@ -160,7 +160,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
 
             <View
                 android:id="@+id/divider2"
-                style="@style/Divider"
+                style="@style/HorizontalDivider"
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/standard_component_margin"
                 app:layout_constraintTop_toBottomOf="@id/cleanliness" />
@@ -177,7 +177,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
 
             <View
                 android:id="@+id/divider3"
-                style="@style/Divider"
+                style="@style/HorizontalDivider"
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/standard_component_margin"
                 app:layout_constraintTop_toBottomOf="@id/description" />

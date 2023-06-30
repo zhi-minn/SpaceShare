@@ -97,12 +97,20 @@
                     android:textStyle="bold"
                     app:layout_constraintTop_toBottomOf="@id/location" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/spaceAvailable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/sample_space_available"
+                    app:layout_constraintTop_toBottomOf="@id/price" />
+
                 <View
                     android:id="@+id/divider1"
-                    style="@style/Divider"
+                    style="@style/HorizontalDivider"
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/standard_component_margin"
-                    app:layout_constraintTop_toBottomOf="@id/price" />
+                    app:layout_constraintTop_toBottomOf="@id/spaceAvailable" />
 
                 <!-- Amenities -->
                 <androidx.appcompat.widget.AppCompatTextView
@@ -162,7 +170,7 @@
 
                 <View
                     android:id="@+id/divider2"
-                    style="@style/Divider"
+                    style="@style/HorizontalDivider"
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/standard_component_margin"
                     app:layout_constraintTop_toBottomOf="@id/cleanliness" />
@@ -179,7 +187,7 @@
 
                 <View
                     android:id="@+id/divider3"
-                    style="@style/Divider"
+                    style="@style/HorizontalDivider"
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/standard_component_margin"
                     app:layout_constraintTop_toBottomOf="@id/description" />
@@ -203,37 +211,39 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- (Reactivate/Deactivate) & Delete Buttons -->
-            <androidx.appcompat.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnChangeStatus"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/box_padding"
                 android:paddingVertical="4dp"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="@dimen/standard_component_margin"
                 android:layout_marginBottom="8dp"
                 android:text="Deactivate"
+                android:textAllCaps="false"
                 android:textSize="@dimen/title_text"
                 android:textAlignment="center"
                 android:background="@drawable/rounded_rectangle_bg"
-                android:backgroundTint="@color/quantum_orange300"
+                android:backgroundTint="@color/light_orange"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btnDelete"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnDelete"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/box_padding"
                 android:paddingVertical="4dp"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="@dimen/standard_component_margin"
                 android:layout_marginBottom="8dp"
                 android:text="Delete"
+                android:textAllCaps="false"
                 android:textSize="@dimen/title_text"
                 android:textAlignment="center"
                 android:background="@drawable/rounded_rectangle_bg"
-                android:backgroundTint="@color/quantum_googred300"
+                android:backgroundTint="@color/light_red"
                 app:layout_constraintStart_toEndOf="@id/btnChangeStatus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
