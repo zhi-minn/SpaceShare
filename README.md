@@ -118,5 +118,7 @@
 * Minn 6 hours (2023-06-28 -> 2023-06-29) [PR](https://github.com/zhi-minn/SpaceShare/pull/41)
   * Host can now search and filter through own listings
   * Host can update listing status (active or inactive)
+* Chang 1 hours (2023-06-29 -> Incomplete)
+  * Fix detailed client listing page crashing when reaching end of ScrollView
 * Chang 0.5 hours (2023-06-30)
   * Added title and dismiss button to search dialog
