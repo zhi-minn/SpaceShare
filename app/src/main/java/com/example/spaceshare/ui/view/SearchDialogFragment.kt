@@ -147,6 +147,7 @@ class SearchDialogFragment(
         }
 
         binding.btnCancel.setOnClickListener {
+            // TODO: make cancel button into a clear button or just remove it
             dialog?.dismiss()
         }
 
