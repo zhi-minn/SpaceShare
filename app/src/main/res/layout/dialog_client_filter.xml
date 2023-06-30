@@ -129,7 +129,7 @@
                 android:background="?attr/colorPrimary"
                 android:text="Apply"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent" />
 

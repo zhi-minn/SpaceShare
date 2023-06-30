@@ -19,9 +19,9 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="All filters"
+        android:text="Filters"
         android:textStyle="bold"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintTop_toTopOf="@id/btnClose"
         app:layout_constraintBottom_toBottomOf="@id/btnClose"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:text="Active listings"
             android:textStyle="bold"
-            android:textSize="@dimen/title_text"
+            android:textSize="16dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -66,7 +66,7 @@
             android:layout_marginTop="@dimen/standard_component_margin"
             android:text="Inactive listings"
             android:textStyle="bold"
-            android:textSize="@dimen/title_text"
+            android:textSize="16dp"
             app:layout_constraintTop_toBottomOf="@id/activeListings"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -85,7 +85,7 @@
             android:layout_marginTop="@dimen/standard_component_margin"
             android:text="Price (per day)"
             android:textStyle="bold"
-            android:textSize="@dimen/title_text"
+            android:textSize="16dp"
             app:layout_constraintTop_toBottomOf="@id/inacitveListings"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -94,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="$0 - $100"
-            android:textSize="@dimen/title_text"
+            android:textSize="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/priceLabel"
             app:layout_constraintBottom_toBottomOf="@id/priceLabel" />
@@ -116,7 +116,7 @@
             android:layout_marginTop="@dimen/standard_component_margin"
             android:text="Space (cubic metres)"
             android:textStyle="bold"
-            android:textSize="@dimen/title_text"
+            android:textSize="16dp"
             app:layout_constraintTop_toBottomOf="@id/priceRangeSlider"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -125,7 +125,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2.0 - 4.0"
-            android:textSize="@dimen/title_text"
+            android:textSize="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/spaceLabel"
             app:layout_constraintBottom_toBottomOf="@id/spaceLabel" />
@@ -163,7 +163,7 @@
             android:background="?attr/colorPrimary"
             android:text="Apply"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="parent" />
 
