@@ -237,7 +237,7 @@
 
                 <View
                     android:id="@+id/divider1"
-                    style="@style/Divider"
+                    style="@style/HorizontalDivider"
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/standard_component_margin"
                     />

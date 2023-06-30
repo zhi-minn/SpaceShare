@@ -177,9 +177,9 @@ class CreateListingDialogFragment : DialogFragment() {
     private fun publishListing(title: String, price: String, description: String) {
         val hostId = auth.currentUser?.uid
         if (validateListing(title, description, price)) {
-            val listing = Listing(id = UUID.randomUUID().toString(), hostId = hostId,
+            val listing = Listing(hostId = hostId,
                 title = title, description = description, price = price.toDouble(),
-                spaceAvailable = createListingViewModel.spaceAvailable.value, amenities = getCheckedAmenities())
+                spaceAvailable = createListingViewModel.spaceAvailable.value ?: 0.0, amenities = getCheckedAmenities())
             createListingViewModel.publishListing(listing)
             binding.scrollView.visibility = View.GONE
             binding.progressBar.visibility = View.VISIBLE

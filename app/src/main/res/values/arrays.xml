@@ -1,0 +1,10 @@
+<resources>
+    <array name="initial_price_values">
+        <item>10.00</item>
+        <item>30.00</item>
+    </array>
+    <array name="initial_space_values">
+        <item>2.0</item>
+        <item>4.0</item>
+    </array>
+</resources>

@@ -1,6 +1,7 @@
 package com.example.spaceshare.data.implementation
 
 import android.util.Log
+import androidx.compose.runtime.rememberUpdatedState
 import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.SearchCriteria
@@ -15,7 +16,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ListingRepoImpl @Inject constructor(
-    private val db: FirebaseFirestore
+    db: FirebaseFirestore
 ) : ListingRepository {
 
     companion object {
@@ -26,11 +27,11 @@ class ListingRepoImpl @Inject constructor(
     override suspend fun createListing(listing: Listing): String {
         return withContext(Dispatchers.IO) {
             val deferred = CompletableDeferred<String>()
-            listingsCollection.document(listing.id!!)
+            listingsCollection.document(listing.id)
                 .set(listing)
                 .addOnSuccessListener {
                     Log.d("listings", "Added listing with id ${listing.id}")
-                    deferred.complete(listing.id!!)
+                    deferred.complete(listing.id)
                 }
                 .addOnFailureListener { e ->
                     Log.w("listings", "Error adding document", e)
@@ -145,6 +146,39 @@ class ListingRepoImpl @Inject constructor(
                 return@withContext emptyList()
             }
         }
+
+    override suspend fun getListing(listingId: String): Listing? {
+        return withContext(Dispatchers.IO) {
+            val deferred = CompletableDeferred<Listing?>()
+            listingsCollection.document(listingId)
+                .get()
+                .addOnSuccessListener {
+                    try {
+                        val listing = it.toObject(Listing::class.java)
+                        deferred.complete(listing)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error casting listing with ID $listingId to Listing object: ${e.message}", e)
+                        deferred.complete(null)
+                    }
+                }
+            deferred.await()
+        }
+    }
+
+    override suspend fun updateListing(listing: Listing): Boolean = withContext(Dispatchers.IO) {
+        val deferred = CompletableDeferred<Boolean>()
+        listingsCollection.document(listing.id)
+            .set(listing)
+            .addOnSuccessListener {
+                Log.i(TAG, "Update success for listing with id ${listing.id}")
+                deferred.complete(true)
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Failed to update listing: ${e.message}", e)
+                deferred.complete(false)
+            }
+        deferred.await()
+    }
 
     override suspend fun deleteListing(listingId: String): Unit = withContext(Dispatchers.IO) {
         try {
