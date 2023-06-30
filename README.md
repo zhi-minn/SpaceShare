@@ -126,3 +126,5 @@
   + User verification display, create user document to UserVerfieid collection when sign up
 * Chang 2 hours (2023-06-30) [PR](https://github.com/zhi-minn/SpaceShare/pull/43)
   * Add filtering functionality to client searches
+  * Added title and dismiss button to search dialog for better UI
+  * Smoothed transition when opening dialogs on search page for better UX
