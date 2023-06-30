@@ -53,7 +53,7 @@ class SearchDialogFragment(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Light_NoTitleBar_Fullscreen)
+        setStyle(STYLE_NO_FRAME, R.style.SearchAndFilterDialogStyle)
     }
 
     private fun configureCards() {
@@ -142,6 +142,10 @@ class SearchDialogFragment(
     }
 
     private fun configureButtons() {
+        binding.btnClose.setOnClickListener {
+            dialog?.dismiss()
+        }
+
         binding.btnCancel.setOnClickListener {
             dialog?.dismiss()
         }

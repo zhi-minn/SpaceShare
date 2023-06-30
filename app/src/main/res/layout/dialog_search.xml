@@ -8,12 +8,43 @@
         android:layout_height="match_parent"
         tools:context=".ui.view.SearchDialogFragment">
 
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/close"
+            android:background="@color/fui_transparent"
+            android:layout_marginLeft="@dimen/standard_component_margin"
+            android:layout_marginTop="@dimen/standard_component_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appCompatTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search for Spaces"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/btnClose"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btnClose" />
+
+        <View style="@style/HorizontalDivider"
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/btnClose" />
+
         <LinearLayout
             android:id="@+id/search_page"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="80dp"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@id/divider1">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/whereCard"
