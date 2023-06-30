@@ -115,3 +115,6 @@
   * Add createdAt and updatedAt timestamps to Listing model
 * Chang 2 hours (2023-06-29) [PR](https://github.com/zhi-minn/SpaceShare/pull/40)
   * Add detailed client listing page
+* Minn 6 hours (2023-06-28 -> 2023-06-29) [PR](https://github.com/zhi-minn/SpaceShare/pull/41)
+  * Host can now search and filter through own listings
+  * Host can update listing status (active or inactive)
