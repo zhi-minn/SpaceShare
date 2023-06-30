@@ -1,12 +1,15 @@
 package com.example.spaceshare.ui.view
 
 import MapDialogFragment
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
@@ -21,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.Timestamp
 import java.util.Objects
 
 class HostListingDialogFragment(
@@ -61,6 +65,7 @@ class HostListingDialogFragment(
             GeocoderUtil.getGeneralLocation(location.latitude, location.longitude)
         }
         binding.price.text = getString(R.string.listing_price_template, listing.price)
+        binding.spaceAvailable.text = getString(R.string.space_available_template, listing.spaceAvailable)
 
         // If no amenities, we do not require a divider for this section
         if (listing.amenities.isEmpty()) {
@@ -85,11 +90,49 @@ class HostListingDialogFragment(
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
             }
         }
+
+        // Deactivate / Activate button (default is deactivate)
+        if (!listing.isActive) {
+            val color = ContextCompat.getColor(requireContext(), R.color.light_green)
+            binding.btnChangeStatus.text = "Activate"
+            binding.btnChangeStatus.backgroundTintList = ColorStateList.valueOf(color)
+        }
     }
 
     private fun configureButtons() {
         binding.btnBack.setOnClickListener {
             this.dismiss()
+        }
+
+        binding.btnChangeStatus.setOnClickListener {
+            val noun = if (listing.isActive) "Deactivation" else "Activation"
+            val action = if (listing.isActive) "deactivate" else "activate"
+            AlertDialog.Builder(requireContext())
+                .setTitle("Confirm $noun")
+                .setMessage("Are you sure you want to $action this listing?")
+                .setPositiveButton("Confirm") { _, _ ->
+                    listing.isActive = !listing.isActive
+                    listingViewModel.updateListing(listing)
+                    this.dismiss()
+                }
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show()
+        }
+
+        binding.btnDelete.setOnClickListener {
+            // TODO: Check no upcoming reservations
+
+            AlertDialog.Builder(requireContext())
+                .setTitle("Confirm Delete")
+                .setMessage("Are you sure you want to delete this listing?")
+                .setPositiveButton("Delete") { _, _ ->
+                    listingViewModel.removeItem(listing)
+                    this.dismiss()
+                }
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show()
         }
     }
 

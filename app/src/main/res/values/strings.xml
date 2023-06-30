@@ -29,4 +29,5 @@
     <string name="sample_price">9.89 CAD/day</string>
     <string name="sample_space_available">3.5 cubic metres</string>
     <string name="listing_price_template">%.2f CAD/day</string>
+    <string name="space_available_template">%.1f cubic metres</string>
 </resources>

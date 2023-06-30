@@ -31,9 +31,7 @@ class ListingAdapter(
 
         fun bind(listing: Listing) {
             // Bind the listing data to the views
-            binding.location.text = listing.location?.let { location ->
-                GeocoderUtil.getGeneralLocation(location.latitude, location.longitude)
-            }
+            binding.title.text = listing.title ?: "Untitled"
             binding.price.text = String.format("%.2f CAD/day", listing.price)
             binding.spaceAvailable.text = "${listing.spaceAvailable} cubic metres"
 

@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/check"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="@dimen/standard_component_margin"
                 android:background="@drawable/round_button_black"
                 android:backgroundTint="@color/quantum_googgreen200"
                 app:layout_constraintBottom_toBottomOf="parent"
