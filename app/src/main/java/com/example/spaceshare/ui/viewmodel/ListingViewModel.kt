@@ -7,10 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.data.repository.FirebaseStorageRepository
 import com.example.spaceshare.data.repository.ListingRepository
+import com.example.spaceshare.models.FilterCriteria
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.User
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 class ListingViewModel @Inject constructor(
@@ -25,35 +27,61 @@ class ListingViewModel @Inject constructor(
     val filteredListingsLiveData: LiveData<List<Listing>> = _filteredListingsLiveData
 
     private var curQuery: String = ""
+    private var curCriteria: FilterCriteria = FilterCriteria()
 
     fun fetchListings(user: User) {
         viewModelScope.launch {
             val listings = repo.getUserListings(user)
             _listingsLiveData.value = listings
-            filterListings(curQuery)
+            filterListings(curQuery, curCriteria)
         }
     }
 
-    fun filterListings(query: String) {
+    fun getCriteria(): FilterCriteria {
+        return curCriteria
+    }
+
+    fun setCriteria(criteria: FilterCriteria) {
+        curCriteria = criteria
+        filterListings(curQuery, curCriteria)
+    }
+
+    fun filterListings(query: String, criteria: FilterCriteria) {
         curQuery = query
+        curCriteria = criteria
+
+        var criteriaListings = _listingsLiveData.value.orEmpty().filter { listing ->
+            listing.price >= criteria.minPrice
+                    && listing.price <= criteria.maxPrice
+                    && listing.spaceAvailable >= criteria.minSpace
+                    && listing.spaceAvailable <= criteria.maxSpace
+        }
+        // If 'Active Listings' filter not checked, remove active listings
+        if (!criteria.isActive) {
+            criteriaListings = criteriaListings.filterNot { listing -> listing.isActive }
+        }
+        // If 'Inactive Listings' filter not checked, remove inactive listings
+        if (!criteria.isInactive) {
+            criteriaListings = criteriaListings.filterNot { listing -> !listing.isActive }
+        }
+
         if (query.isEmpty()) {
-            _filteredListingsLiveData.value = _listingsLiveData.value
+            _filteredListingsLiveData.value = criteriaListings
             return
         }
 
         // Filter by price or space available
         val value = query.toDoubleOrNull()
         if (value != null) {
-            _filteredListingsLiveData.value = _listingsLiveData.value.orEmpty().filter { listing ->
+            _filteredListingsLiveData.value = criteriaListings.filter { listing ->
                 listing.price == value || listing.spaceAvailable == value
             }
             return
         }
 
         // Filter by title
-        _filteredListingsLiveData.value = _listingsLiveData.value.orEmpty().filter { listing ->
-            val title = listing.title ?: "Untitled"
-            title.contains(query)
+        _filteredListingsLiveData.value = criteriaListings.filter { listing ->
+            listing.title.lowercase(Locale.ROOT).contains(query.lowercase(Locale.ROOT))
         }
     }
 
@@ -67,7 +95,7 @@ class ListingViewModel @Inject constructor(
          val updatedList = _listingsLiveData.value?.toMutableList()
          updatedList?.remove(listing)
          _listingsLiveData.value = updatedList ?: emptyList()
-         filterListings(curQuery)
+         filterListings(curQuery, curCriteria)
          viewModelScope.launch {
              // Delete listing
              repo.deleteListing(listing.id!!)

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Filter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ListingAdapter
 import com.example.spaceshare.adapters.ListingAdapter.ItemClickListener
 import com.example.spaceshare.databinding.FragmentListingsBinding
+import com.example.spaceshare.models.FilterCriteria
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.User
 import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
@@ -73,9 +75,17 @@ class ListingsFragment : Fragment(), CreateListingDialogListener {
             val createListingDialogFragment = CreateListingDialogFragment()
             createListingDialogFragment.show(Objects.requireNonNull(childFragmentManager), "createListingDialog")
         }
+
+        binding.btnFilter.setOnClickListener {
+            val filterDialogFragment = FilterDialogFragment(listingViewModel)
+            filterDialogFragment.show(Objects.requireNonNull(childFragmentManager), "filterDialog")
+        }
     }
 
     private fun configureObservers() {
+        listingViewModel.listingsLiveData.observe(viewLifecycleOwner) { listings ->
+            binding.btnFilter.isEnabled = listings.isNotEmpty()
+        }
         listingViewModel.filteredListingsLiveData.observe(viewLifecycleOwner) { listings ->
             adapter.submitList(listings)
         }
@@ -91,7 +101,7 @@ class ListingsFragment : Fragment(), CreateListingDialogListener {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                listingViewModel.filterListings(s.toString())
+                listingViewModel.filterListings(s.toString(), listingViewModel.getCriteria())
             }
         })
     }
@@ -99,7 +109,7 @@ class ListingsFragment : Fragment(), CreateListingDialogListener {
     override fun onListingCreated(listing: Listing?) {
         if (listing != null) {
             listingViewModel.addItem(listing)
-            listingViewModel.filterListings(binding.searchTextView.text.toString())
+            listingViewModel.filterListings(binding.searchTextView.text.toString(), listingViewModel.getCriteria())
             Toast.makeText(requireContext(), "Listing successfully published", Toast.LENGTH_SHORT).show()
             binding.recyclerView.scrollToPosition(0)
         } else {
