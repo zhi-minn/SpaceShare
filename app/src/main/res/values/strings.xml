@@ -30,4 +30,6 @@
     <string name="sample_space_available">3.5 cubic metres</string>
     <string name="listing_price_template">%.2f CAD/day</string>
     <string name="space_available_template">%.1f cubic metres</string>
+    <string name="user_verification_false">Your account is not yet verified</string>
+    <string name="user_verification_true">Your account is verified</string>
 </resources>
