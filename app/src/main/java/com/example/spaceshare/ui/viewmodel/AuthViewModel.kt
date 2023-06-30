@@ -4,8 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.spaceshare.manager.SharedPreferencesManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.nulabinc.zxcvbn.Zxcvbn
 import javax.inject.Inject
 
@@ -22,6 +25,8 @@ class AuthViewModel @Inject constructor(
 
     private val _registerStatus = MutableLiveData<AuthResult>()
     val registerStatus: LiveData<AuthResult> = _registerStatus
+
+    private val db = Firebase.firestore
 
     fun login(email: String, password: String) {
         if (email.isEmpty() || password.isEmpty()) {
@@ -60,6 +65,9 @@ class AuthViewModel @Inject constructor(
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     sendEmailVerification(auth.currentUser)
+                    val userProperties = hashMapOf("verified" to false)
+                    db.collection("UserVerification").document(email)
+                        .set(userProperties)
                 } else {
                     _registerStatus.value = AuthResult(false, "Registration failed. ${task.exception?.message}")
                 }

@@ -120,5 +120,5 @@
   * Host can update listing status (active or inactive)
 * Chang 1 hours (2023-06-29 -> Incomplete)
   * Fix detailed client listing page crashing when reaching end of ScrollView
-* Chang 0.5 hours (2023-06-30)
-  * Added title and dismiss button to search dialog
+* William 6 hours (2023-06-30) [Commit](https://github.com/zhi-minn/SpaceShare/commit/1b0cfcd1470ff970d7fbc90f7192de39ab7fff65)
+  + User verification display, create user document to UserVerfieid collection when sign up
