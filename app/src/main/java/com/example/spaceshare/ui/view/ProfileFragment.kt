@@ -89,7 +89,7 @@ class ProfileFragment : Fragment() {
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    userVerified = document.data?.get("verified").toString().toBoolean()
+                    userVerified = document.data?.get("isVerified").toString().toBoolean()
                     if (userVerified) {
                         binding.userVerified.text = resources.getText(R.string.user_verification_true)
                     }
