@@ -157,7 +157,7 @@ class LoginFragment : Fragment() {
                         idToken != null -> {
                             // Got an ID token from Google. Use it to authenticate with Firebase.
                             val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
-                            authViewModel.loginWithSSOCredential(firebaseCredential)
+                            authViewModel.loginWithSSOCredential(firebaseCredential, credential)
                             Log.d(TAG, "Got ID token.")
                         }
 

@@ -10,6 +10,7 @@ import com.google.firebase.auth.AuthCredential
 import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.data.repository.UserRepository
 import com.example.spaceshare.models.User
+import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -63,12 +64,16 @@ class AuthViewModel @Inject constructor(
             }
     }
 
-    fun loginWithSSOCredential(firebaseCredential: AuthCredential) {
+    fun loginWithSSOCredential(firebaseCredential: AuthCredential, signInCredential: SignInCredential) {
         auth.signInWithCredential(firebaseCredential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
+
+                    // Create user in collection for custom fields
+                    val user = auth.currentUser
+                    createUserInCollection(user?.uid, signInCredential.givenName, signInCredential.familyName)
                     _loginStatus.value = AuthResult(true, "Successfully logged in.")
                 } else {
                     // Sign in failed.
@@ -114,9 +119,9 @@ class AuthViewModel @Inject constructor(
             }
     }
 
-    private fun createUserInCollection(userId: String?, firstName: String, lastName: String) {
+    private fun createUserInCollection(userId: String?, firstName: String?, lastName: String?) {
         if (userId != null) {
-            val user = User(userId, firstName, lastName)
+            val user = User(userId, firstName ?: "", lastName ?: "")
             viewModelScope.launch {
                 try {
                     userRepo.createUser(user)
