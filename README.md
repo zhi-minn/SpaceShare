@@ -132,3 +132,6 @@
   * Fix search dialog opening instead of filter dialog when edge of filter button is clicked
   * Refine search UI by making touch targets larger and more intuitive
   * Add "$" to start of price labels for listings
+* William 3 hours (2023-07-1) [Commit](https://github.com/zhi-minn/SpaceShare/commit/1799ae8285417a426bad71a6e971345dada1eefd)
+  + Removed Firestore db from ProfileFragment and accessed it from UserViewModel
+  + Add user to new collection "user" when signup with email and isVerified populated
