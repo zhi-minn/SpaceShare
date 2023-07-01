@@ -52,10 +52,17 @@ class SearchFragment : Fragment() {
     }
 
     private fun configureSearchBar() {
-        binding.searchBarCard.setOnClickListener {
-            val searchDialogFragment = SearchDialogFragment(searchViewModel)
-            searchDialogFragment.show(Objects.requireNonNull(childFragmentManager), "searchDialog")
+        binding.searchIcon.setOnClickListener {
+            openSearchDialog()
         }
+        binding.searchTextView.setOnClickListener {
+            openSearchDialog()
+        }
+    }
+
+    private fun openSearchDialog() {
+        val searchDialogFragment = SearchDialogFragment(searchViewModel)
+        searchDialogFragment.show(Objects.requireNonNull(childFragmentManager), "searchDialog")
     }
 
     private fun configureFilterButton() {
