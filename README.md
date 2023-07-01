@@ -135,3 +135,6 @@
 * William 3 hours (2023-07-01) [Commit](https://github.com/zhi-minn/SpaceShare/commit/1799ae8285417a426bad71a6e971345dada1eefd)
   + Removed Firestore db from ProfileFragment and accessed it from UserViewModel
   + Add user to new collection "user" when signup with email and isVerified populated
+* Minn 2.5 hours (2023-07-01) [PR](https://github.com/zhi-minn/SpaceShare/pull/47)
+  * Implemented Room database for local data access
+  * Fixed ProfileFragment to properly access User custom object from Repository layer
