@@ -138,5 +138,5 @@
 * Minn 2.5 hours (2023-07-01) [PR](https://github.com/zhi-minn/SpaceShare/pull/47)
   * Implemented Room database for local data access
   * Fixed ProfileFragment to properly access User custom object from Repository layer
-* Chang 3.5 hours (2023-07-01) [PR]](https://github.com/zhi-minn/SpaceShare/pull/48)
+* Chang 3.5 hours (2023-07-01) [PR](https://github.com/zhi-minn/SpaceShare/pull/48)
   * Added Google SSO integration for login and signup
