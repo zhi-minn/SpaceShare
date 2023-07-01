@@ -8,7 +8,7 @@ interface ListingRepository {
 
     suspend fun createListing(listing: Listing) : String
 
-    suspend fun getUserListings(user: User): List<Listing>
+    suspend fun getUserListings(userId: String): List<Listing>
 
     suspend fun getAllListings(): List<Listing>
 

@@ -14,6 +14,7 @@ import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentLoginBinding
 import com.example.spaceshare.ui.viewmodel.AuthViewModel
 import com.example.spaceshare.utils.ToastUtil
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
