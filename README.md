@@ -128,3 +128,7 @@
   * Add filtering functionality to client searches
   * Added title and dismiss button to search dialog for better UI
   * Smoothed transition when opening dialogs on search page for better UX
+* Chang 0.5 hours (2023-06-30) [PR](https://github.com/zhi-minn/SpaceShare/pull/44)
+  * Fix search dialog opening instead of filter dialog when edge of filter button is clicked
+  * Refine search UI by making touch targets larger and more intuitive
+  * Add "$" to start of price labels for listings
