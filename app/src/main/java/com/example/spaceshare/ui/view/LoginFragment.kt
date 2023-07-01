@@ -132,7 +132,8 @@ class LoginFragment : Fragment() {
                     .addOnSuccessListener(requireActivity()) { result ->
                         try {
                             startIntentSenderForResult(
-                                result.pendingIntent.intentSender, REQ_ONE_TAP,
+                                result.pendingIntent.intentSender,
+                                REQ_ONE_TAP,
                                 null, 0, 0, 0, null
                             )
                         } catch (e: IntentSender.SendIntentException) {
@@ -147,51 +148,16 @@ class LoginFragment : Fragment() {
             }
     }
 
-    private fun handleGoogleSSOResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    private fun handleGoogleSSOResult(requestCode: Int, data: Intent?) {
         when (requestCode) {
             REQ_ONE_TAP -> {
-                try {
-                    val credential = authViewModel.oneTapClient.getSignInCredentialFromIntent(data)
-                    val idToken = credential.googleIdToken
-                    when {
-                        idToken != null -> {
-                            // Got an ID token from Google. Use it to authenticate with Firebase.
-                            val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
-                            authViewModel.loginWithSSOCredential(firebaseCredential, credential)
-                            Log.d(TAG, "Got ID token.")
-                        }
-
-                        else -> {
-                            // Shouldn't happen.
-                            Log.d(TAG, "No ID token!")
-                        }
-                    }
-                } catch (e: ApiException) {
-                    when (e.statusCode) {
-                        CommonStatusCodes.CANCELED -> {
-                            Log.d(TAG, "One-tap dialog was closed.")
-                            // Don't re-prompt the user.
-                            authViewModel.showOneTapUI = false
-                        }
-
-                        CommonStatusCodes.NETWORK_ERROR -> {
-                            Log.d(TAG, "One-tap encountered a network error.")
-                            // Try again or just ignore.
-                        }
-                        else -> {
-                            Log.d(
-                                TAG, "Couldn't get credential from result." +
-                                        " (${e.localizedMessage})"
-                            )
-                        }
-                    }
-                }
+                authViewModel.processGoogleSSOCredential(data)
             }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        handleGoogleSSOResult(requestCode, resultCode, data)
+        handleGoogleSSOResult(requestCode, data)
     }
 }

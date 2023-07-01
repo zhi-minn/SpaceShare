@@ -140,3 +140,8 @@
   * Fixed ProfileFragment to properly access User custom object from Repository layer
 * Chang 3.5 hours (2023-07-01) [PR](https://github.com/zhi-minn/SpaceShare/pull/48)
   * Added Google SSO integration for login and signup
+* Chang 0.75 hours (2023-07-01) [PR](https://github.com/zhi-minn/SpaceShare/pull/49/)
+  * Refactor processing of Google SSO credentials
+    * Moved processing logic out of LoginFragment and into AuthViewModel
+    * Process Google credential user details separately from loginWithSSOCredentials function as different SSO providers may handle user details differently
+  * Tested signup user flow with new Google user
