@@ -65,8 +65,10 @@ class AuthViewModel @Inject constructor(
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     sendEmailVerification(auth.currentUser)
-                    val userProperties = hashMapOf("verified" to false)
-                    db.collection("UserVerification").document(email)
+                    val uid = auth.currentUser?.uid!!
+                    val email = auth.currentUser?.email
+                    val userProperties = hashMapOf("isVerified" to false, "email" to email)
+                    db.collection("user").document(uid)
                         .set(userProperties)
                 } else {
                     _registerStatus.value = AuthResult(false, "Registration failed. ${task.exception?.message}")
