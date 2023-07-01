@@ -170,44 +170,6 @@
                 android:textColor="@color/white"
                 app:layout_constraintTop_toBottomOf="@id/termsOfUse"/>
 
-            <TextView
-                android:id="@+id/textOr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="OR"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnSignup"
-                android:layout_marginTop="32dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/textOr"
-                android:background="@drawable/rounded_pink_button"
-                android:layout_marginTop="32dp"
-                android:paddingVertical="8dp"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/google"
-                    android:layout_marginEnd="8dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sign up with Google"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/button_text"/>
-
-            </LinearLayout>
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

@@ -1,9 +1,18 @@
 package com.example.spaceshare.ui.viewmodel
 
+import android.content.IntentSender
 import android.util.Log
+import androidx.core.app.ActivityCompat.startIntentSenderForResult
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.spaceshare.AuthActivity
+import com.example.spaceshare.R
+import com.example.spaceshare.manager.SharedPreferencesManager
+import com.example.spaceshare.ui.view.LoginFragment
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.firebase.auth.AuthCredential
 import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.data.repository.UserRepository
 import com.example.spaceshare.models.User
@@ -38,6 +47,11 @@ class AuthViewModel @Inject constructor(
 
     private val db = Firebase.firestore
 
+    lateinit var oneTapClient: SignInClient
+    lateinit var signInRequest: BeginSignInRequest
+    lateinit var signUpRequest: BeginSignInRequest
+    var showOneTapUI = true
+
     fun login(email: String, password: String) {
         if (email.isEmpty() || password.isEmpty()) {
             _loginStatus.value = AuthResult(false, "Please enter both email and password.")
@@ -59,7 +73,27 @@ class AuthViewModel @Inject constructor(
             }
     }
 
+    fun loginWithSSOCredential(firebaseCredential: AuthCredential) {
+        auth.signInWithCredential(firebaseCredential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update with the signed-in user's information
+                    Log.d(TAG, "signInWithCredential:success")
+                    _loginStatus.value = AuthResult(true, "Successfully logged in.")
+                } else {
+                    // Sign in failed.
+                    _loginStatus.value = AuthResult(false, "Authentication failed. ${task.exception?.message}")
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                }
+            }
+    }
+
     fun register(firstName: String, lastName: String, email: String, password: String) {
+        if (email.isEmpty() || password.isEmpty()) {
+            _registerStatus.value = AuthResult(false, "Please enter both email and password.")
+            return
+        }
+        
         val passwordScore = Zxcvbn().measure(password).score
         if (passwordScore == 0) {
             _registerStatus.value = AuthResult(false, "Please use a more secure password.")
