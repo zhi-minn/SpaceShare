@@ -1,15 +1,9 @@
 package com.example.spaceshare.ui.viewmodel
 
-import android.content.IntentSender
 import android.util.Log
-import androidx.core.app.ActivityCompat.startIntentSenderForResult
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.spaceshare.AuthActivity
-import com.example.spaceshare.R
-import com.example.spaceshare.manager.SharedPreferencesManager
-import com.example.spaceshare.ui.view.LoginFragment
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
@@ -19,8 +13,6 @@ import com.example.spaceshare.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.nulabinc.zxcvbn.Zxcvbn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -44,8 +36,6 @@ class AuthViewModel @Inject constructor(
 
     private val _registerStatus = MutableLiveData<AuthResult>()
     val registerStatus: LiveData<AuthResult> = _registerStatus
-
-    private val db = Firebase.firestore
 
     lateinit var oneTapClient: SignInClient
     lateinit var signInRequest: BeginSignInRequest

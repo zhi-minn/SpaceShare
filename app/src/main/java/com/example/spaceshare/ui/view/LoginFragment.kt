@@ -35,7 +35,6 @@ class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private lateinit var navController: NavController
-    private lateinit var authActivity: AuthActivity
 
     @Inject
     lateinit var authViewModel: AuthViewModel
