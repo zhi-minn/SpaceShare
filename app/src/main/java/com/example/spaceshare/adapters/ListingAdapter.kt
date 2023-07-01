@@ -32,7 +32,7 @@ class ListingAdapter(
         fun bind(listing: Listing) {
             // Bind the listing data to the views
             binding.title.text = listing.title ?: "Untitled"
-            binding.price.text = String.format("%.2f CAD/day", listing.price)
+            binding.price.text = String.format("$%.2f CAD/day", listing.price)
             binding.spaceAvailable.text = "${listing.spaceAvailable} cubic metres"
 
             // Load the listing image from Firebase Storage into the ImageView
