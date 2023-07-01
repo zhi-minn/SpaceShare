@@ -43,10 +43,10 @@ class ListingRepoImpl @Inject constructor(
 
     }
 
-    override suspend fun getUserListings(user: User): List<Listing> = withContext(Dispatchers.IO) {
+    override suspend fun getUserListings(userId: String): List<Listing> = withContext(Dispatchers.IO) {
         try {
             val result = listingsCollection
-                .whereEqualTo("hostId", user.id)
+                .whereEqualTo("hostId", userId)
                 .orderBy("updatedAt", Query.Direction.DESCENDING)
                 .get()
                 .await()

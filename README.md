@@ -123,7 +123,7 @@
     * Detailed client listing page does not crash when on hardware Android device, still crashes on emulator
     * Deprioritizing since the problem is not as severe as initially thought and has already taken up a lot of time
 * William 6 hours (2023-06-30) [Commit](https://github.com/zhi-minn/SpaceShare/commit/1b0cfcd1470ff970d7fbc90f7192de39ab7fff65)
-  + User verification display, create user document to UserVerfieid collection when sign up
+  + User verification display, create user document to UserVerified collection when sign up
 * Chang 2 hours (2023-06-30) [PR](https://github.com/zhi-minn/SpaceShare/pull/43)
   * Add filtering functionality to client searches
   * Added title and dismiss button to search dialog for better UI
@@ -132,3 +132,9 @@
   * Fix search dialog opening instead of filter dialog when edge of filter button is clicked
   * Refine search UI by making touch targets larger and more intuitive
   * Add "$" to start of price labels for listings
+* William 3 hours (2023-07-01) [Commit](https://github.com/zhi-minn/SpaceShare/commit/1799ae8285417a426bad71a6e971345dada1eefd)
+  + Removed Firestore db from ProfileFragment and accessed it from UserViewModel
+  + Add user to new collection "user" when signup with email and isVerified populated
+* Minn 2.5 hours (2023-07-01) [PR](https://github.com/zhi-minn/SpaceShare/pull/47)
+  * Implemented Room database for local data access
+  * Fixed ProfileFragment to properly access User custom object from Repository layer

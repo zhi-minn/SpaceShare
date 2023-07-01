@@ -16,7 +16,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 class ListingViewModel @Inject constructor(
-    private val repo: ListingRepository,
+    private val listingRepo: ListingRepository,
     private val firebaseStorageRepo: FirebaseStorageRepository
 ): ViewModel() {
 
@@ -29,9 +29,9 @@ class ListingViewModel @Inject constructor(
     private var curQuery: String = ""
     private var curCriteria: FilterCriteria = FilterCriteria()
 
-    fun fetchListings(user: User) {
+    fun getUserListings(userId: String) {
         viewModelScope.launch {
-            val listings = repo.getUserListings(user)
+            val listings = listingRepo.getUserListings(userId)
             _listingsLiveData.value = listings
             filterListings(curQuery, curCriteria)
         }
@@ -89,7 +89,7 @@ class ListingViewModel @Inject constructor(
         val newList = _listingsLiveData.value.orEmpty().toMutableList()
 
         viewModelScope.launch {
-            if (repo.updateListing(listing)) {
+            if (listingRepo.updateListing(listing)) {
                 for (index in 0 until newList.size) {
                     if (newList[index].id == listing.id) {
                         newList[index] = listing
@@ -115,7 +115,7 @@ class ListingViewModel @Inject constructor(
          filterListings(curQuery, curCriteria)
          viewModelScope.launch {
              // Delete listing
-             repo.deleteListing(listing.id!!)
+             listingRepo.deleteListing(listing.id!!)
 
              // Delete corresponding images
              for (filePath in listing.photos) {
