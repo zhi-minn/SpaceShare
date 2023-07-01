@@ -1,13 +1,11 @@
 package com.example.spaceshare.ui.view
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -17,7 +15,8 @@ import com.example.spaceshare.databinding.FragmentProfileBinding
 import com.example.spaceshare.manager.SharedPreferencesManager
 import com.example.spaceshare.ui.viewmodel.AuthViewModel
 import com.example.spaceshare.ui.viewmodel.MainViewModel
-import com.example.spaceshare.ui.viewmodel.UserViewModel
+import com.example.spaceshare.ui.viewmodel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -31,7 +30,7 @@ class ProfileFragment : Fragment() {
     @Inject
     lateinit var authViewModel: AuthViewModel
     @Inject
-    lateinit var userViewModel: UserViewModel
+    lateinit var profileViewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,8 +46,8 @@ class ProfileFragment : Fragment() {
 
         // UI Setup
         configureUI()
+        configureObservers()
         configureButtons()
-        configureUserVerified()
     }
 
     private fun configureUI() {
@@ -83,33 +82,21 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun configureUserVerified() {
-        val docRef = userViewModel.getDocRef()
-        var userVerified = false
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    userVerified = document.data?.get("isVerified").toString().toBoolean()
-                    if (userVerified) {
-                        binding.userVerified.text = resources.getText(R.string.user_verification_true)
-                    }
-                    else {
-                        binding.userVerified.text = resources.getText(R.string.user_verification_false)
-                    }
-                }
-                else {
-                    binding.userVerified.text = resources.getText(R.string.user_verification_false)
-                }
+    private fun configureObservers() {
+        profileViewModel.userLiveData.observe(viewLifecycleOwner) { user ->
+            binding.userVerified.text = if (user.isVerified) {
+                resources.getText(R.string.user_verification_true)
+            } else {
+                resources.getText(R.string.user_verification_false)
             }
+        }
+        profileViewModel.getUserById(FirebaseAuth.getInstance().currentUser!!.uid)
     }
 
     private fun updateUI(isHostMode: Boolean) {
         binding.btnSwitchMode.text = if (isHostMode)
             "Switch to client" else
             "Switch to host"
-        binding.uiMode.text = if (isHostMode)
-            "You are in host mode" else
-            "You are in client mode"
     }
 
     override fun onDestroyView() {

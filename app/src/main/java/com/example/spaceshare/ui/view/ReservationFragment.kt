@@ -166,7 +166,7 @@ class ReservationFragment : Fragment() {
                 binding.reservationPage.addView(cardView)
             }
         }
-        viewModel.fetchReservations(User("j577YevJRoZHgsKCRC9i1RLACZL2"))
+        viewModel.fetchReservations(User("j577YevJRoZHgsKCRC9i1RLACZL2", "first_name", "last_name"))
     }
 
 }

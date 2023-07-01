@@ -1,111 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="@dimen/box_padding">
 
-        <LinearLayout
+        <!-- Profile & Picture -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="@dimen/box_padding">
-
-            <!-- Profile & Picture -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Profile"
-                    android:textSize="@dimen/title_text"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    app:cardCornerRadius="50dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/username"
-                        android:scaleType="centerCrop"
-                        android:tint="@color/medium_light_gray"
-                        android:layout_margin="6dp"
-                        tools:ignore="UseAppTint" />
-
-                </androidx.cardview.widget.CardView>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/btnSwitchMode"
-                android:text=""
-                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingVertical="16dp"
-                android:paddingHorizontal="32dp"
-                android:layout_marginTop="@dimen/standard_component_margin"
-                android:background="@drawable/text_background_curved" />
+                android:text="Profile"
+                android:textSize="@dimen/title_text"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <TextView
-                android:id="@+id/uiMode"
-                android:text=""
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingVertical="16dp"
-                android:paddingHorizontal="32dp"
-                android:layout_marginTop="@dimen/standard_component_margin" />
+            <androidx.cardview.widget.CardView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:cardCornerRadius="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-            <TextView
-                android:id="@+id/userVerified"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_component_margin"
-                android:text="@string/user_verification_false"
-                android:textSize="@dimen/button_text"
-                android:drawableStart="@drawable/exclamation_circle"
-                android:drawablePadding="@dimen/drawable_start_padding"
-                android:gravity="center_vertical" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/username"
+                    android:scaleType="centerCrop"
+                    android:tint="@color/medium_light_gray"
+                    android:layout_margin="6dp"
+                    tools:ignore="UseAppTint" />
 
-            <TextView
-                android:id="@+id/btnPreferences"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_component_margin"
-                android:text="Preferences"
-                android:textSize="@dimen/button_text"
-                android:drawableStart="@drawable/preferences"
-                android:drawablePadding="@dimen/drawable_start_padding"
-                android:gravity="center_vertical" />
+            </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/btnLogout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_component_margin"
-                android:text="Log out"
-                android:textSize="@dimen/button_text"
-                android:drawableStart="@drawable/logout"
-                android:drawablePadding="@dimen/drawable_start_padding"
-                android:gravity="center_vertical"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/btnSwitchMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/standard_component_margin"
+            android:background="@drawable/text_background_curved"
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="16dp"
+            android:text="Switch to client"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topBar" />
 
-    </ScrollView>
+        <TextView
+            android:id="@+id/btnPreferences"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/standard_component_margin"
+            android:text="Preferences"
+            android:textSize="@dimen/button_text"
+            android:drawableStart="@drawable/preferences"
+            android:drawablePadding="@dimen/drawable_start_padding"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@id/btnSwitchMode" />
+
+        <TextView
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/standard_component_margin"
+            android:text="Log out"
+            android:textSize="@dimen/button_text"
+            android:drawableStart="@drawable/logout"
+            android:drawablePadding="@dimen/drawable_start_padding"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@id/btnPreferences" />
+
+        <TextView
+            android:id="@+id/userVerified"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/exclamation_circle"
+            android:drawablePadding="@dimen/drawable_start_padding"
+            android:gravity="center_vertical"
+            android:text="@string/user_verification_false"
+            android:textSize="@dimen/button_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

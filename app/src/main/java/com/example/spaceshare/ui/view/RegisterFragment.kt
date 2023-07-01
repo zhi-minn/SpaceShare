@@ -29,6 +29,8 @@ class RegisterFragment : Fragment() {
     @Inject
     lateinit var authViewModel: AuthViewModel
 
+    private val errorMsg = "This field is required"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,7 +64,37 @@ class RegisterFragment : Fragment() {
         }
 
         binding.btnSignup.setOnClickListener {
-            authViewModel.register(binding.email.text.toString(), binding.password.text.toString())
+            if (validateInput()) {
+                authViewModel.register(
+                    binding.firstName.text.toString(),
+                    binding.lastName.text.toString(),
+                    binding.email.text.toString(),
+                    binding.password.text.toString()
+                )
+            }
         }
+    }
+
+    private fun validateInput(): Boolean {
+        with (binding) {
+            if (firstName.text.isEmpty()) {
+                firstName.error = "$errorMsg for ID verification"
+                return false
+            }
+            if (lastName.text.isEmpty()) {
+                lastName.error = "$errorMsg for ID verification"
+                return false
+            }
+            if (email.text.isEmpty()) {
+                email.error = errorMsg
+                return false
+            }
+            if (password.text.isEmpty()) {
+                password.error = errorMsg
+                return false
+            }
+        }
+
+        return true
     }
 }

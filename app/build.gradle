@@ -69,6 +69,9 @@ android {
 }
 
 dependencies {
+    // Versions
+    def room_version = "2.5.2"
+
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.0')
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
@@ -140,6 +143,12 @@ dependencies {
     // MUI
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'android.arch.lifecycle:livedata:1.1.1'
+
+    // Room (caching)
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
 }
 
 kapt {

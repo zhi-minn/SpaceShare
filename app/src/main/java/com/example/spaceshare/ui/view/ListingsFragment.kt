@@ -89,7 +89,7 @@ class ListingsFragment : Fragment(), CreateListingDialogListener {
         listingViewModel.filteredListingsLiveData.observe(viewLifecycleOwner) { listings ->
             adapter.submitList(listings)
         }
-        listingViewModel.fetchListings(User(FirebaseAuth.getInstance().currentUser?.uid!!))
+        listingViewModel.getUserListings(FirebaseAuth.getInstance().currentUser!!.uid)
 
         binding.searchTextView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
