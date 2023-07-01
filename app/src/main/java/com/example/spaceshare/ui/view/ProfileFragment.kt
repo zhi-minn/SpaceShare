@@ -17,9 +17,7 @@ import com.example.spaceshare.databinding.FragmentProfileBinding
 import com.example.spaceshare.manager.SharedPreferencesManager
 import com.example.spaceshare.ui.viewmodel.AuthViewModel
 import com.example.spaceshare.ui.viewmodel.MainViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.example.spaceshare.ui.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -32,8 +30,8 @@ class ProfileFragment : Fragment() {
     lateinit var mainViewModel: MainViewModel
     @Inject
     lateinit var authViewModel: AuthViewModel
-
-    private val db = Firebase.firestore
+    @Inject
+    lateinit var userViewModel: UserViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,29 +84,23 @@ class ProfileFragment : Fragment() {
     }
 
     private fun configureUserVerified() {
-        val email = FirebaseAuth.getInstance().currentUser?.email
-        if (email.isNullOrBlank()) {
-            binding.userVerified.text = resources.getText(R.string.user_verification_false)
-        }
-        else {
-            var userVerified = false
-            val docRef = db.collection("UserVerification").document(email)
-            docRef.get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        userVerified = document.data?.get("verified").toString().toBoolean()
-                        if (userVerified) {
-                            binding.userVerified.text = resources.getText(R.string.user_verification_true)
-                        }
-                        else {
-                            binding.userVerified.text = resources.getText(R.string.user_verification_false)
-                        }
+        val docRef = userViewModel.getDocRef()
+        var userVerified = false
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    userVerified = document.data?.get("isVerified").toString().toBoolean()
+                    if (userVerified) {
+                        binding.userVerified.text = resources.getText(R.string.user_verification_true)
                     }
                     else {
                         binding.userVerified.text = resources.getText(R.string.user_verification_false)
                     }
                 }
-        }
+                else {
+                    binding.userVerified.text = resources.getText(R.string.user_verification_false)
+                }
+            }
     }
 
     private fun updateUI(isHostMode: Boolean) {
