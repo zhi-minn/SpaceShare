@@ -56,7 +56,7 @@ class ClientFilterDialogFragment(
         val prices = searchViewModel.listings.value?.map { it.price }
         var maxPrice = prices?.maxOrNull()?.toFloat() ?: 100.0f
         if (maxPrice == 0.0f) maxPrice = 100.0f
-        val criteriaMaxPrice = if (criteria.maxPrice > maxPrice) maxPrice else criteria.maxPrice
+        val criteriaMaxPrice = criteria.maxPrice ?: maxPrice
         binding.priceRangeSlider.valueFrom = 0.0f
         binding.priceRangeSlider.valueTo = maxPrice
         binding.priceRangeSlider.values = listOf(criteria.minPrice, criteriaMaxPrice)

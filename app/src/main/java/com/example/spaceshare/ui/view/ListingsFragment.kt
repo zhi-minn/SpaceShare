@@ -1,14 +1,12 @@
 package com.example.spaceshare.ui.view
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.Filter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -19,9 +17,7 @@ import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ListingAdapter
 import com.example.spaceshare.adapters.ListingAdapter.ItemClickListener
 import com.example.spaceshare.databinding.FragmentListingsBinding
-import com.example.spaceshare.models.FilterCriteria
 import com.example.spaceshare.models.Listing
-import com.example.spaceshare.models.User
 import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -29,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
 import javax.inject.Inject
 import com.example.spaceshare.ui.viewmodel.CreateListingViewModel.CreateListingDialogListener
+import com.google.android.material.snackbar.Snackbar
 
 @AndroidEntryPoint
 class ListingsFragment : Fragment(), CreateListingDialogListener {
@@ -110,10 +107,14 @@ class ListingsFragment : Fragment(), CreateListingDialogListener {
         if (listing != null) {
             listingViewModel.addItem(listing)
             listingViewModel.filterListings(binding.searchTextView.text.toString(), listingViewModel.getCriteria())
-            Toast.makeText(requireContext(), "Listing successfully published", Toast.LENGTH_SHORT).show()
+            Snackbar.make(binding.root, "Listing published successfully.", Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(resources.getColor(R.color.success_green, null))
+                .show()
             binding.recyclerView.scrollToPosition(0)
         } else {
-            Toast.makeText(requireContext(), "Error publishing listing. Please try again later", Toast.LENGTH_SHORT).show()
+            Snackbar.make(binding.root, "Error publishing listing. Please try again later.", Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(resources.getColor(R.color.error_red, null))
+                .show()
         }
     }
 }

@@ -9,11 +9,12 @@ import com.example.spaceshare.data.repository.FirebaseStorageRepository
 import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.models.FilterCriteria
 import com.example.spaceshare.models.Listing
-import com.example.spaceshare.models.User
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.Locale
 import javax.inject.Inject
+
+import com.example.spaceshare.consts.ListingConsts.DEFAULT_MAX_PRICE
 
 class ListingViewModel @Inject constructor(
     private val listingRepo: ListingRepository,
@@ -32,6 +33,7 @@ class ListingViewModel @Inject constructor(
     fun getUserListings(userId: String) {
         viewModelScope.launch {
             val listings = listingRepo.getUserListings(userId)
+            Log.i("Listings", "Fetched $listings")
             _listingsLiveData.value = listings
             filterListings(curQuery, curCriteria)
         }
@@ -50,9 +52,14 @@ class ListingViewModel @Inject constructor(
         curQuery = query
         curCriteria = criteria
 
+        val prices = listingsLiveData.value?.map { it.price }
+        var maxPrice = prices?.maxOrNull()?.toFloat() ?: DEFAULT_MAX_PRICE
+        if (maxPrice == 0.0f) maxPrice = DEFAULT_MAX_PRICE
+        val criteriaMaxPrice = criteria.maxPrice ?: maxPrice
+
         var criteriaListings = _listingsLiveData.value.orEmpty().filter { listing ->
             listing.price >= criteria.minPrice
-                    && listing.price <= criteria.maxPrice
+                    && listing.price <= criteriaMaxPrice
                     && listing.spaceAvailable >= criteria.minSpace
                     && listing.spaceAvailable <= criteria.maxSpace
         }

@@ -2,6 +2,7 @@ package com.example.spaceshare.ui.view
 
 import android.icu.text.DecimalFormat
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,7 +58,7 @@ class FilterDialogFragment(
         val prices = listingViewModel.listingsLiveData.value?.map { it.price }
         var maxPrice = prices?.maxOrNull()?.toFloat() ?: 100.0f
         if (maxPrice == 0.0f) maxPrice = 100.0f
-        val criteriaMaxPrice = if (criteria.maxPrice > maxPrice) maxPrice else criteria.maxPrice
+        val criteriaMaxPrice = criteria.maxPrice ?: maxPrice
         binding.priceRangeSlider.valueFrom = 0.0f
         binding.priceRangeSlider.valueTo = maxPrice
         binding.priceRangeSlider.values = listOf(criteria.minPrice, criteriaMaxPrice)

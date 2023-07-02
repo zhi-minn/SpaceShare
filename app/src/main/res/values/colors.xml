@@ -13,7 +13,9 @@
     <color name="medium_light_gray">#D3D3D3</color>
     <color name="light_pink">#FDEAEC</color>
     <color name="light_green">#90EE90</color>
+    <color name="success_green">#4BB543</color>
     <color name="light_orange">#FFD580</color>
     <color name="light_red">#FF7276</color>
+    <color name="error_red">#FFCCCC</color>
     <color name="baby_blue">#89CFF0</color>
 </resources>

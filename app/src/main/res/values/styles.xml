@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Dialog Styles -->
     <style name="MapDialogStyle" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -44,16 +45,12 @@
         <item name="android:windowExitAnimation">@anim/slide_out_to_bottom</item>
     </style>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">#5C9EAD</item>
-        <item name="colorPrimaryVariant">#326273</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSecondary">#E39774</item>
-        <item name="colorSecondaryVariant">#E39774</item>
-        <item name="colorOnSecondary">#EEEEEE</item>
-        <item name="android:fontFamily">@font/sans_serif</item>
+    <!-- Snackbars -->
+    <style name="SnackbarLightGreen" parent="Widget.MaterialComponents.Snackbar">
+        <item name="colorSurface">@color/light_green</item>
     </style>
 
+    <!-- Dividers -->
     <style name="HorizontalDivider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
@@ -64,5 +61,16 @@
         <item name="android:layout_width">1dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+    <!-- Themes -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">#5C9EAD</item>
+        <item name="colorPrimaryVariant">#326273</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#E39774</item>
+        <item name="colorSecondaryVariant">#E39774</item>
+        <item name="colorOnSecondary">#EEEEEE</item>
+        <item name="android:fontFamily">@font/sans_serif</item>
     </style>
 </resources>

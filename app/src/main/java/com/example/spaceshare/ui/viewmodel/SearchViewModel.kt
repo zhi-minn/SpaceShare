@@ -3,6 +3,7 @@ package com.example.spaceshare.ui.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spaceshare.consts.ListingConsts
 import com.example.spaceshare.consts.ListingConsts.SPACE_BOOKING_LOWER_LIMIT
 import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
 import com.example.spaceshare.data.repository.ListingRepository
@@ -87,8 +88,13 @@ class SearchViewModel @Inject constructor(
 
     fun filterByFilterCriteria() {
         val filteredByCriteriaListings = listings.value.orEmpty().filter { listing ->
+            val prices = listings.value?.map { it.price }
+            var maxPrice = prices?.maxOrNull()?.toFloat() ?: ListingConsts.DEFAULT_MAX_PRICE
+            if (maxPrice == 0.0f) maxPrice = ListingConsts.DEFAULT_MAX_PRICE
+            val filterCriteriaMaxPrice = filterCriteria.maxPrice ?: maxPrice
+
             listing.price >= filterCriteria.minPrice
-                    && listing.price <= filterCriteria.maxPrice
+                    && listing.price <= filterCriteriaMaxPrice
                     && listing.spaceAvailable >= filterCriteria.minSpace
                     && listing.spaceAvailable <= filterCriteria.maxSpace
         }
