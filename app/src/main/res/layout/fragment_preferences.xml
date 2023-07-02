@@ -101,6 +101,23 @@
                 android:valueTo="25"
                 app:layout_constraintTop_toBottomOf="@+id/distanceTitle" />
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/receiveEmails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/standard_component_margin"
+                android:text="Receive email updates"
+                android:textSize="@dimen/standard_text"
+                app:layout_constraintTop_toBottomOf="@id/searchRadiusSlider"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchEmailUpdates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/receiveEmails"
+                app:layout_constraintBottom_toBottomOf="@id/receiveEmails"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btnSave"

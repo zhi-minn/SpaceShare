@@ -4,8 +4,8 @@ import com.google.firebase.firestore.GeoPoint
 
 data class Preferences(
     val userId: String? = null,
-    val email: String? = null
-) {
-    var location: GeoPoint? = null
+    val email: String? = null,
+    var isActive: Boolean = true,
+    var location: GeoPoint? = null,
     var radius: Int = 5
-}
+) {}

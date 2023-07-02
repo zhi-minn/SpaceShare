@@ -63,6 +63,10 @@ class PreferencesDialogFragment : DialogFragment() {
             viewModel.setRadius(value.toInt())
         })
 
+        binding.switchEmailUpdates.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setIsActive(isChecked)
+        }
+
         binding.btnSave.setOnClickListener {
             viewModel.updatePreferences()
             this.dismiss()
@@ -90,6 +94,7 @@ class PreferencesDialogFragment : DialogFragment() {
 
                 binding.searchRadiusSlider.value = preferences.radius.toFloat()
                 binding.distanceIndicator.text = "${preferences.radius} km"
+                binding.switchEmailUpdates.isChecked = preferences.isActive
             }
         }
 

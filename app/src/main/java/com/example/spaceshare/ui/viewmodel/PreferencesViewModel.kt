@@ -38,6 +38,16 @@ class PreferencesViewModel @Inject constructor(
         _preferencesLiveData.value = curPreferences
     }
 
+    fun setIsActive(isActive: Boolean) {
+        var curPreferences = _preferencesLiveData.value
+        if (curPreferences == null) {
+            curPreferences = instantiatePreferences()
+        }
+
+        curPreferences.isActive = isActive
+        _preferencesLiveData.value = curPreferences
+    }
+
     override fun setLocation(latLng: LatLng) {
         var curPreferences = _preferencesLiveData.value
         if (curPreferences == null) {

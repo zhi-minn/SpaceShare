@@ -108,7 +108,7 @@ class CreateListingViewModel @Inject constructor(
                             return@forEach
                         }
 
-                        if (preferences.location != null && preferences.email != null) {
+                        if (preferences.isActive && preferences.location != null && preferences.email != null) {
                             val distance = MathUtil.calculateDistanceInKilometers(listing.location!!, preferences.location!!)
                             if (distance <= preferences.radius) {
                                 MailUtil.sendEmail(preferences.email, "New Listing Alert",
