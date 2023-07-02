@@ -145,3 +145,5 @@
     * Moved processing logic out of LoginFragment and into AuthViewModel
     * Process Google credential user details separately from loginWithSSOCredentials function as different SSO providers may handle user details differently
   * Tested signup user flow with new Google user
+* Minn 1 hour (2023-07-02) [PR](https://github.com/zhi-minn/SpaceShare/pull/50)
+  * Bootstrap profile details page dialog
