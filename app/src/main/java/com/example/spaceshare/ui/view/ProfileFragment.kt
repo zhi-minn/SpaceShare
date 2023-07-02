@@ -18,6 +18,7 @@ import com.example.spaceshare.ui.viewmodel.MainViewModel
 import com.example.spaceshare.ui.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -68,6 +69,12 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        // Edit account details
+        binding.btnEditAccount.setOnClickListener {
+            val profileDetailsDialogFragment = ProfileDetailsDialogFragment(profileViewModel)
+            profileDetailsDialogFragment.show(Objects.requireNonNull(childFragmentManager), "profileDetailsDialog")
+        }
+
         // Preferences
         binding.btnPreferences.setOnClickListener {
             navController.navigate(R.id.action_profileFragment_to_preferencesFragment)
@@ -84,6 +91,8 @@ class ProfileFragment : Fragment() {
 
     private fun configureObservers() {
         profileViewModel.userLiveData.observe(viewLifecycleOwner) { user ->
+            binding.displayName.text = "${user.firstName} ${user.lastName}"
+
             binding.userVerified.text = if (user.isVerified) {
                 resources.getText(R.string.user_verification_true)
             } else {
