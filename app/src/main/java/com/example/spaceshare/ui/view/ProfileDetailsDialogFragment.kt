@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogProfileDetailsBinding
-import com.example.spaceshare.models.User
 import com.example.spaceshare.ui.viewmodel.ProfileViewModel
 
 class ProfileDetailsDialogFragment(
@@ -34,7 +33,7 @@ class ProfileDetailsDialogFragment(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_FRAME, R.style.ListingDialogStyle)
+        setStyle(STYLE_NO_FRAME, R.style.GenericDialogStyle)
     }
 
     private fun configureBindings() {

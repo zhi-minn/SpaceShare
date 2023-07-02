@@ -2,7 +2,6 @@ package com.example.spaceshare.ui.view
 
 import android.icu.text.DecimalFormat
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,7 @@ import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogFilterCriteriaBinding
 import com.example.spaceshare.models.FilterCriteria
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
-import com.google.android.material.slider.LabelFormatter
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FilterDialogFragment(
@@ -25,7 +22,7 @@ class FilterDialogFragment(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_FRAME, R.style.ListingDialogStyle)
+        setStyle(STYLE_NO_FRAME, R.style.GenericDialogStyle)
     }
 
     override fun onCreateView(

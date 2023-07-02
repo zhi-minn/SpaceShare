@@ -15,8 +15,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import com.aemerse.slider.model.CarouselItem
 import com.example.spaceshare.CropActivity
 import com.example.spaceshare.R
@@ -26,12 +24,9 @@ import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
 import com.example.spaceshare.utils.DecimalInputFilter
 import com.example.spaceshare.utils.GeocoderUtil
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
-import java.util.UUID
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,7 +41,7 @@ class CreateListingDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_FRAME, R.style.ListingDialogStyle)
+        setStyle(STYLE_NO_FRAME, R.style.GenericDialogStyle)
     }
 
     override fun onAttach(context: Context) {

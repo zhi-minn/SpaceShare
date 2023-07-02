@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentPreferencesBinding
 import com.example.spaceshare.ui.viewmodel.PreferencesViewModel
@@ -20,10 +18,9 @@ import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PreferencesFragment : Fragment() {
+class PreferencesDialogFragment : DialogFragment() {
 
     private lateinit var binding: FragmentPreferencesBinding
-    private lateinit var navController: NavController
     @Inject
     lateinit var viewModel: PreferencesViewModel
 
@@ -39,15 +36,19 @@ class PreferencesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
 
         configureButtons()
         configureObservers()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_FRAME, R.style.GenericDialogStyle)
+    }
+
     private fun configureButtons() {
         binding.btnBack.setOnClickListener {
-            navController.popBackStack()
+            this.dismiss()
         }
 
         binding.location.setOnClickListener {
@@ -64,7 +65,7 @@ class PreferencesFragment : Fragment() {
 
         binding.btnSave.setOnClickListener {
             viewModel.updatePreferences()
-            navController.popBackStack()
+            this.dismiss()
         }
     }
 

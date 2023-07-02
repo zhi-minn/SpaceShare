@@ -2,9 +2,7 @@ package com.example.spaceshare.ui.view
 
 import MapDialogFragment
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -14,7 +12,6 @@ import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.DialogClientListingBinding
 import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.models.Listing
-import com.example.spaceshare.ui.viewmodel.ListingViewModel
 import com.example.spaceshare.utils.GeocoderUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -49,7 +46,7 @@ class ClientListingDialogFragment(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_FRAME, R.style.ListingDialogStyle)
+        setStyle(STYLE_NO_FRAME, R.style.GenericDialogStyle)
     }
 
     private fun configureBindings() {

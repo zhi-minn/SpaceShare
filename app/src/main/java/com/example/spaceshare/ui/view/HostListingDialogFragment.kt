@@ -3,9 +3,7 @@ package com.example.spaceshare.ui.view
 import MapDialogFragment
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
@@ -24,7 +22,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.firebase.Timestamp
 import java.util.Objects
 
 class HostListingDialogFragment(
@@ -54,7 +51,7 @@ class HostListingDialogFragment(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_FRAME, R.style.ListingDialogStyle)
+        setStyle(STYLE_NO_FRAME, R.style.GenericDialogStyle)
     }
 
     private fun configureBindings() {

@@ -33,9 +33,6 @@
         <action
             android:id="@+id/action_profileFragment_to_reservationFragment"
             app:destination="@id/reservationFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_preferencesFragment"
-            app:destination="@id/preferencesFragment" />
     </fragment>
 
     <!-- Listing Fragment -->
@@ -60,14 +57,6 @@
         <action
             android:id="@+id/action_reservationFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
-    </fragment>
-
-    <!-- Preferences Fragment -->
-    <fragment
-        android:id="@+id/preferencesFragment"
-        android:name="com.example.spaceshare.ui.view.PreferencesFragment"
-        android:label="Preferences"
-        tools:layout="@layout/fragment_preferences" >
     </fragment>
 
 </navigation>

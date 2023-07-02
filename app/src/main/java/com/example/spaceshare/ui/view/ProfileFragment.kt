@@ -77,7 +77,8 @@ class ProfileFragment : Fragment() {
 
         // Preferences
         binding.btnPreferences.setOnClickListener {
-            navController.navigate(R.id.action_profileFragment_to_preferencesFragment)
+            val preferencesDialogFragment = PreferencesDialogFragment()
+            preferencesDialogFragment.show(Objects.requireNonNull(childFragmentManager), "preferencesDialog")
         }
 
         // Logout
