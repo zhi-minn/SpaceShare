@@ -16,13 +16,32 @@
         <item name="android:windowAnimationStyle">@style/FadeInOutDialogAnimation</item>
     </style>
 
+    <style name="SlideLeftDialogStyle" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@style/SlideLeftDialogAnimation</item>
+    </style>
+
+    <style name="SlideUpDialogStyle" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@style/SlideUpDialogAnimation</item>
+    </style>
+
     <style name="SearchAndFilterDialogStyle" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/FadeInOutDialogAnimation</item>
     </style>
 
+    <!-- Animations -->
     <style name="FadeInOutDialogAnimation" parent="android:Theme.Black.NoTitleBar.Fullscreen">
         <item name="android:windowEnterAnimation">@anim/fade_in</item>
         <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+
+    <style name="SlideLeftDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_right</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_to_right</item>
+    </style>
+
+    <style name="SlideUpDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_to_bottom</item>
     </style>
 
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
