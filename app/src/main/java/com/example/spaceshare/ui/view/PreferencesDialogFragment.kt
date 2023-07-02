@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
-import com.example.spaceshare.databinding.FragmentPreferencesBinding
+import com.example.spaceshare.databinding.DialogPreferencesBinding
 import com.example.spaceshare.ui.viewmodel.PreferencesViewModel
 import com.example.spaceshare.utils.GeocoderUtil
 import com.google.android.material.slider.Slider
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class PreferencesDialogFragment : DialogFragment() {
 
-    private lateinit var binding: FragmentPreferencesBinding
+    private lateinit var binding: DialogPreferencesBinding
     @Inject
     lateinit var viewModel: PreferencesViewModel
 
@@ -28,7 +28,7 @@ class PreferencesDialogFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_preferences, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.dialog_preferences, container, false)
         // Set container to invisible first while data loading
         binding.container.visibility = View.GONE
         return binding.root

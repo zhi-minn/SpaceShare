@@ -1,13 +1,11 @@
 package com.example.spaceshare.ui.view
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -43,6 +41,7 @@ class ListingsFragment : Fragment(), CreateListingDialogListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_listings, container, false)
+        binding.noListingView.visibility = View.GONE
         return binding.root
     }
 
@@ -81,6 +80,7 @@ class ListingsFragment : Fragment(), CreateListingDialogListener {
 
     private fun configureObservers() {
         listingViewModel.listingsLiveData.observe(viewLifecycleOwner) { listings ->
+            binding.noListingView.visibility = if (listings.isNotEmpty()) View.GONE else View.VISIBLE
             binding.btnFilter.isEnabled = listings.isNotEmpty()
         }
         listingViewModel.filteredListingsLiveData.observe(viewLifecycleOwner) { listings ->
