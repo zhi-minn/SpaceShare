@@ -42,7 +42,8 @@ import com.example.spaceshare.consts.LocationConsts.KW_MAX_LONG
 
 class MapDialogFragment(
     private val locationInterface: LocationInterface?,
-    private val location: LatLng?
+    private val location: LatLng?,
+    private val isStatic: Boolean = false
 ) : DialogFragment(), OnMapReadyCallback {
 
     private lateinit var googleMap: GoogleMap
@@ -71,7 +72,7 @@ class MapDialogFragment(
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_map, container, false)
 
         // Hide search bar if map is static
-        if (location != null) {
+        if (isStatic) {
             binding.searchBar.visibility = View.GONE
             binding.btnConfirmLocation.visibility = View.GONE
         }
@@ -326,9 +327,10 @@ class MapDialogFragment(
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
         if (location != null) {
-            map?.addMarker(MarkerOptions().position(location))
-            map?.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
-        } else {
+            map.addMarker(MarkerOptions().position(location))
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
+        }
+        if (!isStatic) {
             enableMyLocation()
             configureSearchBar()
             configureMapListeners()
