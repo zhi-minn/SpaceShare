@@ -63,12 +63,12 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
                 android:text="@string/sample_title"
                 android:textSize="@dimen/title_text"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@id/ratings"
+                app:layout_constraintEnd_toStartOf="@id/likes"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/ratings"
+                android:id="@+id/likes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
