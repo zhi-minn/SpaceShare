@@ -12,13 +12,22 @@ import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.DialogClientListingBinding
 import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.models.Listing
+import com.example.spaceshare.models.Reservation
+import com.example.spaceshare.models.ReservationStatus
+import com.example.spaceshare.models.toInt
+import com.example.spaceshare.ui.viewmodel.ReservationViewModel
+import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.example.spaceshare.utils.GeocoderUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import java.sql.Date
 import java.util.Objects
+import javax.inject.Inject
 
 class ClientListingDialogFragment(
     private val listing: Listing
@@ -27,13 +36,18 @@ class ClientListingDialogFragment(
     companion object {
         private val TAG = this::class.simpleName
     }
-
+    private lateinit var auth: FirebaseAuth
+    @Inject
+    lateinit var reservationViewModel: ReservationViewModel
+    @Inject
+    lateinit var searchViewModel: SearchViewModel
     private lateinit var binding: DialogClientListingBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        auth = FirebaseAuth.getInstance()
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_client_listing, container, false)
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
@@ -90,7 +104,7 @@ class ClientListingDialogFragment(
         }
 
         binding.btnReserve.setOnClickListener {
-            // TODO: Put reservation related code here
+            reserveListing()
         }
     }
 
@@ -128,5 +142,18 @@ class ClientListingDialogFragment(
                 mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
             }
         }
+    }
+
+    private fun reserveListing() {
+        val hostId = listing.hostId
+        val clientId = auth.currentUser?.uid
+        val listingId = listing.id
+        val startDate = Timestamp(Date(searchViewModel.startTime.value!!))
+        val endDate = Timestamp(Date(searchViewModel.endTime.value!!))
+        val unit = searchViewModel.spaceRequired.value
+        val reservation =
+            Reservation(hostId=hostId, clientId=clientId, listingId=listingId,
+                startDate=startDate, endDate=endDate, unit=unit, status=ReservationStatus.PENDING.toInt())
+        reservationViewModel.reserveListing(reservation)
     }
 }
