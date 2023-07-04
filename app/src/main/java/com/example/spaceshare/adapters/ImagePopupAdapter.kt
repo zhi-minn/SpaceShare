@@ -5,14 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.aemerse.slider.utils.setImage
 import com.bumptech.glide.Glide
 import com.example.spaceshare.R
+import com.example.spaceshare.models.ImageModel
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.firebase.storage.FirebaseStorage
 
 class ImagePopupAdapter(
     private val context: Context,
-    private val images: List<String>
+    private val images: List<ImageModel>
 ) : RecyclerView.Adapter<ImagePopupAdapter.ImageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
@@ -21,12 +23,17 @@ class ImagePopupAdapter(
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val imageUrl = images[position]
-        val storageRef = FirebaseStorage.getInstance().reference.child("spaces/$imageUrl")
+        val imageModel = images[position]
+        if (imageModel.imagePath != null) {
+            val storageRef = FirebaseStorage.getInstance().reference.child("spaces/${imageModel.imagePath}")
 
-        Glide.with(context)
-            .load(storageRef)
-            .into(holder.image)
+            Glide.with(context)
+                .load(storageRef)
+                .into(holder.image)
+        }
+        if (imageModel.localUri != null) {
+            holder.image.setImageURI(imageModel.localUri)
+        }
     }
 
     override fun getItemCount(): Int {

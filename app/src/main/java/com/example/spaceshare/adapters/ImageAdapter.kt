@@ -13,12 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.spaceshare.R
+import com.example.spaceshare.models.ImageModel
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.firebase.storage.FirebaseStorage
 import me.relex.circleindicator.CircleIndicator3
 
 class ImageAdapter(
-    private val images: List<String>
+    private val images: List<ImageModel>
 ) : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
     companion object {
@@ -31,18 +32,26 @@ class ImageAdapter(
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val imageUrl = images[position]
-        val storageRef = FirebaseStorage.getInstance().reference.child("spaces/$imageUrl")
-        try {
-            Glide.with(holder.itemView)
-                .load(storageRef)
-                .into(holder.image)
+        val imageModel = images[position]
+        if (imageModel.imagePath != null) {
+            val storageRef = FirebaseStorage.getInstance().reference.child("spaces/${imageModel.imagePath}")
+            try {
+                Glide.with(holder.itemView)
+                    .load(storageRef)
+                    .into(holder.image)
 
+                holder.image.setOnClickListener {
+                    showImagePopup(holder.image.context, images, position)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading image with reference ${imageModel.imagePath}", e)
+            }
+        }
+        if (imageModel.localUri != null) {
+            holder.image.setImageURI(imageModel.localUri)
             holder.image.setOnClickListener {
                 showImagePopup(holder.image.context, images, position)
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error loading image with reference $imageUrl", e)
         }
     }
 
@@ -50,7 +59,7 @@ class ImageAdapter(
         return images.size
     }
 
-    private fun showImagePopup(context: Context, images: List<String>, currentPosition: Int) {
+    private fun showImagePopup(context: Context, images: List<ImageModel>, currentPosition: Int) {
         val dialog = Dialog(context, R.style.ImageDialogStyle)
         dialog.setContentView(R.layout.dialog_image_popup)
 

@@ -16,24 +16,24 @@ import com.example.spaceshare.adapters.ListingAdapter
 import com.example.spaceshare.adapters.ListingAdapter.ItemClickListener
 import com.example.spaceshare.databinding.FragmentListingsBinding
 import com.example.spaceshare.models.Listing
-import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
+import com.example.spaceshare.ui.viewmodel.ListingMetadataViewModel
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
 import javax.inject.Inject
-import com.example.spaceshare.ui.viewmodel.CreateListingViewModel.CreateListingDialogListener
+import com.example.spaceshare.ui.viewmodel.ListingMetadataViewModel.ListingMetadataDialogListener
 import com.google.android.material.snackbar.Snackbar
 
 @AndroidEntryPoint
-class ListingsFragment : Fragment(), CreateListingDialogListener {
+class ListingsFragment : Fragment(), ListingMetadataDialogListener {
 
     private lateinit var binding: FragmentListingsBinding
     private lateinit var navController: NavController
     @Inject
     lateinit var listingViewModel: ListingViewModel
     @Inject
-    lateinit var createListingViewModel: CreateListingViewModel
+    lateinit var createListingViewModel: ListingMetadataViewModel
     private lateinit var adapter: ListingAdapter
 
     override fun onCreateView(
@@ -55,7 +55,7 @@ class ListingsFragment : Fragment(), CreateListingDialogListener {
     }
 
     private fun configureRecyclerView() {
-        adapter = ListingAdapter(object : ItemClickListener {
+        adapter = ListingAdapter(childFragmentManager, object : ItemClickListener {
             override fun onItemClick(listing: Listing) {
                 val hostListingDialogFragment = HostListingDialogFragment(listing, listingViewModel)
                 hostListingDialogFragment.show(Objects.requireNonNull(childFragmentManager),
@@ -68,8 +68,8 @@ class ListingsFragment : Fragment(), CreateListingDialogListener {
 
     private fun configureButtons() {
         binding.btnAddListing.setOnClickListener {
-            val createListingDialogFragment = CreateListingDialogFragment()
-            createListingDialogFragment.show(Objects.requireNonNull(childFragmentManager), "createListingDialog")
+            val listingMetadataDialogFragment = ListingMetadataDialogFragment()
+            listingMetadataDialogFragment.show(Objects.requireNonNull(childFragmentManager), "createListingDialog")
         }
 
         binding.btnFilter.setOnClickListener {
@@ -85,6 +85,10 @@ class ListingsFragment : Fragment(), CreateListingDialogListener {
         }
         listingViewModel.filteredListingsLiveData.observe(viewLifecycleOwner) { listings ->
             adapter.submitList(listings)
+            adapter.notifyDataSetChanged()
+            binding.recyclerView.post {
+                binding.recyclerView.scrollToPosition(0)
+            }
         }
         listingViewModel.getUserListings(FirebaseAuth.getInstance().currentUser!!.uid)
 
@@ -110,7 +114,6 @@ class ListingsFragment : Fragment(), CreateListingDialogListener {
             Snackbar.make(binding.root, "Listing published successfully.", Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(resources.getColor(R.color.success_green, null))
                 .show()
-            binding.recyclerView.scrollToPosition(0)
         } else {
             Snackbar.make(binding.root, "Error publishing listing. Please try again later.", Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(resources.getColor(R.color.error_red, null))

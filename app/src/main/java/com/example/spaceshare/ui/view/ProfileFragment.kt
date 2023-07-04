@@ -92,7 +92,10 @@ class ProfileFragment : Fragment() {
 
     private fun configureObservers() {
         profileViewModel.userLiveData.observe(viewLifecycleOwner) { user ->
-            binding.displayName.text = "${user.firstName} ${user.lastName}"
+            val sb = StringBuilder()
+            if (user.firstName.isNotEmpty()) sb.append(user.firstName)
+            if (user.lastName.isNotEmpty()) sb.append(" ${user.lastName}")
+            binding.displayName.text = sb.toString()
 
             binding.userVerified.text = if (user.isVerified) {
                 resources.getText(R.string.user_verification_true)

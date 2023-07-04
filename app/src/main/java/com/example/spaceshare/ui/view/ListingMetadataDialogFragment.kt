@@ -10,44 +10,49 @@ import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import com.aemerse.slider.model.CarouselItem
 import com.example.spaceshare.CropActivity
 import com.example.spaceshare.R
+import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.DialogCreateListingBinding
 import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.models.Listing
-import com.example.spaceshare.ui.viewmodel.CreateListingViewModel
+import com.example.spaceshare.ui.viewmodel.ListingMetadataViewModel
 import com.example.spaceshare.utils.DecimalInputFilter
 import com.example.spaceshare.utils.GeocoderUtil
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateListingDialogFragment : DialogFragment() {
+class ListingMetadataDialogFragment(
+    private val listing: Listing? = null
+) : DialogFragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: DialogCreateListingBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
     @Inject
-    lateinit var createListingViewModel: CreateListingViewModel
-    private var listener: CreateListingViewModel.CreateListingDialogListener? = null
+    lateinit var listingMetadataViewModel: ListingMetadataViewModel
+    private var listener: ListingMetadataViewModel.ListingMetadataDialogListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, R.style.GenericDialogStyle)
+        if (listing != null) listingMetadataViewModel.setListing(listing)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         val parentFragment = parentFragment
-        if (parentFragment is CreateListingViewModel.CreateListingDialogListener) {
+        if (parentFragment is ListingMetadataViewModel.ListingMetadataDialogListener) {
             listener = parentFragment
         }
     }
@@ -71,10 +76,20 @@ class CreateListingDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         auth = FirebaseAuth.getInstance()
 
+        configureListeners()
         configureButtons()
         configureFilters()
         configureCropActivity()
         configureObservers()
+    }
+
+    private fun configureListeners() {
+        binding.priceInput.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus && binding.priceInput.text.toString().isEmpty()) {
+                val defaultValue = 0.00
+                binding.priceInput.setText(defaultValue.toString())
+            }
+        }
     }
 
     private fun configureButtons() {
@@ -90,23 +105,28 @@ class CreateListingDialogFragment : DialogFragment() {
 
         // Space increment/decrement buttons
         binding.btnMinusSpace.setOnClickListener {
-            createListingViewModel.decrementSpaceAvailable()
+            listingMetadataViewModel.decrementSpaceAvailable()
         }
         binding.btnAddSpace.setOnClickListener {
-            createListingViewModel.incrementSpaceAvailable()
+            listingMetadataViewModel.incrementSpaceAvailable()
         }
 
         // Maps
         binding.btnOpenMaps.setOnClickListener {
-            val mapDialogFragment = MapDialogFragment(createListingViewModel, null)
+            var latLng: LatLng? = null
+            listingMetadataViewModel.listingLiveData.value?.location?.let {
+                latLng = LatLng(it.latitude, it.longitude)
+            }
+            val mapDialogFragment = MapDialogFragment(listingMetadataViewModel, latLng)
             mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
 
         // Publish button
         binding.btnPublish.setOnClickListener {
-            publishListing(binding.titleTextInput.text.toString(),
-                binding.priceInput.text.toString(),
-                binding.descriptionTextInput.text.toString())
+            listingMetadataViewModel.setListing(binding.titleTextInput.text.toString(),
+                binding.priceInput.text.toString().toDouble(),
+                binding.descriptionTextInput.text.toString(),
+                getCheckedAmenities())
         }
     }
 
@@ -115,28 +135,55 @@ class CreateListingDialogFragment : DialogFragment() {
     }
 
     private fun configureObservers() {
-        // Images
-        createListingViewModel.imageUris.observe(viewLifecycleOwner) { uris ->
-            binding.carousel.registerLifecycle(lifecycle)
-            val list = mutableListOf<CarouselItem>()
-            uris.forEach { uri ->
-                list.add(CarouselItem(imageUrl = uri.toString()))
+        // Listing metadata
+        listingMetadataViewModel.listingLiveData.observe(viewLifecycleOwner) { listing ->
+            binding.titleTextInput.setText(listing.title)
+            binding.priceInput.setText(listing.price.toString())
+            binding.descriptionTextInput.setText(listing.description)
+            binding.spaceText.text = listing.spaceAvailable.toString()
+            val amenities = Amenity.values().filter { listing.amenities.contains(it) }
+            for (amenity in amenities) {
+                when (amenity) {
+                    Amenity.SURVEILLANCE -> binding.surveillance.isChecked = true
+                    Amenity.CLIMATE_CONTROLLED -> binding.climateControlled.isChecked = true
+                    Amenity.WELL_LIT-> binding.lighting.isChecked = true
+                    Amenity.ACCESSIBILITY -> binding.accessibility.isChecked = true
+                    Amenity.WEEKLY_CLEANING -> binding.cleanliness.isChecked = true
+                }
             }
-            binding.carousel.setData(list)
+
+            listing.location?.let {
+                binding.parsedLocation.text = GeocoderUtil.getAddress(it.latitude, it.longitude)
+            }
+        }
+
+        // Images
+        listingMetadataViewModel.images.observe(viewLifecycleOwner) { images ->
+            binding.viewPagerListingImages.adapter = ImageAdapter(images)
+            binding.imageIndicator.setViewPager(binding.viewPagerListingImages)
         }
 
         // Spaces
-        createListingViewModel.spaceAvailable.observe(viewLifecycleOwner) { spaces ->
+        listingMetadataViewModel.spaceAvailable.observe(viewLifecycleOwner) { spaces ->
             binding.spaceText.text = spaces.toString()
         }
 
-        // Location
-        createListingViewModel.location.observe(viewLifecycleOwner) { location ->
-            binding.parsedLocation.text = GeocoderUtil.getAddress(location.latitude, location.longitude)
+        // Validation
+        listingMetadataViewModel.validateResult.observe(viewLifecycleOwner) { result ->
+            if (result.isSuccess) {
+                binding.scrollView.visibility = View.GONE
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                val snackbar = Snackbar.make(binding.root, result.message, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(resources.getColor(R.color.error_red, null))
+                val tv: TextView = snackbar.view.findViewById(com.google.android.material.R.id.snackbar_text)
+                tv.setTextColor(resources.getColor(R.color.black, null))
+                snackbar.show()
+            }
         }
 
         // Navigation
-        createListingViewModel.publishResult.observe(viewLifecycleOwner) { result ->
+        listingMetadataViewModel.publishResult.observe(viewLifecycleOwner) { result ->
             if (result.isSuccess && result.listing != null) {
                 listener?.onListingCreated(result.listing)
             } else {
@@ -154,30 +201,9 @@ class CreateListingDialogFragment : DialogFragment() {
                 @Suppress("DEPRECATION")
                 val imageUri = result.data?.getParcelableExtra<Uri>("imageUri")
                 if (imageUri != null) {
-                    createListingViewModel.addImageUri(imageUri)
+                    listingMetadataViewModel.addImageUri(imageUri)
                 }
             }
-        }
-    }
-
-    private fun validateListing(title: String, description: String, price: String): Boolean {
-        if (title.isNullOrEmpty() || description.isNullOrEmpty() ||
-            price.isNullOrEmpty() || createListingViewModel.location.value == null) {
-            Toast.makeText(requireContext(), "Please enter all mandatory details", Toast.LENGTH_SHORT).show()
-            return false
-        }
-        return true
-    }
-
-    private fun publishListing(title: String, price: String, description: String) {
-        val hostId = auth.currentUser?.uid
-        if (validateListing(title, description, price)) {
-            val listing = Listing(hostId = hostId,
-                title = title, description = description, price = price.toDouble(),
-                spaceAvailable = createListingViewModel.spaceAvailable.value ?: 0.0, amenities = getCheckedAmenities())
-            createListingViewModel.publishListing(listing)
-            binding.scrollView.visibility = View.GONE
-            binding.progressBar.visibility = View.VISIBLE
         }
     }
 
