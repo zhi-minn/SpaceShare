@@ -115,11 +115,10 @@
                 android:id="@+id/btnAddListing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
+                android:layout_gravity="bottom|center"
                 android:background="@drawable/round_button_black"
                 android:backgroundTint="?attr/colorPrimary"
                 android:tint="@color/white"
-                android:layout_marginRight="@dimen/standard_component_margin"
                 android:layout_marginBottom="@dimen/standard_component_margin"
                 android:src="@drawable/add_48dp"
                 android:elevation="4dp"/>

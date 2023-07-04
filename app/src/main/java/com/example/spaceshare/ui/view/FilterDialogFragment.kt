@@ -62,7 +62,7 @@ class FilterDialogFragment(
         binding.priceRangeSlider.valueFrom = 0.0f
         binding.priceRangeSlider.valueTo = maxPrice
         binding.priceRangeSlider.values = listOf(criteria.minPrice, criteriaMaxPrice)
-        binding.priceIndicator.text = "$${String.format("%.2f", criteria.minPrice)} - $${String.format("%.2f", maxPrice)}"
+        binding.priceIndicator.text = "$${String.format("%.2f", criteria.minPrice)} - $${String.format("%.2f", criteriaMaxPrice)}"
 
         val spaces = listingViewModel.listingsLiveData.value?.map { it.spaceAvailable }
         var maxSpace = spaces?.maxOrNull()?.toFloat() ?: 10.0f

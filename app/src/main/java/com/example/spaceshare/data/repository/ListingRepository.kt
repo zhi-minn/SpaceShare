@@ -2,11 +2,10 @@ package com.example.spaceshare.data.repository
 
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.SearchCriteria
-import com.example.spaceshare.models.User
 
 interface ListingRepository {
 
-    suspend fun createListing(listing: Listing) : String
+    suspend fun setListing(listing: Listing) : String
 
     suspend fun getUserListings(userId: String): List<Listing>
 

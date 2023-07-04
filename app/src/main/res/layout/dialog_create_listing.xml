@@ -2,11 +2,12 @@
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/create_listing_page"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.view.CreateListingDialogFragment">
+        tools:context=".ui.view.ListingMetadataDialogFragment">
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -66,27 +67,32 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="6dp"
-                    app:cardElevation="20dp">
+                    android:layout_height="wrap_content">
 
-                    <com.aemerse.slider.ImageCarousel
-                        android:id="@+id/carousel"
-                        android:layout_width="402dp"
-                        android:layout_height="266dp" />
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/viewPagerListingImages"
+                        android:layout_width="match_parent"
+                        android:layout_height="266dp"
+                        tools:itemCount="3"
+                        tools:orientation="horizontal" />
 
-                </androidx.cardview.widget.CardView>
+                    <me.relex.circleindicator.CircleIndicator3
+                        android:id="@+id/imageIndicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_gravity="bottom" />
+
+                </FrameLayout>
 
                 <Button
                     android:id="@+id/btnAddPhoto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
                     android:contentDescription="add photo"
                     android:text="add photo"
                     app:layout_constraintBottom_toBottomOf="@+id/closeListingButton"
@@ -97,6 +103,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="@dimen/standard_component_margin"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
@@ -116,6 +123,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="@dimen/standard_component_margin"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
@@ -145,6 +153,7 @@
                         android:id="@+id/descriptionTextInput"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
+                        android:layout_marginHorizontal="8dp"
                         android:background="@drawable/rounded_rectangle_bg"
                         android:inputType="text"
                         android:singleLine="false" />
@@ -156,6 +165,7 @@
                     android:id="@+id/whatSelectorCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="@dimen/standard_component_margin"
                     app:strokeColor="#C0C0C0"
                     app:strokeWidth="1dp"
@@ -239,12 +249,14 @@
                     android:id="@+id/divider1"
                     style="@style/HorizontalDivider"
                     android:layout_width="match_parent"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="@dimen/standard_component_margin"
                     />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="@dimen/standard_component_margin"
                     android:orientation="horizontal">
 
@@ -299,6 +311,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="@dimen/standard_component_margin"
                     android:orientation="horizontal">
 
@@ -333,9 +346,8 @@
                     android:id="@+id/termsAndPrivacyAgreementTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="@dimen/standard_component_margin"
-                    android:layout_marginRight="15dp"
                     android:text="By posting your listing, you agree to our Terms of Use and Privacy Policy"
                     android:textAlignment="center" />
 

@@ -17,6 +17,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.FragmentReservationBinding
+import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
@@ -152,7 +153,7 @@ class ReservationFragment : Fragment() {
                 }
 
                 if (previewPhoto != null) {
-                    viewPager.adapter = ImageAdapter(previewPhoto)
+                    viewPager.adapter = ImageAdapter(previewPhoto.map { ImageModel(imagePath = it) })
                 }
 
                 // Add the CardView to the LinearLayout

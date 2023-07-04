@@ -1,8 +1,6 @@
 package com.example.spaceshare.ui.view
 
-import android.location.Geocoder
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,7 +71,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun configureRecyclerView() {
-        adapter = ListingAdapter(object : ListingAdapter.ItemClickListener {
+        adapter = ListingAdapter(childFragmentManager, object : ListingAdapter.ItemClickListener {
             override fun onItemClick(listing: Listing) {
                 val clientListingDialogFragment = ClientListingDialogFragment(listing)
                 clientListingDialogFragment.show(Objects.requireNonNull(childFragmentManager),

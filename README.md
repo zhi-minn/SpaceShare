@@ -147,3 +147,6 @@
   * Tested signup user flow with new Google user
 * Minn 1 hour (2023-07-02) [PR](https://github.com/zhi-minn/SpaceShare/pull/50)
   * Bootstrap profile details page dialog
+* Minn 4 hours (2023-07-03) [PR](https://github.com/zhi-minn/SpaceShare/pull/51)
+  * Host can now edit listing, including adding pictures
+  * Refactored ImageAdapter to use ImageModel class that can take either a FirebaseStorage filepath or local image URI

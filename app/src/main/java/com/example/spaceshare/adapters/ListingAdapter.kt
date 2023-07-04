@@ -1,16 +1,21 @@
 package com.example.spaceshare.adapters
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.spaceshare.R
 import com.example.spaceshare.databinding.ListingItemBinding
+import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
-import com.example.spaceshare.utils.GeocoderUtil
+import com.example.spaceshare.ui.view.ListingMetadataDialogFragment
+import java.util.Objects
 
 class ListingAdapter(
+    private val childFragmentManager: FragmentManager,
     private val itemClickListener: ItemClickListener
 ) : ListAdapter<Listing, ListingAdapter.ViewHolder>(DiffCallback()) {
 
@@ -30,18 +35,23 @@ class ListingAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(listing: Listing) {
+            println("Binding $listing")
             // Bind the listing data to the views
             binding.title.text = listing.title ?: "Untitled"
             binding.price.text = String.format("$%.2f CAD/day", listing.price)
             binding.spaceAvailable.text = "${listing.spaceAvailable} cubic metres"
 
             // Load the listing image from Firebase Storage into the ImageView
-            if (listing.photos != null) {
-                binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos)
-                binding.imageIndicator.setViewPager(binding.viewPagerListingImages)
-            }
+            binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
+            binding.imageIndicator.setViewPager(binding.viewPagerListingImages)
 
             // Set click listeners
+            binding.btnEdit.setOnClickListener {
+                println("CLick")
+                val listingMetadataDialogFragment = ListingMetadataDialogFragment(listing)
+                listingMetadataDialogFragment.show(Objects.requireNonNull(childFragmentManager),
+                    "listingMetadataDialog")
+            }
             binding.textContainer.setOnClickListener {
                 itemClickListener.onItemClick(listing)
             }
