@@ -355,6 +355,7 @@
                     android:id="@+id/btnPublish"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="@dimen/standard_component_margin"
                     android:text="Publish Listing"
                     android:textSize="16sp" />
