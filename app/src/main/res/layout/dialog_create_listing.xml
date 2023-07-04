@@ -316,12 +316,12 @@
                     android:orientation="horizontal">
 
                     <ImageButton
-                        android:id="@+id/btnOpenMaps"
+                        android:id="@+id/btnSelectLocation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/round_button_black"
                         android:padding="8dp"
-                        android:src="@drawable/map"
+                        android:src="@android:drawable/ic_menu_mylocation"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -333,22 +333,11 @@
                         android:maxLines="2"
                         android:padding="8dp"
                         android:layout_height="wrap_content"
-                        android:text="Please select location"
+                        android:text="Please select a location"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/btnPublish"
-                        app:layout_constraintStart_toEndOf="@id/btnOpenMaps"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageButton
-                        android:id="@+id/btnPublish"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/round_button_black"
-                        android:padding="8dp"
-                        android:src="@drawable/publish"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/btnSelectLocation"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -361,6 +350,14 @@
                     android:layout_marginTop="@dimen/standard_component_margin"
                     android:text="By posting your listing, you agree to our Terms of Use and Privacy Policy"
                     android:textAlignment="center" />
+
+                <Button
+                    android:id="@+id/btnPublish"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    android:text="Publish Listing"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 

@@ -112,7 +112,15 @@ class ListingMetadataDialogFragment(
         }
 
         // Maps
-        binding.btnOpenMaps.setOnClickListener {
+        binding.btnSelectLocation.setOnClickListener {
+            var latLng: LatLng? = null
+            listingMetadataViewModel.listingLiveData.value?.location?.let {
+                latLng = LatLng(it.latitude, it.longitude)
+            }
+            val mapDialogFragment = MapDialogFragment(listingMetadataViewModel, latLng)
+            mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
+        }
+        binding.parsedLocation.setOnClickListener {
             var latLng: LatLng? = null
             listingMetadataViewModel.listingLiveData.value?.location?.let {
                 latLng = LatLng(it.latitude, it.longitude)
