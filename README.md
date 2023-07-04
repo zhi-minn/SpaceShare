@@ -150,3 +150,8 @@
 * Minn 4 hours (2023-07-03) [PR](https://github.com/zhi-minn/SpaceShare/pull/51)
   * Host can now edit listing, including adding pictures
   * Refactored ImageAdapter to use ImageModel class that can take either a FirebaseStorage filepath or local image URI
+* Chang 1 hour (2023-07-03) [PR](https://github.com/zhi-minn/SpaceShare/pull/52)
+  * Conducted user interviews, facilitating by giving testers tasks and noting down any difficulties they had
+  * Revised create listing page based on observations and feedback
+    * Made publish listing a bar button on the bottom of the page rather than an icon button (testers could not find how to publish)
+    * Made "Please select a location" text also trigger the map dialog, users were not sure where to select a location and kept clicking the text which did not do anything
