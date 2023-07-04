@@ -11,6 +11,7 @@ import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.DialogClientListingBinding
 import com.example.spaceshare.enums.Amenity
+import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.utils.GeocoderUtil
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -50,13 +51,14 @@ class ClientListingDialogFragment(
     }
 
     private fun configureBindings() {
-        binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos)
+        binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
         binding.imageIndicator.setViewPager(binding.viewPagerListingImages)
         binding.titleText.text = listing.title
         binding.location.text = listing.location?.let { location ->
             GeocoderUtil.getGeneralLocation(location.latitude, location.longitude)
         }
         binding.price.text = getString(R.string.listing_price_template, listing.price)
+        binding.likes.text = listing.likes.toString()
 
         // If no amenities, we do not require a divider for this section
         if (listing.amenities.isEmpty()) {
@@ -124,7 +126,7 @@ class ClientListingDialogFragment(
             map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
 
             map.setOnMapClickListener {
-                val mapDialogFragment = MapDialogFragment(null, latLng)
+                val mapDialogFragment = MapDialogFragment(null, latLng, true)
                 mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
             }
         }

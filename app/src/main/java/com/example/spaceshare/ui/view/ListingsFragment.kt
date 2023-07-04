@@ -85,6 +85,10 @@ class ListingsFragment : Fragment(), ListingMetadataDialogListener {
         }
         listingViewModel.filteredListingsLiveData.observe(viewLifecycleOwner) { listings ->
             adapter.submitList(listings)
+            adapter.notifyDataSetChanged()
+            binding.recyclerView.post {
+                binding.recyclerView.scrollToPosition(0)
+            }
         }
         listingViewModel.getUserListings(FirebaseAuth.getInstance().currentUser!!.uid)
 
@@ -110,7 +114,6 @@ class ListingsFragment : Fragment(), ListingMetadataDialogListener {
             Snackbar.make(binding.root, "Listing published successfully.", Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(resources.getColor(R.color.success_green, null))
                 .show()
-            binding.recyclerView.scrollToPosition(0)
         } else {
             Snackbar.make(binding.root, "Error publishing listing. Please try again later.", Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(resources.getColor(R.color.error_red, null))

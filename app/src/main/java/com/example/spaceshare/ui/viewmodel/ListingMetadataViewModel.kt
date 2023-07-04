@@ -22,6 +22,7 @@ import javax.inject.Inject
 
 import com.example.spaceshare.consts.ListingConsts.SPACE_OFFERING_LOWER_LIMIT
 import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
+import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.utils.GeocoderUtil
 import com.google.firebase.auth.FirebaseAuth
@@ -33,8 +34,19 @@ class ListingMetadataViewModel @Inject constructor(
     private val firebaseStorageRepo: FirebaseStorageRepository
 ): ViewModel(), LocationInterface {
 
+    companion object {
+        private val TAG = this::class.simpleName
+    }
+
+    // Used to display in UI
     private val _images: MutableLiveData<MutableList<ImageModel>> = MutableLiveData()
     val images: LiveData<MutableList<ImageModel>> = _images
+
+    // Persist to storage
+    private val _addImages: MutableLiveData<MutableList<ImageModel>> = MutableLiveData()
+
+    // Delete from storage
+    private val _deleteImages: MutableLiveData<MutableList<String>> = MutableLiveData()
 
     private val _spaceAvailable: MutableLiveData<Double> = MutableLiveData(0.5)
     val spaceAvailable: LiveData<Double> = _spaceAvailable
@@ -48,23 +60,40 @@ class ListingMetadataViewModel @Inject constructor(
     )
     private val _publishResult: MutableLiveData<PublishResult> = MutableLiveData()
     val publishResult: LiveData<PublishResult> = _publishResult
+    data class ValidateResult(
+        val isSuccess: Boolean,
+        val message: String
+    )
+    private val _validateResult: MutableLiveData<ValidateResult> = MutableLiveData()
+    val validateResult: LiveData<ValidateResult> = _validateResult
+
+    init {
+        _listingLiveData.value = Listing(hostId = FirebaseAuth.getInstance().currentUser?.uid)
+    }
 
     fun addImageUri(imageUri: Uri) {
+        val newImage = ImageModel(localUri = imageUri)
+
+        val newAddImages = _addImages.value ?: mutableListOf()
+        newAddImages.add(newImage)
+        _addImages.value = newAddImages
+
         val newImages = _images.value ?: mutableListOf()
-        newImages.add(ImageModel(localUri = imageUri))
+        newImages.add(newImage)
         _images.value = newImages
     }
 
     override fun setLocation(location: LatLng) {
         val newListing = _listingLiveData.value
-        if (newListing != null) {
-            newListing.location = GeoPoint(location.latitude, location.longitude)
-            _listingLiveData.value = newListing!!
+        newListing?.let {
+            it.location = GeoPoint(location.latitude, location.longitude)
+            _listingLiveData.value = it
         }
     }
 
     fun setListing(listing: Listing) {
         _listingLiveData.value = listing
+        _images.value = listing.photos.map { ImageModel(imagePath = it) }.toMutableList()
     }
 
     fun incrementSpaceAvailable() {
@@ -79,13 +108,25 @@ class ListingMetadataViewModel @Inject constructor(
         }
     }
 
-    fun publishListing(listing: Listing) {
-        // Upload images
-        viewModelScope.launch {
-            val images = _images.value
+    fun setListing(title: String, price: Double, description: String, amenities: MutableList<Amenity>) {
+        val finalListing = _listingLiveData.value!!
+        finalListing.title = title
+        finalListing.price = price
+        finalListing.description = description
+        finalListing.spaceAvailable = _spaceAvailable.value ?: 0.0
+        finalListing.amenities.clear()
+        finalListing.amenities.addAll(amenities)
+        // Set updatedAt field to null so Firebase will set it
+        finalListing.updatedAt = null
+        if (!validateListing(finalListing)) return
+        _validateResult.value = ValidateResult(true, "Listing validated")
 
-            if (!images.isNullOrEmpty()) {
-                val uploadTasks = images.map { image ->
+        viewModelScope.launch {
+            // Upload images
+            val imagesToUpload = _addImages.value
+
+            if (!imagesToUpload.isNullOrEmpty()) {
+                val uploadTasks = imagesToUpload.map { image ->
                     viewModelScope.async {
                         try {
                             image.localUri?.let {
@@ -100,27 +141,29 @@ class ListingMetadataViewModel @Inject constructor(
 
                 val imageNames = uploadTasks.awaitAll().filterNotNull()
 
-                listing.photos.addAll(imageNames)
+                finalListing.photos.addAll(imageNames)
             }
 
             // Upload listing
             try {
-                listingRepo.createListing(listing)
-                _publishResult.value = PublishResult(true, listing)
-                Log.i("tag", "Updated to ${_publishResult.value}")
+                listingRepo.setListing(finalListing)
+                _publishResult.value = PublishResult(true, finalListing)
+                Log.i(TAG, "Updated to ${_publishResult.value}")
 
                 // Inform users whose preferences matches listing
-                if (listing.location != null) {
+                finalListing.location?.let {
                     preferencesRepo.getAllPreferences().forEach { preferences ->
+                        // Don't send notification to yourself
                         if (FirebaseAuth.getInstance().currentUser?.email.equals(preferences.email)) {
                             return@forEach
                         }
 
+                        // Only send notification to active, valid preferences
                         if (preferences.isActive && preferences.location != null && preferences.email != null) {
-                            val distance = MathUtil.calculateDistanceInKilometers(listing.location!!, preferences.location!!)
+                            val distance = MathUtil.calculateDistanceInKilometers(it, preferences.location!!)
                             if (distance <= preferences.radius) {
                                 MailUtil.sendEmail(preferences.email, "New Listing Alert",
-                                    getEmailBody(listing, distance))
+                                    getEmailBody(finalListing, distance))
                             }
                         }
                     }
@@ -131,6 +174,20 @@ class ListingMetadataViewModel @Inject constructor(
                 _publishResult.value = PublishResult(false)
             }
         }
+    }
+
+    private fun validateListing(listing: Listing): Boolean {
+        if (listing.title.isEmpty() || listing.description.isEmpty()) {
+            _validateResult.value = ValidateResult(false, "Please ensure all fields are filled")
+            return false
+        }
+
+        if (listing.location == null) {
+            _validateResult.value = ValidateResult(false, "Please select a location for your listing")
+            return false
+        }
+
+        return true
     }
 
     private fun getEmailBody(listing: Listing, distance: Double): String {

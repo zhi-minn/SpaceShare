@@ -24,17 +24,17 @@ class ListingRepoImpl @Inject constructor(
     }
 
     private val listingsCollection = db.collection("listings")
-    override suspend fun createListing(listing: Listing): String {
+    override suspend fun setListing(listing: Listing): String {
         return withContext(Dispatchers.IO) {
             val deferred = CompletableDeferred<String>()
             listingsCollection.document(listing.id)
                 .set(listing)
                 .addOnSuccessListener {
-                    Log.d("listings", "Added listing with id ${listing.id}")
+                    Log.d(TAG, "Set listing with id ${listing.id}")
                     deferred.complete(listing.id)
                 }
                 .addOnFailureListener { e ->
-                    Log.w("listings", "Error adding document", e)
+                    Log.e(TAG, "Error setting document", e)
                     deferred.completeExceptionally(e)
                 }
 

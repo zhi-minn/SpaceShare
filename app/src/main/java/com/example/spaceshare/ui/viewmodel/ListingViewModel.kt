@@ -15,6 +15,8 @@ import java.util.Locale
 import javax.inject.Inject
 
 import com.example.spaceshare.consts.ListingConsts.DEFAULT_MAX_PRICE
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class ListingViewModel @Inject constructor(
     private val listingRepo: ListingRepository,
@@ -53,13 +55,14 @@ class ListingViewModel @Inject constructor(
         curCriteria = criteria
 
         val prices = listingsLiveData.value?.map { it.price }
-        var maxPrice = prices?.maxOrNull()?.toFloat() ?: DEFAULT_MAX_PRICE
-        if (maxPrice == 0.0f) maxPrice = DEFAULT_MAX_PRICE
-        val criteriaMaxPrice = criteria.maxPrice ?: maxPrice
+        val maxPrice = prices?.maxOrNull() ?: DEFAULT_MAX_PRICE
+        var criteriaMaxPrice = criteria.maxPrice ?: maxPrice.toFloat()
+        val roundedCriteriaMaxPrice = BigDecimal(criteriaMaxPrice.toDouble())
+            .setScale(2, RoundingMode.HALF_EVEN).toDouble()
 
         var criteriaListings = _listingsLiveData.value.orEmpty().filter { listing ->
             listing.price >= criteria.minPrice
-                    && listing.price <= criteriaMaxPrice
+                    && listing.price <= roundedCriteriaMaxPrice
                     && listing.spaceAvailable >= criteria.minSpace
                     && listing.spaceAvailable <= criteria.maxSpace
         }
@@ -111,8 +114,14 @@ class ListingViewModel @Inject constructor(
 
     fun addItem(listing: Listing) {
         val currentList = _listingsLiveData.value.orEmpty().toMutableList()
+        // Remove item first in case we are updating a listing
+        val currentPos = currentList.indexOf(listing)
+        if (currentPos != -1) {
+            currentList.removeAt(currentPos)
+        }
         currentList.add(0, listing)
         _listingsLiveData.value = currentList
+        filterListings(curQuery, curCriteria)
     }
 
      fun removeItem(listing: Listing) {

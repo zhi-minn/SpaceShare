@@ -14,6 +14,7 @@ import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.DialogHostListingBinding
 import com.example.spaceshare.enums.Amenity
+import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
 import com.example.spaceshare.utils.GeocoderUtil
@@ -55,7 +56,7 @@ class HostListingDialogFragment(
     }
 
     private fun configureBindings() {
-        binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos)
+        binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
         binding.imageIndicator.setViewPager(binding.viewPagerListingImages)
         binding.titleText.text = listing.title
         binding.location.text = listing.location?.let { location ->
@@ -63,6 +64,7 @@ class HostListingDialogFragment(
         }
         binding.price.text = getString(R.string.listing_price_template, listing.price)
         binding.spaceAvailable.text = getString(R.string.space_available_template, listing.spaceAvailable)
+        binding.likes.text = listing.likes.toString()
 
         // If no amenities, we do not require a divider for this section
         if (listing.amenities.isEmpty()) {
@@ -109,6 +111,7 @@ class HostListingDialogFragment(
                 .setMessage("Are you sure you want to $action this listing?")
                 .setPositiveButton("Confirm") { _, _ ->
                     listing.isActive = !listing.isActive
+                    listing.updatedAt = null
                     listingViewModel.updateListing(listing)
                     this.dismiss()
                 }
@@ -163,7 +166,7 @@ class HostListingDialogFragment(
             map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
 
             map.setOnMapClickListener {
-                val mapDialogFragment = MapDialogFragment(null, latLng)
+                val mapDialogFragment = MapDialogFragment(null, latLng, true)
                 mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
             }
         }

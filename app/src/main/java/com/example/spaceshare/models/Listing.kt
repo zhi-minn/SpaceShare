@@ -17,11 +17,11 @@ data class Listing(
     val amenities: MutableList<Amenity> = mutableListOf(),
     var isActive: Boolean = true,
     var likes: Int = 0,
+    var location: GeoPoint? = null,
     @ServerTimestamp
     val createdAt: Timestamp? = null,
     @ServerTimestamp
     var updatedAt: Timestamp? = null
     // val availability: Availability? = null,
 ) {
-    var location: GeoPoint? = null
 }
