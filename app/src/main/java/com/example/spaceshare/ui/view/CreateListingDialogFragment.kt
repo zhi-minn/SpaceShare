@@ -97,7 +97,11 @@ class CreateListingDialogFragment : DialogFragment() {
         }
 
         // Maps
-        binding.btnOpenMaps.setOnClickListener {
+        binding.btnSelectLocation.setOnClickListener {
+            val mapDialogFragment = MapDialogFragment(createListingViewModel, null)
+            mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
+        }
+        binding.parsedLocation.setOnClickListener {
             val mapDialogFragment = MapDialogFragment(createListingViewModel, null)
             mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
         }
