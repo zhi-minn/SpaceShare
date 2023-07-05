@@ -39,6 +39,7 @@ class ListingMetadataDialogFragment(
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: DialogCreateListingBinding
     private lateinit var startForResult: ActivityResultLauncher<Intent>
+
     @Inject
     lateinit var listingMetadataViewModel: ListingMetadataViewModel
     private var listener: ListingMetadataViewModel.ListingMetadataDialogListener? = null
@@ -67,7 +68,8 @@ class ListingMetadataDialogFragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.dialog_create_listing, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.dialog_create_listing, container, false)
         binding.progressBar.visibility = View.GONE
         return binding.root
     }
@@ -127,10 +129,12 @@ class ListingMetadataDialogFragment(
 
         // Publish button
         binding.btnPublish.setOnClickListener {
-            listingMetadataViewModel.setListing(binding.titleTextInput.text.toString(),
+            listingMetadataViewModel.setListing(
+                binding.titleTextInput.text.toString(),
                 binding.priceInput.text.toString().toDouble(),
                 binding.descriptionTextInput.text.toString(),
-                getCheckedAmenities())
+                getCheckedAmenities()
+            )
         }
     }
 
@@ -150,21 +154,27 @@ class ListingMetadataDialogFragment(
                 when (amenity) {
                     Amenity.SURVEILLANCE -> binding.surveillance.isChecked = true
                     Amenity.CLIMATE_CONTROLLED -> binding.climateControlled.isChecked = true
-                    Amenity.WELL_LIT-> binding.lighting.isChecked = true
+                    Amenity.WELL_LIT -> binding.lighting.isChecked = true
                     Amenity.ACCESSIBILITY -> binding.accessibility.isChecked = true
                     Amenity.WEEKLY_CLEANING -> binding.cleanliness.isChecked = true
                 }
             }
 
             listing.location?.let {
-                binding.locationTextInput.setText(GeocoderUtil.getAddress(it.latitude, it.longitude))
+                binding.locationTextInput.setText(
+                    GeocoderUtil.getAddress(
+                        it.latitude,
+                        it.longitude
+                    )
+                )
                 listingMetadataViewModel.updateRecommendedPricing()
             }
         }
 
         // Recommended pricing
         listingMetadataViewModel.recommendedPrice.observe(viewLifecycleOwner) { recPrice ->
-            binding.priceInputLayout.helperText = "Recommended Price: $$recPrice"
+            val recPriceString = String.format("%.2f", recPrice)
+            binding.priceInputLayout.helperText = "Recommended Price: $$recPriceString"
         }
 
         // Images
@@ -186,7 +196,8 @@ class ListingMetadataDialogFragment(
             } else {
                 val snackbar = Snackbar.make(binding.root, result.message, Snackbar.LENGTH_SHORT)
                     .setBackgroundTint(resources.getColor(R.color.error_red, null))
-                val tv: TextView = snackbar.view.findViewById(com.google.android.material.R.id.snackbar_text)
+                val tv: TextView =
+                    snackbar.view.findViewById(com.google.android.material.R.id.snackbar_text)
                 tv.setTextColor(resources.getColor(R.color.black, null))
                 snackbar.show()
             }

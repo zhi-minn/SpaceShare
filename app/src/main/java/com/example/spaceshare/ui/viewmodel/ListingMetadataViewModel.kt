@@ -237,7 +237,9 @@ class ListingMetadataViewModel @Inject constructor(
             val listOfPrices = filteredListings.map { listing ->
                 listing.price
             }
-            _recommendedPrice.value = listOfPrices.average()
+            if (listOfPrices.isNotEmpty()) {
+                _recommendedPrice.value = listOfPrices.average()
+            }
         }
     }
 
