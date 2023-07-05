@@ -94,6 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
                     android:contentDescription="add photo"
+                    android:elegantTextHeight="true"
                     android:text="add photo"
                     app:layout_constraintBottom_toBottomOf="@+id/closeListingButton"
                     app:layout_constraintEnd_toEndOf="parent"
