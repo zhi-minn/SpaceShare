@@ -26,8 +26,7 @@ import java.util.Locale
 class CropActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityCropBinding
-    private val backButton by lazy { findViewById<ImageView>(R.id.btnBack) }
-    private val selectButton by lazy { findViewById<ImageView>(R.id.select) }
+    private val backButton by lazy { findViewById<ImageView>(R.id.btnClose) }
     private val progressBar by lazy { findViewById<ProgressBar>(R.id.progress) }
     private val cropButton by lazy { findViewById<ImageView>(R.id.btnCrop) }
 
@@ -37,13 +36,12 @@ class CropActivity: AppCompatActivity() {
 
         backButton.setOnClickListener { finish() }
 
+        // Immediately launch image selector
         val contentLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri:    Uri? ->
             if (uri == null) return@registerForActivityResult
             binding.cropView.setUri(uri)
         }
-
-        selectButton.setOnClickListener { contentLauncher.launch("image/*") }
-        selectButton.callOnClick()
+        contentLauncher.launch("image/*")
 
         binding.cropView.addOnCropListener(object : OnCropListener {
             override fun onSuccess(bitmap: Bitmap) {
