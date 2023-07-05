@@ -1,7 +1,5 @@
 package com.example.spaceshare.adapters
 
-import android.content.Context
-import android.content.ContextWrapper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isGone
@@ -45,7 +43,8 @@ class ListingAdapter(
             binding.spaceAvailable.text = "${listing.spaceAvailable} cubic metres"
 
             // Load the listing image from Firebase Storage into the ImageView
-            binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
+            binding.viewPagerListingImages.adapter =
+                ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
             binding.imageIndicator.setViewPager(binding.viewPagerListingImages)
 
             // Whether to show the edit button
@@ -55,8 +54,10 @@ class ListingAdapter(
             binding.btnEdit.setOnClickListener {
                 println("CLick")
                 val listingMetadataDialogFragment = ListingMetadataDialogFragment(listing)
-                listingMetadataDialogFragment.show(Objects.requireNonNull(childFragmentManager),
-                    "listingMetadataDialog")
+                listingMetadataDialogFragment.show(
+                    Objects.requireNonNull(childFragmentManager),
+                    "listingMetadataDialog"
+                )
             }
             binding.textContainer.setOnClickListener {
                 itemClickListener.onItemClick(listing)
