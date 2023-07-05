@@ -103,21 +103,17 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun applyClientSearchFilters(listings: List<Listing>): List<Listing> {
-        val nonOwnListings = filterForNonOwnListings(listings)
-        val activeListings = filterForActiveListings(nonOwnListings)
-        return activeListings
-    }
-
-    private fun filterForActiveListings(listings: List<Listing>): List<Listing> {
         return listings.filter { listing ->
-            listing.isActive
+            filterForActiveListings(listing) && filterForNonOwnListings(listing)
         }
     }
 
-    private fun filterForNonOwnListings(listings: List<Listing>): List<Listing> {
-        return listings.filter { listing ->
-            listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
-        }
+    private fun filterForActiveListings(listing: Listing): Boolean {
+        return listing.isActive
+    }
+
+    private fun filterForNonOwnListings(listing: Listing): Boolean {
+        return listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
     }
 
     override fun setLocation(latLng: LatLng) {
