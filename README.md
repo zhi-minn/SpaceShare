@@ -161,3 +161,7 @@
     * Smart pricing is based on the average price of listings in a 5km radius around the location
   * Added "$" prefix to price input field
   * Refactored client search filters to apply in one go rather than filter sequentially
+* Chang 0.75 hours (2023-07-05) [PR](https://github.com/zhi-minn/SpaceShare/pull/55)
+  * Added no listings view for search page (prompts users to check their filters and search criteria)
+  * Fixed edit button being available on search results
+  * Removed cancel button on search dialog
