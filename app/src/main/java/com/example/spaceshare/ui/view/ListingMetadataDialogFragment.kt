@@ -121,9 +121,6 @@ class ListingMetadataDialogFragment(
         }
 
         // Choose location map
-        binding.locationTextInputLayout.setOnClickListener {
-            openLocationMap()
-        }
         binding.locationTextInput.setOnClickListener {
             openLocationMap()
         }
@@ -161,7 +158,13 @@ class ListingMetadataDialogFragment(
 
             listing.location?.let {
                 binding.locationTextInput.setText(GeocoderUtil.getAddress(it.latitude, it.longitude))
+                listingMetadataViewModel.updateRecommendedPricing()
             }
+        }
+
+        // Recommended pricing
+        listingMetadataViewModel.recommendedPrice.observe(viewLifecycleOwner) { recPrice ->
+            binding.priceInputLayout.helperText = "Recommended Price: $$recPrice"
         }
 
         // Images
