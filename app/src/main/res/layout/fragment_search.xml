@@ -8,6 +8,39 @@
         android:layout_height="match_parent"
         tools:context=".ui.view.SearchFragment">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/noListingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/sadBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/box"
+                app:tint="@color/medium_light_gray"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Could not find any listings.\nTry changing your filters or adjusting your search criteria."
+                android:textAlignment="center"
+                android:textSize="@dimen/standard_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sadBox" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/searchBarCard"
             android:layout_width="0dp"

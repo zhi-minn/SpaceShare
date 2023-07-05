@@ -17,21 +17,23 @@ import com.example.spaceshare.adapters.ListingAdapter.ItemClickListener
 import com.example.spaceshare.databinding.FragmentListingsBinding
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.ListingMetadataViewModel
+import com.example.spaceshare.ui.viewmodel.ListingMetadataViewModel.ListingMetadataDialogListener
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
 import javax.inject.Inject
-import com.example.spaceshare.ui.viewmodel.ListingMetadataViewModel.ListingMetadataDialogListener
-import com.google.android.material.snackbar.Snackbar
 
 @AndroidEntryPoint
 class ListingsFragment : Fragment(), ListingMetadataDialogListener {
 
     private lateinit var binding: FragmentListingsBinding
     private lateinit var navController: NavController
+
     @Inject
     lateinit var listingViewModel: ListingViewModel
+
     @Inject
     lateinit var createListingViewModel: ListingMetadataViewModel
     private lateinit var adapter: ListingAdapter
@@ -58,8 +60,10 @@ class ListingsFragment : Fragment(), ListingMetadataDialogListener {
         adapter = ListingAdapter(childFragmentManager, object : ItemClickListener {
             override fun onItemClick(listing: Listing) {
                 val hostListingDialogFragment = HostListingDialogFragment(listing, listingViewModel)
-                hostListingDialogFragment.show(Objects.requireNonNull(childFragmentManager),
-                    "hostListingDialog")
+                hostListingDialogFragment.show(
+                    Objects.requireNonNull(childFragmentManager),
+                    "hostListingDialog"
+                )
             }
         })
         binding.recyclerView.adapter = adapter
@@ -69,7 +73,10 @@ class ListingsFragment : Fragment(), ListingMetadataDialogListener {
     private fun configureButtons() {
         binding.btnAddListing.setOnClickListener {
             val listingMetadataDialogFragment = ListingMetadataDialogFragment()
-            listingMetadataDialogFragment.show(Objects.requireNonNull(childFragmentManager), "createListingDialog")
+            listingMetadataDialogFragment.show(
+                Objects.requireNonNull(childFragmentManager),
+                "createListingDialog"
+            )
         }
 
         binding.btnFilter.setOnClickListener {
@@ -80,7 +87,8 @@ class ListingsFragment : Fragment(), ListingMetadataDialogListener {
 
     private fun configureObservers() {
         listingViewModel.listingsLiveData.observe(viewLifecycleOwner) { listings ->
-            binding.noListingView.visibility = if (listings.isNotEmpty()) View.GONE else View.VISIBLE
+            binding.noListingView.visibility =
+                if (listings.isNotEmpty()) View.GONE else View.VISIBLE
             binding.btnFilter.isEnabled = listings.isNotEmpty()
         }
         listingViewModel.filteredListingsLiveData.observe(viewLifecycleOwner) { listings ->
@@ -110,12 +118,19 @@ class ListingsFragment : Fragment(), ListingMetadataDialogListener {
     override fun onListingCreated(listing: Listing?) {
         if (listing != null) {
             listingViewModel.addItem(listing)
-            listingViewModel.filterListings(binding.searchTextView.text.toString(), listingViewModel.getCriteria())
+            listingViewModel.filterListings(
+                binding.searchTextView.text.toString(),
+                listingViewModel.getCriteria()
+            )
             Snackbar.make(binding.root, "Listing published successfully.", Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(resources.getColor(R.color.success_green, null))
                 .show()
         } else {
-            Snackbar.make(binding.root, "Error publishing listing. Please try again later.", Snackbar.LENGTH_SHORT)
+            Snackbar.make(
+                binding.root,
+                "Error publishing listing. Please try again later.",
+                Snackbar.LENGTH_SHORT
+            )
                 .setBackgroundTint(resources.getColor(R.color.error_red, null))
                 .show()
         }

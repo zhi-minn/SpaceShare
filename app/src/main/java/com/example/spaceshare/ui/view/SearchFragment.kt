@@ -84,6 +84,8 @@ class SearchFragment : Fragment() {
 
     private fun configureListingObservers() {
         searchViewModel.listings.observe(viewLifecycleOwner) { listings ->
+            binding.noListingView.visibility = if (listings.isNotEmpty()) View.GONE else View.VISIBLE
+            adapter.areEditButtonsGone = true
             adapter.submitList(listings)
         }
     }

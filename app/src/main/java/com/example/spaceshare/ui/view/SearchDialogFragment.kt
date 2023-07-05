@@ -146,11 +146,6 @@ class SearchDialogFragment(
             dialog?.dismiss()
         }
 
-        binding.btnCancel.setOnClickListener {
-            // TODO: make cancel button into a clear button or just remove it
-            dialog?.dismiss()
-        }
-
         binding.btnSearch.setOnClickListener {
             searchViewModel.submitSearch()
             dialog?.dismiss()

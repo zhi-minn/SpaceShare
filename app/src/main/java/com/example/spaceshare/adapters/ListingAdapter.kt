@@ -1,9 +1,8 @@
 package com.example.spaceshare.adapters
 
-import android.content.Context
-import android.content.ContextWrapper
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -18,6 +17,8 @@ class ListingAdapter(
     private val childFragmentManager: FragmentManager,
     private val itemClickListener: ItemClickListener
 ) : ListAdapter<Listing, ListingAdapter.ViewHolder>(DiffCallback()) {
+
+    var areEditButtonsGone = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -42,15 +43,21 @@ class ListingAdapter(
             binding.spaceAvailable.text = "${listing.spaceAvailable} cubic metres"
 
             // Load the listing image from Firebase Storage into the ImageView
-            binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
+            binding.viewPagerListingImages.adapter =
+                ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
             binding.imageIndicator.setViewPager(binding.viewPagerListingImages)
+
+            // Whether to show the edit button
+            binding.btnEdit.isGone = areEditButtonsGone
 
             // Set click listeners
             binding.btnEdit.setOnClickListener {
                 println("CLick")
                 val listingMetadataDialogFragment = ListingMetadataDialogFragment(listing)
-                listingMetadataDialogFragment.show(Objects.requireNonNull(childFragmentManager),
-                    "listingMetadataDialog")
+                listingMetadataDialogFragment.show(
+                    Objects.requireNonNull(childFragmentManager),
+                    "listingMetadataDialog"
+                )
             }
             binding.textContainer.setOnClickListener {
                 itemClickListener.onItemClick(listing)
