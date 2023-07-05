@@ -92,6 +92,15 @@ class ListingMetadataDialogFragment(
         }
     }
 
+    private fun openLocationMap() {
+        var latLng: LatLng? = null
+        listingMetadataViewModel.listingLiveData.value?.location?.let {
+            latLng = LatLng(it.latitude, it.longitude)
+        }
+        val mapDialogFragment = MapDialogFragment(listingMetadataViewModel, latLng)
+        mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
+    }
+
     private fun configureButtons() {
         // Close button
         binding.btnCloseListing.setOnClickListener {
@@ -111,22 +120,12 @@ class ListingMetadataDialogFragment(
             listingMetadataViewModel.incrementSpaceAvailable()
         }
 
-        // Maps
-        binding.btnSelectLocation.setOnClickListener {
-            var latLng: LatLng? = null
-            listingMetadataViewModel.listingLiveData.value?.location?.let {
-                latLng = LatLng(it.latitude, it.longitude)
-            }
-            val mapDialogFragment = MapDialogFragment(listingMetadataViewModel, latLng)
-            mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
+        // Choose location map
+        binding.locationTextInputLayout.setOnClickListener {
+            openLocationMap()
         }
-        binding.parsedLocation.setOnClickListener {
-            var latLng: LatLng? = null
-            listingMetadataViewModel.listingLiveData.value?.location?.let {
-                latLng = LatLng(it.latitude, it.longitude)
-            }
-            val mapDialogFragment = MapDialogFragment(listingMetadataViewModel, latLng)
-            mapDialogFragment.show(Objects.requireNonNull(childFragmentManager), "mapDialog")
+        binding.locationTextInput.setOnClickListener {
+            openLocationMap()
         }
 
         // Publish button
@@ -161,7 +160,7 @@ class ListingMetadataDialogFragment(
             }
 
             listing.location?.let {
-                binding.parsedLocation.text = GeocoderUtil.getAddress(it.latitude, it.longitude)
+                binding.locationTextInput.setText(GeocoderUtil.getAddress(it.latitude, it.longitude))
             }
         }
 
