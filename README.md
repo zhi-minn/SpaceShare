@@ -165,3 +165,6 @@
   * Added no listings view for search page (prompts users to check their filters and search criteria)
   * Fixed edit button being available on search results
   * Removed cancel button on search dialog
+* Chang 0.5 hours (2023-07-05) [PR](https://github.com/zhi-minn/SpaceShare/pull/56)
+  * Made crop photo UI more intuitive
+  * Fixed recommended price displaying NaN and limited it to 2 demical digits
