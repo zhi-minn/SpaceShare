@@ -6,33 +6,32 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spaceshare.consts.ListingConsts.RECOMMENDED_PRICING_SEARCH_RADIUS
+import com.example.spaceshare.consts.ListingConsts.SPACE_OFFERING_LOWER_LIMIT
+import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
 import com.example.spaceshare.data.repository.FirebaseStorageRepository
 import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.data.repository.PreferencesRepository
+import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.interfaces.LocationInterface
+import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
+import com.example.spaceshare.utils.GeocoderUtil
 import com.example.spaceshare.utils.MailUtil
 import com.example.spaceshare.utils.MathUtil
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-import com.example.spaceshare.consts.ListingConsts.SPACE_OFFERING_LOWER_LIMIT
-import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
-import com.example.spaceshare.enums.Amenity
-import com.example.spaceshare.models.ImageModel
-import com.example.spaceshare.utils.GeocoderUtil
-import com.google.firebase.auth.FirebaseAuth
-import java.lang.StringBuilder
-
 class ListingMetadataViewModel @Inject constructor(
     private val listingRepo: ListingRepository,
     private val preferencesRepo: PreferencesRepository,
     private val firebaseStorageRepo: FirebaseStorageRepository
-): ViewModel(), LocationInterface {
+) : ViewModel(), LocationInterface {
 
     companion object {
         private val TAG = this::class.simpleName
@@ -58,14 +57,20 @@ class ListingMetadataViewModel @Inject constructor(
         val isSuccess: Boolean,
         val listing: Listing? = null
     )
+
     private val _publishResult: MutableLiveData<PublishResult> = MutableLiveData()
     val publishResult: LiveData<PublishResult> = _publishResult
+
     data class ValidateResult(
         val isSuccess: Boolean,
         val message: String
     )
+
     private val _validateResult: MutableLiveData<ValidateResult> = MutableLiveData()
     val validateResult: LiveData<ValidateResult> = _validateResult
+
+    private val _recommendedPrice: MutableLiveData<Double> = MutableLiveData()
+    val recommendedPrice: LiveData<Double> = _recommendedPrice
 
     init {
         _listingLiveData.value = Listing(hostId = FirebaseAuth.getInstance().currentUser?.uid)
@@ -108,7 +113,12 @@ class ListingMetadataViewModel @Inject constructor(
         }
     }
 
-    fun setListing(title: String, price: Double, description: String, amenities: MutableList<Amenity>) {
+    fun setListing(
+        title: String,
+        price: Double,
+        description: String,
+        amenities: MutableList<Amenity>
+    ) {
         val finalListing = _listingLiveData.value!!
         finalListing.title = title
         finalListing.price = price
@@ -160,17 +170,23 @@ class ListingMetadataViewModel @Inject constructor(
 
                         // Only send notification to active, valid preferences
                         if (preferences.isActive && preferences.location != null && preferences.email != null) {
-                            val distance = MathUtil.calculateDistanceInKilometers(it, preferences.location!!)
+                            val distance =
+                                MathUtil.calculateDistanceInKilometers(it, preferences.location!!)
                             if (distance <= preferences.radius) {
-                                MailUtil.sendEmail(preferences.email, "New Listing Alert",
-                                    getEmailBody(finalListing, distance))
+                                MailUtil.sendEmail(
+                                    preferences.email, "New Listing Alert",
+                                    getEmailBody(finalListing, distance)
+                                )
                             }
                         }
                     }
                 }
             } catch (e: Exception) {
                 // TODO: Inform user error creating listing in UI
-                Log.e("CreateListing", "Error creating listing or sending email preferences: ${e.message}")
+                Log.e(
+                    "CreateListing",
+                    "Error creating listing or sending email preferences: ${e.message}"
+                )
                 _publishResult.value = PublishResult(false)
             }
         }
@@ -183,7 +199,8 @@ class ListingMetadataViewModel @Inject constructor(
         }
 
         if (listing.location == null) {
-            _validateResult.value = ValidateResult(false, "Please select a location for your listing")
+            _validateResult.value =
+                ValidateResult(false, "Please select a location for your listing")
             return false
         }
 
@@ -192,7 +209,8 @@ class ListingMetadataViewModel @Inject constructor(
 
     private fun getEmailBody(listing: Listing, distance: Double): String {
         val sb = StringBuilder()
-        val address = GeocoderUtil.getAddress(listing.location!!.latitude, listing.location!!.longitude)
+        val address =
+            GeocoderUtil.getAddress(listing.location!!.latitude, listing.location!!.longitude)
 
         sb.append("There is a new listing matching your preferences at the following address:\n")
         sb.append("$address\n\n")
@@ -200,9 +218,59 @@ class ListingMetadataViewModel @Inject constructor(
         sb.append("Title: ${listing.title}\n")
         sb.append("Description: ${listing.description}\n")
         sb.append("Price: ${listing.price} CAD/day\n")
-        sb.append("Approximate distance to preferred location: ${String.format("%.2f", distance)} km")
+        sb.append(
+            "Approximate distance to preferred location: ${
+                String.format(
+                    "%.2f",
+                    distance
+                )
+            } km"
+        )
 
         return sb.toString()
+    }
+
+    fun updateRecommendedPricing() {
+        viewModelScope.launch {
+            val allListings = listingRepo.getAllListings()
+            val filteredListings = applyFilters(allListings)
+            val listOfPrices = filteredListings.map { listing ->
+                listing.price
+            }
+            _recommendedPrice.value = listOfPrices.average()
+        }
+    }
+
+    private fun applyFilters(listings: List<Listing>): List<Listing> {
+        return listings.filter { listing ->
+            filterForActiveListings(listing) &&
+            filterForNonOwnListings(listing) &&
+            filterByDistance(listing)
+        }
+    }
+
+    private fun filterByDistance(listing: Listing): Boolean {
+        return try {
+            val dist = MathUtil.calculateDistanceInKilometers(
+                _listingLiveData.value?.location!!,
+                listing.location!!
+            )
+            dist <= RECOMMENDED_PRICING_SEARCH_RADIUS
+        } catch (e: Exception) {
+            Log.e(
+                TAG,
+                "Error calculating and filtering by Listing distance for id ${listing.id}: ${e.message}"
+            )
+            false
+        }
+    }
+
+    private fun filterForActiveListings(listing: Listing): Boolean {
+        return listing.isActive
+    }
+
+    private fun filterForNonOwnListings(listing: Listing): Boolean {
+        return listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
     }
 
     interface ListingMetadataDialogListener {

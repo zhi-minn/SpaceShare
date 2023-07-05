@@ -155,3 +155,9 @@
   * Revised create listing page based on observations and feedback
     * Made publish listing a bar button on the bottom of the page rather than an icon button (testers could not find how to publish)
     * Made "Please select a location" text also trigger the map dialog, users were not sure where to select a location and kept clicking the text which did not do anything
+* Chang 1.75 hours (2023-07-05) [PR](https://github.com/zhi-minn/SpaceShare/pull/54)
+  * Added price recommendations ("Smart Pricing") to create listing dialog
+    * Moved location selector to the top of the dialog to facilitate smart pricing
+    * Smart pricing is based on the average price of listings in a 5km radius around the location
+  * Added "$" prefix to price input field
+  * Refactored client search filters to apply in one go rather than filter sequentially

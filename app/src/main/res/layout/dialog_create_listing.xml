@@ -99,6 +99,28 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/closeListingButton" />
 
+                <!-- Location -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/locationTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    android:hint="Location">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/locationTextInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_rectangle_bg"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:inputType="text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <!-- Title -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -121,6 +143,7 @@
 
                 <!-- Price -->
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/priceInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
@@ -128,6 +151,7 @@
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     app:hintEnabled="true"
+                    app:prefixText="$"
                     android:hint="Price (per day)">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -135,7 +159,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/rounded_rectangle_bg"
-                        android:inputType="numberDecimal" />
+                        android:inputType="numberDecimal"
+                        />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -307,40 +332,6 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_marginTop="@dimen/standard_component_margin"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:id="@+id/btnSelectLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/round_button_black"
-                        android:padding="8dp"
-                        android:src="@android:drawable/ic_menu_mylocation"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/parsedLocation"
-                        android:layout_width="0dp"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:padding="8dp"
-                        android:layout_height="wrap_content"
-                        android:text="Please select a location"
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/btnSelectLocation"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/termsAndPrivacyAgreementTextView"
