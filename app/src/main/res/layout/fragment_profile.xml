@@ -21,15 +21,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/profileImage"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profileImageContainer"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_marginTop="@dimen/standard_component_margin"
-            android:src="@drawable/default_profile_image"
+            app:cardCornerRadius="37.5dp"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/pageTitle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pageTitle" />
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="37.5dp"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/profileImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/default_profile_image_225dp"
+                    android:scaleType="centerCrop"/>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.cardview.widget.CardView>
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/displayName"
@@ -39,7 +57,7 @@
             android:textSize="@dimen/standard_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profileImage" />
+            app:layout_constraintTop_toBottomOf="@id/profileImageContainer" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/btnEditAccount"

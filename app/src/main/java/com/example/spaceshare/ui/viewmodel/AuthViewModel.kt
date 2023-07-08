@@ -191,7 +191,9 @@ class AuthViewModel @Inject constructor(
             val user = User(userId, firstName, lastName)
             viewModelScope.launch {
                 try {
-                    userRepo.createUser(user)
+                    if (userRepo.getUserById(userId) == null) {
+                        userRepo.setUser(user)
+                    }
                 } catch (e: Exception) {
                     Log.e(TAG, "Error creating user in collection: ${e.message}", e)
                 }

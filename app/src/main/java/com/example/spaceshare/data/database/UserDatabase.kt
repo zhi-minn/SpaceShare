@@ -23,6 +23,7 @@ abstract class UserDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context): UserDatabase {
             return Room.databaseBuilder(context.applicationContext, UserDatabase::class.java, "user-db")
+                .fallbackToDestructiveMigration()
                 .build()
         }
     }

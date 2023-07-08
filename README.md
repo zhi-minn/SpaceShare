@@ -174,3 +174,5 @@
   * Scroll to uploaded image when adding pictures
 * Minn 0.75 hour (2023-07-07) [Commit](https://github.com/zhi-minn/SpaceShare/commit/df0c2cfcba62998fb750e43dfae28a56393bbd2f)
   * Add delete image functionality to listing creation or update
+* Minn 3 hours (2023-07-08) [Commit](https://github.com/zhi-minn/SpaceShare/commit/6d3717438848de9aa1f6166cc7dbab3a4587da6a)
+  * Implement update user metadata functionality
