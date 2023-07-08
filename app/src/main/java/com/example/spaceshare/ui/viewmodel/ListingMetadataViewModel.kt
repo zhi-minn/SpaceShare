@@ -53,6 +53,9 @@ class ListingMetadataViewModel @Inject constructor(
     private val _listingLiveData: MutableLiveData<Listing> = MutableLiveData()
     val listingLiveData: LiveData<Listing> = _listingLiveData
 
+    private val _imageNewlyAdded: MutableLiveData<Boolean> = MutableLiveData(false)
+    val imageNewlyAdded: LiveData<Boolean> = _imageNewlyAdded
+
     data class PublishResult(
         val isSuccess: Boolean,
         val listing: Listing? = null
@@ -86,6 +89,7 @@ class ListingMetadataViewModel @Inject constructor(
         val newImages = _images.value ?: mutableListOf()
         newImages.add(newImage)
         _images.value = newImages
+        _imageNewlyAdded.value = true
     }
 
     override fun setLocation(location: LatLng) {

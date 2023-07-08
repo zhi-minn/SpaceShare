@@ -71,6 +71,8 @@ class ListingMetadataDialogFragment(
         binding =
             DataBindingUtil.inflate(inflater, R.layout.dialog_create_listing, container, false)
         binding.progressBar.visibility = View.GONE
+        // For image placeholder
+        binding.viewPagerListingImages.adapter = ImageAdapter(emptyList())
         return binding.root
     }
 
@@ -181,6 +183,12 @@ class ListingMetadataDialogFragment(
         listingMetadataViewModel.images.observe(viewLifecycleOwner) { images ->
             binding.viewPagerListingImages.adapter = ImageAdapter(images)
             binding.imageIndicator.setViewPager(binding.viewPagerListingImages)
+        }
+        listingMetadataViewModel.imageNewlyAdded.observe(viewLifecycleOwner) {
+            val images = listingMetadataViewModel.images.value
+            if (it && images != null) {
+                binding.viewPagerListingImages.setCurrentItem(images.size - 1, false)
+            }
         }
 
         // Spaces

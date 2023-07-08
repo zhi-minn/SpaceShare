@@ -36,7 +36,6 @@ class ListingAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(listing: Listing) {
-            println("Binding $listing")
             // Bind the listing data to the views
             binding.title.text = listing.title ?: "Untitled"
             binding.price.text = String.format("$%.2f CAD/day", listing.price)
