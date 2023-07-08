@@ -22,7 +22,7 @@ class UserRepoImpl @Inject constructor(
 
     private val userCollection = db.collection("users")
 
-    override suspend fun createUser(user: User): String {
+    override suspend fun setUser(user: User): String {
         return withContext(Dispatchers.IO) {
             val deferred = CompletableDeferred<String>()
 

@@ -153,6 +153,10 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
+
+    // Formatting
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.13.15'
+
 }
 
 kapt {

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
 import com.example.spaceshare.R
 import com.example.spaceshare.SplashActivity
 import com.example.spaceshare.databinding.FragmentProfileBinding
@@ -17,6 +18,7 @@ import com.example.spaceshare.ui.viewmodel.AuthViewModel
 import com.example.spaceshare.ui.viewmodel.MainViewModel
 import com.example.spaceshare.ui.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Objects
 import javax.inject.Inject
@@ -92,6 +94,17 @@ class ProfileFragment : Fragment() {
 
     private fun configureObservers() {
         profileViewModel.userLiveData.observe(viewLifecycleOwner) { user ->
+            // Profile photo
+            if (!user.photoPath.isNullOrEmpty()) {
+                val storageRef =
+                    FirebaseStorage.getInstance().reference.child("profiles/${user.photoPath}")
+
+                Glide.with(requireContext())
+                    .load(storageRef)
+                    .into(binding.profileImage)
+            }
+
+            // Name
             val sb = StringBuilder()
             if (user.firstName.isNotEmpty()) sb.append(user.firstName)
             if (user.lastName.isNotEmpty()) sb.append(" ${user.lastName}")
