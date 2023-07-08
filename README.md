@@ -172,3 +172,5 @@
   * Added placeholder image for uploading listing
   * Add validation for uploading image
   * Scroll to uploaded image when adding pictures
+* Minn 0.75 hour (2023-07-07) [Commit](https://github.com/zhi-minn/SpaceShare/commit/df0c2cfcba62998fb750e43dfae28a56393bbd2f)
+  * Add delete image functionality to listing creation or update
