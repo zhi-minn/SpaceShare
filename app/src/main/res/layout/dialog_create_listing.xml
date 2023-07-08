@@ -88,6 +88,7 @@
 
                 </FrameLayout>
 
+                <!-- Add / Delete Image -->
                 <Button
                     android:id="@+id/btnAddPhoto"
                     android:layout_width="match_parent"
@@ -96,6 +97,18 @@
                     android:contentDescription="add photo"
                     android:elegantTextHeight="true"
                     android:text="add photo"
+                    app:layout_constraintBottom_toBottomOf="@+id/closeListingButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/closeListingButton" />
+                <Button
+                    android:id="@+id/btnDeletePhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:contentDescription="delete photo"
+                    android:elegantTextHeight="true"
+                    android:text="delete photo"
+                    android:backgroundTint="@color/light_red"
                     app:layout_constraintBottom_toBottomOf="@+id/closeListingButton"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/closeListingButton" />

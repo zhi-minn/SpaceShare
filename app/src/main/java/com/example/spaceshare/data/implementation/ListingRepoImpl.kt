@@ -24,7 +24,7 @@ class ListingRepoImpl @Inject constructor(
     }
 
     private val listingsCollection = db.collection("listings")
-    override suspend fun setListing(listing: Listing): String {
+    override suspend fun postListing(listing: Listing): String {
         return withContext(Dispatchers.IO) {
             val deferred = CompletableDeferred<String>()
             listingsCollection.document(listing.id)

@@ -116,6 +116,11 @@ class ListingMetadataDialogFragment(
             startForResult.launch(Intent(requireActivity(), CropActivity::class.java))
         }
 
+        // Delete photo button
+        binding.btnDeletePhoto.setOnClickListener {
+            listingMetadataViewModel.removeImage(binding.viewPagerListingImages.currentItem)
+        }
+
         // Space increment/decrement buttons
         binding.btnMinusSpace.setOnClickListener {
             listingMetadataViewModel.decrementSpaceAvailable()
@@ -131,7 +136,7 @@ class ListingMetadataDialogFragment(
 
         // Publish button
         binding.btnPublish.setOnClickListener {
-            listingMetadataViewModel.setListing(
+            listingMetadataViewModel.postListing(
                 binding.titleTextInput.text.toString(),
                 binding.priceInput.text.toString().toDouble(),
                 binding.descriptionTextInput.text.toString(),
@@ -181,6 +186,7 @@ class ListingMetadataDialogFragment(
 
         // Images
         listingMetadataViewModel.images.observe(viewLifecycleOwner) { images ->
+            binding.btnDeletePhoto.visibility = if (images.isEmpty()) View.GONE else View.VISIBLE
             binding.viewPagerListingImages.adapter = ImageAdapter(images)
             binding.imageIndicator.setViewPager(binding.viewPagerListingImages)
         }

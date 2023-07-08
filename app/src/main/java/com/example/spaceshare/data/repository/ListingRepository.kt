@@ -5,7 +5,7 @@ import com.example.spaceshare.models.SearchCriteria
 
 interface ListingRepository {
 
-    suspend fun setListing(listing: Listing) : String
+    suspend fun postListing(listing: Listing) : String
 
     suspend fun getUserListings(userId: String): List<Listing>
 

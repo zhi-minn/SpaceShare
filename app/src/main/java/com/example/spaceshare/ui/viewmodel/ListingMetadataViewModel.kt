@@ -38,7 +38,7 @@ class ListingMetadataViewModel @Inject constructor(
     }
 
     // Used to display in UI
-    private val _images: MutableLiveData<MutableList<ImageModel>> = MutableLiveData()
+    private val _images: MutableLiveData<MutableList<ImageModel>> = MutableLiveData(mutableListOf())
     val images: LiveData<MutableList<ImageModel>> = _images
 
     // Persist to storage
@@ -92,6 +92,28 @@ class ListingMetadataViewModel @Inject constructor(
         _imageNewlyAdded.value = true
     }
 
+    fun removeImage(position: Int) {
+        val newImages = _images.value ?: mutableListOf()
+        val newAddImages = _addImages.value ?: mutableListOf()
+        val newDeleteImages = _deleteImages.value ?: mutableListOf()
+        val image = newImages[position]
+
+        // First add to delete images if image removed currently exists on Firebase Storage
+        if (!newAddImages.contains(image) &&
+            (image.imagePath != null) &&
+            !newDeleteImages.contains(image.imagePath)) {
+            newDeleteImages.add(image.imagePath)
+            _deleteImages.value = newDeleteImages
+        }
+
+        // Then remove from images to upload if exists
+        newAddImages.remove(image)
+
+        // Finally remove from list of images shown to user
+        newImages.remove(image)
+        _images.value = newImages
+    }
+
     override fun setLocation(location: LatLng) {
         val newListing = _listingLiveData.value
         newListing?.let {
@@ -117,7 +139,7 @@ class ListingMetadataViewModel @Inject constructor(
         }
     }
 
-    fun setListing(
+    fun postListing(
         title: String,
         price: Double,
         description: String,
@@ -158,9 +180,24 @@ class ListingMetadataViewModel @Inject constructor(
                 finalListing.photos.addAll(imageNames)
             }
 
+            // Delete images
+            val imagesToDelete = _deleteImages.value
+            if (!imagesToDelete.isNullOrEmpty()) {
+                imagesToDelete.forEach {
+                    viewModelScope.async {
+                        try {
+                            firebaseStorageRepo.deleteFile("spaces", it)
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
+                }
+                finalListing.photos.removeAll(imagesToDelete)
+            }
+
             // Upload listing
             try {
-                listingRepo.setListing(finalListing)
+                listingRepo.postListing(finalListing)
                 _publishResult.value = PublishResult(true, finalListing)
                 Log.i(TAG, "Updated to ${_publishResult.value}")
 
