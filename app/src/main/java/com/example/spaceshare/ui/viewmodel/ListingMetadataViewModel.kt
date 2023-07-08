@@ -197,6 +197,15 @@ class ListingMetadataViewModel @Inject constructor(
     }
 
     private fun validateListing(listing: Listing): Boolean {
+        val existingImageCount = _images.value?.size ?: 0
+        val newImageCount = _addImages.value?.size ?: 0
+        val deleteImageCount = _deleteImages.value?.size ?: 0
+        val finalImageCount = existingImageCount + newImageCount - deleteImageCount
+        if (finalImageCount <= 0) {
+            _validateResult.value = ValidateResult(false, "Please upload at least 1 image")
+            return false
+        }
+
         if (listing.title.isEmpty() || listing.description.isEmpty()) {
             _validateResult.value = ValidateResult(false, "Please ensure all fields are filled")
             return false
