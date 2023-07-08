@@ -125,6 +125,7 @@ class ListingMetadataViewModel @Inject constructor(
     fun setListing(listing: Listing) {
         _listingLiveData.value = listing
         _images.value = listing.photos.map { ImageModel(imagePath = it) }.toMutableList()
+        _spaceAvailable.value = listing.spaceAvailable
     }
 
     fun incrementSpaceAvailable() {

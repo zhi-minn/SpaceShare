@@ -80,11 +80,31 @@ class ListingMetadataDialogFragment(
         super.onViewCreated(view, savedInstanceState)
         auth = FirebaseAuth.getInstance()
 
+        configureInitialUI()
         configureListeners()
         configureButtons()
         configureFilters()
         configureCropActivity()
         configureObservers()
+    }
+
+    private fun configureInitialUI() {
+        if (listing != null) {
+            binding.titleTextInput.setText(listing.title)
+            binding.priceInput.setText(listing.price.toString())
+            binding.descriptionTextInput.setText(listing.description)
+            binding.spaceText.text = listing.spaceAvailable.toString()
+            val amenities = Amenity.values().filter { listing.amenities.contains(it) }
+            for (amenity in amenities) {
+                when (amenity) {
+                    Amenity.SURVEILLANCE -> binding.surveillance.isChecked = true
+                    Amenity.CLIMATE_CONTROLLED -> binding.climateControlled.isChecked = true
+                    Amenity.WELL_LIT -> binding.lighting.isChecked = true
+                    Amenity.ACCESSIBILITY -> binding.accessibility.isChecked = true
+                    Amenity.WEEKLY_CLEANING -> binding.cleanliness.isChecked = true
+                }
+            }
+        }
     }
 
     private fun configureListeners() {
@@ -152,21 +172,6 @@ class ListingMetadataDialogFragment(
     private fun configureObservers() {
         // Listing metadata
         listingMetadataViewModel.listingLiveData.observe(viewLifecycleOwner) { listing ->
-            binding.titleTextInput.setText(listing.title)
-            binding.priceInput.setText(listing.price.toString())
-            binding.descriptionTextInput.setText(listing.description)
-            binding.spaceText.text = listing.spaceAvailable.toString()
-            val amenities = Amenity.values().filter { listing.amenities.contains(it) }
-            for (amenity in amenities) {
-                when (amenity) {
-                    Amenity.SURVEILLANCE -> binding.surveillance.isChecked = true
-                    Amenity.CLIMATE_CONTROLLED -> binding.climateControlled.isChecked = true
-                    Amenity.WELL_LIT -> binding.lighting.isChecked = true
-                    Amenity.ACCESSIBILITY -> binding.accessibility.isChecked = true
-                    Amenity.WEEKLY_CLEANING -> binding.cleanliness.isChecked = true
-                }
-            }
-
             listing.location?.let {
                 binding.locationTextInput.setText(
                     GeocoderUtil.getAddress(
