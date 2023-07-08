@@ -168,3 +168,7 @@
 * Chang 0.5 hours (2023-07-05) [PR](https://github.com/zhi-minn/SpaceShare/pull/56)
   * Made crop photo UI more intuitive
   * Fixed recommended price displaying NaN and limited it to 2 demical digits
+* Minn 1 hour (2023-07-07) [Commit](https://github.com/zhi-minn/SpaceShare/commit/79af49cbded77ef8705d5e76980ceed4e667ead9)
+  * Added placeholder image for uploading listing
+  * Add validation for uploading image
+  * Scroll to uploaded image when adding pictures
