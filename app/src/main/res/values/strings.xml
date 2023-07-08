@@ -36,4 +36,5 @@
     <string name="space_available_template">%.1f cubic metres</string>
     <string name="user_verification_false">Your account is not yet verified</string>
     <string name="user_verification_true">Your account is verified</string>
+    <string name="government_id_none">Not submitted</string>
 </resources>

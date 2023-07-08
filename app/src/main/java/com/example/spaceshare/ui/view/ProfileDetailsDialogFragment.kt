@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogProfileDetailsBinding
 import com.example.spaceshare.ui.viewmodel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 class ProfileDetailsDialogFragment(
     private val profileViewModel: ProfileViewModel
@@ -41,6 +42,8 @@ class ProfileDetailsDialogFragment(
     }
 
     private fun configureButtons() {
-
+        binding.btnBack.setOnClickListener {
+            this.dismiss()
+        }
     }
 }
