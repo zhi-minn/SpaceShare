@@ -176,3 +176,6 @@
   * Add delete image functionality to listing creation or update
 * Minn 3 hours (2023-07-08) [Commit](https://github.com/zhi-minn/SpaceShare/commit/6d3717438848de9aa1f6166cc7dbab3a4587da6a)
   * Implement update user metadata functionality
+* William 1 hour (2023-07-08) [Commit](https://github.com/zhi-minn/SpaceShare/commit/62ace157f15aa2207af5ede87ef46c99550d46fd)
+  + Fix back button on profile dialog fragment
+  + Add initial UI government ID part in profile details
