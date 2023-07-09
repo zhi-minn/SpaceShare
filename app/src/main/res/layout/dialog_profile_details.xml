@@ -192,6 +192,42 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/governmentIdContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    app:layout_constraintTop_toBottomOf="@id/phoneNumberContainer">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/governmentIdLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Government ID"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/standard_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/governmentId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/government_id_none"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/governmentIdLabel" />
+
+                    <ImageView
+                        android:id="@+id/btnEditGovernmentId"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/governmentIdLabel"
+                        app:layout_constraintBottom_toTopOf="@id/governmentId"
+                        android:src="@drawable/arrow_right"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

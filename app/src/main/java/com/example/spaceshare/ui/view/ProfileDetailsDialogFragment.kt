@@ -81,6 +81,10 @@ class ProfileDetailsDialogFragment(
     }
 
     private fun configureButtons() {
+        binding.btnBack.setOnClickListener {
+            this.dismiss()
+        }
+
         binding.btnEditPhoto.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             pickImageLauncher.launch(intent)
