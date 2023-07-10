@@ -126,7 +126,23 @@
                 android:text="A verification code will be sent to the number"
                 android:textSize="12sp"/>
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- Government ID -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/governmentIdContainer"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@id/detailDescription">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/government_id_privacy"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button

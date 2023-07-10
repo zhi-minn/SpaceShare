@@ -37,4 +37,5 @@
     <string name="user_verification_false">Your account is not yet verified</string>
     <string name="user_verification_true">Your account is verified</string>
     <string name="government_id_none">Not submitted</string>
+    <string name="government_id_privacy">Your ID will not be shared to any host or client. Please refer to our privacy policy for more details.</string>
 </resources>

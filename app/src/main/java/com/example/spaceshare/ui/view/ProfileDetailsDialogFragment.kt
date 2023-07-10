@@ -99,5 +99,10 @@ class ProfileDetailsDialogFragment(
             val editProfileDetail = EditProfileDialogFragment(ProfileDetail.PHONE_NUMBER, profileViewModel)
             editProfileDetail.show(Objects.requireNonNull(childFragmentManager), "editProfileDialog")
         }
+
+        binding.governmentIdContainer.setOnClickListener {
+            val editProfileDetail = EditProfileDialogFragment(ProfileDetail.GOVERNMENT_ID, profileViewModel)
+            editProfileDetail.show(Objects.requireNonNull(childFragmentManager), "editProfileDialog")
+        }
     }
 }
