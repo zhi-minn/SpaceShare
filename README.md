@@ -118,10 +118,11 @@
 * Minn 6 hours (2023-06-28 -> 2023-06-29) [PR](https://github.com/zhi-minn/SpaceShare/pull/41)
   * Host can now search and filter through own listings
   * Host can update listing status (active or inactive)
-* Chang 2 hours (2023-06-29 -> Incomplete) Low-Priority Bug
+* Chang 2 hours (2023-06-29 -> 2023-07-10) 
   * Investigate detailed client listing page crashing when reaching end of ScrollView
     * Detailed client listing page does not crash when on hardware Android device, still crashes on emulator
     * Deprioritizing since the problem is not as severe as initially thought and has already taken up a lot of time
+  * As of 2023-07-10, app no longer crashes on emulator, marking this as complete
 * William 6 hours (2023-06-30) [Commit](https://github.com/zhi-minn/SpaceShare/commit/1b0cfcd1470ff970d7fbc90f7192de39ab7fff65)
   + User verification display, create user document to UserVerified collection when sign up
 * Chang 2 hours (2023-06-30) [PR](https://github.com/zhi-minn/SpaceShare/pull/43)
