@@ -179,5 +179,5 @@
 * William 1 hour (2023-07-08) [Commit](https://github.com/zhi-minn/SpaceShare/commit/62ace157f15aa2207af5ede87ef46c99550d46fd)
   + Fix back button on profile dialog fragment
   + Add initial UI government ID part in profile details
-* William 1.5 hour (2023-09-08) [Commit](https://github.com/zhi-minn/SpaceShare/commit/66c3c34605e3e21e435cb51a3b7c173606fe7d80)
+* William 1.5 hour (2023-07-09) [Commit](https://github.com/zhi-minn/SpaceShare/commit/66c3c34605e3e21e435cb51a3b7c173606fe7d80)
   + Government ID edit profile screen UI
