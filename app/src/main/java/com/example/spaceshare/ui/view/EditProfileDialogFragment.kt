@@ -29,6 +29,8 @@ class EditProfileDialogFragment(
     private val NAME_DESCRIPTION = "This name will be used to verify your identity. Changing it will require re-verification."
     private val PHONE_NUMBER_TITLE = "Phone number"
     private val PHONE_NUMBER_DESCRIPTION = "This will be provided to potential renters as a secondary contact"
+    private val GOVERNMENT_ID_TITLE = "Government ID"
+    private val GOVERNMENT_ID_DESCRIPTION = "This allows us to make sure you are real and provides the platform an assurance of trust and transparency."
 
     private lateinit var binding: DialogEditProfileBinding
 
@@ -126,6 +128,12 @@ class EditProfileDialogFragment(
                     }
                 })
             }
+            ProfileDetail.GOVERNMENT_ID -> {
+                binding.governmentIdContainer.visibility = View.VISIBLE
+                binding.detailLabel.text = GOVERNMENT_ID_TITLE
+                binding.detailDescription.text = GOVERNMENT_ID_DESCRIPTION
+                binding.btnUpdate.text = "UPLOAD"
+            }
         }
     }
 
@@ -169,6 +177,9 @@ class EditProfileDialogFragment(
                         profileViewModel.updateUser(it)
                     }
                     this.dismiss()
+                }
+                ProfileDetail.GOVERNMENT_ID -> {
+
                 }
             }
         }
