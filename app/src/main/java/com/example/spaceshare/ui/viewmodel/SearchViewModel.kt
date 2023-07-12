@@ -102,6 +102,10 @@ class SearchViewModel @Inject constructor(
         listings.value = filteredByCriteriaListings
     }
 
+    fun getSearchViewModel(): SearchViewModel {
+        return this
+    }
+
     private fun applyClientSearchFilters(listings: List<Listing>): List<Listing> {
         val nonOwnListings = filterForNonOwnListings(listings)
         val activeListings = filterForActiveListings(nonOwnListings)

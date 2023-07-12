@@ -148,9 +148,13 @@ class ClientListingDialogFragment(
         val hostId = listing.hostId
         val clientId = auth.currentUser?.uid
         val listingId = listing.id
-        val startDate = Timestamp(Date(searchViewModel.startTime.value!!))
-        val endDate = Timestamp(Date(searchViewModel.endTime.value!!))
-        val unit = searchViewModel.spaceRequired.value
+        val searchDetails = searchViewModel.getSearchViewModel()
+        val startDate = Timestamp(Date(searchDetails.startTime.value!!))
+        val endDate = Timestamp(Date(searchDetails.endTime.value!!))
+        val unit = searchDetails.spaceRequired.value
+//        val startDate = Timestamp(Date(searchViewModel.startTime.value!!))
+//        val endDate = Timestamp(Date(searchViewModel.endTime.value!!))
+//        val unit = searchViewModel.spaceRequired.value
         val reservation =
             Reservation(hostId=hostId, clientId=clientId, listingId=listingId,
                 startDate=startDate, endDate=endDate, unit=unit, status=ReservationStatus.PENDING.toInt())
