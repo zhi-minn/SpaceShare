@@ -92,7 +92,11 @@ class ClientListingDialogFragment(
         }
 
         binding.btnReserve.setOnClickListener {
-            // TODO: Put reservation related code here
+            val reservationDialogFragment = ReservationDialogFragment(listing, listingViewModel)
+            reservationDialogFragment.show(
+                Objects.requireNonNull(childFragmentManager),
+                "hostListingDialog"
+            )
         }
     }
 
