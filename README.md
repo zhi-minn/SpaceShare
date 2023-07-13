@@ -182,3 +182,5 @@
   + Add initial UI government ID part in profile details
 * William 1.5 hour (2023-07-09) [Commit](https://github.com/zhi-minn/SpaceShare/commit/66c3c34605e3e21e435cb51a3b7c173606fe7d80)
   + Government ID edit profile screen UI
+* Youming 1.5 hour (2023-07-13) [Commit](https://github.com/zhi-minn/SpaceShare/commit/2651dd024918ead1e2ac4b72866a43469a857269)
+  + Reservation detailed page
