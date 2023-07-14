@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogClientFilterBinding
+import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.models.FilterCriteria
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,20 +40,17 @@ class ClientFilterDialogFragment(
         super.onViewCreated(view, savedInstanceState)
 
         configureSliders()
-        configureFilters()
+        configureAmenities()
         configureButtons()
         configureListeners()
     }
 
-    private fun configureSliders() {
-        val decimalFormat = DecimalFormat("0.0") // Set the desired decimal format
-        binding.spaceRangeSlider.setLabelFormatter { value -> decimalFormat.format(value) }
-    }
 
-    private fun configureFilters() {
+    private fun configureSliders() {
         val criteria = searchViewModel.filterCriteria
 
-        // Set range slider bounds based on min and max values from listing
+        // Set range slider bounds based on min and max values from listings
+        // Also set range slider initial values based on previous setting
         val prices = searchViewModel.listings.value?.map { it.price }
         var maxPrice = prices?.maxOrNull()?.toFloat() ?: 100.0f
         if (maxPrice == 0.0f) maxPrice = 100.0f
@@ -72,6 +70,22 @@ class ClientFilterDialogFragment(
         binding.spaceRangeSlider.values = listOf(criteria.minSpace, criteriaMaxSpace)
         binding.spaceIndicator.text =
             "${String.format("%.1f", criteria.minSpace)} - ${String.format("%.1f", maxSpace)}"
+
+        val decimalFormat = DecimalFormat("0.0") // Set the desired decimal format
+        binding.spaceRangeSlider.setLabelFormatter { value -> decimalFormat.format(value) }
+    }
+
+    private fun configureAmenities() {
+        val amenities = Amenity.values().filter { searchViewModel.filterCriteria.amenities.contains(it) }
+        for (amenity in amenities) {
+            when (amenity) {
+                Amenity.SURVEILLANCE -> binding.surveillance.isChecked = true
+                Amenity.CLIMATE_CONTROLLED -> binding.climateControlled.isChecked = true
+                Amenity.WELL_LIT -> binding.lighting.isChecked = true
+                Amenity.ACCESSIBILITY -> binding.accessibility.isChecked = true
+                Amenity.WEEKLY_CLEANING -> binding.cleanliness.isChecked = true
+            }
+        }
     }
 
     private fun configureButtons() {
@@ -82,9 +96,10 @@ class ClientFilterDialogFragment(
         binding.btnApply.setOnClickListener {
             val priceRange = binding.priceRangeSlider.values
             val spaceRange = binding.spaceRangeSlider.values
+            val amenitiesSelected : MutableList<Amenity> = getCheckedAmenities()
             val criteria = FilterCriteria(
                 isActive = true, isInactive = false,
-                priceRange[0], priceRange[1], spaceRange[0], spaceRange[1]
+                priceRange[0], priceRange[1], spaceRange[0], spaceRange[1], amenitiesSelected
             )
             searchViewModel.filterCriteria = criteria
             searchViewModel.filterByFilterCriteria()
@@ -107,5 +122,15 @@ class ClientFilterDialogFragment(
             binding.spaceIndicator.text =
                 "${String.format("%.1f", minSpace)} - $${String.format("%.1f", maxSpace)}"
         }
+    }
+
+    private fun getCheckedAmenities(): MutableList<Amenity> {
+        val amenities = mutableListOf<Amenity>()
+        if (binding.surveillance.isChecked) amenities.add(Amenity.SURVEILLANCE)
+        if (binding.climateControlled.isChecked) amenities.add(Amenity.CLIMATE_CONTROLLED)
+        if (binding.lighting.isChecked) amenities.add(Amenity.WELL_LIT)
+        if (binding.accessibility.isChecked) amenities.add(Amenity.ACCESSIBILITY)
+        if (binding.cleanliness.isChecked) amenities.add(Amenity.WEEKLY_CLEANING)
+        return amenities
     }
 }

@@ -184,3 +184,5 @@
   + Government ID edit profile screen UI
 * Youming 1.5 hour (2023-07-13) [Commit](https://github.com/zhi-minn/SpaceShare/commit/2651dd024918ead1e2ac4b72866a43469a857269)
   + Reservation detailed page
+* Chang 1.5 hours (2023-07-14) [PR](https://github.com/zhi-minn/SpaceShare/pull/60)
+  * Added ability to filter by amenities to search page
