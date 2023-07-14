@@ -208,8 +208,7 @@ class EditProfileDialogFragment(
                         val imageUri = profileViewModel.fileNameLiveData.value
                         println("imageUri: $imageUri")
                         if (imageUri != null) {
-                            val id = FirebaseAuth.getInstance().currentUser!!.uid
-                            profileViewModel.updateGovernmentId(imageUri.toUri(), id) {
+                            profileViewModel.updateGovernmentId(imageUri.toUri()) {
                                 binding.governmentIdImage.setImageURI(null)
                                 binding.governmentIdImageContainer.visibility = View.GONE
                                 binding.btnUpdate.text = "Add Government ID"

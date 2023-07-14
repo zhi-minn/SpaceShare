@@ -73,7 +73,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun updateGovernmentId(imageUri: Uri, id: String, callback: (Boolean) -> Unit) {
+    fun updateGovernmentId(imageUri: Uri, callback: (Boolean) -> Unit) {
         viewModelScope.launch {
             _userLiveData.value?.governmentId?.let {
                 println("deleting!")
