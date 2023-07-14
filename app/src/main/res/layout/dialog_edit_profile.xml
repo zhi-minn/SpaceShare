@@ -138,11 +138,51 @@
             app:layout_constraintTop_toBottomOf="@id/detailDescription">
 
             <TextView
+                android:id="@+id/governmentIdPrivacy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="@string/government_id_privacy"/>
+
+            <TextView
+                android:id="@+id/governmentIdList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/governmentIdPrivacy"
+                android:layout_marginTop="32dp"
+                android:text="@string/government_id_valid"/>
+
+            <LinearLayout
+                android:id="@+id/governmentIdImageContainer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/governmentIdList">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="@string/government_id_image_preview"/>
+
+                <ImageView
+                    android:id="@+id/governmentIdImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="8dp"/>
+
+                <Button
+                    android:id="@+id/governmentIdRemove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/government_id_image_remove"/>
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button

@@ -77,6 +77,11 @@ class ProfileDetailsDialogFragment(
 
             // Phone number
             binding.phoneNumber.text = user.phoneNumber
+
+            // Government Id
+            if (!user.governmentId.isNullOrEmpty() && !user.isVerified) {
+                binding.governmentId.text = getString(R.string.government_id_found_not_verified)
+            }
         }
     }
 
