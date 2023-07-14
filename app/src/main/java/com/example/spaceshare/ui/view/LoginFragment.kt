@@ -84,6 +84,10 @@ class LoginFragment : Fragment() {
     private fun configureObservers() {
         authViewModel.loginStatus.observe(viewLifecycleOwner) { result ->
             if (result.isSuccess) {
+                // First update FCM (Firebase Cloud Messaging) token for notifications
+                authViewModel.updateUserFcmToken()
+
+                // Then redirect to landing page
                 val intent = Intent(requireContext(), MainActivity::class.java)
                 startActivity(intent)
                 requireActivity().finish()

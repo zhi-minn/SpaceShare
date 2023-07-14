@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.data.repository.UserRepository
+import com.example.spaceshare.manager.FCMTokenManager
 import com.example.spaceshare.models.User
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -184,6 +185,34 @@ class AuthViewModel @Inject constructor(
                         AuthResult(false, "Registration failed. ${task.exception?.message}")
                 }
             }
+    }
+
+    fun updateUserFcmToken() {
+        FirebaseAuth.getInstance().currentUser?.uid?.let {
+            viewModelScope.launch {
+                val curUser = userRepo.getUserById(it)
+                FCMTokenManager.getToken()?.let {
+                    if (curUser != null) {
+                        curUser.fcmToken = it
+                        userRepo.setUser(curUser)
+                    }
+                }
+            }
+        }
+    }
+
+    fun removeFcmTokenIfMatch() {
+        FirebaseAuth.getInstance().currentUser?.uid?.let {
+            viewModelScope.launch {
+                val curUser = userRepo.getUserById(it)
+                FCMTokenManager.getToken()?.let {
+                    if (curUser != null && curUser.fcmToken == it) {
+                        curUser.fcmToken = ""
+                        userRepo.setUser(curUser)
+                    }
+                }
+            }
+        }
     }
 
     private fun createUserInCollection(userId: String?, firstName: String?, lastName: String?) {

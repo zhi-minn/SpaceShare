@@ -114,6 +114,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.6.0")
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation 'com.firebaseui:firebase-ui-storage:8.0.2'
 
     //RxJava
