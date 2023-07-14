@@ -188,3 +188,7 @@
   * Added ability to filter by amenities to search page
 * Minn 4 hours (2023-07-14) [PR](https://github.com/zhi-minn/SpaceShare/pull/61)
   * Added push notifications and cron job to trigger it (Firebase Cloud Messaging)
+* William 10 hours (2023-07-11 -> 2023-07-14) [Commit](https://github.com/zhi-minn/SpaceShare/commit/d502d395e2b746da970e36fc3697fbb646b378b2)
+  + Government id screen ui improvements
+  + Photo picker to select photo
+  + Upload government Id to Firebase Storage feature
