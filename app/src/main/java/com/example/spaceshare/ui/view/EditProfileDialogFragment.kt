@@ -206,7 +206,6 @@ class EditProfileDialogFragment(
                     }
                     else {
                         val imageUri = profileViewModel.fileNameLiveData.value
-                        println("imageUri: $imageUri")
                         if (imageUri != null) {
                             profileViewModel.updateGovernmentId(imageUri.toUri()) {
                                 binding.governmentIdImage.setImageURI(null)
