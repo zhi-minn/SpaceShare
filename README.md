@@ -186,3 +186,5 @@
   + Reservation detailed page
 * Chang 1.5 hours (2023-07-14) [PR](https://github.com/zhi-minn/SpaceShare/pull/60)
   * Added ability to filter by amenities to search page
+* Minn 4 hours (2023-07-14) [PR](https://github.com/zhi-minn/SpaceShare/pull/61)
+  * Added push notifications and cron job to trigger it (Firebase Cloud Messaging)
