@@ -1,11 +1,16 @@
 package com.example.spaceshare.ui.view
 
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
@@ -15,6 +20,7 @@ import com.example.spaceshare.ui.viewmodel.ProfileViewModel
 import com.example.spaceshare.utils.PhoneNumberValidator
 import com.example.spaceshare.utils.SnackbarUtil
 import com.example.spaceshare.utils.StringUtil.isLettersOnly
+import com.google.firebase.auth.FirebaseAuth
 
 class EditProfileDialogFragment(
     private val detail: ProfileDetail,
@@ -24,6 +30,7 @@ class EditProfileDialogFragment(
     companion object {
         private val TAG = this::class.simpleName
     }
+
     // Consts
     private val NAME_TITLE = "Name"
     private val NAME_DESCRIPTION = "This name will be used to verify your identity. Changing it will require re-verification."
@@ -33,6 +40,21 @@ class EditProfileDialogFragment(
     private val GOVERNMENT_ID_DESCRIPTION = "This allows us to make sure you are real and provides the platform an assurance of trust and transparency."
 
     private lateinit var binding: DialogEditProfileBinding
+
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        // Callback is invoked after the user selects a media item or closes the
+        // photo picker.
+        if (uri != null) {
+            Log.d("PhotoPicker", "Selected URI: $uri")
+            val imgUri = Uri.parse(uri.toString())
+            profileViewModel.setFileName(imgUri)
+            binding.governmentIdImageContainer.visibility = View.VISIBLE
+            binding.governmentIdImage.setImageURI(uri)
+            binding.btnUpdate.text = "UPLOAD"
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -132,7 +154,7 @@ class EditProfileDialogFragment(
                 binding.governmentIdContainer.visibility = View.VISIBLE
                 binding.detailLabel.text = GOVERNMENT_ID_TITLE
                 binding.detailDescription.text = GOVERNMENT_ID_DESCRIPTION
-                binding.btnUpdate.text = "UPLOAD"
+                binding.btnUpdate.text = "Add Government ID"
             }
         }
     }
@@ -179,9 +201,30 @@ class EditProfileDialogFragment(
                     this.dismiss()
                 }
                 ProfileDetail.GOVERNMENT_ID -> {
-
+                    if (binding.btnUpdate.text == "Add Government ID") {
+                        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    }
+                    else {
+                        val imageUri = profileViewModel.fileNameLiveData.value
+                        println("imageUri: $imageUri")
+                        if (imageUri != null) {
+                            val id = FirebaseAuth.getInstance().currentUser!!.uid
+                            profileViewModel.updateGovernmentId(imageUri.toUri(), id) {
+                                binding.governmentIdImage.setImageURI(null)
+                                binding.governmentIdImageContainer.visibility = View.GONE
+                                binding.btnUpdate.text = "Add Government ID"
+                                this.dismiss()
+                            }
+                        }
+                    }
                 }
             }
+        }
+
+        binding.governmentIdRemove.setOnClickListener {
+            binding.governmentIdImage.setImageURI(null)
+            binding.governmentIdImageContainer.visibility = View.GONE
+            binding.btnUpdate.text = "Add Government ID"
         }
     }
 }

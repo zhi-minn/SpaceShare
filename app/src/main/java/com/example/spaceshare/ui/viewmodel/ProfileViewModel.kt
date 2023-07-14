@@ -20,6 +20,14 @@ class ProfileViewModel @Inject constructor(
     private val _userLiveData: MutableLiveData<User> = MutableLiveData()
     val userLiveData: LiveData<User> = _userLiveData
 
+    // Government ID
+    private val _fileNameLiveData = MutableLiveData<String>()
+    val fileNameLiveData: LiveData<String> = _fileNameLiveData
+
+    fun setFileName(fileName: Uri) {
+        _fileNameLiveData.value = fileName.toString()
+    }
+
     fun getUserById(userId: String) {
         viewModelScope.launch {
             userRepo.getUserById(userId)?.let {
@@ -57,6 +65,36 @@ class ProfileViewModel @Inject constructor(
                 val curUser = _userLiveData.value
                 curUser?.let {
                     it.photoPath = imagePath
+                    _userLiveData.value = it
+                    userRepo.setUser(it)
+                }
+            }
+            callback(true)
+        }
+    }
+
+    fun updateGovernmentId(imageUri: Uri, id: String, callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            _userLiveData.value?.governmentId?.let {
+                println("deleting!")
+                viewModelScope.async {
+                    firebaseStorageRepo.deleteFile("ids", it)
+                }
+            }
+
+            val uploadTask = viewModelScope.async {
+                try {
+                    firebaseStorageRepo.uploadFile("ids", imageUri)
+                } catch (e: Exception) {
+                    null
+                }
+            }
+
+            val imagePath = uploadTask.await()
+            imagePath?.let { imagePath ->
+                val curUser = _userLiveData.value
+                curUser?.let {
+                    it.governmentId = imagePath
                     _userLiveData.value = it
                     userRepo.setUser(it)
                 }

@@ -12,7 +12,10 @@ data class User(
     @ColumnInfo(name = "photo_url") var photoPath: String? = null,
     @ColumnInfo(name = "phone_number") var phoneNumber: String = "",
     @ColumnInfo(name = "is_verified") var isVerified: Boolean = false,
-    @ColumnInfo(name = "fcm_token") var fcmToken: String = ""
+    @ColumnInfo(name = "fcm_token") var fcmToken: String = "",
+    @ColumnInfo(name = "government_id_url") var governmentId: String? = null
 ) {
-    constructor() : this("", "", "", null, "", false, "")
+    constructor() : this("", "", "", null, "", false, "", null)
 }
+
+
