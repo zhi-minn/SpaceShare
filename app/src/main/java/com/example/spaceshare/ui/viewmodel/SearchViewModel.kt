@@ -97,6 +97,7 @@ class SearchViewModel @Inject constructor(
                     && listing.price <= filterCriteriaMaxPrice
                     && listing.spaceAvailable >= filterCriteria.minSpace
                     && listing.spaceAvailable <= filterCriteria.maxSpace
+                    && listing.amenities.containsAll(filterCriteria.amenities)
         }
 
         listings.value = filteredByCriteriaListings
@@ -114,6 +115,10 @@ class SearchViewModel @Inject constructor(
 
     private fun filterForNonOwnListings(listing: Listing): Boolean {
         return listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
+    }
+
+    private fun sortByDistance() {
+
     }
 
     override fun setLocation(latLng: LatLng) {

@@ -287,30 +287,31 @@
                         app:layout_constraintEnd_toStartOf="@+id/whatSelectorSizeText"
                         app:layout_constraintTop_toTopOf="@+id/whatSelectorAddSize" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.cardview.widget.CardView>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="25dp" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/btnSearch"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:elegantTextHeight="true"
-                    android:text="Search"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
         </LinearLayout>
+
+        <View style="@style/HorizontalDivider"
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/standard_component_margin"
+            app:layout_constraintBottom_toTopOf="@+id/btnSearch" />
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:elegantTextHeight="true"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:text="Search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
