@@ -85,6 +85,12 @@ class ProfileFragment : Fragment() {
 
         // Logout
         binding.btnLogout.setOnClickListener {
+            /**
+                Remove registered fcm token from user if it matches device fcm token so
+                device owner no longer receives notifications regarding other possible users
+            **/
+            authViewModel.removeFcmTokenIfMatch()
+
             authViewModel.logout()
             val intent = Intent(requireContext(), SplashActivity::class.java)
             startActivity(intent)
