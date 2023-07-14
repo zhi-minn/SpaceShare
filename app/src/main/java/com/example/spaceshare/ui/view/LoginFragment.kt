@@ -7,22 +7,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.example.spaceshare.AuthActivity
 import com.example.spaceshare.MainActivity
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentLoginBinding
 import com.example.spaceshare.ui.viewmodel.AuthViewModel
-import com.example.spaceshare.utils.ToastUtil
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.CommonStatusCodes
-import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -93,7 +88,7 @@ class LoginFragment : Fragment() {
                 startActivity(intent)
                 requireActivity().finish()
             } else {
-                ToastUtil.showLongToast(requireContext(), result.message)
+                Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
             }
         }
     }

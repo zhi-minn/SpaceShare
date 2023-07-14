@@ -9,14 +9,13 @@ import android.os.Environment
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import com.example.spaceshare.databinding.ActivityCropBinding
-import com.example.spaceshare.utils.ToastUtil
 import com.takusemba.cropme.OnCropListener
-import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -56,13 +55,13 @@ class CropActivity: AppCompatActivity() {
             }
 
             override fun onFailure(e: Exception) {
-                ToastUtil.showShortToast(this@CropActivity, "Failed to clip image")
+                Toast.makeText(this@CropActivity, "Failed to clip image", Toast.LENGTH_SHORT).show()
             }
         })
 
         cropButton.setOnClickListener(View.OnClickListener {
             if (binding.cropView.isOffFrame()) {
-                ToastUtil.showShortToast(this@CropActivity, "Image if off frame")
+                Toast.makeText(this@CropActivity, "Image off frame", Toast.LENGTH_SHORT).show()
                 return@OnClickListener
             }
             progressBar.visibility = View.VISIBLE

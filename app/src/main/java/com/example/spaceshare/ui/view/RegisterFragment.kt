@@ -5,13 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentRegisterBinding
 import com.example.spaceshare.ui.viewmodel.AuthViewModel
-import com.example.spaceshare.utils.ToastUtil
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -53,7 +53,7 @@ class RegisterFragment : Fragment() {
             if (result.isSuccess) {
                 navController.navigate(R.id.action_registerFragment_to_loginFragment)
             } else {
-                ToastUtil.showShortToast(requireContext(), result.message)
+                Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
