@@ -9,6 +9,7 @@ import com.example.spaceshare.ui.viewmodel.MessagesViewModel
 import com.example.spaceshare.R
 import MessageAdapter
 import android.widget.ProgressBar
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
@@ -42,6 +43,12 @@ class MessagesFragment : Fragment() {
     private lateinit var binding: FragmentMessagesBinding
     private lateinit var manager: LinearLayoutManager
 
+    private val openDocument = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        uri?.let {uri ->
+            messagesViewModel.sendImageMessage(uri, requireActivity())
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,7 +72,7 @@ class MessagesFragment : Fragment() {
         val options = FirebaseRecyclerOptions.Builder<Message>()
             .setQuery(messagesViewModel.getMessagesDBref(), Message::class.java)
             .build()
-        adapter = MessageAdapter(options, profileViewModel.getUsername())
+        adapter = MessageAdapter(options, FirebaseAuth.getInstance().currentUser!!.displayName)
         binding.progressBar.visibility = ProgressBar.INVISIBLE
         manager = LinearLayoutManager(context)
         manager.stackFromEnd = true
@@ -94,19 +101,15 @@ class MessagesFragment : Fragment() {
 
         // When the send button is clicked, send a text message
         binding.sendButton.setOnClickListener {
-            val message = Message(
-                binding.messageEditText.text.toString(),
-                profileViewModel.getUsername(),
-                profileViewModel.getUserPhotoURL(),
-                null /* no image */
-            )
-            messagesViewModel.sendMessage(message)
+
+            val textContent = binding.messageEditText.text.toString()
+            messagesViewModel.sendMessage(textContent)
             binding.messageEditText.setText("")
         }
 
-//        // When the image button is clicked, launch the image picker
-//        binding.addMessageImageView.setOnClickListener {
-//            openDocument.launch(arrayOf("image/*"))
-//        }
+        // When the image button is clicked, launch the image picker
+        binding.addMessageImageView.setOnClickListener {
+            openDocument.launch(arrayOf("image/*"))
+        }
     }
 }

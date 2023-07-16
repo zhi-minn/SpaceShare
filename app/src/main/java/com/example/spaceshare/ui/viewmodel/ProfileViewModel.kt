@@ -43,22 +43,6 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun getUsername(): String {
-        val user = _userLiveData.value
-        if (user != null) {
-            return user.firstName + " " + user.lastName
-        }
-        return ""
-    }
-
-    fun getUserPhotoURL(): String? {
-        val user = _userLiveData.value
-        if (user != null) {
-            return user.photoPath
-        }
-        return ""
-    }
-
     fun updateUserPhoto(imageUri: Uri, callback: (Boolean) -> Unit) {
         viewModelScope.launch {
             // Delete current profile image if exists
