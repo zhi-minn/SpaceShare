@@ -18,4 +18,7 @@
     <color name="light_red">#FF7276</color>
     <color name="error_red">#FFCCCC</color>
     <color name="baby_blue">#89CFF0</color>
+    <color name="colorGray">#dedede</color>
+    <color name="colorBlue">#2962FF</color>
+    <color name="colorDarkGray">#b4b4b4</color>
 </resources>
