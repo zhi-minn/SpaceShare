@@ -192,7 +192,7 @@
   + Government id screen ui improvements
   + Photo picker to select photo
   + Upload government Id to Firebase Storage feature
-+ Chang 6 hours (2023-07-16) [PR](https://github.com/zhi-minn/SpaceShare/pull/64)
+* Chang 6 hours (2023-07-16) [PR](https://github.com/zhi-minn/SpaceShare/pull/64)
   * Added messaging functionality
     * Users can send text and image messages
     * TODO:
