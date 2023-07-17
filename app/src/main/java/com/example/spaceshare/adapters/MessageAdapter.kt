@@ -15,6 +15,8 @@ import com.example.spaceshare.databinding.ImageMessageBinding
 import com.example.spaceshare.databinding.MessageBinding
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.sql.Date
+import java.text.SimpleDateFormat
 
 // The FirebaseRecyclerAdapter class and options come from the FirebaseUI library
 class MessageAdapter(
@@ -58,9 +60,12 @@ class MessageAdapter(
             binding.messageTextView.text = item.text
             setTextColor(item.name, binding.messageTextView)
 
-            binding.messengerTextView.text = item.name ?: "anonymous"
-            if (item.photoUrl != null) {
-                loadImageIntoView(binding.messengerImageView, item.photoUrl)
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm a")
+            val sentAtTimeFormatted = simpleDateFormat.format(Date(item.timestamp))
+            binding.messengerTextView.text = item.name + "  " + sentAtTimeFormatted
+
+            if (item.profilePhotoUrl != null) {
+                loadImageIntoView(binding.messengerImageView, item.profilePhotoUrl)
             } else {
                 binding.messengerImageView.setImageResource(R.drawable.account_circle_black_36dp)
             }
@@ -83,8 +88,8 @@ class MessageAdapter(
             loadImageIntoView(binding.messageImageView, item.imageUrl!!, false)
 
             binding.messengerTextView.text = item.name ?: "anonymous"
-            if (item.photoUrl != null) {
-                loadImageIntoView(binding.messengerImageView, item.photoUrl)
+            if (item.profilePhotoUrl != null) {
+                loadImageIntoView(binding.messengerImageView, item.profilePhotoUrl)
             } else {
                 binding.messengerImageView.setImageResource(R.drawable.account_circle_black_36dp)
             }

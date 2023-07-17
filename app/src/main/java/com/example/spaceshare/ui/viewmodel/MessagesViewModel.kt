@@ -1,12 +1,13 @@
 package com.example.spaceshare.ui.viewmodel
 
 import android.net.Uri
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.data.implementation.FirebaseDatabaseRepoImpl
-import com.example.spaceshare.data.repository.FirebaseStorageRepository
 import com.example.spaceshare.data.repository.UserRepository
 import com.example.spaceshare.models.Message
 import com.example.spaceshare.models.User
@@ -16,7 +17,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class MessagesViewModel @Inject constructor(
@@ -53,11 +53,13 @@ class MessagesViewModel @Inject constructor(
         return messagesRef
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun sendMessage(text: String) {
         val message = constructMessage(text, null)
         messagesRef.push().setValue(message)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun sendImageMessage(uri: Uri, activityContext : FragmentActivity) {
         val message = constructMessage(null, "https://i.gifer.com/ZKZg.gif") // use loading image until actual image is uploaded
         messagesRef.push().setValue(
@@ -78,13 +80,14 @@ class MessagesViewModel @Inject constructor(
                     .reference
                     .child("messages")
                     .child(currentUser.id)
-                    .child(key!!)
+                    .child(key!!) // message key in Firebase RT Database
                     .child(uri.lastPathSegment!!)
                 putImageInStorage(storageReference, uri, key, activityContext)
             }
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun putImageInStorage(storageReference: StorageReference, uri: Uri, key: String?, activityContext: FragmentActivity) {
         // First upload the image to Cloud Storage
         viewModelScope.launch {
@@ -109,6 +112,7 @@ class MessagesViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun constructMessage(text: String?, imageURL: String?): Message {
         return Message(
             text,
