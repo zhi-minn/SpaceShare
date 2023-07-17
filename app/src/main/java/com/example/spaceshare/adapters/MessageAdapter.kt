@@ -60,9 +60,7 @@ class MessageAdapter(
             binding.messageTextView.text = item.text
             setTextColor(item.senderName, binding.messageTextView)
 
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm a")
-            val sentAtTimeFormatted = simpleDateFormat.format(Date(item.timestamp))
-            binding.messengerTextView.text = item.senderName + "  " + sentAtTimeFormatted
+            binding.messengerTextView.text = getMessageSenderText(item)
 
             if (item.profilePhotoUrl != null) {
                 loadImageIntoView(binding.messengerImageView, item.profilePhotoUrl)
@@ -87,13 +85,19 @@ class MessageAdapter(
         fun bind(item: Message) {
             loadImageIntoView(binding.messageImageView, item.imageUrl!!, false)
 
-            binding.messengerTextView.text = item.senderName ?: "anonymous"
+            binding.messengerTextView.text = getMessageSenderText(item)
             if (item.profilePhotoUrl != null) {
                 loadImageIntoView(binding.messengerImageView, item.profilePhotoUrl)
             } else {
                 binding.messengerImageView.setImageResource(R.drawable.account_circle_black_36dp)
             }
         }
+    }
+
+    private fun getMessageSenderText(message: Message) : String {
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm a")
+        val sentAtTimeFormatted = simpleDateFormat.format(Date(message.timestamp))
+        return message.senderName + "  " + sentAtTimeFormatted
     }
 
     private fun loadImageIntoView(view: ImageView, url: String, isCircular: Boolean = true) {
