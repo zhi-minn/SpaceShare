@@ -116,5 +116,9 @@ class ChatDialogFragment(
         binding.addMessageImageView.setOnClickListener {
             openDocument.launch(arrayOf("image/*"))
         }
+
+        binding.btnClose.setOnClickListener {
+            this.dismiss()
+        }
     }
 }
