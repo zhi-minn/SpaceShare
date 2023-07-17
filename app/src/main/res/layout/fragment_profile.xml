@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="@dimen/box_padding">
+        android:padding="24dp">
 
         <!-- Profile & Picture -->
         <TextView
