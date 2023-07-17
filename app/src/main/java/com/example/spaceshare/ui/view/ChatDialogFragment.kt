@@ -1,59 +1,60 @@
 package com.example.spaceshare.ui.view
 
+import MessageAdapter
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.spaceshare.ui.viewmodel.MessagesViewModel
-import com.example.spaceshare.R
-import MessageAdapter
-import android.os.Build
 import android.widget.ProgressBar
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ScrollToBottomObserver
-import com.example.spaceshare.databinding.FragmentMessagesBinding
+import com.example.spaceshare.databinding.DialogChatBinding
 import com.example.spaceshare.models.Message
-import com.example.spaceshare.ui.viewmodel.ProfileViewModel
+import com.example.spaceshare.ui.viewmodel.MessagesViewModel
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class MessagesFragment : Fragment() {
+class ChatDialogFragment(
+    private val chatViewModel : MessagesViewModel
+) : DialogFragment() {
 
-    companion object {
-        fun newInstance() = MessagesFragment()
-    }
-
-    @Inject
-    lateinit var messagesViewModel: MessagesViewModel
-
-    private lateinit var adapter: MessageAdapter
-
+    private lateinit var binding: DialogChatBinding
     private lateinit var navController: NavController
-    private lateinit var binding: FragmentMessagesBinding
+    private lateinit var adapter: MessageAdapter
     private lateinit var manager: LinearLayoutManager
 
     @RequiresApi(Build.VERSION_CODES.O)
     private val openDocument = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let {uri ->
-            messagesViewModel.sendImageMessage(uri, requireActivity())
+            chatViewModel.sendImageMessage(uri, requireActivity())
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_FRAME, R.style.SearchAndFilterDialogStyle)
+    }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_messages, container, false)
+        // Inflate the layout for this fragment
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.dialog_chat, container, false)
         return binding.root
     }
 
@@ -68,7 +69,7 @@ class MessagesFragment : Fragment() {
 
     private fun configureRecyclerView() {
         val options = FirebaseRecyclerOptions.Builder<Message>()
-            .setQuery(messagesViewModel.getMessagesDBref(), Message::class.java)
+            .setQuery(chatViewModel.getMessagesDBref(), Message::class.java)
             .build()
         adapter = MessageAdapter(options, FirebaseAuth.getInstance().currentUser!!.displayName)
         binding.progressBar.visibility = ProgressBar.INVISIBLE
@@ -102,7 +103,7 @@ class MessagesFragment : Fragment() {
         binding.sendButton.setOnClickListener {
 
             val textContent = binding.messageEditText.text.toString()
-            messagesViewModel.sendMessage(textContent)
+            chatViewModel.sendMessage(textContent)
             binding.messageEditText.setText("")
         }
 
