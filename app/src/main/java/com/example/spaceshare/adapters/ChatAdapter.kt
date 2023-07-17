@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.spaceshare.data.repository.UserRepository
 import com.example.spaceshare.databinding.ChatItemBinding
 import com.example.spaceshare.models.Chat
+import com.example.spaceshare.utils.ImageLoaderUtil
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +39,10 @@ class ChatAdapter (
 
         fun bind(chat: Chat) {
             // Bind the chat data to the views
+            if (chat.photoURL != null) {
+                ImageLoaderUtil.loadImageIntoView(binding.chatImageView, chat.photoURL, false)
+            }
+
             CoroutineScope(Dispatchers.IO).launch {
                 val hostUser = chat.hostId?.let { userRepo.getUserById(it) }
                 if (hostUser != null) {

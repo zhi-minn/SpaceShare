@@ -29,12 +29,17 @@ class MessagesRepoImpl @Inject constructor(
     private val realTimeDB = Firebase.database
     private val baseMessagesRef = realTimeDB.reference.child("messages")
 
-    override fun getBaseMessagesRef() : DatabaseReference {
+    override fun getBaseMessagesRef(): DatabaseReference {
         return baseMessagesRef
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun createChat(title : String, hostId : String, memberIds : List<String>) : Chat {
+    override suspend fun createChat(
+        title: String,
+        photoURL: String,
+        hostId: String,
+        memberIds: List<String>
+    ): Chat {
         // Return the chat if the chat already exists
         val existingChats = getChatsByMemberIds(memberIds).filter { chat ->
             chat.title == title
@@ -45,7 +50,7 @@ class MessagesRepoImpl @Inject constructor(
 
         // Otherwise make a new chat
         return withContext(Dispatchers.IO) {
-            val chat = Chat(title = title, hostId = hostId, members = memberIds)
+            val chat = Chat(title = title, photoURL = photoURL, hostId = hostId, members = memberIds)
             val deferred = CompletableDeferred<Chat>()
             chatsCollection.document(chat.id)
                 .set(chat)
@@ -67,7 +72,12 @@ class MessagesRepoImpl @Inject constructor(
 
             chatRef
                 .update("lastMessage", lastMessage)
-                .addOnSuccessListener { Log.d(TAG, "Chat $chatId successfully updated lastMessage") }
+                .addOnSuccessListener {
+                    Log.d(
+                        TAG,
+                        "Chat $chatId successfully updated lastMessage"
+                    )
+                }
                 .addOnFailureListener { e -> Log.w(TAG, "Error updating chat document $chatId", e) }
         }
     }
@@ -82,7 +92,11 @@ class MessagesRepoImpl @Inject constructor(
                         val chat = it.toObject(Chat::class.java)
                         deferred.complete(chat)
                     } catch (e: Exception) {
-                        Log.e(TAG, "Error casting listing with ID $chatId to Chat object: ${e.message}", e)
+                        Log.e(
+                            TAG,
+                            "Error casting listing with ID $chatId to Chat object: ${e.message}",
+                            e
+                        )
                         deferred.complete(null)
                     }
                 }
@@ -94,47 +108,49 @@ class MessagesRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun getChatsByMemberIds(memberIds: List<String>) : List<Chat> = withContext(Dispatchers.IO) {
-        try {
-            val result = chatsCollection.whereEqualTo("members", memberIds)
-                .get()
-                .await()
+    override suspend fun getChatsByMemberIds(memberIds: List<String>): List<Chat> =
+        withContext(Dispatchers.IO) {
+            try {
+                val result = chatsCollection.whereEqualTo("members", memberIds)
+                    .get()
+                    .await()
 
-            return@withContext result.documents.mapNotNull { document ->
-                try {
-                    val chat = document.toObject(Chat::class.java)
-                    chat?.id = document.id
-                    chat
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error casting document to Chat object: ${e.message}")
-                    null
+                return@withContext result.documents.mapNotNull { document ->
+                    try {
+                        val chat = document.toObject(Chat::class.java)
+                        chat?.id = document.id
+                        chat
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error casting document to Chat object: ${e.message}")
+                        null
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error reading chats query: ${e.message}")
+                return@withContext emptyList()
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error reading chats query: ${e.message}")
-            return@withContext emptyList()
         }
-    }
 
-    override suspend fun getChatsByUserId(userId: String): List<Chat> = withContext(Dispatchers.IO) {
-        try {
-            val result = chatsCollection.whereArrayContains("members", userId)
-                .get()
-                .await()
+    override suspend fun getChatsByUserId(userId: String): List<Chat> =
+        withContext(Dispatchers.IO) {
+            try {
+                val result = chatsCollection.whereArrayContains("members", userId)
+                    .get()
+                    .await()
 
-            return@withContext result.documents.mapNotNull { document ->
-                try {
-                    val chat = document.toObject(Chat::class.java)
-                    chat?.id = document.id
-                    chat
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error casting document to Chat object: ${e.message}")
-                    null
+                return@withContext result.documents.mapNotNull { document ->
+                    try {
+                        val chat = document.toObject(Chat::class.java)
+                        chat?.id = document.id
+                        chat
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error casting document to Chat object: ${e.message}")
+                        null
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error reading chats query: ${e.message}")
+                return@withContext emptyList()
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error reading chats query: ${e.message}")
-            return@withContext emptyList()
         }
-    }
 }
