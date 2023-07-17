@@ -13,6 +13,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.example.spaceshare.databinding.ImageMessageBinding
 import com.example.spaceshare.databinding.MessageBinding
+import com.example.spaceshare.utils.ImageLoaderUtil
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.sql.Date
@@ -63,7 +64,7 @@ class MessageAdapter(
             binding.messengerTextView.text = getMessageSenderText(item)
 
             if (item.profilePhotoUrl != null) {
-                loadImageIntoView(binding.messengerImageView, item.profilePhotoUrl)
+                ImageLoaderUtil.loadImageIntoView(binding.messengerImageView, item.profilePhotoUrl)
             } else {
                 binding.messengerImageView.setImageResource(R.drawable.account_circle_black_36dp)
             }
@@ -83,11 +84,11 @@ class MessageAdapter(
     inner class ImageMessageViewHolder(private val binding: ImageMessageBinding) :
         ViewHolder(binding.root) {
         fun bind(item: Message) {
-            loadImageIntoView(binding.messageImageView, item.imageUrl!!, false)
+            ImageLoaderUtil.loadImageIntoView(binding.messageImageView, item.imageUrl!!, false)
 
             binding.messengerTextView.text = getMessageSenderText(item)
             if (item.profilePhotoUrl != null) {
-                loadImageIntoView(binding.messengerImageView, item.profilePhotoUrl)
+                ImageLoaderUtil.loadImageIntoView(binding.messengerImageView, item.profilePhotoUrl)
             } else {
                 binding.messengerImageView.setImageResource(R.drawable.account_circle_black_36dp)
             }
@@ -98,34 +99,5 @@ class MessageAdapter(
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm a")
         val sentAtTimeFormatted = simpleDateFormat.format(Date(message.timestamp))
         return message.senderName + "  " + sentAtTimeFormatted
-    }
-
-    private fun loadImageIntoView(view: ImageView, url: String, isCircular: Boolean = true) {
-        if (url.startsWith("gs://")) {
-            val storageReference = Firebase.storage.getReferenceFromUrl(url)
-            storageReference.downloadUrl
-                .addOnSuccessListener { uri ->
-                    val downloadUrl = uri.toString()
-                    loadWithGlide(view, downloadUrl, isCircular)
-                }
-                .addOnFailureListener { e ->
-                    Log.w(
-                        TAG,
-                        "Getting download url was not successful.",
-                        e
-                    )
-                }
-        } else {
-            loadWithGlide(view, url, isCircular)
-        }
-    }
-
-    private fun loadWithGlide(view: ImageView, url: String, isCircular: Boolean = true) {
-        Glide.with(view.context).load(url).into(view)
-        var requestBuilder = Glide.with(view.context).load(url)
-        if (isCircular) {
-            requestBuilder = requestBuilder.transform(CircleCrop())
-        }
-        requestBuilder.into(view)
     }
 }
