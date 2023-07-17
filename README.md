@@ -200,4 +200,7 @@
 * Chang 1.5 hours (2023-07-16) [PR](https://github.com/zhi-minn/SpaceShare/pull/65)
   * Fixed user profile photos not showing up in messages
   * Make image loading gif higher quality
-  
+* Chang 2.5 hours (2023-07-17) [PR](https://github.com/zhi-minn/SpaceShare/pull/66)
+  * Added timestamp to messages
+  * Added chat dialog fragment
+  * Added MessagesRepo and Chat model
