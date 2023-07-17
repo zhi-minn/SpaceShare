@@ -16,11 +16,11 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class MessagesViewModel @Inject constructor(
-    private val userRepo: UserRepository,
-    private val firebaseStorageRepo: FirebaseStorageRepository
+    private val userRepo: UserRepository
 ) : ViewModel() {
 
     private val firebaseDatabaseRepo = FirebaseDatabaseRepoImpl()
@@ -31,13 +31,21 @@ class MessagesViewModel @Inject constructor(
 
     private lateinit var messagesRef: DatabaseReference
     private lateinit var currentUser: User
+    private lateinit var currentUserPhotoURL: String
 
     init {
         viewModelScope.launch {
-            messagesRef = firebaseDatabaseRepo.getMessagesRef()
+            messagesRef = firebaseDatabaseRepo.getMessagesRef().child("global")
 
             val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
             currentUser = userRepo.getUserById(currentUserId)!!
+
+            currentUser.photoPath?.let {
+                Firebase.storage.reference.child("profiles").child(it).downloadUrl
+                    .addOnSuccessListener { url ->
+                        currentUserPhotoURL = url.toString()
+                    }
+            }
         }
     }
 
@@ -51,7 +59,7 @@ class MessagesViewModel @Inject constructor(
     }
 
     fun sendImageMessage(uri: Uri, activityContext : FragmentActivity) {
-        val message = constructMessage(null, "https://www.google.com/images/spin-32.gif") // use loading image until actual image is uploaded
+        val message = constructMessage(null, "https://i.gifer.com/ZKZg.gif") // use loading image until actual image is uploaded
         messagesRef.push().setValue(
             message,
             DatabaseReference.CompletionListener { databaseError, databaseReference ->
@@ -105,12 +113,12 @@ class MessagesViewModel @Inject constructor(
         return Message(
             text,
             getCurrentUsername(),
-            currentUser.photoPath,
+            currentUserPhotoURL,
             imageURL
         )
     }
 
-    fun getCurrentUsername(): String {
+    private fun getCurrentUsername(): String {
         return currentUser.firstName + " " + currentUser.lastName
     }
 }
