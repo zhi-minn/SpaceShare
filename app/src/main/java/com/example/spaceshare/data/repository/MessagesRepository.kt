@@ -7,7 +7,7 @@ import com.google.firebase.database.DatabaseReference
 interface MessagesRepository {
 
     // Creates a chat with the members set to the memberIds
-    suspend fun createChat(title : String, memberIds : List<String>) : Chat
+    suspend fun createChat(title : String, hostId : String, memberIds : List<String>) : Chat
 
     // Gets all the chats where the members are exactly the memberIds provided
     suspend fun getChatsByMemberIds(memberIds: List<String>) : List<Chat>

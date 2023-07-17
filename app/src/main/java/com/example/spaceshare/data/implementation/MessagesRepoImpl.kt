@@ -5,12 +5,10 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.spaceshare.data.repository.MessagesRepository
 import com.example.spaceshare.models.Chat
-import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Message
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +34,7 @@ class MessagesRepoImpl @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun createChat(title : String, memberIds : List<String>) : Chat {
+    override suspend fun createChat(title : String, hostId : String, memberIds : List<String>) : Chat {
         // Return the chat if the chat already exists
         val existingChats = getChatsByMemberIds(memberIds).filter { chat ->
             chat.title == title
@@ -47,7 +45,7 @@ class MessagesRepoImpl @Inject constructor(
 
         // Otherwise make a new chat
         return withContext(Dispatchers.IO) {
-            val chat = Chat(title = title, members = memberIds)
+            val chat = Chat(title = title, hostId = hostId, members = memberIds)
             val deferred = CompletableDeferred<Chat>()
             chatsCollection.document(chat.id)
                 .set(chat)

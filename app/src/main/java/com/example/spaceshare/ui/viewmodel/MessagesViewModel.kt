@@ -48,7 +48,7 @@ class MessagesViewModel @Inject constructor(
     suspend fun createChatWithHost(listing: Listing): Chat {
         return withContext(Dispatchers.IO) {
             val memberIds = listOf(listing.hostId, currentUser.id)
-            val chat = messagesRepo.createChat(listing.title, memberIds as List<String>)
+            val chat = messagesRepo.createChat(listing.title, listing.hostId!!, memberIds as List<String>)
             return@withContext chat
         }
     }

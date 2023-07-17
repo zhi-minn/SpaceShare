@@ -6,13 +6,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.spaceshare.data.repository.UserRepository
 import com.example.spaceshare.databinding.ChatItemBinding
 import com.example.spaceshare.models.Chat
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.sql.Date
 import java.text.SimpleDateFormat
 
-class ChatAdapter(
+class ChatAdapter (
+    private val userRepo: UserRepository,
     private val itemClickListener: ItemClickListener
 ) : ListAdapter<Chat, ChatAdapter.ViewHolder>(DiffCallback()) {
 
@@ -33,6 +38,13 @@ class ChatAdapter(
 
         fun bind(chat: Chat) {
             // Bind the chat data to the views
+            CoroutineScope(Dispatchers.IO).launch {
+                val hostUser = chat.hostId?.let { userRepo.getUserById(it) }
+                if (hostUser != null) {
+                    binding.chatOwner.text = hostUser.firstName + " " + hostUser.lastName
+                }
+            }
+
             binding.chatItemTitle.text = chat.title ?: "Untitled"
 
             val lastMessage = chat.lastMessage
@@ -64,7 +76,6 @@ class ChatAdapter(
                     binding.lastUpdateTime.text = lastMessageTimeFormatted
                 }
             }
-
 
             // Set click listeners
             binding.chatItemContainer.setOnClickListener {

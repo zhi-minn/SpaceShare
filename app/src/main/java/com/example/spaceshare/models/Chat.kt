@@ -7,8 +7,9 @@ import java.util.UUID
 
 data class Chat @RequiresApi(Build.VERSION_CODES.O) constructor(
     var id: String = UUID.randomUUID().toString(),
-    var title : String = "",
-    var lastMessage : Message? = null,
+    val hostId : String? = null,
+    val title : String = "",
+    val lastMessage : Message? = null,
     val members : List<String> = listOf()
 ) {
 }

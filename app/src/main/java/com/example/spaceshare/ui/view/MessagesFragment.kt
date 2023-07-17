@@ -12,10 +12,10 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spaceshare.adapters.ChatAdapter
+import com.example.spaceshare.data.repository.UserRepository
 import com.example.spaceshare.databinding.FragmentMessagesBinding
 import com.example.spaceshare.models.Chat
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,6 +27,9 @@ class MessagesFragment : Fragment() {
 
     @Inject
     lateinit var messagesViewModel: MessagesViewModel
+
+    @Inject
+    lateinit var userRepo : UserRepository
 
     private lateinit var adapter: ChatAdapter
 
@@ -57,7 +60,7 @@ class MessagesFragment : Fragment() {
     }
 
     private fun configureRecyclerView() {
-        adapter = ChatAdapter(object : ChatAdapter.ItemClickListener {
+        adapter = ChatAdapter(userRepo, object : ChatAdapter.ItemClickListener {
             override fun onItemClick(chat: Chat) {
                 val chatDialogFragment = ChatDialogFragment(chat)
                 chatDialogFragment.show(
