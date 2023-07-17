@@ -8,5 +8,6 @@ data class Chat (
     var title : String = "",
     var lastMessage : String = "",
     var lastMessageTimestamp: Timestamp? = null,
-    val members : List<String>
-)
+    val members : List<String> = listOf()
+) {
+}
