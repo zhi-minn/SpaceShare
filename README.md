@@ -200,7 +200,11 @@
 * Chang 1.5 hours (2023-07-16) [PR](https://github.com/zhi-minn/SpaceShare/pull/65)
   * Fixed user profile photos not showing up in messages
   * Make image loading gif higher quality
-* Chang 2.5 hours (2023-07-17) [PR](https://github.com/zhi-minn/SpaceShare/pull/66)
-  * Added timestamp to messages
-  * Added chat dialog fragment
-  * Added MessagesRepo and Chat model
+* Chang 9 hours (2023-07-17) [PR](https://github.com/zhi-minn/SpaceShare/pull/66)
+  * Added timestamp to each message
+  * Added individual chats/channels to messaging service
+  * Added ability for prospective clients to message host from listing details page
+    * Will not create duplicate chats for the same listing
+  * Messages fragment now shows all chats a user is part of
+    * Chats keep track of last update
+  * Revamped old messages fragment into reuseable chat dialog fragment
