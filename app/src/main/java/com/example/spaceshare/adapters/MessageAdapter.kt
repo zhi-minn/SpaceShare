@@ -58,11 +58,11 @@ class MessageAdapter(
     inner class MessageViewHolder(private val binding: MessageBinding) : ViewHolder(binding.root) {
         fun bind(item: Message) {
             binding.messageTextView.text = item.text
-            setTextColor(item.name, binding.messageTextView)
+            setTextColor(item.senderName, binding.messageTextView)
 
             val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm a")
             val sentAtTimeFormatted = simpleDateFormat.format(Date(item.timestamp))
-            binding.messengerTextView.text = item.name + "  " + sentAtTimeFormatted
+            binding.messengerTextView.text = item.senderName + "  " + sentAtTimeFormatted
 
             if (item.profilePhotoUrl != null) {
                 loadImageIntoView(binding.messengerImageView, item.profilePhotoUrl)
@@ -87,7 +87,7 @@ class MessageAdapter(
         fun bind(item: Message) {
             loadImageIntoView(binding.messageImageView, item.imageUrl!!, false)
 
-            binding.messengerTextView.text = item.name ?: "anonymous"
+            binding.messengerTextView.text = item.senderName ?: "anonymous"
             if (item.profilePhotoUrl != null) {
                 loadImageIntoView(binding.messengerImageView, item.profilePhotoUrl)
             } else {

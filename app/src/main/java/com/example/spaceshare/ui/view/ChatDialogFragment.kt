@@ -49,7 +49,7 @@ class ChatDialogFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, R.style.SearchAndFilterDialogStyle)
-        chatViewModel.setChatDBRef(chat.id)
+        chatViewModel.setChat(chat)
     }
 
     override fun onCreateView(

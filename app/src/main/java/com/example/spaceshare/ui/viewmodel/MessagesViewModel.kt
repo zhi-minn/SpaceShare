@@ -40,7 +40,6 @@ class MessagesViewModel @Inject constructor(
         viewModelScope.launch {
             chats.value =
                 messagesRepo.getChatsByUserId(FirebaseAuth.getInstance().currentUser!!.uid)
-            chats.value = chats.value?.plus(Chat("global", "Global Chat", "something", null, emptyList()))
             Log.d(TAG, chats.value.toString())
         }
     }

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.data.repository.MessagesRepository
 import com.example.spaceshare.data.repository.UserRepository
+import com.example.spaceshare.models.Chat
 import com.example.spaceshare.models.Message
 import com.example.spaceshare.models.User
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +29,7 @@ class ChatViewModel @Inject constructor(
         private val TAG = this::class.simpleName
     }
 
+    private lateinit var chat : Chat
     private lateinit var chatDBRef: DatabaseReference
     private lateinit var currentUser: User
     private lateinit var currentUserPhotoURL: String
@@ -46,8 +48,9 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    fun setChatDBRef(chatId : String) {
-        chatDBRef = messagesRepo.getBaseMessagesRef().child(chatId)
+    fun setChat(chatToSet: Chat) {
+        chat = chatToSet
+        chatDBRef = messagesRepo.getBaseMessagesRef().child(chat.id)
     }
 
     fun getChatDBRef(): DatabaseReference {
@@ -56,8 +59,17 @@ class ChatViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun sendMessage(text: String) {
-        val message = constructMessage(text, null)
-        chatDBRef.push().setValue(message)
+        viewModelScope.launch {
+            val message = constructMessage(text, null)
+            chatDBRef.push().setValue(message)
+            updateLastMessage(message)
+        }
+    }
+
+    private fun updateLastMessage(message: Message) {
+        viewModelScope.launch {
+            messagesRepo.setLastMessage(chat.id, message)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -101,6 +113,7 @@ class ChatViewModel @Inject constructor(
                         .addOnSuccessListener { uri ->
                             val message = constructMessage(null, uri.toString())
                             chatDBRef.child(key!!).setValue(message)
+                            updateLastMessage(message)
                         }
                 }
                 .addOnFailureListener(activityContext) { e ->
@@ -118,6 +131,7 @@ class ChatViewModel @Inject constructor(
         return Message(
             text,
             getCurrentUsername(),
+            currentUser.id,
             currentUserPhotoURL,
             imageURL
         )

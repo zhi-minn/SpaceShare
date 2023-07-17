@@ -1,9 +1,12 @@
 package com.example.spaceshare.data.implementation
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.example.spaceshare.data.repository.MessagesRepository
 import com.example.spaceshare.models.Chat
 import com.example.spaceshare.models.Listing
+import com.example.spaceshare.models.Message
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,6 +35,7 @@ class MessagesRepoImpl @Inject constructor(
         return baseMessagesRef
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun createChat(title : String, memberIds : List<String>) : Chat {
         // Return the chat if the chat already exists
         val existingChats = getChatsByMemberIds(memberIds).filter { chat ->
@@ -56,6 +60,17 @@ class MessagesRepoImpl @Inject constructor(
                     deferred.completeExceptionally(e)
                 }
             deferred.await()
+        }
+    }
+
+    override suspend fun setLastMessage(chatId: String, lastMessage: Message) {
+        return withContext(Dispatchers.IO) {
+            val chatRef = chatsCollection.document(chatId)
+
+            chatRef
+                .update("lastMessage", lastMessage)
+                .addOnSuccessListener { Log.d(TAG, "Chat $chatId successfully updated lastMessage") }
+                .addOnFailureListener { e -> Log.w(TAG, "Error updating chat document $chatId", e) }
         }
     }
 

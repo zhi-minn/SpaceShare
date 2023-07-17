@@ -1,5 +1,6 @@
 package com.example.spaceshare.adapters
 
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -7,6 +8,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spaceshare.databinding.ChatItemBinding
 import com.example.spaceshare.models.Chat
+import com.google.firebase.auth.FirebaseAuth
+import java.sql.Date
+import java.text.SimpleDateFormat
 
 class ChatAdapter(
     private val itemClickListener: ItemClickListener
@@ -30,7 +34,37 @@ class ChatAdapter(
         fun bind(chat: Chat) {
             // Bind the chat data to the views
             binding.chatItemTitle.text = chat.title ?: "Untitled"
-            binding.chatLastMessage.text = chat.lastMessage
+
+            val lastMessage = chat.lastMessage
+            if (lastMessage != null) {
+                var lastUpdate = ""
+                val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+
+                // Add who sent the last message
+                if (lastMessage.senderId != currentUserId)
+                    lastUpdate += lastMessage.senderName
+                else
+                    lastUpdate += "You"
+
+                // Add what the last message was
+                if (lastMessage.text != null)
+                    lastUpdate += ": " + lastMessage.text
+                else
+                    lastUpdate += " sent an attachment"
+
+                binding.chatLastUpdate.text = lastUpdate
+
+                // Set last update time
+                if (DateUtils.isToday(lastMessage.timestamp)) {
+                    binding.lastUpdateTime.text = DateUtils.getRelativeTimeSpanString(lastMessage.timestamp)
+                }
+                else {
+                    val simpleDateFormat = SimpleDateFormat("MMM dd")
+                    val lastMessageTimeFormatted = simpleDateFormat.format(Date(lastMessage.timestamp))
+                    binding.lastUpdateTime.text = lastMessageTimeFormatted
+                }
+            }
+
 
             // Set click listeners
             binding.chatItemContainer.setOnClickListener {
