@@ -7,7 +7,6 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spaceshare.data.implementation.FirebaseDatabaseRepoImpl
 import com.example.spaceshare.data.repository.MessagesRepository
 import com.example.spaceshare.data.repository.UserRepository
 import com.example.spaceshare.models.Message
@@ -25,8 +24,6 @@ class ChatViewModel @Inject constructor(
     private val messagesRepo: MessagesRepository
 ) : ViewModel() {
 
-    private val firebaseDatabaseRepo = FirebaseDatabaseRepoImpl()
-
     companion object {
         private val TAG = this::class.simpleName
     }
@@ -37,8 +34,6 @@ class ChatViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            chatDBRef = firebaseDatabaseRepo.getMessagesRef().child("global")
-
             val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
             currentUser = userRepo.getUserById(currentUserId)!!
 

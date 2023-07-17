@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spaceshare.data.implementation.FirebaseDatabaseRepoImpl
 import com.example.spaceshare.data.repository.MessagesRepository
 import com.example.spaceshare.data.repository.UserRepository
 import com.example.spaceshare.models.Chat
