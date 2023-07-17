@@ -39,8 +39,9 @@ class MessagesViewModel @Inject constructor(
     fun fetchChats() {
         viewModelScope.launch {
             chats.value =
-                messagesRepo.getChatsByUserId(FirebaseAuth.getInstance().currentUser!!.uid)
-            Log.d(TAG, chats.value.toString())
+                messagesRepo.getChatsByUserId(FirebaseAuth.getInstance().currentUser!!.uid).sortedByDescending { chat ->
+                    chat.lastMessage?.timestamp
+                }
         }
     }
 
