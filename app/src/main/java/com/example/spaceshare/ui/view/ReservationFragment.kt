@@ -13,11 +13,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
+import com.example.spaceshare.adapters.ListingAdapter
 import com.example.spaceshare.databinding.FragmentReservationBinding
 import com.example.spaceshare.models.ImageModel
+import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
@@ -30,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -93,7 +97,21 @@ class ReservationFragment : Fragment() {
 //        }.attach()
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
         displayReservations()
+//        configureRecyclerView()
     }
+
+//    private fun configureRecyclerView() {
+//        adapter = ReservationAdapter(childFragmentManager, object : ReservationAdapter.ItemClickListener {
+//            override fun onItemClick(reservation: Reservation) {
+//                val clientListingDialogFragment = ClientListingDialogFragment(listing)
+//                clientListingDialogFragment.show(
+//                    Objects.requireNonNull(childFragmentManager),
+//                    "clientListingDialog")
+//            }
+//        })
+//        binding.recyclerView.adapter = adapter
+//        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+//    }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -162,6 +180,12 @@ class ReservationFragment : Fragment() {
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
                 layoutParams.setMargins(8, 32, 8, 32)
+                cardView.setOnClickListener{
+                    val reservationDetailDialogFragment = ReservationDetailDialogFragment(reservation)
+                    reservationDetailDialogFragment.show(
+                        Objects.requireNonNull(childFragmentManager),
+                        "reservationDialog")
+                }
                 cardView.layoutParams = layoutParams
                 cardView.radius = 25.0F
                 binding.reservationPage.addView(cardView)

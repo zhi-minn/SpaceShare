@@ -1,6 +1,7 @@
 package com.example.spaceshare.models
 
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.ServerTimestamp
 
 enum class ReservationStatus {
     PENDING,
@@ -23,9 +24,11 @@ data class Reservation(
     val hostId: String? = null,
     val clientId: String? = null,
     val listingId: String? = null,
+    @ServerTimestamp
     val startDate: Timestamp? = null,
+    @ServerTimestamp
     val endDate: Timestamp? = null,
-    val unit: Int? = null,
+    val unit: Double? = null,
     val status: Int? = null
 
 //    val rating:Int? = null
