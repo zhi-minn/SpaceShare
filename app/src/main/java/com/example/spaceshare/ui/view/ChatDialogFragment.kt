@@ -68,8 +68,13 @@ class ChatDialogFragment(
         super.onViewCreated(view, savedInstanceState)
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
 
+        configureUI()
         configureRecyclerView()
         configureButtons()
+    }
+
+    private fun configureUI() {
+        binding.chatTitle.text = chat.title
     }
 
     private fun configureRecyclerView() {
