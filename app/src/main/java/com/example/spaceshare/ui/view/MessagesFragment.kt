@@ -46,6 +46,14 @@ class MessagesFragment : Fragment() {
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
 
         configureRecyclerView()
+        configureChatObservers()
+        configureButtons()
+    }
+
+    private fun configureButtons() {
+        binding.refreshButton.setOnClickListener {
+            messagesViewModel.fetchChats()
+        }
     }
 
     private fun configureRecyclerView() {
@@ -60,5 +68,11 @@ class MessagesFragment : Fragment() {
         })
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun configureChatObservers() {
+        messagesViewModel.chats.observe(viewLifecycleOwner) { chats ->
+            adapter.submitList(chats)
+        }
     }
 }
