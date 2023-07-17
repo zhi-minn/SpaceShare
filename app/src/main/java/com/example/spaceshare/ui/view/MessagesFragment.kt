@@ -34,9 +34,6 @@ class MessagesFragment : Fragment() {
     @Inject
     lateinit var messagesViewModel: MessagesViewModel
 
-    @Inject
-    lateinit var profileViewModel: ProfileViewModel
-
     private lateinit var adapter: MessageAdapter
 
     private lateinit var navController: NavController
@@ -60,8 +57,6 @@ class MessagesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
-
-        profileViewModel.getUserById(FirebaseAuth.getInstance().currentUser!!.uid)
 
         configureRecyclerView()
         configureButtons()
