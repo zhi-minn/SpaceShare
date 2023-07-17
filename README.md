@@ -208,3 +208,9 @@
   * Messages fragment now shows all chats a user is part of
     * Chats keep track of last update
   * Revamped old messages fragment into reuseable chat dialog fragment
+* Chang 2 hours (2023-07-17) [PR](https://github.com/zhi-minn/SpaceShare/pull/67)
+  * Sorted chats by most recently updated in messages tab
+  * Fixed image messages not having a timestamp
+  * Refactored image loading into utility class
+  * Added host names to chats
+  * Added chat pictures (uses first image of listing)
