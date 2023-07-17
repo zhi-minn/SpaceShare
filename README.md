@@ -197,3 +197,7 @@
     * Users can send text and image messages
     * TODO:
       * Make channels so not all users talk on the same channel lol
+* Chang 1.5 hours (2023-07-16) [PR](https://github.com/zhi-minn/SpaceShare/pull/65)
+  * Fixed user profile photos not showing up in messages
+  * Make image loading gif higher quality
+  
