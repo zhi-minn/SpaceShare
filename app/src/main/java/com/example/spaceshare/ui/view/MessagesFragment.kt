@@ -7,21 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.spaceshare.ui.viewmodel.MessagesViewModel
 import com.example.spaceshare.R
-import MessageAdapter
-import android.widget.ProgressBar
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spaceshare.adapters.ScrollToBottomObserver
+import com.example.spaceshare.adapters.ChatAdapter
 import com.example.spaceshare.databinding.FragmentMessagesBinding
-import com.example.spaceshare.models.Message
-import com.example.spaceshare.ui.viewmodel.ProfileViewModel
-import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.firebase.auth.FirebaseAuth
+import com.example.spaceshare.models.Chat
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,17 +28,10 @@ class MessagesFragment : Fragment() {
     @Inject
     lateinit var messagesViewModel: MessagesViewModel
 
-    private lateinit var adapter: MessageAdapter
+    private lateinit var adapter: ChatAdapter
 
     private lateinit var navController: NavController
     private lateinit var binding: FragmentMessagesBinding
-    private lateinit var manager: LinearLayoutManager
-
-    private val openDocument = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        uri?.let {uri ->
-            messagesViewModel.sendImageMessage(uri, requireActivity())
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,52 +46,33 @@ class MessagesFragment : Fragment() {
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
 
         configureRecyclerView()
+        configureChatObservers()
         configureButtons()
-
-    }
-
-    private fun configureRecyclerView() {
-        val options = FirebaseRecyclerOptions.Builder<Message>()
-            .setQuery(messagesViewModel.getMessagesDBref(), Message::class.java)
-            .build()
-        adapter = MessageAdapter(options, FirebaseAuth.getInstance().currentUser!!.displayName)
-        binding.progressBar.visibility = ProgressBar.INVISIBLE
-        manager = LinearLayoutManager(context)
-        manager.stackFromEnd = true
-        binding.messageRecyclerView.layoutManager = manager
-        binding.messageRecyclerView.adapter = adapter
-
-        // Scroll down when a new message arrives
-        adapter.registerAdapterDataObserver(
-            ScrollToBottomObserver(binding.messageRecyclerView, adapter, manager)
-        )
-
-        adapter.startListening()
     }
 
     private fun configureButtons() {
-        // Disable the send button when there's no text in the input field
-        binding.messageEditText.doOnTextChanged { text, start, before, count ->
-            if (text.toString().trim().isNotEmpty()) {
-                binding.sendButton.isEnabled = true
-                binding.sendButton.setImageResource(R.drawable.outline_send_24)
-            } else {
-                binding.sendButton.isEnabled = false
-                binding.sendButton.setImageResource(R.drawable.outline_send_gray_24)
+        binding.refreshButton.setOnClickListener {
+            messagesViewModel.fetchChats()
+        }
+    }
+
+    private fun configureRecyclerView() {
+        adapter = ChatAdapter(object : ChatAdapter.ItemClickListener {
+            override fun onItemClick(chat: Chat) {
+                val chatDialogFragment = ChatDialogFragment(chat)
+                chatDialogFragment.show(
+                    childFragmentManager,
+                    "chatDialog"
+                )
             }
-        }
+        })
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
 
-        // When the send button is clicked, send a text message
-        binding.sendButton.setOnClickListener {
-
-            val textContent = binding.messageEditText.text.toString()
-            messagesViewModel.sendMessage(textContent)
-            binding.messageEditText.setText("")
-        }
-
-        // When the image button is clicked, launch the image picker
-        binding.addMessageImageView.setOnClickListener {
-            openDocument.launch(arrayOf("image/*"))
+    private fun configureChatObservers() {
+        messagesViewModel.chats.observe(viewLifecycleOwner) { chats ->
+            adapter.submitList(chats)
         }
     }
 }

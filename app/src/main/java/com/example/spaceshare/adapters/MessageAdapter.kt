@@ -15,6 +15,8 @@ import com.example.spaceshare.databinding.ImageMessageBinding
 import com.example.spaceshare.databinding.MessageBinding
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.sql.Date
+import java.text.SimpleDateFormat
 
 // The FirebaseRecyclerAdapter class and options come from the FirebaseUI library
 class MessageAdapter(
@@ -56,11 +58,14 @@ class MessageAdapter(
     inner class MessageViewHolder(private val binding: MessageBinding) : ViewHolder(binding.root) {
         fun bind(item: Message) {
             binding.messageTextView.text = item.text
-            setTextColor(item.name, binding.messageTextView)
+            setTextColor(item.senderName, binding.messageTextView)
 
-            binding.messengerTextView.text = item.name ?: "anonymous"
-            if (item.photoUrl != null) {
-                loadImageIntoView(binding.messengerImageView, item.photoUrl)
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm a")
+            val sentAtTimeFormatted = simpleDateFormat.format(Date(item.timestamp))
+            binding.messengerTextView.text = item.senderName + "  " + sentAtTimeFormatted
+
+            if (item.profilePhotoUrl != null) {
+                loadImageIntoView(binding.messengerImageView, item.profilePhotoUrl)
             } else {
                 binding.messengerImageView.setImageResource(R.drawable.account_circle_black_36dp)
             }
@@ -82,9 +87,9 @@ class MessageAdapter(
         fun bind(item: Message) {
             loadImageIntoView(binding.messageImageView, item.imageUrl!!, false)
 
-            binding.messengerTextView.text = item.name ?: "anonymous"
-            if (item.photoUrl != null) {
-                loadImageIntoView(binding.messengerImageView, item.photoUrl)
+            binding.messengerTextView.text = item.senderName ?: "anonymous"
+            if (item.profilePhotoUrl != null) {
+                loadImageIntoView(binding.messengerImageView, item.profilePhotoUrl)
             } else {
                 binding.messengerImageView.setImageResource(R.drawable.account_circle_black_36dp)
             }

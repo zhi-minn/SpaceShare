@@ -117,9 +117,6 @@ class SearchViewModel @Inject constructor(
         return listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
     }
 
-    private fun sortByDistance() {
-
-    }
 
     override fun setLocation(latLng: LatLng) {
         location.value = latLng
