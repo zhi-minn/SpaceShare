@@ -32,23 +32,49 @@ class MessagesRepoImpl @Inject constructor(
         return baseMessagesRef
     }
 
-    override suspend fun createChat(memberIds : List<String>) : String? {
-        // Return null if the channel already exists
-        if (getChatsByMemberIds(memberIds).isNotEmpty()) {
-            return null
+    override suspend fun createChat(title : String, memberIds : List<String>) : Chat {
+        // Return the chat if the chat already exists
+        val existingChats = getChatsByMemberIds(memberIds).filter { chat ->
+            chat.title == title
+        }
+        if (existingChats.isNotEmpty()) {
+            return existingChats.first()
         }
 
+        // Otherwise make a new chat
         return withContext(Dispatchers.IO) {
-            val chat = Chat(members = memberIds)
-            val deferred = CompletableDeferred<String>()
+            val chat = Chat(title = title, members = memberIds)
+            val deferred = CompletableDeferred<Chat>()
             chatsCollection.document(chat.id)
                 .set(chat)
                 .addOnSuccessListener {
                     Log.d(TAG, "Set chat with id ${chat.id}")
-                    deferred.complete(chat.id)
+                    deferred.complete(chat)
                 }
                 .addOnFailureListener { e ->
                     Log.e(TAG, "Error setting document", e)
+                    deferred.completeExceptionally(e)
+                }
+            deferred.await()
+        }
+    }
+
+    override suspend fun getChatById(chatId: String): Chat? {
+        return withContext(Dispatchers.IO) {
+            val deferred = CompletableDeferred<Chat?>()
+            chatsCollection.document(chatId)
+                .get()
+                .addOnSuccessListener {
+                    try {
+                        val chat = it.toObject(Chat::class.java)
+                        deferred.complete(chat)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error casting listing with ID $chatId to Chat object: ${e.message}", e)
+                        deferred.complete(null)
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "Error getting document", e)
                     deferred.completeExceptionally(e)
                 }
             deferred.await()
