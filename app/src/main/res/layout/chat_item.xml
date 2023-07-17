@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chatItemContainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/chatItemContainer">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/chatItemTitle"
@@ -26,9 +26,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         android:elegantTextHeight="true"
         android:text="Last User : Last message"
         android:textAlignment="viewStart"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/chatItemTitle"
         app:layout_constraintStart_toStartOf="@+id/chatItemTitle"
         app:layout_constraintTop_toBottomOf="@+id/chatItemTitle" />
