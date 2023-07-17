@@ -3,7 +3,6 @@ package com.example.spaceshare.ui.view
 import MessageAdapter
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,16 +18,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ScrollToBottomObserver
 import com.example.spaceshare.databinding.DialogChatBinding
+import com.example.spaceshare.models.Chat
 import com.example.spaceshare.models.Message
-import com.example.spaceshare.ui.viewmodel.MessagesViewModel
+import com.example.spaceshare.ui.viewmodel.ChatViewModel
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChatDialogFragment(
-    private val chatViewModel : MessagesViewModel
+    private val chat : Chat
 ) : DialogFragment() {
+
+    @Inject
+    lateinit var chatViewModel: ChatViewModel
 
     private lateinit var binding: DialogChatBinding
     private lateinit var navController: NavController
@@ -45,6 +49,7 @@ class ChatDialogFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, R.style.SearchAndFilterDialogStyle)
+        chatViewModel.setChatDBRef(chat.id)
     }
 
     override fun onCreateView(
@@ -69,9 +74,9 @@ class ChatDialogFragment(
 
     private fun configureRecyclerView() {
         val options = FirebaseRecyclerOptions.Builder<Message>()
-            .setQuery(chatViewModel.getMessagesDBref(), Message::class.java)
+            .setQuery(chatViewModel.getChatDBRef(), Message::class.java)
             .build()
-        adapter = MessageAdapter(options, FirebaseAuth.getInstance().currentUser!!.displayName)
+        adapter = MessageAdapter(options, chatViewModel.getCurrentUsername())
         binding.progressBar.visibility = ProgressBar.INVISIBLE
         manager = LinearLayoutManager(context)
         manager.stackFromEnd = true

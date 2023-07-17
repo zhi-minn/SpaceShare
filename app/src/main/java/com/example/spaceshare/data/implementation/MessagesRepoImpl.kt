@@ -4,8 +4,11 @@ import android.util.Log
 import com.example.spaceshare.data.repository.MessagesRepository
 import com.example.spaceshare.models.Chat
 import com.example.spaceshare.models.Listing
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -21,6 +24,13 @@ class MessagesRepoImpl @Inject constructor(
     }
 
     private val chatsCollection = db.collection("chats")
+
+    private val realTimeDB = Firebase.database
+    private val baseMessagesRef = realTimeDB.reference.child("messages")
+
+    override fun getBaseMessagesRef() : DatabaseReference {
+        return baseMessagesRef
+    }
 
     override suspend fun createChat(memberIds : List<String>) : String? {
         // Return null if the channel already exists

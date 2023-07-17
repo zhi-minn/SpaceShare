@@ -1,6 +1,7 @@
 package com.example.spaceshare.data.repository
 
 import com.example.spaceshare.models.Chat
+import com.google.firebase.database.DatabaseReference
 
 interface MessagesRepository {
 
@@ -12,4 +13,6 @@ interface MessagesRepository {
 
     // Gets all the chats a user is a member of
     suspend fun getChatsByUserId(userId : String) : List<Chat>
+
+    fun getBaseMessagesRef() : DatabaseReference
 }

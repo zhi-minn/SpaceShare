@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/chatItemContainer">
+
+    <TextView
+        android:id="@+id/chatItemTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:elegantTextHeight="true"
+        android:text="Chat Title"
+        android:textAlignment="viewStart"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/chatLastMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:elegantTextHeight="true"
+        android:text="Last User : Last message"
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toEndOf="@+id/chatItemTitle"
+        app:layout_constraintStart_toStartOf="@+id/chatItemTitle"
+        app:layout_constraintTop_toBottomOf="@+id/chatItemTitle" />
+</androidx.constraintlayout.widget.ConstraintLayout>
