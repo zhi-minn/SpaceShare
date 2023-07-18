@@ -214,3 +214,7 @@
   * Refactored image loading into utility class
   * Added host names to chats
   * Added chat pictures (uses first image of listing)
+* Chang 2 hours (2023-07-18) [PR](https://github.com/zhi-minn/SpaceShare/pull/69)
+  * Made chat message timestamps more concise
+  * Chats now refresh the chats list in the messages tab upon being closed or when a message is sent
+  * Chat last update time now uses "Just now" instead of "0 minutes ago"

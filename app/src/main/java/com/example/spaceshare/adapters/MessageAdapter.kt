@@ -96,7 +96,7 @@ class MessageAdapter(
     }
 
     private fun getMessageSenderText(message: Message) : String {
-        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm a")
+        val simpleDateFormat = SimpleDateFormat("MMM dd hh:mm aa")
         val sentAtTimeFormatted = simpleDateFormat.format(Date(message.timestamp))
         return message.senderName + "  " + sentAtTimeFormatted
     }

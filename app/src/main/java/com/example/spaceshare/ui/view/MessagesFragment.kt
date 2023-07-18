@@ -22,7 +22,7 @@ import javax.inject.Inject
 class MessagesFragment : Fragment() {
 
     companion object {
-        fun newInstance() = MessagesFragment()
+        val tag = this::class.simpleName
     }
 
     @Inject
@@ -62,7 +62,7 @@ class MessagesFragment : Fragment() {
     private fun configureRecyclerView() {
         adapter = ChatAdapter(userRepo, object : ChatAdapter.ItemClickListener {
             override fun onItemClick(chat: Chat) {
-                val chatDialogFragment = ChatDialogFragment(chat)
+                val chatDialogFragment = ChatDialogFragment(chat, shouldRefreshChatsList = true)
                 chatDialogFragment.show(
                     childFragmentManager,
                     "chatDialog"
