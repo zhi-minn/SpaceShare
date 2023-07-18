@@ -45,7 +45,6 @@ class UserRepoImpl @Inject constructor(
 
     override suspend fun getUserById(userId: String): User? {
     return withContext(Dispatchers.IO) {
-
         userDao.getUserById(userId)
             ?: try {
                 val snapshot = userCollection.document(userId).get().await()
@@ -63,4 +62,29 @@ class UserRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun getAllUsers(): List<User> = withContext(Dispatchers.IO) {
+        try {
+            val result = userCollection
+                .get()
+                .await()
+
+            return@withContext result.documents.mapNotNull { document ->
+                try {
+                    val user = document.toObject(User::class.java)
+                    user
+                } catch (e: Exception) {
+                    Log.e(UserRepoImpl.TAG, "Error casting document to User object: ${e.message}")
+                    null
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(UserRepoImpl.TAG, "Error reading users document: ${e.message}")
+            return@withContext emptyList()
+        }
+    }
+
+    override suspend fun updateUserVerifiedStatus(userId: String, status: Int) {
+        val userRef = userCollection.document(userId)
+        userRef.update("verified", status)
+    }
 }

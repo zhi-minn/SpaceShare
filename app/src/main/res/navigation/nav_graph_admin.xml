@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/adminUserFragment">
+    <!-- Admin User Fragment -->
+    <fragment
+        android:id="@+id/adminUserFragment"
+        android:name="com.example.spaceshare.ui.view.AdminUserFragment"
+        android:label="Admin"
+        tools:layout="@layout/fragment_admin_user">
+        <action
+            android:id="@+id/action_adminUserFragment_to_userEntryFragment"
+            app:destination="@id/userEntryFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"/>
+    </fragment>
+
+    <!-- User Entry Fragment -->
+    <fragment
+        android:id="@+id/userEntryFragment"
+        android:name="com.example.spaceshare.ui.view.UserEntryFragment"
+        android:label="UserEntry"
+        tools:layout="@layout/fragment_user_entry">
+        <action
+            android:id="@+id/action_userEntryFragment_to_adminUserFragment"
+            app:destination="@id/adminUserFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"/>
+    </fragment>
+
+</navigation>

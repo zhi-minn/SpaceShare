@@ -36,8 +36,11 @@
     <string name="space_available_template">%.1f cubic metres</string>
     <string name="user_verification_false">Your account is not yet verified</string>
     <string name="user_verification_true">Your account is verified</string>
+    <string name="user_verification_denied">Your account has been denied, please resubmit</string>
     <string name="government_id_none">Not submitted</string>
     <string name="government_id_found_not_verified">Submitted, currently in verification</string>
+    <string name="government_id_verified">Verified</string>
+    <string name="government_id_denied">Denied, please resubmit a valid government id</string>
     <string name="government_id_privacy">Your ID will not be shared to any host or client. Please refer to our privacy policy for more details.</string>
     <string name="government_id_valid">
         These are valid ID types we accept:\n

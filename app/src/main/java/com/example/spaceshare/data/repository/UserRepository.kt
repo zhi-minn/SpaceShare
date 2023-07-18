@@ -7,4 +7,8 @@ interface UserRepository {
     suspend fun setUser(user: User): String
 
     suspend fun getUserById(userId: String): User?
+
+    suspend fun getAllUsers(): List<User>
+
+    suspend fun updateUserVerifiedStatus(userId: String, status: Int)
 }

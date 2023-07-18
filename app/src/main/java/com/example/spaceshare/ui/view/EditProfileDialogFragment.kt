@@ -154,7 +154,7 @@ class EditProfileDialogFragment(
                 binding.governmentIdContainer.visibility = View.VISIBLE
                 binding.detailLabel.text = GOVERNMENT_ID_TITLE
                 binding.detailDescription.text = GOVERNMENT_ID_DESCRIPTION
-                binding.btnUpdate.text = "Add Government ID"
+                binding.btnUpdate.text = getString(R.string.government_id_upload_title)
             }
         }
     }
@@ -182,7 +182,7 @@ class EditProfileDialogFragment(
                     curUser?.let {
                         it.firstName = newFirstName
                         it.lastName = newLastName
-                        it.isVerified = false
+                        it.isVerified = 0
                         profileViewModel.updateUser(it)
                     }
                     this.dismiss()

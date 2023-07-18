@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.example.spaceshare.AdminActivity
 import com.example.spaceshare.MainActivity
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.FragmentLoginBinding
@@ -83,7 +84,12 @@ class LoginFragment : Fragment() {
 
     private fun configureObservers() {
         authViewModel.loginStatus.observe(viewLifecycleOwner) { result ->
-            if (result.isSuccess) {
+            if (result.admin) {
+                // Redirect to admin page
+                val intent = Intent(requireContext(), AdminActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            } else if (result.isSuccess) {
                 // First update FCM (Firebase Cloud Messaging) token for notifications
                 authViewModel.updateUserFcmToken()
 
