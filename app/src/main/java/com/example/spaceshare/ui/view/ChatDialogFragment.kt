@@ -119,8 +119,11 @@ class ChatDialogFragment(
 
         // When the send button is clicked, send a text message
         binding.sendButton.setOnClickListener {
-            binding.messageEditText.setText("")
+            // Grab text content and reset it back to empty first
             val textContent = binding.messageEditText.text.toString()
+            binding.messageEditText.setText("")
+
+            // Then do network requests
             chatViewModel.sendMessage(textContent)
             if (shouldRefreshChatsList) {
                 messagesViewModel.fetchChats()
