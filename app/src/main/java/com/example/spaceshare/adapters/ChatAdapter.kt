@@ -73,7 +73,11 @@ class ChatAdapter (
 
                 // Set last update time
                 if (DateUtils.isToday(lastMessage.timestamp)) {
-                    binding.lastUpdateTime.text = DateUtils.getRelativeTimeSpanString(lastMessage.timestamp)
+                    var lastUpdateTimeString = DateUtils.getRelativeTimeSpanString(lastMessage.timestamp)
+                    if (lastUpdateTimeString == "0 minutes ago") {
+                        lastUpdateTimeString = "Just now"
+                    }
+                    binding.lastUpdateTime.text = lastUpdateTimeString
                 }
                 else {
                     val simpleDateFormat = SimpleDateFormat("MMM dd")
