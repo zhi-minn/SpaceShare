@@ -25,10 +25,16 @@ class ReservationViewModel @Inject constructor(
     private val _listingReserved: MutableLiveData<Boolean> = MutableLiveData()
     val listingReserved: LiveData<Boolean> = _listingReserved
 
+    private val _listingLiveData: MutableLiveData<List<Listing>> = MutableLiveData()
+    val listingLiveData: LiveData<List<Listing>> = _listingLiveData
+
     fun fetchReservations(user: User) {
         viewModelScope.launch {
             val reservations = repo.fetchReservations(user, isHostMode.value ?: false)
             _reservationLiveData.value = reservations
+            val listingIds = reservations.map{it.listingId}
+            val listings = repo.fetchListings(listingIds)
+            _listingLiveData.value = listings
         }
     }
 

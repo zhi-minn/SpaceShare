@@ -65,22 +65,19 @@ class ReservationRepoImpl @Inject constructor(
             }
         }
 
-//    override suspend fun fetchListings(reservations: List<Reservation>?): List<Listing> {
-//        val listingIds = reservations?.map { i -> i.listingId }
-//        val tasks = mutableListOf<Task<Listing>>()
-//        if (listingIds != null) {
-//
-//            for (id in listingIds) {
-//                if (id == null) continue
-//                val documentRef = listingsCollection.document(id)
-//                val task = documentRef.get().continueWith { documentSnapshot ->
-//                    val listing: Listing? = documentSnapshot.result?.toObject(Listing::class.java)
-//                    listing ?: throw Exception("listing not found")
-//                }
-//                tasks.add(task)
-//            }
-//        }
-//
-//        return Tasks.whenAllSuccess<Listing>(tasks).await()
-//    }
+    override suspend fun fetchListings(listingIds: List<String?>): List<Listing> {
+        val tasks = mutableListOf<Task<Listing>>()
+
+        for (id in listingIds) {
+            if (id == null) continue
+            val documentRef = listingsCollection.document(id)
+            val task = documentRef.get().continueWith { documentSnapshot ->
+                val listing: Listing? = documentSnapshot.result?.toObject(Listing::class.java)
+                listing ?: throw Exception("listing not found")
+            }
+            tasks.add(task)
+        }
+
+        return Tasks.whenAllSuccess<Listing>(tasks).await()
+    }
 }

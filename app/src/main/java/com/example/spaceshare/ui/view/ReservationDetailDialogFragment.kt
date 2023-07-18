@@ -21,10 +21,11 @@ class ReservationDetailDialogFragment(
     private lateinit var binding: ReservationItemDetailBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.reservation_item_detail, container, false)
+    ): View? {
+        binding = ReservationItemDetailBinding.inflate(inflater, container, false)
         configureBindings()
         binding.btnBack.setOnClickListener {
             this.dismiss()
@@ -42,7 +43,7 @@ class ReservationDetailDialogFragment(
             else -> "ERROR"
         }
 
-        binding.price.text = reservation.startDate?.toDate().toString()
+        binding.pricePaid.text = reservation.startDate?.toDate().toString()
 
         binding.title.text = reservation.hostId.toString()
 

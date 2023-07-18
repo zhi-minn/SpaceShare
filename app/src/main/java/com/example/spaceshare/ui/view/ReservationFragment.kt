@@ -25,12 +25,14 @@ import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
 import com.example.spaceshare.models.toInt
+import com.example.spaceshare.ui.viewmodel.ListingViewModel
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 //import com.example.spaceshare.utils.ImageAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.tasks.await
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Objects
@@ -46,6 +48,8 @@ class ReservationFragment : Fragment() {
     private lateinit var binding: FragmentReservationBinding
     @Inject
     lateinit var viewModel: ReservationViewModel
+    @Inject
+    lateinit var listingViewModel: ListingViewModel
 
 
     override fun onCreateView(
@@ -122,6 +126,13 @@ class ReservationFragment : Fragment() {
                 listOf("JPEG_20230619_181925_5939538432909368723.jpg_179d1f4f-856a-47e9-ae15-4466ca4fb64b"),
                 listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"))
             var current = 0
+
+            viewModel.listingLiveData.observe(viewLifecycleOwner) { listings ->
+                for (listing in listings) {
+                    val xxx = listing
+                }
+            }
+
             for (reservation in reservations) {
                 val cardView = layoutInflater.inflate(R.layout.reservation_item, null) as CardView
                 val viewPager: ViewPager2 = cardView.findViewById(R.id.view_pager_reservation_images)
@@ -173,6 +184,12 @@ class ReservationFragment : Fragment() {
                 if (previewPhoto != null) {
                     viewPager.adapter = ImageAdapter(previewPhoto.map { ImageModel(imagePath = it) })
                 }
+                cardView.setOnClickListener{
+                    val reservationDetailDialogFragment = ReservationDetailDialogFragment(reservation)
+                    reservationDetailDialogFragment.show(
+                        Objects.requireNonNull(childFragmentManager),
+                        "reservationDialog")
+                }
 
                 // Add the CardView to the LinearLayout
                 val layoutParams = LinearLayout.LayoutParams(
@@ -180,12 +197,6 @@ class ReservationFragment : Fragment() {
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
                 layoutParams.setMargins(8, 32, 8, 32)
-                cardView.setOnClickListener{
-                    val reservationDetailDialogFragment = ReservationDetailDialogFragment(reservation)
-                    reservationDetailDialogFragment.show(
-                        Objects.requireNonNull(childFragmentManager),
-                        "reservationDialog")
-                }
                 cardView.layoutParams = layoutParams
                 cardView.radius = 25.0F
                 binding.reservationPage.addView(cardView)
