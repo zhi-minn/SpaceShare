@@ -46,6 +46,7 @@ class ChatDialogFragment(
     private val openDocument = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let {uri ->
             chatViewModel.sendImageMessage(uri, requireActivity())
+            refreshParentChatsList()
         }
     }
 
@@ -125,9 +126,7 @@ class ChatDialogFragment(
 
             // Then do network requests
             chatViewModel.sendMessage(textContent)
-            if (shouldRefreshChatsList) {
-                messagesViewModel.fetchChats()
-            }
+            refreshParentChatsList()
         }
 
         // When the image button is clicked, launch the image picker
@@ -136,10 +135,14 @@ class ChatDialogFragment(
         }
 
         binding.btnClose.setOnClickListener {
-            if (shouldRefreshChatsList) {
-                messagesViewModel.fetchChats()
-            }
+            refreshParentChatsList()
             this.dismiss()
+        }
+    }
+
+    private fun refreshParentChatsList() {
+        if (shouldRefreshChatsList) {
+            messagesViewModel.fetchChats()
         }
     }
 }

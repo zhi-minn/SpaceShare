@@ -67,7 +67,7 @@ class ChatAdapter (
                 if (lastMessage.text != null)
                     lastUpdate += ": " + lastMessage.text
                 else
-                    lastUpdate += " sent an attachment"
+                    lastUpdate += " sent an image"
 
                 binding.chatLastUpdate.text = lastUpdate
 
