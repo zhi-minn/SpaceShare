@@ -35,19 +35,18 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <EditText
+                    <TextView
                         android:id="@+id/host_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="text"
                         android:text="host_name"
                         tools:layout_conversion_absoluteHeight="45dp"
                         tools:layout_conversion_absoluteWidth="194dp"
                         tools:layout_editor_absoluteX="218dp"
                         tools:layout_editor_absoluteY="0dp" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/house_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -94,7 +93,7 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <EditText
+                        <TextView
                             android:id="@+id/dates_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -102,7 +101,7 @@
                             android:inputType="text"
                             android:text="Dates" />
 
-                        <EditText
+                        <TextView
                             android:id="@+id/picked_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -141,7 +140,7 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <EditText
+                        <TextView
                             android:id="@+id/sizes_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -149,7 +148,7 @@
                             android:inputType="text"
                             android:text="Dates" />
 
-                        <EditText
+                        <TextView
                             android:id="@+id/lugguage_size"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

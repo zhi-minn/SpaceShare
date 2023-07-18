@@ -23,7 +23,7 @@ data class Reservation(
     val hostId: String? = null,
     val clientId: String? = null,
     val listingId: String? = null,
-    val startDate: Timestamp? = null,
+    val startDate: Timestamp? = Timestamp.now(),
     val endDate: Timestamp? = null,
     val unit: Int? = null,
     val status: Int? = null

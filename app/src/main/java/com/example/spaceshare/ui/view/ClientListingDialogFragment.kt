@@ -13,6 +13,7 @@ import com.example.spaceshare.databinding.DialogClientListingBinding
 import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
+import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.utils.GeocoderUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -30,6 +31,8 @@ class ClientListingDialogFragment(
     }
 
     private lateinit var binding: DialogClientListingBinding
+
+    val reservation:Reservation = Reservation()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -92,7 +95,12 @@ class ClientListingDialogFragment(
         }
 
         binding.btnReserve.setOnClickListener {
-            // TODO: Put reservation related code here
+            val reservationPagedialogFragment = ReservationPageDialogFragment(listing, reservation)
+            val bundle = Bundle().apply {
+                putInt("reservationId", reservationId)
+            }
+            dialogFragment.arguments = bundle
+            dialogFragment.show(supportFragmentManager, "ReservationDetailDialogFragment")
         }
     }
 
