@@ -3,6 +3,7 @@ package com.example.spaceshare.ui.view
 import MessageAdapter
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChatDialogFragment(
-    private val chat : Chat
+    private val chat : Chat,
+    private val shouldRefreshChatsList : Boolean = false
 ) : DialogFragment() {
 
     @Inject
@@ -51,8 +53,11 @@ class ChatDialogFragment(
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, R.style.SearchAndFilterDialogStyle)
         chatViewModel.setChat(chat)
+
         // Set messagesViewModel to be the same one as the parent fragment's
-        messagesViewModel = (requireParentFragment() as MessagesFragment).messagesViewModel
+        if (shouldRefreshChatsList) {
+            messagesViewModel = (requireParentFragment() as MessagesFragment).messagesViewModel
+        }
     }
 
     override fun onCreateView(
@@ -117,7 +122,9 @@ class ChatDialogFragment(
             binding.messageEditText.setText("")
             val textContent = binding.messageEditText.text.toString()
             chatViewModel.sendMessage(textContent)
-            messagesViewModel.fetchChats()
+            if (shouldRefreshChatsList) {
+                messagesViewModel.fetchChats()
+            }
         }
 
         // When the image button is clicked, launch the image picker
@@ -126,7 +133,9 @@ class ChatDialogFragment(
         }
 
         binding.btnClose.setOnClickListener {
-            messagesViewModel.fetchChats()
+            if (shouldRefreshChatsList) {
+                messagesViewModel.fetchChats()
+            }
             this.dismiss()
         }
     }

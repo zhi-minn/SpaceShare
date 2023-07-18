@@ -109,7 +109,7 @@ class ClientListingDialogFragment (
         binding.btnMessageHost.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 val chat = messagesViewModel.createChatWithHost(listing)
-                val chatDialogFragment = ChatDialogFragment(chat)
+                val chatDialogFragment = ChatDialogFragment(chat, shouldRefreshChatsList = false)
                 chatDialogFragment.show(
                     childFragmentManager,
                     "chatDialog"
