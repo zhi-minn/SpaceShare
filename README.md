@@ -218,3 +218,9 @@
   * Made chat message timestamps more concise
   * Chats now refresh the chats list in the messages tab upon being closed or when a message is sent
   * Chat last update time now uses "Just now" instead of "0 minutes ago"
+* William 12.5 hours (2023-07-14 -> 2023-07-18) [Commit](https://github.com/zhi-minn/SpaceShare/commit/26d935cbcb7746c07d1d16cdce2a97a4dce7ccb6)
+  + New admin activity that has recycler view of government id requests
+  + Can click on any request to go to fragment containing details of users
+  + Approve or reject user government id request and updates verified field in Firebase
+  + Update status on client side depending on verified field
+
