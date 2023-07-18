@@ -21,8 +21,8 @@ import com.example.spaceshare.databinding.DialogChatBinding
 import com.example.spaceshare.models.Chat
 import com.example.spaceshare.models.Message
 import com.example.spaceshare.ui.viewmodel.ChatViewModel
+import com.example.spaceshare.ui.viewmodel.MessagesViewModel
 import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -33,6 +33,7 @@ class ChatDialogFragment(
 
     @Inject
     lateinit var chatViewModel: ChatViewModel
+    private lateinit var messagesViewModel: MessagesViewModel
 
     private lateinit var binding: DialogChatBinding
     private lateinit var navController: NavController
@@ -50,6 +51,8 @@ class ChatDialogFragment(
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, R.style.SearchAndFilterDialogStyle)
         chatViewModel.setChat(chat)
+        // Set messagesViewModel to be the same one as the parent fragment's
+        messagesViewModel = (requireParentFragment() as MessagesFragment).messagesViewModel
     }
 
     override fun onCreateView(
@@ -111,10 +114,10 @@ class ChatDialogFragment(
 
         // When the send button is clicked, send a text message
         binding.sendButton.setOnClickListener {
-
+            binding.messageEditText.setText("")
             val textContent = binding.messageEditText.text.toString()
             chatViewModel.sendMessage(textContent)
-            binding.messageEditText.setText("")
+            messagesViewModel.fetchChats()
         }
 
         // When the image button is clicked, launch the image picker
@@ -123,6 +126,7 @@ class ChatDialogFragment(
         }
 
         binding.btnClose.setOnClickListener {
+            messagesViewModel.fetchChats()
             this.dismiss()
         }
     }

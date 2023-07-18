@@ -1,5 +1,6 @@
 package com.example.spaceshare.ui.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,7 +26,8 @@ class MessagesViewModel @Inject constructor(
         private val TAG = this::class.simpleName
     }
 
-    var chats = MutableLiveData<List<Chat>>()
+    private val mutableChats = MutableLiveData<List<Chat>>()
+    val chats: LiveData<List<Chat>> get() = mutableChats
 
     private lateinit var currentUser: User
 
@@ -39,7 +41,7 @@ class MessagesViewModel @Inject constructor(
 
     fun fetchChats() {
         viewModelScope.launch {
-            chats.value =
+            mutableChats.value =
                 messagesRepo.getChatsByUserId(FirebaseAuth.getInstance().currentUser!!.uid)
                     .sortedByDescending { chat ->
                         chat.lastMessage?.timestamp
