@@ -116,10 +116,14 @@ class ProfileFragment : Fragment() {
             if (user.lastName.isNotEmpty()) sb.append(" ${user.lastName}")
             binding.displayName.text = sb.toString()
 
-            binding.userVerified.text = if (user.isVerified) {
-                resources.getText(R.string.user_verification_true)
-            } else {
-                resources.getText(R.string.user_verification_false)
+            if (user.isVerified == 0) {
+                binding.userVerified.text = resources.getText(R.string.user_verification_false)
+            }
+            else if (user.isVerified == 1) {
+                binding.userVerified.text = resources.getText(R.string.user_verification_true)
+            }
+            else {
+                binding.userVerified.text = resources.getText(R.string.user_verification_denied)
             }
         }
         profileViewModel.getUserById(FirebaseAuth.getInstance().currentUser!!.uid)

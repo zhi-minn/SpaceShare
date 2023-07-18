@@ -79,8 +79,12 @@ class ProfileDetailsDialogFragment(
             binding.phoneNumber.text = user.phoneNumber
 
             // Government Id
-            if (!user.governmentId.isNullOrEmpty() && !user.isVerified) {
+            if (!user.governmentId.isNullOrEmpty() && user.isVerified == 0) {
                 binding.governmentId.text = getString(R.string.government_id_found_not_verified)
+            } else if (user.isVerified == 1) {
+                binding.governmentId.text = getString(R.string.government_id_verified)
+            } else if (user.isVerified == 2) {
+                binding.governmentId.text = getString(R.string.government_id_denied)
             }
         }
     }

@@ -18,11 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SpaceShare"
         tools:targetApi="31">
+        <activity
+            android:name=".AdminActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
-
         <meta-data
             android:name="com.example.spaceshare.modules.SpaceShareGlideModule"
             android:value="AppGlideModule" />
@@ -54,8 +57,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".CropActivity"
             android:exported="false"
