@@ -21,7 +21,7 @@ data class Listing(
     @ServerTimestamp
     val createdAt: Timestamp? = null,
     @ServerTimestamp
-    var updatedAt: Timestamp? = null
-    // val availability: Availability? = null,
+    var updatedAt: Timestamp? = null,
+    val bookings: List<Booking> = emptyList()
 ) {
 }
