@@ -192,3 +192,6 @@
   + Government id screen ui improvements
   + Photo picker to select photo
   + Upload government Id to Firebase Storage feature
+* Youming Ning 8 hours (2023-07-15 -> 2023-07-17) [Commit](https://github.com/zhi-minn/SpaceShare/commit/db6964aa3b85692a20c00e3adb3a7adc91df8bf5)
+  + Add Reservation Page source file
+  + modified Detailed page for orders of the client
