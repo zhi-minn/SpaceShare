@@ -19,15 +19,22 @@ import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.DialogReservationPageBinding
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
+import com.example.spaceshare.models.Reservation
+import com.example.spaceshare.models.toInt
+import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.example.spaceshare.utils.GeocoderUtil
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class ReservationPageDialogFragment(
     private val listing: Listing,
     private val searchViewModel: SearchViewModel
@@ -37,6 +44,10 @@ class ReservationPageDialogFragment(
     companion object {
         private val TAG = this::class.simpleName
     }
+    @Inject
+    lateinit var reservationViewModel: ReservationViewModel
+
+    private lateinit var auth: FirebaseAuth
 
     private lateinit var binding: DialogReservationPageBinding
 
@@ -144,7 +155,13 @@ class ReservationPageDialogFragment(
         }
 
         binding.reserveBtn.setOnClickListener{
-            // TODO: implenmente reserve func
+            auth = FirebaseAuth.getInstance()
+            val clientId = auth.currentUser?.uid
+            val reservation = Reservation(
+                hostId=listing.hostId, clientId=clientId, listingId=listing.id,
+                startDate= Timestamp.now(), endDate= Timestamp.now(),
+                unit=3.5, status= com.example.spaceshare.models.ReservationStatus.PENDING.toInt())
+            reservationViewModel.reserveListing(reservation)
         }
     }
 
