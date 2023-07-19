@@ -223,4 +223,5 @@
   + Can click on any request to go to fragment containing details of users
   + Approve or reject user government id request and updates verified field in Firebase
   + Update status on client side depending on verified field
-
+* Wenyu 2 Hours (2023-7-19) [Commit](https://github.com/zhi-minn/SpaceShare/commit/d820b39b0154d15e1c6ee3f9785bf97b055ee680)
+  + Item Declaration Page initialization
