@@ -223,4 +223,5 @@
   + Can click on any request to go to fragment containing details of users
   + Approve or reject user government id request and updates verified field in Firebase
   + Update status on client side depending on verified field
-
+* Chang 1 hour (2023-07-18) [PR](https://github.com/zhi-minn/SpaceShare/pull/71)
+  * Made search functionality only show listings that are available (have enough space to accommodate the request, factoring in existing bookings)
