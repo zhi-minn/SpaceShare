@@ -23,7 +23,7 @@ import java.util.Objects
 
 class ReservationPageDialogFragment(
     private val listing: Listing,
-    private val searchViewModel: SearchViewModel
+//    private val searchViewModel: SearchViewModel
 ): DialogFragment() {
 
     companion object {
@@ -53,11 +53,11 @@ class ReservationPageDialogFragment(
         binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
         binding.hostName.text = listing.hostId
         binding.houseName.text = listing.title
-        val startDate = searchViewModel.startTime
+//        val startDate = searchViewModel.startTime
 
         val formatter = SimpleDateFormat("MMM dd", Locale.getDefault())
-        val formattedDate = formatter.format(startDate)
-        binding.pickedDate.text = formattedDate
+//        val formattedDate = formatter.format(startDate)
+        binding.pickedDate.text = "Jul 19"
         binding.lugguageSize.text = "0.5"// TODO
     }
 

@@ -95,12 +95,14 @@ class ClientListingDialogFragment(
         }
 
         binding.btnReserve.setOnClickListener {
-            val reservationPagedialogFragment = ReservationPageDialogFragment(listing, reservation)
-            val bundle = Bundle().apply {
-                putInt("reservationId", reservationId)
-            }
-            dialogFragment.arguments = bundle
-            dialogFragment.show(supportFragmentManager, "ReservationDetailDialogFragment")
+            val reservationPageDialogFragment = ReservationPageDialogFragment(listing)
+//            val bundle = Bundle().apply {
+//                putInt("reservationId", reservationId)
+//            }
+//            dialogFragment.arguments = bundle
+//            reservationPageDialogFragment.show(supportFragmentManager, "ReservationDetailDialogFragment")
+            reservationPageDialogFragment.show(Objects.requireNonNull(childFragmentManager),
+                "ReservationDetailDialogFragment")
         }
     }
 
