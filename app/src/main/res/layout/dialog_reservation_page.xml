@@ -176,6 +176,12 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/reserveBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reserve" />
         </LinearLayout>
     </ScrollView>
 

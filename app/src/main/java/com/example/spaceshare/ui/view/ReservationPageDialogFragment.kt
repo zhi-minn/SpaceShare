@@ -58,7 +58,7 @@ class ReservationPageDialogFragment(
         val formatter = SimpleDateFormat("MMM dd", Locale.getDefault())
         val formattedDate = formatter.format(startDate)
         binding.pickedDate.text = formattedDate
-        binding.lugguageSize.text = reservation.unit.toString()
+        binding.lugguageSize.text = "0.5"// TODO
     }
 
     private fun configureButtons() {
@@ -68,6 +68,10 @@ class ReservationPageDialogFragment(
 
         binding.sizeEdit.setOnClickListener {
             // TODO: Implement size edit action
+        }
+
+        binding.reserveBtn.setOnClickListener{
+            // TODO: implenmente reserve func
         }
     }
 
