@@ -74,7 +74,7 @@ class SearchFragment : Fragment() {
     private fun configureRecyclerView() {
         adapter = ListingAdapter(childFragmentManager, object : ListingAdapter.ItemClickListener {
             override fun onItemClick(listing: Listing) {
-                val clientListingDialogFragment = ClientListingDialogFragment(listing)
+                val clientListingDialogFragment = ClientListingDialogFragment(listing, searchViewModel)
                 clientListingDialogFragment.show(Objects.requireNonNull(childFragmentManager),
                     "clientListingDialog")
             }

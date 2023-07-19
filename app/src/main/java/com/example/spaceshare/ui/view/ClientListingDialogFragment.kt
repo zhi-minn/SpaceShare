@@ -14,6 +14,7 @@ import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
+import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.example.spaceshare.utils.GeocoderUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -23,7 +24,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import java.util.Objects
 
 class ClientListingDialogFragment(
-    private val listing: Listing
+    private val listing: Listing,
+    private val searchViewModel: SearchViewModel
 ): DialogFragment(), OnMapReadyCallback {
 
     companion object {
@@ -95,7 +97,7 @@ class ClientListingDialogFragment(
         }
 
         binding.btnReserve.setOnClickListener {
-            val reservationPageDialogFragment = ReservationPageDialogFragment(listing)
+            val reservationPageDialogFragment = ReservationPageDialogFragment(listing, searchViewModel)
 //            val bundle = Bundle().apply {
 //                putInt("reservationId", reservationId)
 //            }
