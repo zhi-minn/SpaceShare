@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ReservationRepoImpl @Inject constructor(
-    private val db: FirebaseFirestore
+    db: FirebaseFirestore
 ): ReservationRepository {
 
     companion object {

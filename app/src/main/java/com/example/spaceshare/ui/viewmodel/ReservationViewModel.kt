@@ -34,7 +34,7 @@ class ReservationViewModel @Inject constructor(
 
     fun reserveListing(reservation: Reservation) {
         viewModelScope.launch {
-            if (reservation.hostId == reservation.listingId) {
+            if (reservation.hostId == reservation.clientId) {
                 throw Exception("hostId cannot be the same as clientId")
             }
 
