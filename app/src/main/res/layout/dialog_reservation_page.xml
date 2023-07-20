@@ -140,6 +140,8 @@
 
                     <LinearLayout
                         android:id="@+id/dates"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -155,6 +157,9 @@
 
                             <TextView
                                 android:id="@+id/dates_title"
+                                android:duplicateParentState="true"
+                                android:clickable="false"
+                                android:focusable="false"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
@@ -165,7 +170,10 @@
 
                             <TextView
                                 android:id="@+id/picked_date"
-                                android:layout_width="match_parent"
+                                android:duplicateParentState="true"
+                                android:clickable="false"
+                                android:focusable="false"
+                                android:layout_width="123dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:ems="10"
@@ -182,11 +190,11 @@
                                 android:id="@+id/date_edit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
+                                android:layout_marginTop="4dp"
                                 android:layout_weight="1"
                                 android:text="Edit"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.889"
+                                app:layout_constraintHorizontal_bias="0.911"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -195,6 +203,8 @@
 
                     <LinearLayout
                         android:id="@+id/sizes"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -210,7 +220,10 @@
 
                             <TextView
                                 android:id="@+id/sizes_title"
-                                android:layout_width="match_parent"
+                                android:duplicateParentState="true"
+                                android:clickable="false"
+                                android:focusable="false"
+                                android:layout_width="37dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:ems="10"
@@ -220,7 +233,10 @@
 
                             <TextView
                                 android:id="@+id/lugguage_size"
-                                android:layout_width="match_parent"
+                                android:duplicateParentState="true"
+                                android:clickable="false"
+                                android:focusable="false"
+                                android:layout_width="77dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:ems="10"
@@ -241,7 +257,7 @@
                                 android:layout_weight="1"
                                 android:text="Edit"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.885"
+                                app:layout_constraintHorizontal_bias="0.929"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>

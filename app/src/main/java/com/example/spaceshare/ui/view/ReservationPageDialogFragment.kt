@@ -1,16 +1,18 @@
 package com.example.spaceshare.ui.view
 
 
-import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.Context
-import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -23,7 +25,8 @@ import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.toInt
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
-import com.example.spaceshare.utils.GeocoderUtil
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,6 +85,10 @@ class ReservationPageDialogFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, R.style.GenericDialogStyle)
+        val sizeDialog = Dialog(requireContext())
+        sizeDialog.setContentView(R.layout.dialog_size_picker)
+        sizeDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+
     }
     object GeocoderUtil {
 
@@ -141,18 +148,25 @@ class ReservationPageDialogFragment(
         } else {
             binding.lugguageSize.text = "${searchViewModel.spaceRequired.value} cubic"
         }
+
+        binding.dates.setOnClickListener {
+            binding.dateEdit.performClick()
+        }
+
+        binding.sizes.setOnClickListener {
+            binding.sizeEdit.performClick()
+        }
     }
 
 
 
     private fun configureButtons() {
-        binding.dateEdit.setOnClickListener {
-            // TODO: Implement date edit action
-        }
 
-        binding.sizeEdit.setOnClickListener {
-            // TODO: Implement size edit action
-        }
+        binding.dateEdit.setOnClickListener { openDatePicker() }
+        binding.dates.setOnClickListener { openDatePicker() }
+
+        binding.sizeEdit.setOnClickListener { openSizePicker() }
+        binding.sizes.setOnClickListener { openSizePicker() }
 
         binding.reserveBtn.setOnClickListener{
             auth = FirebaseAuth.getInstance()
@@ -162,9 +176,93 @@ class ReservationPageDialogFragment(
                 startDate= Timestamp.now(), endDate= Timestamp.now(),
                 unit=3.5, status= com.example.spaceshare.models.ReservationStatus.PENDING.toInt())
             reservationViewModel.reserveListing(reservation)
+
+            // Show a confirmation dialog
+            showDialogThenDismiss()
         }
     }
+    private fun showDialogThenDismiss() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Reservation Confirmation")
+        builder.setMessage("Your reservation is complete!")
+        builder.setPositiveButton("OK") { dialog, which ->
+            // Dismiss this DialogFragment when the user confirms
+            this.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
+    }
+    private fun openDatePicker() {
+        val constraintsBuilder = CalendarConstraints.Builder()
 
+        val dateRangePicker =
+            MaterialDatePicker.Builder.dateRangePicker()
+                .setTitleText("Select Dates")
+                .setCalendarConstraints(constraintsBuilder.build())
+                .build()
+
+        dateRangePicker.addOnPositiveButtonClickListener {
+            binding.pickedDate.text = dateRangePicker.headerText
+            searchViewModel.startTime.value = dateRangePicker.selection?.first
+            searchViewModel.endTime.value = dateRangePicker.selection?.second
+        }
+
+        dateRangePicker.show(parentFragmentManager, TAG)
+    }
+
+    private fun openSizePicker() {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_size_picker)
+
+        val sizeValue: TextView = dialog.findViewById(R.id.tv_size_value)
+        val increaseButton: ImageButton = dialog.findViewById(R.id.btn_increase)
+        val decreaseButton: ImageButton = dialog.findViewById(R.id.btn_decrease)
+
+        // Disable the decrease button initially if the size is already 0.5
+        decreaseButton.isEnabled = sizeValue.text.toString().toDouble() > 0.5
+
+        // Disable the increase button initially if the size is already 100
+        increaseButton.isEnabled = sizeValue.text.toString().toDouble() < 100
+
+        increaseButton.setOnClickListener {
+            var value = sizeValue.text.toString().toDouble()
+            if (value < 100) {
+                value += 0.5
+                sizeValue.text = value.toString()
+
+                // Enable decrease button when size is more than 0.5
+                decreaseButton.isEnabled = true
+
+                // Disable increase button if the size reaches 100
+                if (value >= 100) {
+                    increaseButton.isEnabled = false
+                }
+            }
+        }
+
+        decreaseButton.setOnClickListener {
+            var value = sizeValue.text.toString().toDouble()
+            if (value > 0.5) {
+                value -= 0.5
+                sizeValue.text = value.toString()
+
+                // Enable increase button when size is less than 100
+                increaseButton.isEnabled = true
+
+                // Disable decrease button if the size reaches 0.5
+                if (value <= 0.5) {
+                    decreaseButton.isEnabled = false
+                }
+            }
+        }
+
+        dialog.findViewById<Button>(R.id.btn_done).setOnClickListener {
+            val selectedValue = sizeValue.text.toString().toDouble()
+            binding.lugguageSize.text = "$selectedValue cubic"
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
 }
 
 
