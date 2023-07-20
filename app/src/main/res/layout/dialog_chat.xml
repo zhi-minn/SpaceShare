@@ -72,7 +72,7 @@
                     android:elegantTextHeight="true"
                     android:text="$99"
                     android:textAlignment="viewStart"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/listingImagePreview"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -85,7 +85,7 @@
                     android:elegantTextHeight="true"
                     android:text="Hosted by a username"
                     android:textAlignment="viewStart"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/listingPrice"
                     app:layout_constraintTop_toBottomOf="@+id/listingPrice" />
@@ -97,7 +97,7 @@
                     android:layout_marginBottom="8dp"
                     android:elegantTextHeight="true"
                     android:text="Listing Location"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textAlignment="viewStart"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/listingHost"

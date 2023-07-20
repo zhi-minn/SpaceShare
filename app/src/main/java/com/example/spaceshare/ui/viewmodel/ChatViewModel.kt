@@ -166,6 +166,10 @@ class ChatViewModel @Inject constructor(
         }
     }
 
+    fun getAssociatedListing(): Listing {
+        return associatedListing
+    }
+
     suspend fun getHostUserFromRepo(hostId: String) {
         val host = userRepo.getUserById(hostId)
         if (host != null) {
