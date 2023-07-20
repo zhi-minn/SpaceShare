@@ -52,6 +52,7 @@ class SearchViewModel @Inject constructor(
         mutableStartTime.value = 0
         mutableEndTime.value = 0
         mutableSearchRadius.value = 1f
+        mutableFilterCriteria.value = FilterCriteria()
         fetchInitialListings()
     }
 
