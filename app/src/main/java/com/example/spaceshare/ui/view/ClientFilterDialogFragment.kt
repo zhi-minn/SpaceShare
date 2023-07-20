@@ -5,16 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
-import com.example.spaceshare.consts.ListingConsts
 import com.example.spaceshare.databinding.DialogClientFilterBinding
 import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.models.FilterCriteria
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.max
 
 @AndroidEntryPoint
 class ClientFilterDialogFragment() : DialogFragment() {
@@ -46,7 +45,7 @@ class ClientFilterDialogFragment() : DialogFragment() {
         configureSliders()
         configureAmenities()
         configureButtons()
-        configureListeners()
+        configureRadioButtons()
     }
 
 
@@ -88,6 +87,19 @@ class ClientFilterDialogFragment() : DialogFragment() {
 
         val decimalFormat = DecimalFormat("0.0") // Set the desired decimal format
         binding.spaceRangeSlider.setLabelFormatter { value -> decimalFormat.format(value) }
+
+        // Set slider listeners
+        binding.priceRangeSlider.addOnChangeListener { slider, _, _ ->
+            val minPrice = slider.values[0]
+            val maxPrice = slider.values[1]
+            setPriceSliderText(minPrice, maxPrice)
+        }
+
+        binding.spaceRangeSlider.addOnChangeListener { slider, _, _ ->
+            val minSpace = slider.values[0]
+            val maxSpace = slider.values[1]
+            setSpaceSliderText(minSpace, maxSpace)
+        }
     }
 
     private fun configureAmenities() {
@@ -123,17 +135,29 @@ class ClientFilterDialogFragment() : DialogFragment() {
         }
     }
 
-    private fun configureListeners() {
-        binding.priceRangeSlider.addOnChangeListener { slider, _, _ ->
-            val minPrice = slider.values[0]
-            val maxPrice = slider.values[1]
-            setPriceSliderText(minPrice, maxPrice)
+    private fun configureRadioButtons() {
+        binding.radioClosest.isChecked = true
+        binding.sortByRadioGroup.setOnClickListener { view ->
+            onRadioButtonClicked(view)
         }
+    }
 
-        binding.spaceRangeSlider.addOnChangeListener { slider, _, _ ->
-            val minSpace = slider.values[0]
-            val maxSpace = slider.values[1]
-            setSpaceSliderText(minSpace, maxSpace)
+    private fun onRadioButtonClicked(view: View) {
+        if (view is RadioButton) {
+            // Is the button now checked?
+            val checked = view.isChecked
+
+            // Check which radio button was clicked
+            when (view.getId()) {
+                R.id.radioClosest ->
+                    if (checked) {
+                        // Pirates are the best
+                    }
+                R.id.radioNewest ->
+                    if (checked) {
+                        // Ninjas rule
+                    }
+            }
         }
     }
 

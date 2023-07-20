@@ -1,5 +1,6 @@
 package com.example.spaceshare.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,11 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.consts.ListingConsts
 import com.example.spaceshare.consts.ListingConsts.SPACE_BOOKING_LOWER_LIMIT
 import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
+import com.example.spaceshare.data.implementation.ListingRepoImpl
 import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.interfaces.LocationInterface
 import com.example.spaceshare.models.FilterCriteria
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.SearchCriteria
+import com.example.spaceshare.utils.MathUtil
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -23,6 +26,10 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val listingRepo: ListingRepository
 ) : ViewModel(), LocationInterface {
+
+    companion object {
+        private val TAG = this::class.simpleName
+    }
 
     private val mutableSpaceRequired = MutableLiveData<Double>(0.0)
     val spaceRequired: LiveData<Double> get() = mutableSpaceRequired
@@ -62,7 +69,9 @@ class SearchViewModel @Inject constructor(
     private fun fetchInitialListings() {
         viewModelScope.launch {
             val results = listingRepo.getAllListings()
-            mutableSearchResults.value = applyClientSearchFilters(results)
+            val forceFiltered = applyForcedClientSearchFilters(results)
+            val geoPoint = GeoPoint(mutableLocation.value!!.latitude, mutableLocation.value!!.longitude)
+            mutableSearchResults.value = sortByDistance(forceFiltered, geoPoint)
             mutableFilteredListings.value = searchResults.value
         }
     }
@@ -99,7 +108,7 @@ class SearchViewModel @Inject constructor(
                     queryRadius, startTimestamp, endTimestamp
                 )
             val searchResults = listingRepo.searchListings(criteria)
-            mutableSearchResults.value = applyClientSearchFilters(searchResults)
+            mutableSearchResults.value = applyForcedClientSearchFilters(searchResults)
 
 
             // Check filter criteria for invalid values, then apply it if necessary
@@ -177,7 +186,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun applyClientSearchFilters(listings: List<Listing>): List<Listing> {
+    private fun applyForcedClientSearchFilters(listings: List<Listing>): List<Listing> {
         return listings.filter { listing ->
             filterForActiveListings(listing) && filterForNonOwnListings(listing)
         }
@@ -189,6 +198,24 @@ class SearchViewModel @Inject constructor(
 
     private fun filterForNonOwnListings(listing: Listing): Boolean {
         return listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
+    }
+
+    private fun sortByDistance(listings: List<Listing>, targetLocation: GeoPoint): List<Listing> {
+        return listings.sortedBy { listing ->
+            try {
+                val dist = MathUtil.calculateDistanceInKilometers(
+                    targetLocation,
+                    listing.location!!
+                )
+                dist
+            } catch (e: Exception) {
+                Log.e(
+                    TAG,
+                    "Error calculating and sorting by Listing distance for id ${listing.id}: ${e.message}"
+                )
+                null
+            }
+        }
     }
 
     override fun setLocation(latLng: LatLng) {
