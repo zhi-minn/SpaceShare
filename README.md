@@ -192,6 +192,9 @@
   + Government id screen ui improvements
   + Photo picker to select photo
   + Upload government Id to Firebase Storage feature
+* Youming Ning 8 hours (2023-07-15 -> 2023-07-17) [Commit](https://github.com/zhi-minn/SpaceShare/commit/db6964aa3b85692a20c00e3adb3a7adc91df8bf5)
+  + Add Reservation Page source file
+  + modified Detailed page for orders of the client
 * Chang 6 hours (2023-07-16) [PR](https://github.com/zhi-minn/SpaceShare/pull/64)
   * Added messaging functionality
     * Users can send text and image messages
@@ -231,3 +234,4 @@
 * Youming 10 hours (2023-07-19) [Commit](https://github.com/zhi-minn/SpaceShare/commit/40cb77c553e76418b82d5f57aba550f188bb06d6) [Commit](https://github.com/zhi-minn/SpaceShare/commit/40cb77202c9ab66d35f609184304582bb9c93052bcfc8a) [Commit](https://github.com/zhi-minn/SpaceShare/commit/d54d2b602d33bfbb344bdad1ef87dcabcac0b89f)
   + Finish reservation function with Calvin
   + implement the confirmation page and complete detailed add-ons for reservation
+

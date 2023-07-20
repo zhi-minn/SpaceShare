@@ -14,6 +14,8 @@ import com.example.spaceshare.databinding.DialogClientListingBinding
 import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
+import com.example.spaceshare.models.Reservation
+import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.example.spaceshare.ui.viewmodel.MessagesViewModel
 import com.example.spaceshare.utils.GeocoderUtil
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -29,8 +31,9 @@ import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ClientListingDialogFragment (
-    private val listing: Listing
+class ClientListingDialogFragment(
+    private val listing: Listing,
+    private val searchViewModel: SearchViewModel
 ): DialogFragment(), OnMapReadyCallback {
 
     companion object {
@@ -41,6 +44,8 @@ class ClientListingDialogFragment (
     lateinit var messagesViewModel: MessagesViewModel
 
     private lateinit var binding: DialogClientListingBinding
+
+    val reservation:Reservation = Reservation()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -103,7 +108,14 @@ class ClientListingDialogFragment (
         }
 
         binding.btnReserve.setOnClickListener {
-            // TODO: Put reservation related code here
+            val reservationPageDialogFragment = ReservationPageDialogFragment(listing, searchViewModel)
+//            val bundle = Bundle().apply {
+//                putInt("reservationId", reservationId)
+//            }
+//            dialogFragment.arguments = bundle
+//            reservationPageDialogFragment.show(supportFragmentManager, "ReservationDetailDialogFragment")
+            reservationPageDialogFragment.show(Objects.requireNonNull(childFragmentManager),
+                "ReservationDetailDialogFragment")
         }
 
         binding.btnMessageHost.setOnClickListener {
