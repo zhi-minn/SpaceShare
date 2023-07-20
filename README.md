@@ -255,3 +255,5 @@
   * Fixed filter dialog slider text formatting
 * Chang 0.5 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/pull/74)
   * Made reservations add to a listing's bookings
+* Chang 1.25 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/pull/75)
+  * Added listing previews to chats
