@@ -22,12 +22,13 @@ import com.google.android.material.slider.Slider
 import java.util.Objects
 
 class SearchDialogFragment(
-    private val searchViewModel: SearchViewModel
 ) : DialogFragment() {
 
     companion object {
         private val TAG = this::class.simpleName
     }
+
+    private lateinit var searchViewModel: SearchViewModel
 
     private lateinit var binding: DialogSearchBinding
     private lateinit var navController: NavController
@@ -54,6 +55,8 @@ class SearchDialogFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, R.style.SearchAndFilterDialogStyle)
+
+        searchViewModel = (requireParentFragment() as SearchFragment).searchViewModel
     }
 
     private fun configureCards() {

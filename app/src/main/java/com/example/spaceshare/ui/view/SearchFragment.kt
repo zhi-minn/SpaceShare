@@ -11,7 +11,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ListingAdapter
-import com.example.spaceshare.adapters.ScrollToTopObserver
 import com.example.spaceshare.databinding.FragmentSearchBinding
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
@@ -62,13 +61,13 @@ class SearchFragment : Fragment() {
     }
 
     private fun openSearchDialog() {
-        val searchDialogFragment = SearchDialogFragment(searchViewModel)
+        val searchDialogFragment = SearchDialogFragment()
         searchDialogFragment.show(Objects.requireNonNull(childFragmentManager), "searchDialog")
     }
 
     private fun configureFilterButton() {
         binding.btnFilter.setOnClickListener {
-            val filterDialogFragment = ClientFilterDialogFragment(searchViewModel)
+            val filterDialogFragment = ClientFilterDialogFragment()
             filterDialogFragment.show(Objects.requireNonNull(childFragmentManager), "filterDialog")
         }
     }
@@ -85,10 +84,10 @@ class SearchFragment : Fragment() {
         manager = LinearLayoutManager(requireContext())
         binding.recyclerView.layoutManager = manager
 
-        // Scroll up when the list of listings changes (when a new search or filter is applied)
-        adapter.registerAdapterDataObserver(
-            ScrollToTopObserver(binding.recyclerView, adapter, manager)
-        )
+//        // Scroll up when the list of listings changes (when a new search or filter is applied)
+//        adapter.registerAdapterDataObserver(
+//            ScrollToTopObserver(binding.recyclerView, adapter, manager)
+//        )
     }
 
     private fun configureListingObservers() {

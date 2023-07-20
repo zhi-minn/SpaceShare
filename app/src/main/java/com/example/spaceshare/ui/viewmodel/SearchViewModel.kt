@@ -47,6 +47,9 @@ class SearchViewModel @Inject constructor(
     private val mutableFilterCriteria = MutableLiveData<FilterCriteria>()
     val filterCriteria: LiveData<FilterCriteria> get() = mutableFilterCriteria
 
+    private val mutableHasFilterBeenApplied = MutableLiveData<Boolean>(false)
+    val hasFilterBeenApplied: LiveData<Boolean> get() = mutableHasFilterBeenApplied
+
     init {
         mutableLocation.value = LatLng(0.0, 0.0)
         mutableStartTime.value = 0
@@ -97,6 +100,63 @@ class SearchViewModel @Inject constructor(
                 )
             val searchResults = listingRepo.searchListings(criteria)
             mutableSearchResults.value = applyClientSearchFilters(searchResults)
+
+
+            // Check filter criteria for invalid values, then apply it if necessary
+            var filterBeenApplied = hasFilterBeenApplied.value
+            if (filterBeenApplied == null) {
+                filterBeenApplied = false
+            }
+            if (filterBeenApplied) {
+                checkFilterCriteriaMaxValues()
+                filterByFilterCriteria()
+            }
+        }
+    }
+
+    fun getSearchResultsMaxPrice(): Double {
+        val searchResultsSnapshot = searchResults.value
+        if (!searchResultsSnapshot.isNullOrEmpty()) {
+            var maxPrice = searchResultsSnapshot.maxOf { listing ->
+                listing.price
+            }
+            if (maxPrice == 0.0) {
+                maxPrice = ListingConsts.DEFAULT_MAX_PRICE.toDouble()
+            }
+
+            return maxPrice
+        }
+        return ListingConsts.DEFAULT_MAX_PRICE.toDouble()
+    }
+
+    fun getSearchResultsMaxSpace(): Double {
+        val searchResultsSnapshot = searchResults.value
+        if (!searchResultsSnapshot.isNullOrEmpty()) {
+            var maxSpace = searchResultsSnapshot.maxOf { listing ->
+                listing.spaceAvailable
+            }
+            if (maxSpace == 0.0) {
+                maxSpace = ListingConsts.SPACE_UPPER_LIMIT
+            }
+            return maxSpace
+        }
+        return ListingConsts.SPACE_UPPER_LIMIT
+    }
+
+    private fun checkFilterCriteriaMaxValues() {
+        val criteria = filterCriteria.value
+        if (criteria != null) {
+            var searchResultsMaxPrice = getSearchResultsMaxPrice()
+            if (criteria.maxPrice > searchResultsMaxPrice) {
+                criteria.maxPrice = searchResultsMaxPrice.toFloat()
+            }
+
+            var searchResultsMaxSpace = getSearchResultsMaxSpace()
+            if (criteria.maxSpace > searchResultsMaxSpace) {
+                criteria.maxSpace = searchResultsMaxSpace.toFloat()
+            }
+
+            mutableFilterCriteria.value = criteria!!
         }
     }
 
@@ -104,17 +164,14 @@ class SearchViewModel @Inject constructor(
         val criteria = filterCriteria.value
         if (criteria != null) {
             val filteredByCriteriaListings = searchResults.value.orEmpty().filter { listing ->
-                val prices = searchResults.value?.map { it.price }
-                var maxPrice = prices?.maxOrNull()?.toFloat() ?: ListingConsts.DEFAULT_MAX_PRICE
-                if (maxPrice == 0.0f) maxPrice = ListingConsts.DEFAULT_MAX_PRICE
-                val filterCriteriaMaxPrice = criteria.maxPrice ?: maxPrice
-
                 listing.price >= criteria.minPrice
-                        && listing.price <= filterCriteriaMaxPrice
+                        && listing.price <= criteria.maxPrice
                         && listing.spaceAvailable >= criteria.minSpace
                         && listing.spaceAvailable <= criteria.maxSpace
                         && listing.amenities.containsAll(criteria.amenities)
             }
+
+            setHasFilterBeenApplied(true)
 
             mutableFilteredListings.value = filteredByCriteriaListings
         }
@@ -152,5 +209,9 @@ class SearchViewModel @Inject constructor(
 
     fun setSearchRadius(radius: Float) {
         mutableSearchRadius.value = radius
+    }
+
+    private fun setHasFilterBeenApplied(beenApplied: Boolean) {
+        mutableHasFilterBeenApplied.value = beenApplied
     }
 }
