@@ -225,3 +225,11 @@
   + Update status on client side depending on verified field
 * Chang 1 hour (2023-07-18) [PR](https://github.com/zhi-minn/SpaceShare/pull/71)
   * Made search functionality only show listings that are available (have enough space to accommodate the request, factoring in existing bookings)
+* Wenyu 2 Hours (2023-7-19) [Commit](https://github.com/zhi-minn/SpaceShare/commit/d820b39b0154d15e1c6ee3f9785bf97b055ee680)
+  + Item Declaration Page initialization
+* William 3 hours (2023-07-19) [Commit](https://github.com/zhi-minn/SpaceShare/commit/5f5de64c13a66011d1f2ff02f3020faba8283026)
+  + UI changes on admin fragment
+  + Back button on user entry fragment
+* Youming 10 hours (2023-07-19) [Commit](https://github.com/zhi-minn/SpaceShare/commit/40cb77c553e76418b82d5f57aba550f188bb06d6) [Commit](https://github.com/zhi-minn/SpaceShare/commit/40cb77202c9ab66d35f609184304582bb9c93052bcfc8a) [Commit](https://github.com/zhi-minn/SpaceShare/commit/d54d2b602d33bfbb344bdad1ef87dcabcac0b89f)
+  + Finish reservation function with Calvin
+  + implement the confirmation page and complete detailed add-ons for reservation
