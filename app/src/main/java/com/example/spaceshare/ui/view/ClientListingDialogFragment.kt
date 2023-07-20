@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
@@ -33,7 +34,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ClientListingDialogFragment(
     private val listing: Listing,
-    private val searchViewModel: SearchViewModel
+    private val searchViewModel: SearchViewModel? = null,
+    private val hideMessageHostButton: Boolean = false
 ): DialogFragment(), OnMapReadyCallback {
 
     companion object {
@@ -44,8 +46,6 @@ class ClientListingDialogFragment(
     lateinit var messagesViewModel: MessagesViewModel
 
     private lateinit var binding: DialogClientListingBinding
-
-    val reservation:Reservation = Reservation()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -118,6 +118,8 @@ class ClientListingDialogFragment(
                 "ReservationDetailDialogFragment")
         }
 
+
+        binding.btnMessageHost.isGone = hideMessageHostButton
         binding.btnMessageHost.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 val chat = messagesViewModel.createChatWithHost(listing)

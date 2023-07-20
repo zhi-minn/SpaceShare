@@ -29,6 +29,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -91,6 +92,10 @@ class ChatDialogFragment(
     private fun configureUI() {
         binding.chatTitle.text = chat.title
 
+        configureListingPreview()
+    }
+
+    private fun configureListingPreview() {
         if (chat.photoURL != null) {
             ImageLoaderUtil.loadImageIntoView(binding.listingImagePreview, chat.photoURL, false)
         }
@@ -101,11 +106,19 @@ class ChatDialogFragment(
                 chatViewModel.getAssociatedListingFromRepo(chat.associatedListingId)
                 chatViewModel.getHostUserFromRepo(chat.hostId)
 
+                // Do UI updates
                 withContext(Dispatchers.Main) {
                     binding.listingPrice.text = String.format("$%.2f CAD/day", chatViewModel.getAssociatedListingPrice())
                     binding.listingHost.text =
                         "Hosted by ${chatViewModel.getAssociatedListingHostName()}"
                     binding.listingLocation.text = chatViewModel.getAssociatedListingGeneralLocation()
+
+                    binding.chatListingPreview.setOnClickListener {
+                        val clientListingDialogFragment = ClientListingDialogFragment(chatViewModel.getAssociatedListing(), hideMessageHostButton = true)
+                        clientListingDialogFragment.show(
+                            Objects.requireNonNull(childFragmentManager),
+                            "clientListingDialog")
+                    }
                 }
             }
         }

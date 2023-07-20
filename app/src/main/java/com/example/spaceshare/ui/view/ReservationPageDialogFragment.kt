@@ -39,7 +39,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ReservationPageDialogFragment(
     private val listing: Listing,
-    private val searchViewModel: SearchViewModel
+    private val searchViewModel: SearchViewModel?
 ) : DialogFragment() {
 
 
@@ -122,7 +122,7 @@ class ReservationPageDialogFragment(
         binding.houseName.text = listing.title
 
         val formatter = SimpleDateFormat("MMM dd", Locale.getDefault())
-        if (searchViewModel.startTime.value == 0L) {
+        if (searchViewModel == null) {
             val cal = Calendar.getInstance()
 
             // Get current date
@@ -145,7 +145,8 @@ class ReservationPageDialogFragment(
         }
 
         // Handle spaceRequired
-        if (searchViewModel.spaceRequired.value == 0.0) {
+        // Chang: This should be stored in ReservationViewModel
+        if (searchViewModel == null) {
             binding.lugguageSize.text = "1.0 cubic"
         } else {
             binding.lugguageSize.text = "${searchViewModel.spaceRequired.value} cubic"
@@ -211,8 +212,9 @@ class ReservationPageDialogFragment(
 
         dateRangePicker.addOnPositiveButtonClickListener {
             binding.pickedDate.text = dateRangePicker.headerText
-            dateRangePicker.selection?.first?.let { it1 -> searchViewModel.setStartTime(it1) }
-            dateRangePicker.selection?.second?.let { it1 -> searchViewModel.setEndTime(it1) }
+            // SearchViewModel should not be used here, this should be stored in ReservationViewModel
+//            dateRangePicker.selection?.first?.let { it1 -> searchViewModel.setStartTime(it1) }
+//            dateRangePicker.selection?.second?.let { it1 -> searchViewModel.setEndTime(it1) }
         }
 
         dateRangePicker.show(parentFragmentManager, TAG)
