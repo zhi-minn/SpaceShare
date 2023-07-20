@@ -7,11 +7,14 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.data.repository.MessagesRepository
 import com.example.spaceshare.data.repository.UserRepository
 import com.example.spaceshare.models.Chat
+import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Message
 import com.example.spaceshare.models.User
+import com.example.spaceshare.utils.GeocoderUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.ktx.Firebase
@@ -22,17 +25,21 @@ import javax.inject.Inject
 
 class ChatViewModel @Inject constructor(
     private val userRepo: UserRepository,
-    private val messagesRepo: MessagesRepository
+    private val messagesRepo: MessagesRepository,
+    private val listingsRepo: ListingRepository,
 ) : ViewModel() {
 
     companion object {
         private val TAG = this::class.simpleName
     }
 
-    private lateinit var chat : Chat
+    private lateinit var chat: Chat
     private lateinit var chatDBRef: DatabaseReference
     private lateinit var currentUser: User
     private lateinit var currentUserPhotoURL: String
+
+    private lateinit var associatedListing: Listing
+    private lateinit var hostUser: User
 
     init {
         viewModelScope.launch {
@@ -73,8 +80,11 @@ class ChatViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun sendImageMessage(uri: Uri, activityContext : FragmentActivity) {
-        val message = constructMessage(null, "https://i.gifer.com/ZKZg.gif") // use loading image until actual image is uploaded
+    fun sendImageMessage(uri: Uri, activityContext: FragmentActivity) {
+        val message = constructMessage(
+            null,
+            "https://i.gifer.com/ZKZg.gif"
+        ) // use loading image until actual image is uploaded
         chatDBRef.push().setValue(
             message,
             DatabaseReference.CompletionListener { databaseError, databaseReference ->
@@ -101,7 +111,12 @@ class ChatViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun putImageInStorage(storageReference: StorageReference, uri: Uri, key: String?, activityContext: FragmentActivity) {
+    private fun putImageInStorage(
+        storageReference: StorageReference,
+        uri: Uri,
+        key: String?,
+        activityContext: FragmentActivity
+    ) {
         // First upload the image to Cloud Storage
         viewModelScope.launch {
             storageReference.putFile(uri)
@@ -142,5 +157,37 @@ class ChatViewModel @Inject constructor(
             return currentUser.firstName + " " + currentUser.lastName
         }
         return FirebaseAuth.getInstance().currentUser!!.displayName.toString()
+    }
+
+    suspend fun getAssociatedListingFromRepo(listingId: String) {
+        val listing = listingsRepo.getListing(listingId)
+        if (listing != null) {
+            associatedListing = listing
+        }
+    }
+
+    suspend fun getHostUserFromRepo(hostId: String) {
+        val host = userRepo.getUserById(hostId)
+        if (host != null) {
+            hostUser = host
+        }
+    }
+
+    fun getAssociatedListingPrice(): Double {
+        return associatedListing.price
+    }
+
+    fun getAssociatedListingHostName(): String {
+        return hostUser.firstName + " " + hostUser.lastName
+    }
+
+    fun getAssociatedListingGeneralLocation(): String {
+        if (associatedListing.location != null) {
+            return GeocoderUtil.getGeneralLocation(
+                associatedListing.location!!.latitude,
+                associatedListing.location!!.longitude
+            )
+        }
+        return ""
     }
 }
