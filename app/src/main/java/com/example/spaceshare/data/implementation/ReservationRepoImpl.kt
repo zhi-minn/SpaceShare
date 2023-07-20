@@ -1,7 +1,9 @@
 package com.example.spaceshare.data.implementation
 
 import android.util.Log
+import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.data.repository.ReservationRepository
+import com.example.spaceshare.models.Booking
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.User
@@ -16,7 +18,8 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ReservationRepoImpl @Inject constructor(
-    db: FirebaseFirestore
+    db: FirebaseFirestore,
+    private val listingRepo: ListingRepository
 ): ReservationRepository {
 
     companion object {
@@ -25,9 +28,20 @@ class ReservationRepoImpl @Inject constructor(
 
     private val reservationsCollection = db.collection("reservations")
     private val listingsCollection = db.collection("listings")
+
+
     override suspend fun createReservation(reservation: Reservation): String {
         return withContext(Dispatchers.IO) {
             val deferred = CompletableDeferred<String>()
+
+            // Add the reservation request to the list of bookings for the listing
+            val listing = listingRepo.getListing(reservation.listingId.toString())
+            if (listing != null) {
+                val newBooking = Booking(reservation.startDate, reservation.endDate, reservation.spaceRequested)
+                listing.bookings.add(newBooking)
+                listingRepo.updateListing(listing)
+            }
+
             reservationsCollection.add(reservation)
                 .addOnSuccessListener { documentReference ->
                     Log.d("reservations", "Added reservation with id ${documentReference.id}")

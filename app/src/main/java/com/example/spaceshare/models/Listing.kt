@@ -22,6 +22,6 @@ data class Listing(
     val createdAt: Timestamp? = null,
     @ServerTimestamp
     var updatedAt: Timestamp? = null,
-    val bookings: List<Booking> = emptyList()
+    val bookings: MutableList<Booking> = mutableListOf()
 ) {
 }
