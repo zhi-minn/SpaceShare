@@ -40,7 +40,6 @@ class ListingRepoImpl @Inject constructor(
 
             deferred.await()
         }
-
     }
 
     override suspend fun getUserListings(userId: String): List<Listing> = withContext(Dispatchers.IO) {
@@ -50,7 +49,6 @@ class ListingRepoImpl @Inject constructor(
                 .orderBy("updatedAt", Query.Direction.DESCENDING)
                 .get()
                 .await()
-
 
             return@withContext result.documents.mapNotNull { document ->
                 try {

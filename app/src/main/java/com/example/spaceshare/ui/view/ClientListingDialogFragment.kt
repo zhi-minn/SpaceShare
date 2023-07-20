@@ -9,20 +9,28 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
+import com.example.spaceshare.data.repository.MessagesRepository
 import com.example.spaceshare.databinding.DialogClientListingBinding
 import com.example.spaceshare.enums.Amenity
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
+import com.example.spaceshare.ui.viewmodel.MessagesViewModel
 import com.example.spaceshare.utils.GeocoderUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Objects
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ClientListingDialogFragment(
     private val listing: Listing,
     private val searchViewModel: SearchViewModel
@@ -31,6 +39,9 @@ class ClientListingDialogFragment(
     companion object {
         private val TAG = this::class.simpleName
     }
+
+    @Inject
+    lateinit var messagesViewModel: MessagesViewModel
 
     private lateinit var binding: DialogClientListingBinding
 
@@ -105,6 +116,17 @@ class ClientListingDialogFragment(
 //            reservationPageDialogFragment.show(supportFragmentManager, "ReservationDetailDialogFragment")
             reservationPageDialogFragment.show(Objects.requireNonNull(childFragmentManager),
                 "ReservationDetailDialogFragment")
+        }
+
+        binding.btnMessageHost.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val chat = messagesViewModel.createChatWithHost(listing)
+                val chatDialogFragment = ChatDialogFragment(chat, shouldRefreshChatsList = false)
+                chatDialogFragment.show(
+                    childFragmentManager,
+                    "chatDialog"
+                )
+            }
         }
     }
 

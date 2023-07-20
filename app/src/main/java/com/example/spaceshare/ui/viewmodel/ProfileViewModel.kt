@@ -94,6 +94,7 @@ class ProfileViewModel @Inject constructor(
                 val curUser = _userLiveData.value
                 curUser?.let {
                     it.governmentId = imagePath
+                    it.isVerified = 0
                     _userLiveData.value = it
                     userRepo.setUser(it)
                 }

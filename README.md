@@ -195,3 +195,43 @@
 * Youming Ning 8 hours (2023-07-15 -> 2023-07-17) [Commit](https://github.com/zhi-minn/SpaceShare/commit/db6964aa3b85692a20c00e3adb3a7adc91df8bf5)
   + Add Reservation Page source file
   + modified Detailed page for orders of the client
+* Chang 6 hours (2023-07-16) [PR](https://github.com/zhi-minn/SpaceShare/pull/64)
+  * Added messaging functionality
+    * Users can send text and image messages
+    * TODO:
+      * Make channels so not all users talk on the same channel lol
+* Chang 1.5 hours (2023-07-16) [PR](https://github.com/zhi-minn/SpaceShare/pull/65)
+  * Fixed user profile photos not showing up in messages
+  * Make image loading gif higher quality
+* Chang 9 hours (2023-07-17) [PR](https://github.com/zhi-minn/SpaceShare/pull/66)
+  * Added timestamp to each message
+  * Added individual chats/channels to messaging service
+  * Added ability for prospective clients to message host from listing details page
+    * Will not create duplicate chats for the same listing
+  * Messages fragment now shows all chats a user is part of
+    * Chats keep track of last update
+  * Revamped old messages fragment into reuseable chat dialog fragment
+* Chang 2 hours (2023-07-17) [PR](https://github.com/zhi-minn/SpaceShare/pull/67)
+  * Sorted chats by most recently updated in messages tab
+  * Fixed image messages not having a timestamp
+  * Refactored image loading into utility class
+  * Added host names to chats
+  * Added chat pictures (uses first image of listing)
+* Chang 2 hours (2023-07-18) [PR](https://github.com/zhi-minn/SpaceShare/pull/69)
+  * Made chat message timestamps more concise
+  * Chats now refresh the chats list in the messages tab upon being closed or when a message is sent
+  * Chat last update time now uses "Just now" instead of "0 minutes ago"
+* William 12.5 hours (2023-07-14 -> 2023-07-18) [Commit](https://github.com/zhi-minn/SpaceShare/commit/26d935cbcb7746c07d1d16cdce2a97a4dce7ccb6)
+  + New admin activity that has recycler view of government id requests
+  + Can click on any request to go to fragment containing details of users
+  + Approve or reject user government id request and updates verified field in Firebase
+  + Update status on client side depending on verified field
+* Wenyu 2 Hours (2023-7-19) [Commit](https://github.com/zhi-minn/SpaceShare/commit/d820b39b0154d15e1c6ee3f9785bf97b055ee680)
+  + Item Declaration Page initialization
+* William 3 hours (2023-07-19) [Commit](https://github.com/zhi-minn/SpaceShare/commit/5f5de64c13a66011d1f2ff02f3020faba8283026)
+  + UI changes on admin fragment
+  + Back button on user entry fragment
+* Youming 10 hours (2023-07-19) [Commit](https://github.com/zhi-minn/SpaceShare/commit/40cb77c553e76418b82d5f57aba550f188bb06d6) [Commit](https://github.com/zhi-minn/SpaceShare/commit/40cb77202c9ab66d35f609184304582bb9c93052bcfc8a) [Commit](https://github.com/zhi-minn/SpaceShare/commit/d54d2b602d33bfbb344bdad1ef87dcabcac0b89f)
+  + Finish reservation function with Calvin
+  + implement the confirmation page and complete detailed add-ons for reservation
+

@@ -6,15 +6,14 @@
         android:id="@+id/searchFragment"
         android:enabled="true"
         android:icon="@drawable/search"
-        android:title="Search"
+        android:title="Explore"
         app:showAsAction="always" />
 
-    <!-- reservation -->
     <item
         android:id="@+id/reservationFragment"
         android:icon="@drawable/order"
-        android:title="Spaces"
-        android:visible="false"/>
+        android:title="Bookings"
+        android:visible="false" />
 
     <!-- Host-specific Items -->
     <item
@@ -26,12 +25,16 @@
 
     <!-- Common Items -->
     <item
-        android:id="@+id/profileFragment"
+        android:id="@+id/messagesFragment"
         android:enabled="true"
-        android:icon="@drawable/settings"
-        android:title="Profile"
+        android:icon="@android:drawable/sym_action_chat"
+        android:title="Messages"
         app:showAsAction="always" />
 
-
-
+    <item
+        android:id="@+id/profileFragment"
+        android:enabled="true"
+        android:icon="@drawable/username"
+        android:title="Profile"
+        app:showAsAction="always" />
 </menu>

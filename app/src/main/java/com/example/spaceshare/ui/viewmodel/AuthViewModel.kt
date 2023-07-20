@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spaceshare.consts.AdminConsts
 import com.example.spaceshare.data.repository.UserRepository
 import com.example.spaceshare.manager.FCMTokenManager
 import com.example.spaceshare.models.User
@@ -34,7 +35,8 @@ class AuthViewModel @Inject constructor(
 
     data class AuthResult(
         val isSuccess: Boolean,
-        val message: String
+        val message: String,
+        val admin: Boolean = false
     )
 
     private val _loginStatus = MutableLiveData<AuthResult>()
@@ -58,7 +60,9 @@ class AuthViewModel @Inject constructor(
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    if (user != null && user.isEmailVerified) {
+                    if (user != null && AdminConsts.ADMIN_ACCOUNTS.contains(user.email)) {
+                        _loginStatus.value = AuthResult(true, "Admin account.", true)
+                    } else if (user != null && user.isEmailVerified) {
                         _loginStatus.value = AuthResult(true, "Successfully logged in.")
                     } else {
                         _loginStatus.value = AuthResult(false, "Please verify your email first.")
