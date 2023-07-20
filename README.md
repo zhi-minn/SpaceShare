@@ -241,3 +241,5 @@
     * Fixes said dialogs not persisting state between searches and filters
   * Fixed filter dialog crashing in a wide range of circumstances
   * Fixed filter dialog slider text formatting
+* Chang 0.5 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/pull/74)
+  * Made reservations add to a listing's bookings
