@@ -1,7 +1,6 @@
 package com.example.spaceshare.ui.view
 
 
-import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.location.Geocoder
@@ -41,12 +40,13 @@ import javax.inject.Inject
 class ReservationPageDialogFragment(
     private val listing: Listing,
     private val searchViewModel: SearchViewModel
-): DialogFragment() {
+) : DialogFragment() {
 
 
     companion object {
         private val TAG = this::class.simpleName
     }
+
     @Inject
     lateinit var reservationViewModel: ReservationViewModel
 
@@ -73,13 +73,13 @@ class ReservationPageDialogFragment(
         toolbarTitle.text = "Confirm"
 
         val finalRule = binding.root.findViewById<TextView>(R.id.finalRule)
-        finalRule.text = "By selecting the button below, I agree to the ground rules and policy established by SpaceShare"
+        finalRule.text =
+            "By selecting the button below, I agree to the ground rules and policy established by SpaceShare"
         configureBindings()
         configureButtons()
 
         return binding.root
     }
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,6 +90,7 @@ class ReservationPageDialogFragment(
         sizeDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
     }
+
     object GeocoderUtil {
 
         fun getCityName(context: Context, latitude: Double, longitude: Double): String? {
@@ -111,7 +112,8 @@ class ReservationPageDialogFragment(
 
 
     private fun configureBindings() {
-        binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
+        binding.viewPagerListingImages.adapter =
+            ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
 
         binding.location.text = listing.location?.let { location ->
             GeocoderUtil.getCityName(requireContext(), location.latitude, location.longitude)
@@ -159,7 +161,6 @@ class ReservationPageDialogFragment(
     }
 
 
-
     private fun configureButtons() {
 
         binding.dateEdit.setOnClickListener { openDatePicker() }
@@ -168,19 +169,25 @@ class ReservationPageDialogFragment(
         binding.sizeEdit.setOnClickListener { openSizePicker() }
         binding.sizes.setOnClickListener { openSizePicker() }
 
-        binding.reserveBtn.setOnClickListener{
+        binding.reserveBtn.setOnClickListener {
             auth = FirebaseAuth.getInstance()
             val clientId = auth.currentUser?.uid
             val reservation = Reservation(
-                hostId=listing.hostId, clientId=clientId, listingId=listing.id,
-                startDate= Timestamp.now(), endDate= Timestamp.now(),
-                unit=3.5, status= com.example.spaceshare.models.ReservationStatus.PENDING.toInt())
+                hostId = listing.hostId,
+                clientId = clientId,
+                listingId = listing.id,
+                startDate = Timestamp.now(),
+                endDate = Timestamp.now(),
+                spaceRequested = 3.5,
+                status = com.example.spaceshare.models.ReservationStatus.PENDING.toInt()
+            )
             reservationViewModel.reserveListing(reservation)
 
             // Show a confirmation dialog
             showDialogThenDismiss()
         }
     }
+
     private fun showDialogThenDismiss() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Reservation Confirmation")
@@ -192,6 +199,7 @@ class ReservationPageDialogFragment(
         val dialog = builder.create()
         dialog.show()
     }
+
     private fun openDatePicker() {
         val constraintsBuilder = CalendarConstraints.Builder()
 
