@@ -70,5 +70,9 @@ class UserEntryFragment : Fragment() {
             adminViewModel.updateUserVerifiedStatus(id, 2)
             navController.popBackStack()
         }
+
+        binding.buttonBack.setOnClickListener {
+            navController.popBackStack()
+        }
     }
 }

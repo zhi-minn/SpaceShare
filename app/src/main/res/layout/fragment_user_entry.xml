@@ -56,5 +56,12 @@
                 android:text="Reject"
                 android:backgroundTint="@color/light_red"/>
         </LinearLayout>
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Go Back"
+            android:layout_marginTop="100dp"
+            android:backgroundTint="@color/colorPrimary"/>
     </LinearLayout>
 </layout>
