@@ -11,6 +11,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ListingAdapter
+import com.example.spaceshare.adapters.ScrollToTopObserver
 import com.example.spaceshare.databinding.FragmentSearchBinding
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
@@ -30,6 +31,7 @@ class SearchFragment : Fragment() {
     @Inject
     lateinit var searchViewModel: SearchViewModel
     private lateinit var adapter: ListingAdapter
+    private lateinit var manager: LinearLayoutManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,11 +82,17 @@ class SearchFragment : Fragment() {
             }
         })
         binding.recyclerView.adapter = adapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        manager = LinearLayoutManager(requireContext())
+        binding.recyclerView.layoutManager = manager
+
+        // Scroll up when the list of listings changes (when a new search or filter is applied)
+        adapter.registerAdapterDataObserver(
+            ScrollToTopObserver(binding.recyclerView, adapter, manager)
+        )
     }
 
     private fun configureListingObservers() {
-        searchViewModel.listings.observe(viewLifecycleOwner) { listings ->
+        searchViewModel.filteredListings.observe(viewLifecycleOwner) { listings ->
             binding.noListingView.visibility = if (listings.isNotEmpty()) View.GONE else View.VISIBLE
             adapter.areEditButtonsGone = true
             adapter.submitList(listings)

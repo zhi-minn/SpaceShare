@@ -91,7 +91,7 @@ class SearchDialogFragment(
 
             override fun onStopTrackingTouch(slider: Slider) {
                 // Responds to when slider's touch event is being stopped
-                searchViewModel.searchRadius.value = binding.searchRadiusSlider.value
+                searchViewModel.setSearchRadius(binding.searchRadiusSlider.value)
             }
         })
         searchViewModel.searchRadius.observe(viewLifecycleOwner) { radius ->
@@ -109,8 +109,13 @@ class SearchDialogFragment(
                 .build()
         dateRangePicker.addOnPositiveButtonClickListener {
             binding.searchTime.text = dateRangePicker.headerText
-            searchViewModel.startTime.value = dateRangePicker.selection?.first
-            searchViewModel.endTime.value = dateRangePicker.selection?.second
+
+            val startTime = dateRangePicker.selection?.first
+            val endTime = dateRangePicker.selection?.second
+            if (startTime != null && endTime != null) {
+                searchViewModel.setStartTime(startTime)
+                searchViewModel.setEndTime(endTime)
+            }
         }
         binding.whenCard.setOnClickListener {
             dateRangePicker.show(parentFragmentManager, TAG)

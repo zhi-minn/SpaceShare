@@ -47,36 +47,37 @@ class ClientFilterDialogFragment(
 
 
     private fun configureSliders() {
-        val criteria = searchViewModel.filterCriteria
+        val criteria = searchViewModel.filterCriteria.value
+        if (criteria != null) {
+            // Set range slider bounds based on min and max values from search results
+            // Also set range slider initial values based on previous setting
+            val prices = searchViewModel.searchResults.value?.map { it.price }
+            var maxPrice = prices?.maxOrNull()?.toFloat() ?: 100.0f
+            if (maxPrice == 0.0f) maxPrice = 100.0f
+            val criteriaMaxPrice = criteria.maxPrice ?: maxPrice
+            binding.priceRangeSlider.valueFrom = 0.0f
+            binding.priceRangeSlider.valueTo = maxPrice
+            binding.priceRangeSlider.values = listOf(criteria.minPrice, criteriaMaxPrice)
+            binding.priceIndicator.text =
+                "$${String.format("%.2f", criteria.minPrice)} - $${String.format("%.2f", maxPrice)}"
 
-        // Set range slider bounds based on min and max values from listings
-        // Also set range slider initial values based on previous setting
-        val prices = searchViewModel.listings.value?.map { it.price }
-        var maxPrice = prices?.maxOrNull()?.toFloat() ?: 100.0f
-        if (maxPrice == 0.0f) maxPrice = 100.0f
-        val criteriaMaxPrice = criteria.maxPrice ?: maxPrice
-        binding.priceRangeSlider.valueFrom = 0.0f
-        binding.priceRangeSlider.valueTo = maxPrice
-        binding.priceRangeSlider.values = listOf(criteria.minPrice, criteriaMaxPrice)
-        binding.priceIndicator.text =
-            "$${String.format("%.2f", criteria.minPrice)} - $${String.format("%.2f", maxPrice)}"
-
-        val spaces = searchViewModel.listings.value?.map { it.spaceAvailable }
-        var maxSpace = spaces?.maxOrNull()?.toFloat() ?: 10.0f
-        if (maxSpace == 0.0f) maxSpace = 10.0f
-        val criteriaMaxSpace = if (criteria.maxSpace > maxSpace) maxSpace else criteria.maxSpace
-        binding.spaceRangeSlider.valueFrom = 0.0f
-        binding.spaceRangeSlider.valueTo = maxSpace
-        binding.spaceRangeSlider.values = listOf(criteria.minSpace, criteriaMaxSpace)
-        binding.spaceIndicator.text =
-            "${String.format("%.1f", criteria.minSpace)} - ${String.format("%.1f", maxSpace)}"
+            val spaces = searchViewModel.searchResults.value?.map { it.spaceAvailable }
+            var maxSpace = spaces?.maxOrNull()?.toFloat() ?: 10.0f
+            if (maxSpace == 0.0f) maxSpace = 10.0f
+            val criteriaMaxSpace = if (criteria.maxSpace > maxSpace) maxSpace else criteria.maxSpace
+            binding.spaceRangeSlider.valueFrom = 0.0f
+            binding.spaceRangeSlider.valueTo = maxSpace
+            binding.spaceRangeSlider.values = listOf(criteria.minSpace, criteriaMaxSpace)
+            binding.spaceIndicator.text =
+                "${String.format("%.1f", criteria.minSpace)} - ${String.format("%.1f", maxSpace)}"
+        }
 
         val decimalFormat = DecimalFormat("0.0") // Set the desired decimal format
         binding.spaceRangeSlider.setLabelFormatter { value -> decimalFormat.format(value) }
     }
 
     private fun configureAmenities() {
-        val amenities = Amenity.values().filter { searchViewModel.filterCriteria.amenities.contains(it) }
+        val amenities = Amenity.values().filter { searchViewModel.filterCriteria.value?.amenities!!.contains(it) }
         for (amenity in amenities) {
             when (amenity) {
                 Amenity.SURVEILLANCE -> binding.surveillance.isChecked = true
@@ -101,7 +102,7 @@ class ClientFilterDialogFragment(
                 isActive = true, isInactive = false,
                 priceRange[0], priceRange[1], spaceRange[0], spaceRange[1], amenitiesSelected
             )
-            searchViewModel.filterCriteria = criteria
+            searchViewModel.setFilterCriteria(criteria)
             searchViewModel.filterByFilterCriteria()
 
             this.dismiss()
