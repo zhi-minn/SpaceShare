@@ -259,3 +259,5 @@
   * Added listing previews to chats
 * Chang 0.5 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/pull/76)
   * Designed new app icon
+* Chang 3 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/pull/77)
+  * Add sort options to client filter
