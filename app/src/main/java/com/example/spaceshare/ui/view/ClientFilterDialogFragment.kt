@@ -2,15 +2,16 @@ package com.example.spaceshare.ui.view
 
 import android.icu.text.DecimalFormat
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogClientFilterBinding
 import com.example.spaceshare.enums.Amenity
+import com.example.spaceshare.enums.FilterSortByOption
 import com.example.spaceshare.models.FilterCriteria
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -103,7 +104,8 @@ class ClientFilterDialogFragment() : DialogFragment() {
     }
 
     private fun configureAmenities() {
-        val amenities = Amenity.values().filter { searchViewModel.filterCriteria.value?.amenities!!.contains(it) }
+        val amenities = Amenity.values()
+            .filter { searchViewModel.filterCriteria.value?.amenities!!.contains(it) }
         for (amenity in amenities) {
             when (amenity) {
                 Amenity.SURVEILLANCE -> binding.surveillance.isChecked = true
@@ -123,7 +125,7 @@ class ClientFilterDialogFragment() : DialogFragment() {
         binding.btnApply.setOnClickListener {
             val priceRange = binding.priceRangeSlider.values
             val spaceRange = binding.spaceRangeSlider.values
-            val amenitiesSelected : MutableList<Amenity> = getCheckedAmenities()
+            val amenitiesSelected: MutableList<Amenity> = getCheckedAmenities()
             val criteria = FilterCriteria(
                 isActive = true, isInactive = false,
                 priceRange[0], priceRange[1], spaceRange[0], spaceRange[1], amenitiesSelected
@@ -137,29 +139,38 @@ class ClientFilterDialogFragment() : DialogFragment() {
 
     private fun configureRadioButtons() {
         binding.radioClosest.isChecked = true
-        binding.sortByRadioGroup.setOnClickListener { view ->
-            onRadioButtonClicked(view)
+
+        binding.sortByRadioGroup.setOnCheckedChangeListener { radioGroup, checkedId ->
+            onRadioButtonClicked(checkedId)
         }
     }
 
-    private fun onRadioButtonClicked(view: View) {
-        if (view is RadioButton) {
-            // Is the button now checked?
-            val checked = view.isChecked
+    private fun onRadioButtonClicked(checkedId: Int) {
+        // Check which radio button was clicked
+        when (checkedId) {
+            R.id.radioClosest ->
+                searchViewModel.setSortByOption(FilterSortByOption.CLOSEST)
 
-            // Check which radio button was clicked
-            when (view.getId()) {
-                R.id.radioClosest ->
-                    if (checked) {
-                        // Pirates are the best
-                    }
-                R.id.radioNewest ->
-                    if (checked) {
-                        // Ninjas rule
-                    }
-            }
+            R.id.radioNewest ->
+                searchViewModel.setSortByOption(FilterSortByOption.NEWEST)
+
+            R.id.radioOldest ->
+                searchViewModel.setSortByOption(FilterSortByOption.OLDEST)
+
+            R.id.radioCheapest ->
+                searchViewModel.setSortByOption(FilterSortByOption.CHEAPEST)
+
+            R.id.radioMostExpensive ->
+                searchViewModel.setSortByOption(FilterSortByOption.MOST_EXPENSIVE)
+
+            R.id.radioLargest ->
+                searchViewModel.setSortByOption(FilterSortByOption.LARGEST)
+
+            R.id.radioSmallest ->
+                searchViewModel.setSortByOption(FilterSortByOption.SMALLEST)
         }
     }
+
 
     private fun setPriceSliderText(minPrice: Float, maxPrice: Float) {
         binding.priceIndicator.text =

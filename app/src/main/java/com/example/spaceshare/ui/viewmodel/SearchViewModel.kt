@@ -10,6 +10,7 @@ import com.example.spaceshare.consts.ListingConsts.SPACE_BOOKING_LOWER_LIMIT
 import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
 import com.example.spaceshare.data.implementation.ListingRepoImpl
 import com.example.spaceshare.data.repository.ListingRepository
+import com.example.spaceshare.enums.FilterSortByOption
 import com.example.spaceshare.interfaces.LocationInterface
 import com.example.spaceshare.models.FilterCriteria
 import com.example.spaceshare.models.Listing
@@ -57,6 +58,9 @@ class SearchViewModel @Inject constructor(
     private val mutableHasFilterBeenApplied = MutableLiveData<Boolean>(false)
     val hasFilterBeenApplied: LiveData<Boolean> get() = mutableHasFilterBeenApplied
 
+    private val mutableSortByOption = MutableLiveData<FilterSortByOption>(FilterSortByOption.CLOSEST)
+    val sortByOption: LiveData<FilterSortByOption> get() = mutableSortByOption
+
     init {
         mutableLocation.value = LatLng(0.0, 0.0)
         mutableStartTime.value = 0
@@ -70,8 +74,7 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             val results = listingRepo.getAllListings()
             val forceFiltered = applyForcedClientSearchFilters(results)
-            val geoPoint = GeoPoint(mutableLocation.value!!.latitude, mutableLocation.value!!.longitude)
-            mutableSearchResults.value = sortByDistance(forceFiltered, geoPoint)
+            mutableSearchResults.value = sortByDistance(forceFiltered)
             mutableFilteredListings.value = searchResults.value
         }
     }
@@ -109,7 +112,6 @@ class SearchViewModel @Inject constructor(
                 )
             val searchResults = listingRepo.searchListings(criteria)
             mutableSearchResults.value = applyForcedClientSearchFilters(searchResults)
-
 
             // Check filter criteria for invalid values, then apply it if necessary
             var filterBeenApplied = hasFilterBeenApplied.value
@@ -182,25 +184,71 @@ class SearchViewModel @Inject constructor(
 
             setHasFilterBeenApplied(true)
 
-            mutableFilteredListings.value = filteredByCriteriaListings
+            mutableFilteredListings.value = sortBySelectedSortOption(filteredByCriteriaListings)
         }
     }
 
-    private fun applyForcedClientSearchFilters(listings: List<Listing>): List<Listing> {
-        return listings.filter { listing ->
-            filterForActiveListings(listing) && filterForNonOwnListings(listing)
+    private fun sortBySelectedSortOption(listings: List<Listing>): List<Listing> {
+        Log.d(TAG, sortByOption.value.toString())
+        return when (sortByOption.value) {
+            FilterSortByOption.CLOSEST ->
+                sortByDistance(listings)
+            FilterSortByOption.NEWEST ->
+                sortByNewest(listings)
+            FilterSortByOption.OLDEST ->
+                sortByOldest(listings)
+            FilterSortByOption.CHEAPEST ->
+                sortByCheapest(listings)
+            FilterSortByOption.MOST_EXPENSIVE ->
+                sortByMostExpensive(listings)
+            FilterSortByOption.LARGEST ->
+                sortByLargest(listings)
+            FilterSortByOption.SMALLEST ->
+                sortBySmallest(listings)
+
+            else ->
+                emptyList()
         }
     }
 
-    private fun filterForActiveListings(listing: Listing): Boolean {
-        return listing.isActive
+    private fun sortBySmallest(listings: List<Listing>): List<Listing> {
+        return listings.sortedBy { listing ->
+            listing.spaceAvailable
+        }
     }
 
-    private fun filterForNonOwnListings(listing: Listing): Boolean {
-        return listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
+    private fun sortByLargest(listings: List<Listing>): List<Listing> {
+        return listings.sortedByDescending { listing ->
+            listing.spaceAvailable
+        }
     }
 
-    private fun sortByDistance(listings: List<Listing>, targetLocation: GeoPoint): List<Listing> {
+    private fun sortByMostExpensive(listings: List<Listing>): List<Listing> {
+        return listings.sortedByDescending { listing ->
+            listing.price
+        }
+    }
+
+    private fun sortByCheapest(listings: List<Listing>): List<Listing> {
+        return listings.sortedBy { listing ->
+            listing.price
+        }
+    }
+
+    private fun sortByOldest(listings: List<Listing>): List<Listing> {
+        return listings.sortedBy { listing ->
+            listing.createdAt
+        }
+    }
+
+    private fun sortByNewest(listings: List<Listing>): List<Listing> {
+        return listings.sortedByDescending { listing ->
+            listing.createdAt
+        }
+    }
+
+    private fun sortByDistance(listings: List<Listing>): List<Listing> {
+        val targetLocation = GeoPoint(mutableLocation.value!!.latitude, mutableLocation.value!!.longitude)
         return listings.sortedBy { listing ->
             try {
                 val dist = MathUtil.calculateDistanceInKilometers(
@@ -216,6 +264,20 @@ class SearchViewModel @Inject constructor(
                 null
             }
         }
+    }
+
+    private fun applyForcedClientSearchFilters(listings: List<Listing>): List<Listing> {
+        return listings.filter { listing ->
+            filterForActiveListings(listing) && filterForNonOwnListings(listing)
+        }
+    }
+
+    private fun filterForActiveListings(listing: Listing): Boolean {
+        return listing.isActive
+    }
+
+    private fun filterForNonOwnListings(listing: Listing): Boolean {
+        return listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
     }
 
     override fun setLocation(latLng: LatLng) {
@@ -240,5 +302,9 @@ class SearchViewModel @Inject constructor(
 
     private fun setHasFilterBeenApplied(beenApplied: Boolean) {
         mutableHasFilterBeenApplied.value = beenApplied
+    }
+
+    fun setSortByOption(option: FilterSortByOption) {
+        mutableSortByOption.value = option
     }
 }
