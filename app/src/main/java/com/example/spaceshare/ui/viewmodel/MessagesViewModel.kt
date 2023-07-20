@@ -62,6 +62,7 @@ class MessagesViewModel @Inject constructor(
                 listing.title,
                 chatPhotoURL,
                 listing.hostId!!,
+                listing.id,
                 memberIds as List<String>
             )
             return@withContext chat

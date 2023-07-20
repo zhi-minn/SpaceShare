@@ -11,6 +11,7 @@ interface MessagesRepository {
         title: String,
         photoURL: String,
         hostId: String,
+        associatedListingId: String,
         memberIds: List<String>
     ): Chat
 

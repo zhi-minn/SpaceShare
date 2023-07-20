@@ -38,6 +38,7 @@ class MessagesRepoImpl @Inject constructor(
         title: String,
         photoURL: String,
         hostId: String,
+        associatedListingId: String,
         memberIds: List<String>
     ): Chat {
         // Return the chat if the chat already exists
@@ -50,7 +51,7 @@ class MessagesRepoImpl @Inject constructor(
 
         // Otherwise make a new chat
         return withContext(Dispatchers.IO) {
-            val chat = Chat(title = title, photoURL = photoURL, hostId = hostId, members = memberIds)
+            val chat = Chat(title = title, photoURL = photoURL, hostId = hostId, associatedListingId = associatedListingId, members = memberIds)
             val deferred = CompletableDeferred<Chat>()
             chatsCollection.document(chat.id)
                 .set(chat)
