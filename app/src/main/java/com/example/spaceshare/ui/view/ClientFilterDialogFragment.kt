@@ -138,7 +138,24 @@ class ClientFilterDialogFragment() : DialogFragment() {
     }
 
     private fun configureRadioButtons() {
-        binding.radioClosest.isChecked = true
+        searchViewModel.sortByOption.observe(viewLifecycleOwner) { sortByOption ->
+            when (sortByOption) {
+                FilterSortByOption.CLOSEST ->
+                    binding.radioClosest.isChecked = true
+                FilterSortByOption.NEWEST ->
+                    binding.radioNewest.isChecked = true
+                FilterSortByOption.OLDEST ->
+                    binding.radioOldest.isChecked = true
+                FilterSortByOption.CHEAPEST ->
+                    binding.radioCheapest.isChecked = true
+                FilterSortByOption.MOST_EXPENSIVE ->
+                    binding.radioMostExpensive.isChecked = true
+                FilterSortByOption.LARGEST ->
+                    binding.radioLargest.isChecked = true
+                FilterSortByOption.SMALLEST ->
+                    binding.radioSmallest.isChecked = true
+            }
+        }
 
         binding.sortByRadioGroup.setOnCheckedChangeListener { radioGroup, checkedId ->
             onRadioButtonClicked(checkedId)
