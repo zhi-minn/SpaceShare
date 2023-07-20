@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spaceshare.consts.ListingConsts
 import com.example.spaceshare.data.repository.FirebaseStorageRepository
 import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.models.FilterCriteria
@@ -32,6 +33,9 @@ class ListingViewModel @Inject constructor(
     private var curQuery: String = ""
     private var curCriteria: FilterCriteria = FilterCriteria()
 
+    private val mutableHasFilterBeenApplied = MutableLiveData<Boolean>(false)
+    val hasFilterBeenApplied: LiveData<Boolean> get() = mutableHasFilterBeenApplied
+
     fun getUserListings(userId: String) {
         viewModelScope.launch {
             val listings = listingRepo.getUserListings(userId)
@@ -48,6 +52,38 @@ class ListingViewModel @Inject constructor(
     fun setCriteria(criteria: FilterCriteria) {
         curCriteria = criteria
         filterListings(curQuery, curCriteria)
+    }
+    fun getListingsMaxPrice(): Double {
+        val listingsSnapshot = listingsLiveData.value
+        if (!listingsSnapshot.isNullOrEmpty()) {
+            var maxPrice = listingsSnapshot.maxOf { listing ->
+                listing.price
+            }
+            if (maxPrice == 0.0) {
+                maxPrice = ListingConsts.DEFAULT_MAX_PRICE.toDouble()
+            }
+
+            return maxPrice
+        }
+        return ListingConsts.DEFAULT_MAX_PRICE.toDouble()
+    }
+
+    fun getListingsMaxSpace(): Double {
+        val listingsSnapshot = listingsLiveData.value
+        if (!listingsSnapshot.isNullOrEmpty()) {
+            var maxSpace = listingsSnapshot.maxOf { listing ->
+                listing.spaceAvailable
+            }
+            if (maxSpace == 0.0) {
+                maxSpace = ListingConsts.SPACE_UPPER_LIMIT
+            }
+            return maxSpace
+        }
+        return ListingConsts.SPACE_UPPER_LIMIT
+    }
+
+    fun setHasFilterBeenApplied(beenApplied: Boolean) {
+        mutableHasFilterBeenApplied.value = beenApplied
     }
 
     fun filterListings(query: String, criteria: FilterCriteria) {
