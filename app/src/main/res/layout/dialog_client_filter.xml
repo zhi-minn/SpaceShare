@@ -37,160 +37,217 @@
             app:layout_constraintTop_toBottomOf="@id/btnClose" />
 
         <!-- Filters -->
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/box_padding"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/divider2"
             app:layout_constraintTop_toBottomOf="@id/divider1">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/priceLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Price (per day)"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/priceIndicator"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="$0 - $100"
-                android:textAlignment="viewEnd"
-                android:textSize="16dp"
-                app:layout_constraintBottom_toBottomOf="@id/priceLabel"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/spaceIndicator"
-                app:layout_constraintTop_toTopOf="@id/priceLabel" />
-
-            <com.google.android.material.slider.RangeSlider
-                android:id="@+id/priceRangeSlider"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_component_margin"
-                android:valueFrom="0"
-                android:valueTo="100"
-                app:layout_constraintTop_toBottomOf="@id/priceLabel"
-                app:values="@array/initial_price_values" />
+                android:padding="@dimen/box_padding">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/spaceLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_component_margin"
-                android:text="Space (cubic metres)"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/priceRangeSlider" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/priceLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price (per day)"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/spaceIndicator"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="2.0 - 4.0"
-                android:textAlignment="viewEnd"
-                android:textSize="16dp"
-                app:layout_constraintBottom_toBottomOf="@id/spaceLabel"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/spaceLabel"
-                app:layout_constraintTop_toTopOf="@id/spaceLabel" />
-
-            <com.google.android.material.slider.RangeSlider
-                android:id="@+id/spaceRangeSlider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_component_margin"
-                android:valueFrom="0"
-                android:valueTo="10"
-                app:layout_constraintTop_toBottomOf="@id/spaceLabel"
-                app:values="@array/initial_space_values" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/amenitiesLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_component_margin"
-                android:text="Amenities"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spaceRangeSlider" />
-
-            <LinearLayout
-                android:id="@+id/amenitiesMainLinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/amenitiesLabel"
-                tools:layout_editor_absoluteX="32dp">
-
-                <LinearLayout
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/priceIndicator"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:text="$0 - $100"
+                    android:textAlignment="viewEnd"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/priceLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/spaceIndicator"
+                    app:layout_constraintTop_toTopOf="@id/priceLabel" />
 
-                    <CheckBox
-                        android:id="@+id/surveillance"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Surveillance-enabled" />
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/priceRangeSlider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    android:valueFrom="0"
+                    android:valueTo="100"
+                    app:layout_constraintTop_toBottomOf="@id/priceLabel"
+                    app:values="@array/initial_price_values" />
 
-                    <CheckBox
-                        android:id="@+id/lighting"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Well-lit" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/spaceLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    android:text="Space (cubic metres)"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/priceRangeSlider" />
 
-                    <CheckBox
-                        android:id="@+id/cleanliness"
-                        android:layout_width="match_parent"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/spaceIndicator"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="2.0 - 4.0"
+                    android:textAlignment="viewEnd"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/spaceLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/spaceLabel"
+                    app:layout_constraintTop_toTopOf="@id/spaceLabel" />
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/spaceRangeSlider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    android:valueFrom="0"
+                    android:valueTo="10"
+                    app:layout_constraintTop_toBottomOf="@id/spaceLabel"
+                    app:values="@array/initial_space_values" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/amenitiesLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    android:text="Amenities"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spaceRangeSlider" />
+
+                <LinearLayout
+                    android:id="@+id/amenitiesMainLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/amenitiesLabel"
+                    tools:layout_editor_absoluteX="32dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Cleaned weekly" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/surveillance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Surveillance-enabled" />
+
+                        <CheckBox
+                            android:id="@+id/lighting"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Well-lit" />
+
+                        <CheckBox
+                            android:id="@+id/cleanliness"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Cleaned weekly" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/climateControlled"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Climate-controlled" />
+
+                        <CheckBox
+                            android:id="@+id/accessibility"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Accessibility-friendly" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <LinearLayout
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/sortByLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    android:text="Sort By"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/amenitiesMainLinearLayout" />
+
+                <RadioGroup
+                    android:id="@+id/sortByRadioGroup"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/sortByLabel"
+                    app:layout_constraintTop_toBottomOf="@id/sortByLabel">
 
-                    <CheckBox
-                        android:id="@+id/climateControlled"
+                    <RadioButton
+                        android:id="@+id/radioClosest"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Climate-controlled" />
+                        android:text="Distance: Nearest first" />
 
-                    <CheckBox
-                        android:id="@+id/accessibility"
+                    <RadioButton
+                        android:id="@+id/radioNewest"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Accessibility-friendly" />
+                        android:text="Date listed: Newest first" />
 
-                </LinearLayout>
+                    <RadioButton
+                        android:id="@+id/radioOldest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Date listed: Oldest first" />
 
-            </LinearLayout>
-            <!--
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/sortByLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_component_margin"
-                android:text="Sort By"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/amenitiesMainLinearLayout" />
-                !-->
+                    <RadioButton
+                        android:id="@+id/radioCheapest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Price: Lowest first" />
 
+                    <RadioButton
+                        android:id="@+id/radioMostExpensive"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Price: Highest first" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <RadioButton
+                        android:id="@+id/radioLargest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Space: Largest first" />
+
+                    <RadioButton
+                        android:id="@+id/radioSmallest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Space: Smallest first" />
+
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
         <View
             android:id="@+id/divider2"

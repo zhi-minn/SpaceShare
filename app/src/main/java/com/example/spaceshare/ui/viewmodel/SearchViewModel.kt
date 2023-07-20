@@ -1,5 +1,6 @@
 package com.example.spaceshare.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,11 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.consts.ListingConsts
 import com.example.spaceshare.consts.ListingConsts.SPACE_BOOKING_LOWER_LIMIT
 import com.example.spaceshare.consts.ListingConsts.SPACE_UPPER_LIMIT
+import com.example.spaceshare.data.implementation.ListingRepoImpl
 import com.example.spaceshare.data.repository.ListingRepository
+import com.example.spaceshare.enums.FilterSortByOption
 import com.example.spaceshare.interfaces.LocationInterface
 import com.example.spaceshare.models.FilterCriteria
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.SearchCriteria
+import com.example.spaceshare.utils.MathUtil
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -23,6 +27,10 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val listingRepo: ListingRepository
 ) : ViewModel(), LocationInterface {
+
+    companion object {
+        private val TAG = this::class.simpleName
+    }
 
     private val mutableSpaceRequired = MutableLiveData<Double>(0.0)
     val spaceRequired: LiveData<Double> get() = mutableSpaceRequired
@@ -50,6 +58,9 @@ class SearchViewModel @Inject constructor(
     private val mutableHasFilterBeenApplied = MutableLiveData<Boolean>(false)
     val hasFilterBeenApplied: LiveData<Boolean> get() = mutableHasFilterBeenApplied
 
+    private val mutableSortByOption = MutableLiveData<FilterSortByOption>(FilterSortByOption.CLOSEST)
+    val sortByOption: LiveData<FilterSortByOption> get() = mutableSortByOption
+
     init {
         mutableLocation.value = LatLng(0.0, 0.0)
         mutableStartTime.value = 0
@@ -62,7 +73,8 @@ class SearchViewModel @Inject constructor(
     private fun fetchInitialListings() {
         viewModelScope.launch {
             val results = listingRepo.getAllListings()
-            mutableSearchResults.value = applyClientSearchFilters(results)
+            val forceFiltered = applyForcedClientSearchFilters(results)
+            mutableSearchResults.value = sortByDistance(forceFiltered)
             mutableFilteredListings.value = searchResults.value
         }
     }
@@ -99,8 +111,7 @@ class SearchViewModel @Inject constructor(
                     queryRadius, startTimestamp, endTimestamp
                 )
             val searchResults = listingRepo.searchListings(criteria)
-            mutableSearchResults.value = applyClientSearchFilters(searchResults)
-
+            mutableSearchResults.value = applyForcedClientSearchFilters(searchResults)
 
             // Check filter criteria for invalid values, then apply it if necessary
             var filterBeenApplied = hasFilterBeenApplied.value
@@ -173,11 +184,89 @@ class SearchViewModel @Inject constructor(
 
             setHasFilterBeenApplied(true)
 
-            mutableFilteredListings.value = filteredByCriteriaListings
+            mutableFilteredListings.value = sortBySelectedSortOption(filteredByCriteriaListings)
         }
     }
 
-    private fun applyClientSearchFilters(listings: List<Listing>): List<Listing> {
+    private fun sortBySelectedSortOption(listings: List<Listing>): List<Listing> {
+        Log.d(TAG, sortByOption.value.toString())
+        return when (sortByOption.value) {
+            FilterSortByOption.CLOSEST ->
+                sortByDistance(listings)
+            FilterSortByOption.NEWEST ->
+                sortByNewest(listings)
+            FilterSortByOption.OLDEST ->
+                sortByOldest(listings)
+            FilterSortByOption.CHEAPEST ->
+                sortByCheapest(listings)
+            FilterSortByOption.MOST_EXPENSIVE ->
+                sortByMostExpensive(listings)
+            FilterSortByOption.LARGEST ->
+                sortByLargest(listings)
+            FilterSortByOption.SMALLEST ->
+                sortBySmallest(listings)
+
+            else ->
+                emptyList()
+        }
+    }
+
+    private fun sortBySmallest(listings: List<Listing>): List<Listing> {
+        return listings.sortedBy { listing ->
+            listing.spaceAvailable
+        }
+    }
+
+    private fun sortByLargest(listings: List<Listing>): List<Listing> {
+        return listings.sortedByDescending { listing ->
+            listing.spaceAvailable
+        }
+    }
+
+    private fun sortByMostExpensive(listings: List<Listing>): List<Listing> {
+        return listings.sortedByDescending { listing ->
+            listing.price
+        }
+    }
+
+    private fun sortByCheapest(listings: List<Listing>): List<Listing> {
+        return listings.sortedBy { listing ->
+            listing.price
+        }
+    }
+
+    private fun sortByOldest(listings: List<Listing>): List<Listing> {
+        return listings.sortedBy { listing ->
+            listing.createdAt
+        }
+    }
+
+    private fun sortByNewest(listings: List<Listing>): List<Listing> {
+        return listings.sortedByDescending { listing ->
+            listing.createdAt
+        }
+    }
+
+    private fun sortByDistance(listings: List<Listing>): List<Listing> {
+        val targetLocation = GeoPoint(mutableLocation.value!!.latitude, mutableLocation.value!!.longitude)
+        return listings.sortedBy { listing ->
+            try {
+                val dist = MathUtil.calculateDistanceInKilometers(
+                    targetLocation,
+                    listing.location!!
+                )
+                dist
+            } catch (e: Exception) {
+                Log.e(
+                    TAG,
+                    "Error calculating and sorting by Listing distance for id ${listing.id}: ${e.message}"
+                )
+                null
+            }
+        }
+    }
+
+    private fun applyForcedClientSearchFilters(listings: List<Listing>): List<Listing> {
         return listings.filter { listing ->
             filterForActiveListings(listing) && filterForNonOwnListings(listing)
         }
@@ -213,5 +302,9 @@ class SearchViewModel @Inject constructor(
 
     private fun setHasFilterBeenApplied(beenApplied: Boolean) {
         mutableHasFilterBeenApplied.value = beenApplied
+    }
+
+    fun setSortByOption(option: FilterSortByOption) {
+        mutableSortByOption.value = option
     }
 }

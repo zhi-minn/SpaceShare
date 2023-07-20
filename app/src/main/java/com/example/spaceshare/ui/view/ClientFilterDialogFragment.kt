@@ -2,19 +2,19 @@ package com.example.spaceshare.ui.view
 
 import android.icu.text.DecimalFormat
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
-import com.example.spaceshare.consts.ListingConsts
 import com.example.spaceshare.databinding.DialogClientFilterBinding
 import com.example.spaceshare.enums.Amenity
+import com.example.spaceshare.enums.FilterSortByOption
 import com.example.spaceshare.models.FilterCriteria
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.max
 
 @AndroidEntryPoint
 class ClientFilterDialogFragment() : DialogFragment() {
@@ -46,7 +46,7 @@ class ClientFilterDialogFragment() : DialogFragment() {
         configureSliders()
         configureAmenities()
         configureButtons()
-        configureListeners()
+        configureRadioButtons()
     }
 
 
@@ -88,10 +88,24 @@ class ClientFilterDialogFragment() : DialogFragment() {
 
         val decimalFormat = DecimalFormat("0.0") // Set the desired decimal format
         binding.spaceRangeSlider.setLabelFormatter { value -> decimalFormat.format(value) }
+
+        // Set slider listeners
+        binding.priceRangeSlider.addOnChangeListener { slider, _, _ ->
+            val minPrice = slider.values[0]
+            val maxPrice = slider.values[1]
+            setPriceSliderText(minPrice, maxPrice)
+        }
+
+        binding.spaceRangeSlider.addOnChangeListener { slider, _, _ ->
+            val minSpace = slider.values[0]
+            val maxSpace = slider.values[1]
+            setSpaceSliderText(minSpace, maxSpace)
+        }
     }
 
     private fun configureAmenities() {
-        val amenities = Amenity.values().filter { searchViewModel.filterCriteria.value?.amenities!!.contains(it) }
+        val amenities = Amenity.values()
+            .filter { searchViewModel.filterCriteria.value?.amenities!!.contains(it) }
         for (amenity in amenities) {
             when (amenity) {
                 Amenity.SURVEILLANCE -> binding.surveillance.isChecked = true
@@ -111,7 +125,7 @@ class ClientFilterDialogFragment() : DialogFragment() {
         binding.btnApply.setOnClickListener {
             val priceRange = binding.priceRangeSlider.values
             val spaceRange = binding.spaceRangeSlider.values
-            val amenitiesSelected : MutableList<Amenity> = getCheckedAmenities()
+            val amenitiesSelected: MutableList<Amenity> = getCheckedAmenities()
             val criteria = FilterCriteria(
                 isActive = true, isInactive = false,
                 priceRange[0], priceRange[1], spaceRange[0], spaceRange[1], amenitiesSelected
@@ -123,19 +137,40 @@ class ClientFilterDialogFragment() : DialogFragment() {
         }
     }
 
-    private fun configureListeners() {
-        binding.priceRangeSlider.addOnChangeListener { slider, _, _ ->
-            val minPrice = slider.values[0]
-            val maxPrice = slider.values[1]
-            setPriceSliderText(minPrice, maxPrice)
-        }
+    private fun configureRadioButtons() {
+        binding.radioClosest.isChecked = true
 
-        binding.spaceRangeSlider.addOnChangeListener { slider, _, _ ->
-            val minSpace = slider.values[0]
-            val maxSpace = slider.values[1]
-            setSpaceSliderText(minSpace, maxSpace)
+        binding.sortByRadioGroup.setOnCheckedChangeListener { radioGroup, checkedId ->
+            onRadioButtonClicked(checkedId)
         }
     }
+
+    private fun onRadioButtonClicked(checkedId: Int) {
+        // Check which radio button was clicked
+        when (checkedId) {
+            R.id.radioClosest ->
+                searchViewModel.setSortByOption(FilterSortByOption.CLOSEST)
+
+            R.id.radioNewest ->
+                searchViewModel.setSortByOption(FilterSortByOption.NEWEST)
+
+            R.id.radioOldest ->
+                searchViewModel.setSortByOption(FilterSortByOption.OLDEST)
+
+            R.id.radioCheapest ->
+                searchViewModel.setSortByOption(FilterSortByOption.CHEAPEST)
+
+            R.id.radioMostExpensive ->
+                searchViewModel.setSortByOption(FilterSortByOption.MOST_EXPENSIVE)
+
+            R.id.radioLargest ->
+                searchViewModel.setSortByOption(FilterSortByOption.LARGEST)
+
+            R.id.radioSmallest ->
+                searchViewModel.setSortByOption(FilterSortByOption.SMALLEST)
+        }
+    }
+
 
     private fun setPriceSliderText(minPrice: Float, maxPrice: Float) {
         binding.priceIndicator.text =
