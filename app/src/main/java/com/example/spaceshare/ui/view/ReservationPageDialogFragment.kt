@@ -203,8 +203,8 @@ class ReservationPageDialogFragment(
 
         dateRangePicker.addOnPositiveButtonClickListener {
             binding.pickedDate.text = dateRangePicker.headerText
-            searchViewModel.startTime.value = dateRangePicker.selection?.first
-            searchViewModel.endTime.value = dateRangePicker.selection?.second
+//            searchViewModel.startTime.value = dateRangePicker.selection?.first
+//            searchViewModel.endTime.value = dateRangePicker.selection?.second
         }
 
         dateRangePicker.show(parentFragmentManager, TAG)

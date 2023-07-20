@@ -22,12 +22,13 @@ import com.google.android.material.slider.Slider
 import java.util.Objects
 
 class SearchDialogFragment(
-    private val searchViewModel: SearchViewModel
 ) : DialogFragment() {
 
     companion object {
         private val TAG = this::class.simpleName
     }
+
+    private lateinit var searchViewModel: SearchViewModel
 
     private lateinit var binding: DialogSearchBinding
     private lateinit var navController: NavController
@@ -54,6 +55,8 @@ class SearchDialogFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, R.style.SearchAndFilterDialogStyle)
+
+        searchViewModel = (requireParentFragment() as SearchFragment).searchViewModel
     }
 
     private fun configureCards() {
@@ -91,7 +94,7 @@ class SearchDialogFragment(
 
             override fun onStopTrackingTouch(slider: Slider) {
                 // Responds to when slider's touch event is being stopped
-                searchViewModel.searchRadius.value = binding.searchRadiusSlider.value
+                searchViewModel.setSearchRadius(binding.searchRadiusSlider.value)
             }
         })
         searchViewModel.searchRadius.observe(viewLifecycleOwner) { radius ->
@@ -109,8 +112,13 @@ class SearchDialogFragment(
                 .build()
         dateRangePicker.addOnPositiveButtonClickListener {
             binding.searchTime.text = dateRangePicker.headerText
-            searchViewModel.startTime.value = dateRangePicker.selection?.first
-            searchViewModel.endTime.value = dateRangePicker.selection?.second
+
+            val startTime = dateRangePicker.selection?.first
+            val endTime = dateRangePicker.selection?.second
+            if (startTime != null && endTime != null) {
+                searchViewModel.setStartTime(startTime)
+                searchViewModel.setEndTime(endTime)
+            }
         }
         binding.whenCard.setOnClickListener {
             dateRangePicker.show(parentFragmentManager, TAG)

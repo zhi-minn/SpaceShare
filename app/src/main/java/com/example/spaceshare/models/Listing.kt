@@ -4,7 +4,6 @@ import com.example.spaceshare.enums.Amenity
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ServerTimestamp
-import java.util.Date
 import java.util.UUID
 
 data class Listing(
@@ -23,10 +22,6 @@ data class Listing(
     val createdAt: Timestamp? = null,
     @ServerTimestamp
     var updatedAt: Timestamp? = null,
-    // val availability: Availability? = null,
-//    @ServerTimestamp
-//    val startDate: Timestamp? = null,
-//    @ServerTimestamp
-//    val endDate: Timestamp? = null,
+    val bookings: List<Booking> = emptyList()
 ) {
 }

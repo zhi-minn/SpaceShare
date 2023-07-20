@@ -1,5 +1,6 @@
 package com.example.spaceshare.ui.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,41 +24,57 @@ class SearchViewModel @Inject constructor(
     private val listingRepo: ListingRepository
 ) : ViewModel(), LocationInterface {
 
-    var spaceRequired = MutableLiveData<Double>(0.0)
+    private val mutableSpaceRequired = MutableLiveData<Double>(0.0)
+    val spaceRequired: LiveData<Double> get() = mutableSpaceRequired
 
-    var listings = MutableLiveData<List<Listing>>()
+    private val mutableSearchResults = MutableLiveData<List<Listing>>()
+    val searchResults: LiveData<List<Listing>> get() = mutableSearchResults
 
-    var location = MutableLiveData<LatLng>()
-    var searchRadius = MutableLiveData<Float>()
+    private val mutableFilteredListings = MutableLiveData<List<Listing>>()
+    val filteredListings: LiveData<List<Listing>> get() = mutableFilteredListings
 
-    var startTime = MutableLiveData<Long>()
-    var endTime = MutableLiveData<Long>()
+    private val mutableLocation = MutableLiveData<LatLng>()
+    val location: LiveData<LatLng> get() = mutableLocation
 
-    var filterCriteria = FilterCriteria()
+    private val mutableSearchRadius = MutableLiveData<Float>()
+    val searchRadius: LiveData<Float> get() = mutableSearchRadius
+
+    private val mutableStartTime = MutableLiveData<Long>()
+    private val mutableEndTime = MutableLiveData<Long>()
+    val startTime: LiveData<Long> get() = mutableStartTime
+    val endTime: LiveData<Long> get() = mutableEndTime
+
+    private val mutableFilterCriteria = MutableLiveData<FilterCriteria>()
+    val filterCriteria: LiveData<FilterCriteria> get() = mutableFilterCriteria
+
+    private val mutableHasFilterBeenApplied = MutableLiveData<Boolean>(false)
+    val hasFilterBeenApplied: LiveData<Boolean> get() = mutableHasFilterBeenApplied
 
     init {
-        location.value = LatLng(0.0, 0.0)
-        startTime.value = 0
-        endTime.value = 0
-        searchRadius.value = 1f
+        mutableLocation.value = LatLng(0.0, 0.0)
+        mutableStartTime.value = 0
+        mutableEndTime.value = 0
+        mutableSearchRadius.value = 1f
+        mutableFilterCriteria.value = FilterCriteria()
         fetchInitialListings()
     }
 
     private fun fetchInitialListings() {
         viewModelScope.launch {
             val results = listingRepo.getAllListings()
-            listings.value = applyClientSearchFilters(results)
+            mutableSearchResults.value = applyClientSearchFilters(results)
+            mutableFilteredListings.value = searchResults.value
         }
     }
 
     fun incrementSpaceRequired() {
-        if (spaceRequired.value?.plus(0.5)!! < SPACE_UPPER_LIMIT)
-            spaceRequired.value = spaceRequired.value?.plus(0.5)
+        if (mutableSpaceRequired.value?.plus(0.5)!! < SPACE_UPPER_LIMIT)
+            mutableSpaceRequired.value = mutableSpaceRequired.value?.plus(0.5)
     }
 
     fun decrementSpaceRequired() {
-        if (spaceRequired.value?.minus(0.5)!! >= SPACE_BOOKING_LOWER_LIMIT)
-            spaceRequired.value = spaceRequired.value?.minus(0.5)
+        if (mutableSpaceRequired.value?.minus(0.5)!! >= SPACE_BOOKING_LOWER_LIMIT)
+            mutableSpaceRequired.value = spaceRequired.value?.minus(0.5)
     }
 
     fun submitSearch() {
@@ -82,25 +99,82 @@ class SearchViewModel @Inject constructor(
                     queryRadius, startTimestamp, endTimestamp
                 )
             val searchResults = listingRepo.searchListings(criteria)
-            listings.value = applyClientSearchFilters(searchResults)
+            mutableSearchResults.value = applyClientSearchFilters(searchResults)
+
+
+            // Check filter criteria for invalid values, then apply it if necessary
+            var filterBeenApplied = hasFilterBeenApplied.value
+            if (filterBeenApplied == null) {
+                filterBeenApplied = false
+            }
+            if (filterBeenApplied) {
+                checkFilterCriteriaMaxValues()
+                filterByFilterCriteria()
+            }
+        }
+    }
+
+    fun getSearchResultsMaxPrice(): Double {
+        val searchResultsSnapshot = searchResults.value
+        if (!searchResultsSnapshot.isNullOrEmpty()) {
+            var maxPrice = searchResultsSnapshot.maxOf { listing ->
+                listing.price
+            }
+            if (maxPrice == 0.0) {
+                maxPrice = ListingConsts.DEFAULT_MAX_PRICE.toDouble()
+            }
+
+            return maxPrice
+        }
+        return ListingConsts.DEFAULT_MAX_PRICE.toDouble()
+    }
+
+    fun getSearchResultsMaxSpace(): Double {
+        val searchResultsSnapshot = searchResults.value
+        if (!searchResultsSnapshot.isNullOrEmpty()) {
+            var maxSpace = searchResultsSnapshot.maxOf { listing ->
+                listing.spaceAvailable
+            }
+            if (maxSpace == 0.0) {
+                maxSpace = ListingConsts.SPACE_UPPER_LIMIT
+            }
+            return maxSpace
+        }
+        return ListingConsts.SPACE_UPPER_LIMIT
+    }
+
+    private fun checkFilterCriteriaMaxValues() {
+        val criteria = filterCriteria.value
+        if (criteria != null) {
+            var searchResultsMaxPrice = getSearchResultsMaxPrice()
+            if (criteria.maxPrice > searchResultsMaxPrice) {
+                criteria.maxPrice = searchResultsMaxPrice.toFloat()
+            }
+
+            var searchResultsMaxSpace = getSearchResultsMaxSpace()
+            if (criteria.maxSpace > searchResultsMaxSpace) {
+                criteria.maxSpace = searchResultsMaxSpace.toFloat()
+            }
+
+            mutableFilterCriteria.value = criteria!!
         }
     }
 
     fun filterByFilterCriteria() {
-        val filteredByCriteriaListings = listings.value.orEmpty().filter { listing ->
-            val prices = listings.value?.map { it.price }
-            var maxPrice = prices?.maxOrNull()?.toFloat() ?: ListingConsts.DEFAULT_MAX_PRICE
-            if (maxPrice == 0.0f) maxPrice = ListingConsts.DEFAULT_MAX_PRICE
-            val filterCriteriaMaxPrice = filterCriteria.maxPrice ?: maxPrice
+        val criteria = filterCriteria.value
+        if (criteria != null) {
+            val filteredByCriteriaListings = searchResults.value.orEmpty().filter { listing ->
+                listing.price >= criteria.minPrice
+                        && listing.price <= criteria.maxPrice
+                        && listing.spaceAvailable >= criteria.minSpace
+                        && listing.spaceAvailable <= criteria.maxSpace
+                        && listing.amenities.containsAll(criteria.amenities)
+            }
 
-            listing.price >= filterCriteria.minPrice
-                    && listing.price <= filterCriteriaMaxPrice
-                    && listing.spaceAvailable >= filterCriteria.minSpace
-                    && listing.spaceAvailable <= filterCriteria.maxSpace
-                    && listing.amenities.containsAll(filterCriteria.amenities)
+            setHasFilterBeenApplied(true)
+
+            mutableFilteredListings.value = filteredByCriteriaListings
         }
-
-        listings.value = filteredByCriteriaListings
     }
 
     private fun applyClientSearchFilters(listings: List<Listing>): List<Listing> {
@@ -117,8 +191,27 @@ class SearchViewModel @Inject constructor(
         return listing.hostId != FirebaseAuth.getInstance().currentUser?.uid
     }
 
-
     override fun setLocation(latLng: LatLng) {
-        location.value = latLng
+        mutableLocation.value = latLng
+    }
+
+    fun setFilterCriteria(criteria: FilterCriteria) {
+        mutableFilterCriteria.value = criteria
+    }
+
+    fun setStartTime(timestamp: Long) {
+        mutableStartTime.value = timestamp
+    }
+
+    fun setEndTime(timestamp: Long) {
+        mutableEndTime.value = timestamp
+    }
+
+    fun setSearchRadius(radius: Float) {
+        mutableSearchRadius.value = radius
+    }
+
+    private fun setHasFilterBeenApplied(beenApplied: Boolean) {
+        mutableHasFilterBeenApplied.value = beenApplied
     }
 }
