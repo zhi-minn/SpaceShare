@@ -225,3 +225,6 @@
   + Update status on client side depending on verified field
 * Wenyu 2 Hours (2023-7-19) [Commit](https://github.com/zhi-minn/SpaceShare/commit/d820b39b0154d15e1c6ee3f9785bf97b055ee680)
   + Item Declaration Page initialization
+* William 3 hours (2023-07-19) [Commit](https://github.com/zhi-minn/SpaceShare/commit/5f5de64c13a66011d1f2ff02f3020faba8283026)
+  + UI changes on admin fragment
+  + Back button on user entry fragment
