@@ -119,6 +119,7 @@ class ListingMetadataViewModel @Inject constructor(
         newListing?.let {
             it.location = GeoPoint(location.latitude, location.longitude)
             _listingLiveData.value = it
+            updateRecommendedPricing()
         }
     }
 
@@ -131,12 +132,14 @@ class ListingMetadataViewModel @Inject constructor(
     fun incrementSpaceAvailable() {
         if (_spaceAvailable.value?.plus(0.5)!! < SPACE_UPPER_LIMIT) {
             _spaceAvailable.value = _spaceAvailable.value?.plus(0.5)
+            updateRecommendedPricing()
         }
     }
 
     fun decrementSpaceAvailable() {
         if (_spaceAvailable.value?.minus(0.5)!! >= SPACE_OFFERING_LOWER_LIMIT) {
             _spaceAvailable.value = _spaceAvailable.value?.minus(0.5)
+            updateRecommendedPricing()
         }
     }
 
@@ -285,11 +288,13 @@ class ListingMetadataViewModel @Inject constructor(
         viewModelScope.launch {
             val allListings = listingRepo.getAllListings()
             val filteredListings = applyFilters(allListings)
-            val listOfPrices = filteredListings.map { listing ->
-                listing.price
+
+            val listOfPricesPerCubicMetre = filteredListings.map { listing ->
+                listing.price / listing.spaceAvailable
             }
-            if (listOfPrices.isNotEmpty()) {
-                _recommendedPrice.value = listOfPrices.average()
+
+            if (listOfPricesPerCubicMetre.isNotEmpty()) {
+                _recommendedPrice.value = listOfPricesPerCubicMetre.average() * _spaceAvailable.value!!
             }
         }
     }

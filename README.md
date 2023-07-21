@@ -203,6 +203,11 @@
 * Chang 1.5 hours (2023-07-16) [PR](https://github.com/zhi-minn/SpaceShare/pull/65)
   * Fixed user profile photos not showing up in messages
   * Make image loading gif higher quality
+* Calvin 5 hours (2023-07-16) [Commit](https://github.com/zhi-minn/SpaceShare/commit/ae514677aef3ac8ade890ccc64418ae5e5e18fa0)
+  + Created Reservation Detail view on Orders page
+  + Created Reservation Detail Fragment
+  + Updated Orders Page to include Detail view binding
+  + Updated Reservation model
 * Chang 9 hours (2023-07-17) [PR](https://github.com/zhi-minn/SpaceShare/pull/66)
   * Added timestamp to each message
   * Added individual chats/channels to messaging service
@@ -217,6 +222,10 @@
   * Refactored image loading into utility class
   * Added host names to chats
   * Added chat pictures (uses first image of listing)
+* Calvin 3 hours (2023-07-17) [Commit](https://github.com/zhi-minn/SpaceShare/commit/ab85bfd268d9653113671ea18143396941691422)
+  + Added fetchListings logic into ReservationRepoImpl
+  + Updated ReservationViewModel and integrated fetchListing logic
+  + Updated Reservation Detail Page layout
 * Chang 2 hours (2023-07-18) [PR](https://github.com/zhi-minn/SpaceShare/pull/69)
   * Made chat message timestamps more concise
   * Chats now refresh the chats list in the messages tab upon being closed or when a message is sent
@@ -233,5 +242,34 @@
   + Back button on user entry fragment
 * Youming 10 hours (2023-07-19) [Commit](https://github.com/zhi-minn/SpaceShare/commit/40cb77c553e76418b82d5f57aba550f188bb06d6) [Commit](https://github.com/zhi-minn/SpaceShare/commit/40cb77202c9ab66d35f609184304582bb9c93052bcfc8a) [Commit](https://github.com/zhi-minn/SpaceShare/commit/d54d2b602d33bfbb344bdad1ef87dcabcac0b89f)
   + Finish reservation function with Calvin
-  + implement the confirmation page and complete detailed add-ons for reservation
-
+  + Implement the confirmation page and complete detailed add-ons for reservation
+* Calvin 3 hours (2023-07-19) [Commit](https://github.com/zhi-minn/SpaceShare/commit/c38d1fe5e6c5505374596fc7d5a4d1f20d81d789)
+  + Completed reserveListing logic
+  + Modified fragment to integrate reserve function
+* Chang 5 hours (2023-07-19) [PR](https://github.com/zhi-minn/SpaceShare/pull/71)
+  * Made search functionality only show listings that are available (have enough space to accommodate the request, factoring in existing bookings)
+  * Updated SearchViewModel to use MutableLiveData and LiveData
+  * Made search dialog and search filter dialog access parent SearchViewModel correctly
+    * Fixes said dialogs not persisting state between searches and filters
+  * Fixed filter dialog crashing in a wide range of circumstances
+  * Fixed filter dialog slider text formatting
+* Chang 0.5 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/pull/74)
+  * Made reservations add to a listing's bookings
+* Chang 1.25 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/pull/75)
+  * Added listing previews to chats
+* Chang 0.5 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/pull/76)
+  * Designed new app icon
+* Chang 3.25 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/pull/77) [PR](https://github.com/zhi-minn/SpaceShare/pull/79)
+  * Add sort options to client filter
+* Chang 0.5 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/pull/78)
+  * Clicking on the listing preview in chat now gives you a full listing details popup
+* Wenyu 3 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/commit/b1738a33d93c8c2a9e032fff2f2516255ffca772) [PR](https://github.com/zhi-minn/SpaceShare/commit/699a14754b977e886a6f9bb4d4685609b3ec6f1d)
+  * Add item declaration button
+  * Add basic structure for item Declaration
+* Chang 3 hours (2023-07-21) [PR](https://github.com/zhi-minn/SpaceShare/pull/80)
+  * Made recommended pricing factor in amount of space available
+  * Added chat creation as default first update for chats
+  * Added scroll to top floating action button for search
+  * Made search page scroll to top after applying filters (most noticeable to when sort order is changed)
+* Wenyu 3 hours (2023-07-21) [PR](https://github.com/zhi-minn/SpaceShare/commit/12ab55c9133d1d8e7cbbae0128ac34ac18dfce29)
+  * Update item declaration Basic UI

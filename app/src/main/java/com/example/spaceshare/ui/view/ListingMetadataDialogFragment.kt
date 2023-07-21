@@ -185,7 +185,7 @@ class ListingMetadataDialogFragment(
 
         // Recommended pricing
         listingMetadataViewModel.recommendedPrice.observe(viewLifecycleOwner) { recPrice ->
-            val recPriceString = String.format("%.2f", recPrice)
+            val recPriceString = String.format("%.0f", recPrice)
             binding.priceInputLayout.helperText = "Recommended Price: $$recPriceString"
         }
 

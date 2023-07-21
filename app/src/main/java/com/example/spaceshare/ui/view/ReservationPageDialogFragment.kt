@@ -1,7 +1,6 @@
 package com.example.spaceshare.ui.view
 
 
-import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.location.Geocoder
@@ -49,6 +48,7 @@ class ReservationPageDialogFragment(
     companion object {
         private val TAG = this::class.simpleName
     }
+
     @Inject
     lateinit var reservationViewModel: ReservationViewModel
 
@@ -75,13 +75,13 @@ class ReservationPageDialogFragment(
         toolbarTitle.text = "Confirm"
 
         val finalRule = binding.root.findViewById<TextView>(R.id.finalRule)
-        finalRule.text = "By selecting the button below, I agree to the ground rules and policy established by SpaceShare"
+        finalRule.text =
+            "By selecting the button below, I agree to the ground rules and policy established by SpaceShare"
         configureBindings()
         configureButtons()
 
         return binding.root
     }
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,6 +92,7 @@ class ReservationPageDialogFragment(
         sizeDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
     }
+
     object GeocoderUtil {
 
         fun getCityName(context: Context, latitude: Double, longitude: Double): String? {
@@ -113,7 +114,8 @@ class ReservationPageDialogFragment(
 
 
     private fun configureBindings() {
-        binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
+        binding.viewPagerListingImages.adapter =
+            ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
 
         binding.location.text = listing.location?.let { location ->
             GeocoderUtil.getCityName(requireContext(), location.latitude, location.longitude)
@@ -122,7 +124,7 @@ class ReservationPageDialogFragment(
         binding.houseName.text = listing.title
 
         val formatter = SimpleDateFormat("MMM dd", Locale.getDefault())
-        if (searchViewModel.startTime.value == 0L) {
+        if (searchViewModel == null) {
             val cal = Calendar.getInstance()
 
             // Get current date
@@ -145,7 +147,8 @@ class ReservationPageDialogFragment(
         }
 
         // Handle spaceRequired
-        if (searchViewModel.spaceRequired.value == 0.0) {
+        // Chang: This should be stored in ReservationViewModel
+        if (searchViewModel == null) {
             binding.lugguageSize.text = "1.0 cubic"
         } else {
             binding.lugguageSize.text = "${searchViewModel.spaceRequired.value} cubic"
@@ -161,7 +164,6 @@ class ReservationPageDialogFragment(
     }
 
 
-
     private fun configureButtons() {
 
         binding.dateEdit.setOnClickListener { openDatePicker() }
@@ -170,19 +172,21 @@ class ReservationPageDialogFragment(
         binding.sizeEdit.setOnClickListener { openSizePicker() }
         binding.sizes.setOnClickListener { openSizePicker() }
 
-        binding.reserveBtn.setOnClickListener{
+        binding.reserveBtn.setOnClickListener {
             auth = FirebaseAuth.getInstance()
             val clientId = auth.currentUser?.uid
             val reservation = Reservation(
                 hostId=listing.hostId, clientId=clientId, listingId=listing.id,
                 startDate=Timestamp(Date(startDate!!)), endDate=Timestamp(Date(endDate!!)),
                 unit=unit, status= com.example.spaceshare.models.ReservationStatus.PENDING.toInt())
+            )
             reservationViewModel.reserveListing(reservation)
 
             // Show a confirmation dialog
             showDialogThenDismiss()
         }
     }
+
     private fun showDialogThenDismiss() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Reservation Confirmation")
@@ -194,6 +198,7 @@ class ReservationPageDialogFragment(
         val dialog = builder.create()
         dialog.show()
     }
+
     private fun openDatePicker() {
         val constraintsBuilder = CalendarConstraints.Builder()
 
@@ -210,6 +215,9 @@ class ReservationPageDialogFragment(
             searchViewModel.startTime.value = dateRangePicker.selection?.first
             searchViewModel.endTime.value = dateRangePicker.selection?.second
         }
+            // SearchViewModel should not be used here, this should be stored in ReservationViewModel
+//            dateRangePicker.selection?.first?.let { it1 -> searchViewModel.setStartTime(it1) }
+//            dateRangePicker.selection?.second?.let { it1 -> searchViewModel.setEndTime(it1) }
 
         dateRangePicker.show(parentFragmentManager, TAG)
     }

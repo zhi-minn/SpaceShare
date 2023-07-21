@@ -3,7 +3,6 @@ package com.example.spaceshare.ui.view
 import MessageAdapter
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,14 +22,20 @@ import com.example.spaceshare.models.Chat
 import com.example.spaceshare.models.Message
 import com.example.spaceshare.ui.viewmodel.ChatViewModel
 import com.example.spaceshare.ui.viewmodel.MessagesViewModel
+import com.example.spaceshare.utils.ImageLoaderUtil
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChatDialogFragment(
-    private val chat : Chat,
-    private val shouldRefreshChatsList : Boolean = false
+    private val chat: Chat,
+    private val shouldRefreshChatsList: Boolean = false
 ) : DialogFragment() {
 
     @Inject
@@ -43,16 +48,18 @@ class ChatDialogFragment(
     private lateinit var manager: LinearLayoutManager
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private val openDocument = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        uri?.let {uri ->
-            chatViewModel.sendImageMessage(uri, requireActivity())
-            refreshParentChatsList()
+    private val openDocument =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let { uri ->
+                chatViewModel.sendImageMessage(uri, requireActivity())
+                refreshParentChatsList()
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, R.style.SearchAndFilterDialogStyle)
+
         chatViewModel.setChat(chat)
 
         // Set messagesViewModel to be the same one as the parent fragment's
@@ -84,6 +91,37 @@ class ChatDialogFragment(
 
     private fun configureUI() {
         binding.chatTitle.text = chat.title
+
+        configureListingPreview()
+    }
+
+    private fun configureListingPreview() {
+        if (chat.photoURL != null) {
+            ImageLoaderUtil.loadImageIntoView(binding.listingImagePreview, chat.photoURL, false)
+        }
+
+        if (chat.hostId != null && chat.associatedListingId != null) {
+            CoroutineScope(Dispatchers.IO).launch {
+                // Execute repo tasks
+                chatViewModel.getAssociatedListingFromRepo(chat.associatedListingId)
+                chatViewModel.getHostUserFromRepo(chat.hostId)
+
+                // Do UI updates
+                withContext(Dispatchers.Main) {
+                    binding.listingPrice.text = String.format("$%.2f CAD/day", chatViewModel.getAssociatedListingPrice())
+                    binding.listingHost.text =
+                        "Hosted by ${chatViewModel.getAssociatedListingHostName()}"
+                    binding.listingLocation.text = chatViewModel.getAssociatedListingGeneralLocation()
+
+                    binding.chatListingPreview.setOnClickListener {
+                        val clientListingDialogFragment = ClientListingDialogFragment(chatViewModel.getAssociatedListing(), hideMessageHostButton = true)
+                        clientListingDialogFragment.show(
+                            Objects.requireNonNull(childFragmentManager),
+                            "clientListingDialog")
+                    }
+                }
+            }
+        }
     }
 
     private fun configureRecyclerView() {
