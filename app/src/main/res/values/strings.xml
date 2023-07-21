@@ -58,4 +58,12 @@
     <string name="sample_revenue_generated">Revenue to date: $102.33</string>
     <string name="please_declare_your_items">Please Declare your items</string>
     <string name="item_declaration_title">Please Declare your Items Here</string>
+    <string name="item_declaration_attention">Attention: \nYour items declared here will not be visible by your host.</string>
+    <string name="clothing">Clothing</string>
+    <string name="books_and_documents">Books and Documents</string>
+    <string name="small_furniture">Small Furniture</string>
+    <string name="sport_and_recreational_equipment">Sport and Recreational Equipment</string>
+    <string name="small_appliances">Small Appliances</string>
+    <string name="daily_necessaries">Daily Necessaries</string>
+    <string name="mementos_and_collectibles">Mementos and Collectibles</string>
 </resources>

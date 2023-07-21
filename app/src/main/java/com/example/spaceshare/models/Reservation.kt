@@ -1,7 +1,7 @@
 package com.example.spaceshare.models
 
+import com.example.spaceshare.enums.DeclareItemType
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.ServerTimestamp
 
 enum class ReservationStatus {
     PENDING,
@@ -11,15 +11,6 @@ enum class ReservationStatus {
     COMPLETED
 }
 
-enum class DeclareItemType {
-    ClOTHING,
-    BOOKS_AND_DOCUMENTS,
-    FURNITURE,
-    SPORT_AND_RECREATIONAL,
-    APPLIANCE,
-    MEMENTOS,
-    DAILY_NECESSARY
-}
 
 inline fun <reified T : Enum<T>> Int.toEnum(): T? {
     return enumValues<T>().firstOrNull { it.ordinal == this }
