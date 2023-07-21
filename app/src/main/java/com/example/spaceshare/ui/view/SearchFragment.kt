@@ -1,20 +1,26 @@
 package com.example.spaceshare.ui.view
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ListingAdapter
 import com.example.spaceshare.databinding.FragmentSearchBinding
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.launch
 import java.util.Objects
 import javax.inject.Inject
 
@@ -48,6 +54,7 @@ class SearchFragment : Fragment() {
         configureSearchBar()
         configureFilterButton()
         configureRecyclerView()
+        configureScrollToTopButton()
         configureListingObservers()
     }
 
@@ -83,11 +90,39 @@ class SearchFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         manager = LinearLayoutManager(requireContext())
         binding.recyclerView.layoutManager = manager
+    }
 
-//        // Scroll up when the list of listings changes (when a new search or filter is applied)
-//        adapter.registerAdapterDataObserver(
-//            ScrollToTopObserver(binding.recyclerView, adapter, manager)
-//        )
+    private fun configureScrollToTopButton() {
+        binding.fabScrollToTop.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                binding.recyclerView.quickScrollToTop()
+            }
+        }
+    }
+
+    private suspend fun RecyclerView.quickScrollToTop(
+        jumpThreshold: Int = 30,
+        speedFactor: Float = 1.5f
+    ) {
+        val layoutManager = layoutManager as? LinearLayoutManager
+            ?: error("Need to be used with a LinearLayoutManager or subclass of it")
+
+        val smoothScroller = object : LinearSmoothScroller(context) {
+            init {
+                targetPosition = 0
+            }
+
+            override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?) =
+                super.calculateSpeedPerPixel(displayMetrics) / speedFactor
+        }
+
+        val jumpBeforeScroll = layoutManager.findFirstVisibleItemPosition() > jumpThreshold
+        if (jumpBeforeScroll) {
+            layoutManager.scrollToPositionWithOffset(jumpThreshold, 0)
+            awaitFrame()
+        }
+
+        layoutManager.startSmoothScroll(smoothScroller)
     }
 
     private fun configureListingObservers() {
