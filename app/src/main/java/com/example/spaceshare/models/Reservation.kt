@@ -11,6 +11,16 @@ enum class ReservationStatus {
     COMPLETED
 }
 
+enum class DeclareItemType {
+    ClOTHING,
+    BOOKS_AND_DOCUMENTS,
+    FURNITURE,
+    SPORT_AND_RECREATIONAL,
+    APPLIANCE,
+    MEMENTOS,
+    DAILY_NECESSARY
+}
+
 inline fun <reified T : Enum<T>> Int.toEnum(): T? {
     return enumValues<T>().firstOrNull { it.ordinal == this }
 }
@@ -32,6 +42,7 @@ data class Reservation(
     val location: String = "",
     val listingTitle: String = "",
     val previewPhoto: String? = null,
+    val items: MutableList<DeclareItemType>? = null
 //    val rating:Int? = null
 ) {
 }
