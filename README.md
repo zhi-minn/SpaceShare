@@ -271,3 +271,5 @@
   * Added chat creation as default first update for chats
   * Added scroll to top floating action button for search
   * Made search page scroll to top after applying filters (most noticeable to when sort order is changed)
+* Wenyu 3 hours (2023-07-21) [PR](https://github.com/zhi-minn/SpaceShare/commit/12ab55c9133d1d8e7cbbae0128ac34ac18dfce29)
+  * Update item declaration Basic UI
