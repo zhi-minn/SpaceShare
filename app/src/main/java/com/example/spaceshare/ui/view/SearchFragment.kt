@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ListingAdapter
+import com.example.spaceshare.adapters.ScrollToTopObserver
 import com.example.spaceshare.databinding.FragmentSearchBinding
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
@@ -80,15 +81,25 @@ class SearchFragment : Fragment() {
     }
 
     private fun configureRecyclerView() {
+        manager = LinearLayoutManager(requireContext())
+
         adapter = ListingAdapter(childFragmentManager, object : ListingAdapter.ItemClickListener {
             override fun onItemClick(listing: Listing) {
-                val clientListingDialogFragment = ClientListingDialogFragment(listing, searchViewModel)
-                clientListingDialogFragment.show(Objects.requireNonNull(childFragmentManager),
-                    "clientListingDialog")
+                val clientListingDialogFragment =
+                    ClientListingDialogFragment(listing, searchViewModel)
+                clientListingDialogFragment.show(
+                    Objects.requireNonNull(childFragmentManager),
+                    "clientListingDialog"
+                )
             }
         })
+
+        adapter.registerAdapterDataObserver(
+            ScrollToTopObserver(binding.recyclerView, adapter, manager)
+        )
+
         binding.recyclerView.adapter = adapter
-        manager = LinearLayoutManager(requireContext())
+
         binding.recyclerView.layoutManager = manager
     }
 
@@ -127,7 +138,8 @@ class SearchFragment : Fragment() {
 
     private fun configureListingObservers() {
         searchViewModel.filteredListings.observe(viewLifecycleOwner) { listings ->
-            binding.noListingView.visibility = if (listings.isNotEmpty()) View.GONE else View.VISIBLE
+            binding.noListingView.visibility =
+                if (listings.isNotEmpty()) View.GONE else View.VISIBLE
             adapter.areEditButtonsGone = true
             adapter.submitList(listings)
         }
