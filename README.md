@@ -273,3 +273,6 @@
   * Made search page scroll to top after applying filters (most noticeable to when sort order is changed)
 * Wenyu 3 hours (2023-07-21) [PR](https://github.com/zhi-minn/SpaceShare/commit/12ab55c9133d1d8e7cbbae0128ac34ac18dfce29)
   * Update item declaration Basic UI
+* William 1 hours (2023-07-21) [Commit](https://github.com/zhi-minn/SpaceShare/commit/91651a5361979510b72b0aac3ae486a208928c9c)
+  + Update UI for UserEntry
+  + Toast message on accept or reject 
