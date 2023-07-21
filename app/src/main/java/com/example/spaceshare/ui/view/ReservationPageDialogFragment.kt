@@ -39,7 +39,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ReservationPageDialogFragment(
     private val listing: Listing,
-    private val searchViewModel: SearchViewModel
+    private val searchViewModel: SearchViewModel?
 ): DialogFragment() {
     private var startDate : Long? = 0
     private var endDate : Long? = 0
@@ -178,8 +178,7 @@ class ReservationPageDialogFragment(
             val reservation = Reservation(
                 hostId=listing.hostId, clientId=clientId, listingId=listing.id,
                 startDate=Timestamp(Date(startDate!!)), endDate=Timestamp(Date(endDate!!)),
-                unit=unit, status= com.example.spaceshare.models.ReservationStatus.PENDING.toInt())
-            )
+                spaceRequested=unit, status= com.example.spaceshare.models.ReservationStatus.PENDING.toInt())
             reservationViewModel.reserveListing(reservation)
 
             // Show a confirmation dialog
@@ -212,8 +211,6 @@ class ReservationPageDialogFragment(
             binding.pickedDate.text = dateRangePicker.headerText
             startDate = dateRangePicker.selection?.first
             endDate = dateRangePicker.selection?.second
-            searchViewModel.startTime.value = dateRangePicker.selection?.first
-            searchViewModel.endTime.value = dateRangePicker.selection?.second
         }
             // SearchViewModel should not be used here, this should be stored in ReservationViewModel
 //            dateRangePicker.selection?.first?.let { it1 -> searchViewModel.setStartTime(it1) }
