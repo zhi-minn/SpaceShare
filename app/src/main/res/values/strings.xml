@@ -57,4 +57,5 @@
     <string name="dialog_id_verified_false">Host is not verified</string>
     <string name="sample_revenue_generated">Revenue to date: $102.33</string>
     <string name="please_declare_your_items">Please Declare your items</string>
+    <string name="item_declaration_title">Please Declare your Items Here</string>
 </resources>
