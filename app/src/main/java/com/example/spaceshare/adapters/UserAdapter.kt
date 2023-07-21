@@ -22,8 +22,12 @@ class UserAdapter(private val userList: ArrayList<User>, private val itemClickLi
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = userList[position]
-        holder.idView.text = currentItem.id
-        holder.firstNameView.text = currentItem.firstName
+
+        val idStr = "ID: ${currentItem.id}"
+        val firstNameStr = "Name: ${currentItem.firstName}"
+
+        holder.idView.text = idStr
+        holder.firstNameView.text = firstNameStr
         holder.lastNameView.text = currentItem.lastName
     }
 
