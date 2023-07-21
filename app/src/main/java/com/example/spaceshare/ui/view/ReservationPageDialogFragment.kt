@@ -42,7 +42,9 @@ class ReservationPageDialogFragment(
     private val listing: Listing,
     private val searchViewModel: SearchViewModel
 ): DialogFragment() {
-
+    private var startDate : Long? = 0
+    private var endDate : Long? = 0
+    private var unit: Double = 0.0
 
     companion object {
         private val TAG = this::class.simpleName
@@ -173,8 +175,8 @@ class ReservationPageDialogFragment(
             val clientId = auth.currentUser?.uid
             val reservation = Reservation(
                 hostId=listing.hostId, clientId=clientId, listingId=listing.id,
-                startDate= Timestamp.now(), endDate= Timestamp.now(),
-                unit=3.5, status= com.example.spaceshare.models.ReservationStatus.PENDING.toInt())
+                startDate=Timestamp(Date(startDate!!)), endDate=Timestamp(Date(endDate!!)),
+                unit=unit, status= com.example.spaceshare.models.ReservationStatus.PENDING.toInt())
             reservationViewModel.reserveListing(reservation)
 
             // Show a confirmation dialog
@@ -203,6 +205,8 @@ class ReservationPageDialogFragment(
 
         dateRangePicker.addOnPositiveButtonClickListener {
             binding.pickedDate.text = dateRangePicker.headerText
+            startDate = dateRangePicker.selection?.first
+            endDate = dateRangePicker.selection?.second
             searchViewModel.startTime.value = dateRangePicker.selection?.first
             searchViewModel.endTime.value = dateRangePicker.selection?.second
         }
@@ -258,6 +262,7 @@ class ReservationPageDialogFragment(
 
         dialog.findViewById<Button>(R.id.btn_done).setOnClickListener {
             val selectedValue = sizeValue.text.toString().toDouble()
+            unit = selectedValue
             binding.lugguageSize.text = "$selectedValue cubic"
             dialog.dismiss()
         }
