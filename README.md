@@ -263,3 +263,6 @@
   * Add sort options to client filter
 * Chang 0.5 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/pull/78)
   * Clicking on the listing preview in chat now gives you a full listing details popup
+* Wenyu 3 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/commit/b1738a33d93c8c2a9e032fff2f2516255ffca772) [PR](https://github.com/zhi-minn/SpaceShare/commit/699a14754b977e886a6f9bb4d4685609b3ec6f1d)
+  * Add item declaration button
+  * Add basic structure for item Declaration
