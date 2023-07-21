@@ -189,7 +189,6 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun sortBySelectedSortOption(listings: List<Listing>): List<Listing> {
-        Log.d(TAG, sortByOption.value.toString())
         return when (sortByOption.value) {
             FilterSortByOption.CLOSEST ->
                 sortByDistance(listings)

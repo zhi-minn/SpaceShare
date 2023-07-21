@@ -266,3 +266,8 @@
 * Wenyu 3 hours (2023-07-20) [PR](https://github.com/zhi-minn/SpaceShare/commit/b1738a33d93c8c2a9e032fff2f2516255ffca772) [PR](https://github.com/zhi-minn/SpaceShare/commit/699a14754b977e886a6f9bb4d4685609b3ec6f1d)
   * Add item declaration button
   * Add basic structure for item Declaration
+* Chang 3 hours (2023-07-21) [PR](https://github.com/zhi-minn/SpaceShare/pull/80)
+  * Made recommended pricing factor in amount of space available
+  * Added chat creation as default first update for chats
+  * Added scroll to top floating action button for search
+  * Made search page scroll to top after applying filters (most noticeable to when sort order is changed)
