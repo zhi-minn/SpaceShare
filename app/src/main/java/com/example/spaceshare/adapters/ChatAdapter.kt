@@ -14,10 +14,11 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.sql.Date
 import java.text.SimpleDateFormat
 
-class ChatAdapter (
+class ChatAdapter(
     private val userRepo: UserRepository,
     private val itemClickListener: ItemClickListener
 ) : ListAdapter<Chat, ChatAdapter.ViewHolder>(DiffCallback()) {
@@ -45,8 +46,10 @@ class ChatAdapter (
 
             CoroutineScope(Dispatchers.IO).launch {
                 val hostUser = chat.hostId?.let { userRepo.getUserById(it) }
-                if (hostUser != null) {
-                    binding.chatOwner.text = hostUser.firstName + " " + hostUser.lastName
+                withContext(Dispatchers.Main) {
+                    if (hostUser != null) {
+                        binding.chatOwner.text = hostUser.firstName + " " + hostUser.lastName
+                    }
                 }
             }
 
@@ -71,18 +74,27 @@ class ChatAdapter (
 
                 binding.chatLastUpdate.text = lastUpdate
 
-                // Set last update time
-                if (DateUtils.isToday(lastMessage.timestamp)) {
-                    var lastUpdateTimeString = DateUtils.getRelativeTimeSpanString(lastMessage.timestamp)
-                    if (lastUpdateTimeString == "0 minutes ago") {
-                        lastUpdateTimeString = "Just now"
+                binding.lastUpdateTime.text = getLastUpdateTimeString(lastMessage.timestamp)
+            } else {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val notHostMemberId = chat.members.filterNot { memberId ->
+                        memberId == chat.hostId
+                    }.first()
+                    val notHostUser = userRepo.getUserById(notHostMemberId)
+
+                    withContext(Dispatchers.Main) {
+                        if (notHostUser != null) {
+                            binding.chatLastUpdate.text =
+                                "${notHostUser.firstName} ${notHostUser.lastName} created the chat"
+
+                            if (chat.createdAt != null) {
+                                binding.lastUpdateTime.text =
+                                    getLastUpdateTimeString(chat.createdAt.toDate().time)
+                            } else {
+                                binding.lastUpdateTime.text = ""
+                            }
+                        }
                     }
-                    binding.lastUpdateTime.text = lastUpdateTimeString
-                }
-                else {
-                    val simpleDateFormat = SimpleDateFormat("MMM dd")
-                    val lastMessageTimeFormatted = simpleDateFormat.format(Date(lastMessage.timestamp))
-                    binding.lastUpdateTime.text = lastMessageTimeFormatted
                 }
             }
 
@@ -91,7 +103,25 @@ class ChatAdapter (
                 itemClickListener.onItemClick(chat)
             }
         }
+
+        private fun getLastUpdateTimeString(timestamp: Long): String {
+            // Generate last update time string
+            if (DateUtils.isToday(timestamp)) {
+                var lastUpdateTimeString =
+                    DateUtils.getRelativeTimeSpanString(timestamp)
+                if (lastUpdateTimeString == "0 minutes ago") {
+                    lastUpdateTimeString = "Just now"
+                }
+                return lastUpdateTimeString.toString()
+            } else {
+                val simpleDateFormat = SimpleDateFormat("MMM dd")
+                val lastMessageTimeFormatted =
+                    simpleDateFormat.format(Date(timestamp))
+                return lastMessageTimeFormatted
+            }
+        }
     }
+
 
     interface ItemClickListener {
         fun onItemClick(chat: Chat)
