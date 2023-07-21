@@ -19,22 +19,19 @@
             android:id="@+id/userFirstName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="Hello"/>
+            android:textSize="18sp"/>
         <TextView
             android:id="@+id/userLastName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:textSize="18sp"
-            android:text="Hello"/>
+            android:textSize="18sp"/>
     </LinearLayout>
     <TextView
         android:id="@+id/userId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:text="Hello"/>
+        android:textSize="18sp"/>
     <View style="@style/HorizontalDivider"/>
     </LinearLayout>
 </RelativeLayout>
