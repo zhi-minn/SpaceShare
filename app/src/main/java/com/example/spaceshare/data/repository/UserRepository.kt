@@ -11,4 +11,6 @@ interface UserRepository {
     suspend fun getAllUsers(): List<User>
 
     suspend fun updateUserVerifiedStatus(userId: String, status: Int)
+
+    suspend fun getAdminUsers(): List<String>
 }

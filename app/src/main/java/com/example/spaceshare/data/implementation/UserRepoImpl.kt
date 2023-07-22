@@ -22,6 +22,8 @@ class UserRepoImpl @Inject constructor(
 
     private val userCollection = db.collection("users")
 
+    private val adminCollection = db.collection("admins")
+
     override suspend fun setUser(user: User): String {
         return withContext(Dispatchers.IO) {
             val deferred = CompletableDeferred<String>()
@@ -86,5 +88,16 @@ class UserRepoImpl @Inject constructor(
     override suspend fun updateUserVerifiedStatus(userId: String, status: Int) {
         val userRef = userCollection.document(userId)
         userRef.update("verified", status)
+    }
+
+    override suspend fun getAdminUsers(): List<String> = withContext(Dispatchers.IO) {
+        try {
+            val result = adminCollection.document("admins")
+                .get()
+                .await()
+            return@withContext result.data?.get("data") as List<String>
+        } catch (e: Exception) {
+            return@withContext emptyList()
+        }
     }
 }

@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spaceshare.consts.AdminConsts
 import com.example.spaceshare.data.repository.UserRepository
 import com.example.spaceshare.manager.FCMTokenManager
 import com.example.spaceshare.models.User
@@ -21,6 +20,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.nulabinc.zxcvbn.Zxcvbn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 
@@ -50,17 +50,23 @@ class AuthViewModel @Inject constructor(
     lateinit var signUpRequest: BeginSignInRequest
     var showOneTapUI = true
 
+    var adminUsers: List<String> = listOf()
+
     fun login(email: String, password: String) {
         if (email.isEmpty() || password.isEmpty()) {
             _loginStatus.value = AuthResult(false, "Please enter both email and password.")
             return
         }
 
+        runBlocking {
+            adminUsers = userRepo.getAdminUsers()
+        }
+
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    if (user != null && AdminConsts.ADMIN_ACCOUNTS.contains(user.email)) {
+                    if (user != null && adminUsers.contains(user.email)) {
                         _loginStatus.value = AuthResult(true, "Admin account.", true)
                     } else if (user != null && user.isEmailVerified) {
                         _loginStatus.value = AuthResult(true, "Successfully logged in.")
