@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
@@ -211,6 +212,10 @@ class EditProfileDialogFragment(
                                 binding.governmentIdImage.setImageURI(null)
                                 binding.governmentIdImageContainer.visibility = View.GONE
                                 binding.btnUpdate.text = "Add Government ID"
+                                val text = resources.getText(R.string.government_id_submitted_toast)
+                                val duration = Toast.LENGTH_SHORT
+                                val toast = Toast.makeText(requireContext(), text, duration) // in Activity
+                                toast.show()
                                 this.dismiss()
                             }
                         }

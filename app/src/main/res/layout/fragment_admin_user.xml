@@ -15,14 +15,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="6dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="20sp"
                     android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
                     android:text="Government ID Requests"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
                 <Button
                     android:id="@+id/adminLogout"
                     android:layout_width="wrap_content"
