@@ -116,14 +116,21 @@ class ProfileFragment : Fragment() {
             if (user.lastName.isNotEmpty()) sb.append(" ${user.lastName}")
             binding.displayName.text = sb.toString()
 
-            if (user.isVerified == 0) {
+            if (user.isVerified == 0 && user.governmentId != null) {
+                binding.userVerified.text = resources.getText(R.string.user_verification_submitted)
+                binding.userVerified.setCompoundDrawablesWithIntrinsicBounds(R.drawable.question_mark,0,0, 0)
+            }
+            else if (user.isVerified == 0) {
                 binding.userVerified.text = resources.getText(R.string.user_verification_false)
+                binding.userVerified.setCompoundDrawablesWithIntrinsicBounds(R.drawable.exclamation_circle, 0,0, 0)
             }
             else if (user.isVerified == 1) {
                 binding.userVerified.text = resources.getText(R.string.user_verification_true)
+                binding.userVerified.setCompoundDrawablesWithIntrinsicBounds(R.drawable.check, 0, 0, 0)
             }
             else {
                 binding.userVerified.text = resources.getText(R.string.user_verification_denied)
+                binding.userVerified.setCompoundDrawablesWithIntrinsicBounds(R.drawable.close, 0, 0, 0)
             }
         }
         profileViewModel.getUserById(FirebaseAuth.getInstance().currentUser!!.uid)

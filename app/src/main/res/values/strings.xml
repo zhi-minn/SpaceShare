@@ -35,8 +35,9 @@
     <string name="listing_price_template">$%.2f CAD/day</string>
     <string name="space_available_template">%.1f cubic metres</string>
     <string name="user_verification_false">Your account is not yet verified</string>
+    <string name="user_verification_submitted">Your account is awaiting verification</string>
     <string name="user_verification_true">Your account is verified</string>
-    <string name="user_verification_denied">Your account has been denied, please resubmit</string>
+    <string name="user_verification_denied">Your ID has been denied, please resubmit</string>
     <string name="government_id_none">Not submitted</string>
     <string name="government_id_found_not_verified">Submitted, currently in verification</string>
     <string name="government_id_verified">Verified</string>
@@ -51,4 +52,5 @@
     <string name="government_id_upload_title">Add Government ID</string>
     <string name="government_id_image_preview">Image Preview</string>
     <string name="government_id_image_remove">Remove Image</string>
+    <string name="government_id_submitted_toast">ID has been submitted successfully</string>
 </resources>
