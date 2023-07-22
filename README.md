@@ -278,3 +278,6 @@
   + Toast message on accept or reject
 * William 3 hours (2023-07-21) [Commit](https://github.com/zhi-minn/SpaceShare/commit/083f9b8425b940cb3584617307a6e35355b42ff0)
   + Move admin accounts check to Firebase
+* William 2 hours (2023-07-22) [Commit](https://github.com/zhi-minn/SpaceShare/commit/9c928623fff812692862664ade0f7fadb9394ff1)
+  + Add toast message for successful id submission
+  + Change drawable images depending on id status
