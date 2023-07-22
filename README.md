@@ -275,4 +275,6 @@
   * Update item declaration Basic UI
 * William 1 hours (2023-07-21) [Commit](https://github.com/zhi-minn/SpaceShare/commit/91651a5361979510b72b0aac3ae486a208928c9c)
   + Update UI for UserEntry
-  + Toast message on accept or reject 
+  + Toast message on accept or reject
+* William 3 hours (2023-07-21) [Commit](https://github.com/zhi-minn/SpaceShare/commit/083f9b8425b940cb3584617307a6e35355b42ff0)
+  + Move admin accounts check to Firebase
