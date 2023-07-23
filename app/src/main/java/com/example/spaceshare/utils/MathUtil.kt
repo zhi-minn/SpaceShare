@@ -1,6 +1,8 @@
 package com.example.spaceshare.utils
 
 import com.google.firebase.firestore.GeoPoint
+import java.math.BigDecimal
+import java.math.RoundingMode
 import kotlin.math.*
 
 object MathUtil {
@@ -17,5 +19,10 @@ object MathUtil {
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
         return earthRadiusKm * c
+    }
+
+    fun roundToTwoDecimalPlaces(number: Double): Double {
+        val bd = BigDecimal(number).setScale(2, RoundingMode.HALF_EVEN)
+        return bd.toDouble()
     }
 }

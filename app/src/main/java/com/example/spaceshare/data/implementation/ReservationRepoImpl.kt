@@ -4,18 +4,16 @@ import android.util.Log
 import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.data.repository.ReservationRepository
 import com.example.spaceshare.models.Booking
-import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.User
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
-import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import com.example.spaceshare.models.ReservationStatus.APPROVED
 
 class ReservationRepoImpl @Inject constructor(
     db: FirebaseFirestore,
@@ -78,6 +76,31 @@ class ReservationRepoImpl @Inject constructor(
                 return@withContext emptyList()
             }
         }
+
+    override suspend fun fetchCompletedReservationsByListing(listingId: String): List<Reservation> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val result = reservationsCollection
+                    .whereEqualTo("listingId", listingId)
+                    .whereEqualTo("status", APPROVED)
+                    .whereLessThan("endDate", Timestamp.now())
+                    .get()
+                    .await()
+
+                return@withContext result.documents.mapNotNull { document ->
+                    try {
+                        document.toObject(Reservation::class.java)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error casting document to Reservation object: ${e.message}", e)
+                        null
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error retrieving reservations by listing id $listingId: ${e.message}", e)
+                return@withContext emptyList()
+            }
+        }
+    }
 
 //    override suspend fun fetchListings(reservations: List<Reservation>?): List<Listing> {
 //        val listingIds = reservations?.map { i -> i.listingId }

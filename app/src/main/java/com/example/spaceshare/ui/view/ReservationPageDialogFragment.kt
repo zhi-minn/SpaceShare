@@ -21,7 +21,6 @@ import com.example.spaceshare.databinding.DialogReservationPageBinding
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
-import com.example.spaceshare.models.toInt
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.google.android.material.datepicker.CalendarConstraints
@@ -35,6 +34,9 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
+
+import com.example.spaceshare.models.ReservationStatus.PENDING
+import com.example.spaceshare.utils.MathUtil
 
 @AndroidEntryPoint
 class ReservationPageDialogFragment(
@@ -175,10 +177,16 @@ class ReservationPageDialogFragment(
         binding.reserveBtn.setOnClickListener {
             auth = FirebaseAuth.getInstance()
             val clientId = auth.currentUser?.uid
+
+            // Calculate total cost for host analytics (since price is subject to possible change)
+            val totalTime = Date(endDate!!).time - Date(startDate!!).time
+            val totalDays = totalTime / (1000 * 60 * 60 * 24) + 1
+            val totalCost = MathUtil.roundToTwoDecimalPlaces(listing.price * unit * totalDays)
+
             val reservation = Reservation(
-                hostId=listing.hostId, clientId=clientId, listingId=listing.id,
+                hostId=listing.hostId, clientId=clientId, listingId=listing.id, totalCost = totalCost,
                 startDate=Timestamp(Date(startDate!!)), endDate=Timestamp(Date(endDate!!)),
-                spaceRequested=unit, status= com.example.spaceshare.models.ReservationStatus.PENDING.toInt())
+                spaceRequested=unit, status= PENDING)
             reservationViewModel.reserveListing(reservation)
 
             // Show a confirmation dialog

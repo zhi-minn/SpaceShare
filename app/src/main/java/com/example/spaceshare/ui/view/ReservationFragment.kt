@@ -31,6 +31,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+import com.example.spaceshare.models.ReservationStatus.PENDING
+import com.example.spaceshare.models.ReservationStatus.APPROVED
+import com.example.spaceshare.models.ReservationStatus.CANCELLED
+import com.example.spaceshare.models.ReservationStatus.COMPLETED
+import com.example.spaceshare.models.ReservationStatus.DECLINED
 
 @AndroidEntryPoint
 class ReservationFragment : Fragment() {
@@ -144,11 +149,11 @@ class ReservationFragment : Fragment() {
                     period.text = "N/A"
                 }
                 status.text = when (reservation.status) {
-                    0 -> "Pending"
-                    1 -> "Approved"
-                    2 -> "Declined"
-                    3 -> "Cancelled"
-                    4 -> "Completed"
+                    PENDING -> "Pending"
+                    APPROVED -> "Approved"
+                    DECLINED -> "Declined"
+                    CANCELLED -> "Cancelled"
+                    COMPLETED -> "Completed"
                     else -> "ERROR"
                 }
 

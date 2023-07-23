@@ -194,6 +194,7 @@
 
                 <!-- MapView -->
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/mapCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/standard_component_margin"
@@ -207,6 +208,21 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <View
+                    android:id="@+id/divider4"
+                    style="@style/HorizontalDivider"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    app:layout_constraintTop_toBottomOf="@id/mapCardView" />
+
+                <!-- Listing analytics -->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/revenue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    android:text="@string/sample_revenue_generated"
+                    app:layout_constraintTop_toBottomOf="@id/divider4" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -108,7 +108,7 @@ class ChatDialogFragment(
 
                 // Do UI updates
                 withContext(Dispatchers.Main) {
-                    binding.listingPrice.text = String.format("$%.2f CAD/day", chatViewModel.getAssociatedListingPrice())
+                    binding.listingPrice.text = String.format("$%.2f CAD/day per cubic metre", chatViewModel.getAssociatedListingPrice())
                     binding.listingHost.text =
                         "Hosted by ${chatViewModel.getAssociatedListingHostName()}"
                     binding.listingLocation.text = chatViewModel.getAssociatedListingGeneralLocation()

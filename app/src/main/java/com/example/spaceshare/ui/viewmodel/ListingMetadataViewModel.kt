@@ -271,7 +271,7 @@ class ListingMetadataViewModel @Inject constructor(
         sb.append("Here are some basic information regarding the listing:\n")
         sb.append("Title: ${listing.title}\n")
         sb.append("Description: ${listing.description}\n")
-        sb.append("Price: ${listing.price} CAD/day\n")
+        sb.append("Price: ${listing.price} CAD/day per cubic metre\n")
         sb.append(
             "Approximate distance to preferred location: ${
                 String.format(
