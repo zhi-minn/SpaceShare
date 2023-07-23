@@ -285,3 +285,5 @@
   + Add user email to UserEntry display
 * William 2 hours (2023-07-23) [Commit](https://github.com/zhi-minn/SpaceShare/commit/925948a7df7e562980668633361e2cca976ad69d)
   + Add ID status on client listing
+* Minn 2 hours (2023-07-23) [Commit](https://github.com/zhi-minn/SpaceShare/pull/87)
+  * Added revenue analytics
