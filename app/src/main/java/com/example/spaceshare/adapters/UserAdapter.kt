@@ -24,9 +24,11 @@ class UserAdapter(private val userList: ArrayList<User>, private val itemClickLi
         val currentItem = userList[position]
 
         val idStr = "ID: ${currentItem.id}"
+        val emailStr = "Email: ${currentItem.email}"
         val firstNameStr = "Name: ${currentItem.firstName}"
 
         holder.idView.text = idStr
+        holder.emailView.text = emailStr
         holder.firstNameView.text = firstNameStr
         holder.lastNameView.text = currentItem.lastName
     }
@@ -44,6 +46,7 @@ class UserAdapter(private val userList: ArrayList<User>, private val itemClickLi
             }
         }
         val idView: TextView = itemView.findViewById(R.id.userId)
+        val emailView: TextView = itemView.findViewById(R.id.userEmail)
         val firstNameView: TextView = itemView.findViewById(R.id.userFirstName)
         val lastNameView: TextView = itemView.findViewById(R.id.userLastName)
     }

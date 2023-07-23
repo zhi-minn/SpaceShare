@@ -68,6 +68,7 @@ class AdminUserFragment : Fragment(), UserAdapter.ItemClickListener {
         args.putString("id", newArrayList[position].id)
         args.putString("firstName", newArrayList[position].firstName)
         args.putString("lastName", newArrayList[position].lastName)
+        args.putString("email", newArrayList[position].email)
         args.putString("governmentId", newArrayList[position].governmentId)
         navController.navigate(R.id.userEntryFragment, args)
     }

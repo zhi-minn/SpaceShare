@@ -4,15 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spaceshare.data.repository.FirebaseStorageRepository
 import com.example.spaceshare.data.repository.UserRepository
 import com.example.spaceshare.models.User
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AdminViewModel  @Inject constructor(
     private val userRepo: UserRepository,
-    private val firebaseStorageRepo: FirebaseStorageRepository
+    private val firebaseAuth: FirebaseAuth
 ) : ViewModel() {
 
     private val _userEntriesLiveData: MutableLiveData<ArrayList<User>> = MutableLiveData()
