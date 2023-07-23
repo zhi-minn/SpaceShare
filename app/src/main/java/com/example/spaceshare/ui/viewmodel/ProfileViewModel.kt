@@ -73,6 +73,10 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    suspend fun getUserVerifiedStatus(userId: String): Long {
+        return userRepo.getUserVerifiedStatus(userId)
+    }
+
     fun updateGovernmentId(imageUri: Uri, callback: (Boolean) -> Unit) {
         viewModelScope.launch {
             _userLiveData.value?.governmentId?.let {
