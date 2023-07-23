@@ -45,6 +45,7 @@ class HostListingDialogFragment(
         binding.mapView.getMapAsync(this)
 
         configureBindings()
+        configureObservers()
         configureButtons()
 
         return binding.root
@@ -96,6 +97,13 @@ class HostListingDialogFragment(
             binding.btnChangeStatus.text = "Activate"
             binding.btnChangeStatus.backgroundTintList = ColorStateList.valueOf(color)
         }
+    }
+
+    fun configureObservers() {
+        listingViewModel.listingRevenue.observe(viewLifecycleOwner) {
+            binding.revenue.text = String.format("Revenue to date: $%.2f", it)
+        }
+        listingViewModel.fetchListingRevenue(listing.id)
     }
 
     private fun configureButtons() {

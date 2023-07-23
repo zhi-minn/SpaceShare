@@ -24,10 +24,11 @@ data class Reservation(
     val hostId: String? = null,
     val clientId: String? = null,
     val listingId: String? = null,
+    val totalCost: Double = 0.0,
     val startDate: Timestamp? = null,
     val endDate: Timestamp? = null,
     val spaceRequested: Double = 0.0,
-    val status: Int? = null
+    val status: ReservationStatus = ReservationStatus.PENDING
 //    val rating:Int? = null
 ) {
 }

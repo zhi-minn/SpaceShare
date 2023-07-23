@@ -16,11 +16,13 @@ import java.util.Locale
 import javax.inject.Inject
 
 import com.example.spaceshare.consts.ListingConsts.DEFAULT_MAX_PRICE
+import com.example.spaceshare.data.repository.ReservationRepository
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 class ListingViewModel @Inject constructor(
     private val listingRepo: ListingRepository,
+    private val reservationRepo: ReservationRepository,
     private val firebaseStorageRepo: FirebaseStorageRepository
 ): ViewModel() {
 
@@ -29,6 +31,9 @@ class ListingViewModel @Inject constructor(
 
     private val _filteredListingsLiveData: MutableLiveData<List<Listing>> = MutableLiveData()
     val filteredListingsLiveData: LiveData<List<Listing>> = _filteredListingsLiveData
+
+    private val _listingRevenue: MutableLiveData<Double> = MutableLiveData(0.00)
+    val listingRevenue: LiveData<Double> = _listingRevenue
 
     private var curQuery: String = ""
     private var curCriteria: FilterCriteria = FilterCriteria()
@@ -181,4 +186,11 @@ class ListingViewModel @Inject constructor(
              }
          }
      }
+
+    fun fetchListingRevenue(listingId: String) {
+        viewModelScope.launch {
+            val completedReservations = reservationRepo.fetchCompletedReservationsByListing(listingId)
+            _listingRevenue.value = completedReservations.sumOf { it.totalCost }
+        }
+    }
 }
