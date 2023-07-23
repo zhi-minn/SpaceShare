@@ -85,6 +85,18 @@ class UserRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun getUserVerifiedStatus(userId: String): Long = withContext(Dispatchers.IO) {
+        try {
+            val result = userCollection.document(userId)
+                .get()
+                .await()
+            return@withContext result.data?.get("verified") as Long
+        } catch (e: Exception) {
+            Log.e(UserRepoImpl.TAG, "Error reading users document: ${e.message}")
+            return@withContext 0
+        }
+    }
+
     override suspend fun updateUserVerifiedStatus(userId: String, status: Int) {
         val userRef = userCollection.document(userId)
         userRef.update("verified", status)

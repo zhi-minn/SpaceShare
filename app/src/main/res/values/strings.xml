@@ -53,4 +53,6 @@
     <string name="government_id_image_preview">Image Preview</string>
     <string name="government_id_image_remove">Remove Image</string>
     <string name="government_id_submitted_toast">ID has been submitted successfully</string>
+    <string name="dialog_id_verified_true">Host is verified</string>
+    <string name="dialog_id_verified_false">Host is not verified</string>
 </resources>
