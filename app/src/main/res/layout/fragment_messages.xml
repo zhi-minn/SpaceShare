@@ -43,6 +43,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/pageTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/pageTitle"
+            android:background="@color/fui_transparent"
             app:srcCompat="@drawable/refresh" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
