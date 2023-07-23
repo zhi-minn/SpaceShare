@@ -18,6 +18,7 @@ import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.example.spaceshare.ui.viewmodel.MessagesViewModel
+import com.example.spaceshare.ui.viewmodel.ProfileViewModel
 import com.example.spaceshare.utils.GeocoderUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -28,6 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.Objects
 import javax.inject.Inject
 
@@ -44,6 +46,9 @@ class ClientListingDialogFragment(
 
     @Inject
     lateinit var messagesViewModel: MessagesViewModel
+
+    @Inject
+    lateinit var profileViewModel: ProfileViewModel
 
     private lateinit var binding: DialogClientListingBinding
 
@@ -98,6 +103,19 @@ class ClientListingDialogFragment(
             listing.location?.let { location ->
                 val latLng = LatLng(location.latitude, location.longitude)
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+            }
+        }
+
+        runBlocking {
+            if (listing.hostId != null) {
+                val verified = profileViewModel.getUserVerifiedStatus(listing.hostId)
+                if (verified.toInt() == 1) {
+                    binding.verifiedStatus.text = getString(R.string.dialog_id_verified_true)
+                    binding.verifiedStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.check, 0, 0, 0)
+                } else {
+                    binding.verifiedStatus.text = getString(R.string.dialog_id_verified_false)
+                    binding.verifiedStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.exclamation_circle, 0, 0, 0)
+                }
             }
         }
     }
