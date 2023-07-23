@@ -281,3 +281,5 @@
 * William 2 hours (2023-07-22) [Commit](https://github.com/zhi-minn/SpaceShare/commit/9c928623fff812692862664ade0f7fadb9394ff1)
   + Add toast message for successful id submission
   + Change drawable images depending on id status
+* William 3 hours (2023-07-23) [Commit](https://github.com/zhi-minn/SpaceShare/commit/b2488084e57eda39b38c04703bee1819ec0bcdf7)
+  + Add user email to UserEntry display
