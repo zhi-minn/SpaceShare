@@ -283,3 +283,5 @@
   + Change drawable images depending on id status
 * William 3 hours (2023-07-23) [Commit](https://github.com/zhi-minn/SpaceShare/commit/b2488084e57eda39b38c04703bee1819ec0bcdf7)
   + Add user email to UserEntry display
+* William 2 hours (2023-07-23) [Commit](https://github.com/zhi-minn/SpaceShare/commit/925948a7df7e562980668633361e2cca976ad69d)
+  + Add ID status on client listing
