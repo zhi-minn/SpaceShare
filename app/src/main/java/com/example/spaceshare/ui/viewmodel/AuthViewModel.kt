@@ -146,7 +146,8 @@ class AuthViewModel @Inject constructor(
                     createUserInCollection(
                         user?.uid,
                         firstName,
-                        lastName
+                        lastName,
+                        user?.email
                     )
                 } else {
                     // Sign in failed.
@@ -174,7 +175,7 @@ class AuthViewModel @Inject constructor(
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     // Create user in collection for custom fields
-                    createUserInCollection(user?.uid, firstName, lastName)
+                    createUserInCollection(user?.uid, firstName, lastName, user?.email)
 
                     // Update display name
                     val displayName = "$firstName $lastName"
@@ -225,9 +226,9 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private fun createUserInCollection(userId: String?, firstName: String?, lastName: String?) {
+    private fun createUserInCollection(userId: String?, firstName: String?, lastName: String?, email: String?) {
         if (userId != null && firstName != null && lastName != null) {
-            val user = User(userId, firstName, lastName)
+            val user = User(userId, firstName, lastName, email)
             viewModelScope.launch {
                 try {
                     if (userRepo.getUserById(userId) == null) {

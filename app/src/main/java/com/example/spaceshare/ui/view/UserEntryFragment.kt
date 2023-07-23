@@ -43,13 +43,14 @@ class UserEntryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
         id = arguments?.getString("id").toString()
+        val email = arguments?.getString("email")
         val firstName = arguments?.getString("firstName")
         val lastName = arguments?.getString("lastName")
         val governmentId = arguments?.getString("governmentId")
-
         val idStr = "ID: $id"
 
         binding.userEntryId.text = idStr
+        binding.userEntryEmail.text = email
         binding.userEntryFirstName.text = firstName
         binding.userEntryLastName.text = lastName
 
