@@ -20,36 +20,52 @@
                 android:translationX="20dp"
                 android:translationY="20dp" />
 
-            <LinearLayout
-                android:layout_width="200dp"
-                android:layout_height="40dp"
-                android:orientation="horizontal"
-                android:translationX="15dp"
-                android:translationY="30dp">
+            <RadioGroup
+                android:id="@+id/filterGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
 
-                <Button
+                <RadioButton
                     android:id="@+id/allReservationsFilter"
-                    android:layout_width="100dp"
-                    android:layout_height="30dp"
-                    android:background="@color/colorPrimary"
+                    android:layout_width="39dp"
+                    android:layout_height="match_parent"
+                    android:button="@null"
+                    android:checked="true"
                     android:text="All"
-                    android:textSize="13dp" />
+                    android:textAlignment="center"
+                    android:textColor="@drawable/text_selector"
+                    android:textSize="18sp" />
 
-                <Button
+                <RadioButton
                     android:id="@+id/pendingReservationsFilter"
-                    android:layout_width="100dp"
-                    android:layout_height="30dp"
-                    android:background="@color/colorPrimaryDark"
-                    android:textSize="13dp"
-                    android:text="Pending" />
+                    android:layout_width="84dp"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:text="Pending"
+                    android:textAlignment="center"
+                    android:textColor="@drawable/text_selector"
+                    android:textSize="18sp" />
 
-            </LinearLayout>
+            </RadioGroup>
+
+
+            <View
+                android:id="@+id/divider5"
+                style="@style/HorizontalDivider"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginTop="0dp"
+                android:scaleY="0.5"
+                app:layout_constraintTop_toBottomOf="@id/price" />
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="600dp"
-                android:layout_margin="@dimen/box_margin"
-                android:translationY="20dp">
+                android:layout_margin="10dp"
+                android:translationY="0dp">
 
                 <LinearLayout
                     android:id="@+id/reservation_page"
