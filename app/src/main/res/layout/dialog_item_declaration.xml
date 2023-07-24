@@ -250,6 +250,33 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/other"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/fui_min_height_target"
+                android:layout_marginTop="@dimen/drawable_start_padding">
+
+                <CheckBox
+                    android:id="@+id/other_choose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                </CheckBox>
+
+                <TextView
+                    android:id="@+id/other_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/standard_component_margin"
+                    android:text="@string/others"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toEndOf="@id/other_choose"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
 

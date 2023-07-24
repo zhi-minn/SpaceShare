@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.DialogReservationPageBinding
+import com.example.spaceshare.enums.DeclareItemType
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
@@ -35,6 +36,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.Objects
 import javax.inject.Inject
 
 import com.example.spaceshare.models.ReservationStatus.PENDING
@@ -48,7 +50,8 @@ class ReservationPageDialogFragment(
 ): DialogFragment() {
     private var startDate : Long? = 0
     private var endDate : Long? = 0
-    private var unit: Double = 1.0
+    private var unit: Double = 0.0
+    private val itemTypes = mutableListOf<DeclareItemType>()
 
     companion object {
         private val TAG = this::class.simpleName
@@ -61,13 +64,11 @@ class ReservationPageDialogFragment(
 
     private lateinit var binding: DialogReservationPageBinding
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DialogReservationPageBinding.inflate(inflater, container, false)
-
         // Get a reference to the Toolbar
         val toolbar: Toolbar = binding.root.findViewById(R.id.confirmPayToolbar)
         val toolbarTitle: TextView = binding.root.findViewById(R.id.toolbar_title)
@@ -177,6 +178,11 @@ class ReservationPageDialogFragment(
         binding.sizeEdit.setOnClickListener { openSizePicker() }
         binding.sizes.setOnClickListener { openSizePicker() }
 
+        binding.declareButton.setOnClickListener {
+            val itemDeclarationFragment = ItemDeclarationFragment(reservationViewModel)
+            itemDeclarationFragment.show(Objects.requireNonNull(childFragmentManager), "ItemDeclarationFragment")
+        }
+
         binding.reserveBtn.setOnClickListener {
             auth = FirebaseAuth.getInstance()
             val clientId = auth.currentUser?.uid
@@ -203,7 +209,8 @@ class ReservationPageDialogFragment(
                 status= PENDING,
                 listingTitle=listing.title,
                 location=location!!,
-                previewPhoto=previewPhoto)
+                previewPhoto=previewPhoto,
+                items = itemTypes)
             reservationViewModel.reserveListing(reservation)
 
             // Show a confirmation dialog
@@ -257,6 +264,10 @@ class ReservationPageDialogFragment(
 //            dateRangePicker.selection?.second?.let { it1 -> searchViewModel.setEndTime(it1) }
 
         dateRangePicker.show(parentFragmentManager, TAG)
+    }
+
+    private fun openItemPicker() {
+
     }
 
     private fun openSizePicker() {
