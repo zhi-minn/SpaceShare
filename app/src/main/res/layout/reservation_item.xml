@@ -7,12 +7,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_weight="0.3"
             android:orientation="vertical">
 
@@ -44,7 +45,7 @@
             <TextView
                 android:id="@+id/reservation_status"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="59dp"
                 android:padding="8dp"
                 android:text="@string/reservation_status"
                 android:textAppearance="?android:textAppearanceMedium" />
@@ -53,7 +54,7 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager_reservation_images"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="match_parent"
             android:layout_weight="0.7"
             tools:itemCount="3"
             tools:orientation="horizontal" />
