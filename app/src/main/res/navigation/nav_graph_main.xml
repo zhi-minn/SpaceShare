@@ -39,6 +39,9 @@
         <action
             android:id="@+id/action_profileFragment_to_messagesFragment"
             app:destination="@id/messagesFragment" />
+<!--        <action-->
+<!--            android:id="@+id/action_profileFragment_to_hostReservationFragment"-->
+<!--            app:destination="@id/reservationFragment" />-->
     </fragment>
 
     <!-- Messages Fragment -->
@@ -56,6 +59,9 @@
         <action
             android:id="@+id/action_messagesFragment_to_reservationFragment"
             app:destination="@id/reservationFragment" />
+<!--        <action-->
+<!--            android:id="@+id/action_messagesFragment_to_hostReservationFragment"-->
+<!--            app:destination="@id/reservationFragment" />-->
     </fragment>
 
     <!-- Listing Fragment -->
@@ -70,6 +76,9 @@
         <action
             android:id="@+id/action_listingFragment_to_messagesFragment"
             app:destination="@id/messagesFragment" />
+        <action
+            android:id="@+id/action_listingFragment_to_hostReservationFragment"
+            app:destination="@id/reservationFragment" />
     </fragment>
 
     <!-- Reservation Fragment -->

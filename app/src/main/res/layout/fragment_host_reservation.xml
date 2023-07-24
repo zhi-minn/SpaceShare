@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/spaces_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Spaces"
+                android:textSize="40sp"
+                android:translationX="20dp"
+                android:translationY="20dp" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabTextColor="#FFFFFF"
+                app:tabSelectedTextColor="#FFFFFF">
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/allReservationsTab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="All Reservations" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/pendingReservationsTab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pending Reservations" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/reservation_page"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+</layout>
