@@ -290,3 +290,9 @@
 * Youming 2 hours (2023-07-23) [Commit](https://github.com/zhi-minn/SpaceShare/commit/89e2c096f223178e09534c91e66aade0a7d0d3d8)
   * Resolve Merge Reservation Page conflict
   * Perfect the under-function logic.
+* Calvin 5 hours (2023-07-24) [Commit](https://github.com/zhi-minn/SpaceShare/commit/5d836cbe221759c8525e0aedb7c3cb979955e574) [Commit](https://github.com/zhi-minn/SpaceShare/commit/e34849844bb63f6e985ae96a97390f8af9ab8aba#diff-43cc16ba266d61369d2e56fce80fd68a4c62f6737151dd0b53f1d665399f56f3) [Commit](https://github.com/zhi-minn/SpaceShare/commit/b10756d52a9123efcaef1051b79429eec5880f81)
+  * Refactored reservation page fetch logic
+  * Added a status filter on reservation page
+  * Updated Reservation model
+  * Added new fields for reservation page
+  * Updated reservation page view
