@@ -2,25 +2,26 @@ package com.example.spaceshare.ui.view
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogItemDeclarationBinding
+import com.example.spaceshare.enums.DeclareItemType
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class ItemDeclarationFragment(
-    private val viewModel: ReservationViewModel
+    private val parentFragment: ReservationPageDialogFragment
 ): DialogFragment() {
     companion object {
         private val TAG = this::class.simpleName
     }
 
-    @Inject
     private lateinit var binding: DialogItemDeclarationBinding
 
     override fun onCreateView(
@@ -43,23 +44,110 @@ class ItemDeclarationFragment(
 
     private fun configButtons() {
         binding.btnCloseListing.setOnClickListener {
-
+            this.dismiss()
         }
-        binding.clothingChoose.setOnClickListener {
-            if (it.isSelected) {
 
-            } else {
-
+        binding.clothingChoose.apply {
+            isChecked = parentFragment.findItem(DeclareItemType.ClOTHING)
+            setOnCheckedChangeListener {
+                    _, isChecked ->
+                if (isChecked) {
+                    parentFragment.addItems(DeclareItemType.ClOTHING)
+                } else {
+                    parentFragment.removeItems(DeclareItemType.ClOTHING)
+                }
             }
         }
 
-        binding.documentsChoose.setOnClickListener {
-            if (it.isSelected) {
-
-            } else {
-
+        binding.documentsChoose.apply {
+            isChecked = parentFragment.findItem(DeclareItemType.BOOKS_AND_DOCUMENTS)
+            setOnCheckedChangeListener {
+                    _, isChecked ->
+                if (isChecked) {
+                    parentFragment.addItems(DeclareItemType.BOOKS_AND_DOCUMENTS)
+                } else {
+                    parentFragment.removeItems(DeclareItemType.BOOKS_AND_DOCUMENTS)
+                }
             }
         }
 
+        binding.furnitureChoose.apply {
+            isChecked = parentFragment.findItem(DeclareItemType.FURNITURE)
+            setOnCheckedChangeListener {
+                    _, isChecked ->
+                if (isChecked) {
+                    parentFragment.addItems(DeclareItemType.FURNITURE)
+                } else {
+                    parentFragment.removeItems(DeclareItemType.FURNITURE)
+                }
+            }
+        }
+
+        binding.sportAndRecreationalChoose.apply {
+            isChecked = parentFragment.findItem(DeclareItemType.SPORT_AND_RECREATIONAL)
+            setOnCheckedChangeListener {
+                    _, isChecked ->
+                if (isChecked) {
+                    parentFragment.addItems(DeclareItemType.SPORT_AND_RECREATIONAL)
+                } else {
+                    parentFragment.removeItems(DeclareItemType.SPORT_AND_RECREATIONAL)
+                }
+            }
+        }
+
+        binding.applianceChoose.apply {
+            isChecked = parentFragment.findItem(DeclareItemType.APPLIANCE)
+            setOnCheckedChangeListener {
+                    _, isChecked ->
+                if (isChecked) {
+                    parentFragment.addItems(DeclareItemType.APPLIANCE)
+                } else {
+                    parentFragment.removeItems(DeclareItemType.APPLIANCE)
+                }
+            }
+        }
+
+        binding.necessaryChoose.apply {
+            isChecked = parentFragment.findItem(DeclareItemType.DAILY_NECESSARY)
+            setOnCheckedChangeListener {
+                    _, isChecked ->
+                if (isChecked) {
+                    parentFragment.addItems(DeclareItemType.DAILY_NECESSARY)
+                } else {
+                    parentFragment.removeItems(DeclareItemType.DAILY_NECESSARY)
+                }
+            }
+        }
+
+        binding.mementosChoose.apply {
+            isChecked = parentFragment.findItem(DeclareItemType.MEMENTOS)
+            setOnCheckedChangeListener {
+                    _, isChecked ->
+                if (isChecked) {
+                    parentFragment.addItems(DeclareItemType.MEMENTOS)
+                } else {
+                    parentFragment.removeItems(DeclareItemType.MEMENTOS)
+                }
+            }
+        }
+
+        binding.otherChoose.apply {
+            isChecked = parentFragment.findItem(DeclareItemType.OTHERS)
+            setOnCheckedChangeListener {
+                    _, isChecked ->
+                if (isChecked) {
+                    parentFragment.addItems(DeclareItemType.OTHERS)
+                } else {
+                    parentFragment.removeItems(DeclareItemType.OTHERS)
+                }
+            }
+        }
+
+        binding.doneButton.apply {
+            isEnabled = !parentFragment.itemIsEmpty()
+            setOnClickListener {
+                dismiss()
+            }
+        }
     }
 }

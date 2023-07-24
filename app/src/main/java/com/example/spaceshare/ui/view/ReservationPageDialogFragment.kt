@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,6 @@ import com.example.spaceshare.enums.DeclareItemType
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
-import com.example.spaceshare.models.toInt
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.google.android.material.datepicker.CalendarConstraints
@@ -38,6 +38,9 @@ import java.util.Date
 import java.util.Locale
 import java.util.Objects
 import javax.inject.Inject
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 
 import com.example.spaceshare.models.ReservationStatus.PENDING
 import com.example.spaceshare.utils.GeocoderUtil
@@ -50,8 +53,8 @@ class ReservationPageDialogFragment(
 ): DialogFragment() {
     private var startDate : Long? = 0
     private var endDate : Long? = 0
-    private var unit: Double = 0.0
-    private val itemTypes = mutableListOf<DeclareItemType>()
+    private var unit: Double = 1.0
+    private var itemTypes : MutableSet<DeclareItemType> = mutableSetOf()
 
     companion object {
         private val TAG = this::class.simpleName
@@ -118,6 +121,37 @@ class ReservationPageDialogFragment(
         }
     }
 
+    fun addItems(type: DeclareItemType) {
+        try {
+            val tmpResult = itemTypes.add(type)
+            Log.i(TAG, itemTypes.toString())
+            if (!tmpResult) {
+                throw Exception("Add item Error!")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
+        }
+    }
+
+    fun removeItems(type: DeclareItemType) {
+        try {
+            val tmpResult = itemTypes.remove(type)
+            Log.i(TAG, itemTypes.toString())
+            if (!tmpResult) {
+                throw Exception("Remove item Error!")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
+        }
+    }
+
+    fun itemIsEmpty(): Boolean {
+        return itemTypes.isEmpty()
+    }
+
+    fun findItem(type: DeclareItemType): Boolean {
+        return itemTypes.contains(type)
+    }
 
     private fun configureBindings() {
         binding.viewPagerListingImages.adapter =
@@ -179,18 +213,20 @@ class ReservationPageDialogFragment(
         binding.sizes.setOnClickListener { openSizePicker() }
 
         binding.declareButton.setOnClickListener {
-            val itemDeclarationFragment = ItemDeclarationFragment(reservationViewModel)
+            val itemDeclarationFragment = ItemDeclarationFragment(this)
             itemDeclarationFragment.show(Objects.requireNonNull(childFragmentManager), "ItemDeclarationFragment")
         }
 
-        binding.reserveBtn.setOnClickListener {
-            auth = FirebaseAuth.getInstance()
-            val clientId = auth.currentUser?.uid
+        binding.reserveBtn.apply {
+            isEnabled = !itemIsEmpty()
+            setOnClickListener {
+                auth = FirebaseAuth.getInstance()
+                val clientId = auth.currentUser?.uid
 
-            // Calculate total cost for host analytics (since price is subject to possible change)
-            val totalTime = Date(endDate!!).time - Date(startDate!!).time
-            val totalDays = totalTime / (1000 * 60 * 60 * 24) + 1
-            val totalCost = MathUtil.roundToTwoDecimalPlaces(listing.price * unit * totalDays)
+                // Calculate total cost for host analytics (since price is subject to possible change)
+                val totalTime = Date(endDate!!).time - Date(startDate!!).time
+                val totalDays = totalTime / (1000 * 60 * 60 * 24) + 1
+                val totalCost = MathUtil.roundToTwoDecimalPlaces(listing.price * unit * totalDays)
 
             val location = listing.location?.let { location ->
                 com.example.spaceshare.utils.GeocoderUtil.getGeneralLocation(location.latitude, location.longitude)
@@ -213,8 +249,9 @@ class ReservationPageDialogFragment(
                 items = itemTypes)
             reservationViewModel.reserveListing(reservation)
 
-            // Show a confirmation dialog
-            showDialogThenDismiss()
+                // Show a confirmation dialog
+                showDialogThenDismiss()
+            }
         }
     }
 
@@ -264,10 +301,6 @@ class ReservationPageDialogFragment(
 //            dateRangePicker.selection?.second?.let { it1 -> searchViewModel.setEndTime(it1) }
 
         dateRangePicker.show(parentFragmentManager, TAG)
-    }
-
-    private fun openItemPicker() {
-
     }
 
     private fun openSizePicker() {
