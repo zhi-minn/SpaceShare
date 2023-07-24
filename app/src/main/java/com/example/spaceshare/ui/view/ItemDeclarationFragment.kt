@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogItemDeclarationBinding
 import com.example.spaceshare.enums.DeclareItemType
@@ -31,6 +32,9 @@ class ItemDeclarationFragment(
     ): View {
         binding = DialogItemDeclarationBinding.inflate(inflater, container, false)
         configButtons()
+        parentFragment.itemTypes.observe(this) { set ->
+            binding.doneButton.isEnabled = set.isNotEmpty()
+        }
         return binding.root
     }
 
@@ -144,7 +148,7 @@ class ItemDeclarationFragment(
         }
 
         binding.doneButton.apply {
-            isEnabled = !parentFragment.itemIsEmpty()
+            // isEnabled = !parentFragment.itemIsEmpty()
             setOnClickListener {
                 dismiss()
             }

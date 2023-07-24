@@ -54,7 +54,10 @@ class ReservationPageDialogFragment(
     private var startDate : Long? = 0
     private var endDate : Long? = 0
     private var unit: Double = 1.0
-    private var itemTypes : MutableSet<DeclareItemType> = mutableSetOf()
+    private val _itemTypes: MutableLiveData<MutableSet<DeclareItemType>> = MutableLiveData(
+        mutableSetOf()
+    )
+    val itemTypes : LiveData<MutableSet<DeclareItemType>>  = _itemTypes
 
     companion object {
         private val TAG = this::class.simpleName
@@ -88,6 +91,9 @@ class ReservationPageDialogFragment(
             "By selecting the button below, I agree to the ground rules and policy established by SpaceShare"
         configureBindings()
         configureButtons()
+        this.itemTypes.observe(this) { set ->
+            binding.reserveBtn.isEnabled = set.isNotEmpty()
+        }
 
         return binding.root
     }
@@ -123,7 +129,7 @@ class ReservationPageDialogFragment(
 
     fun addItems(type: DeclareItemType) {
         try {
-            val tmpResult = itemTypes.add(type)
+            val tmpResult = _itemTypes.value!!.add(type)
             Log.i(TAG, itemTypes.toString())
             if (!tmpResult) {
                 throw Exception("Add item Error!")
@@ -135,7 +141,7 @@ class ReservationPageDialogFragment(
 
     fun removeItems(type: DeclareItemType) {
         try {
-            val tmpResult = itemTypes.remove(type)
+            val tmpResult = _itemTypes.value!!.remove(type)
             Log.i(TAG, itemTypes.toString())
             if (!tmpResult) {
                 throw Exception("Remove item Error!")
@@ -145,12 +151,14 @@ class ReservationPageDialogFragment(
         }
     }
 
+    /*
     fun itemIsEmpty(): Boolean {
-        return itemTypes.isEmpty()
+        return _itemTypes.value!!.isEmpty()
     }
+    */
 
     fun findItem(type: DeclareItemType): Boolean {
-        return itemTypes.contains(type)
+        return _itemTypes.value!!.contains(type)
     }
 
     private fun configureBindings() {
@@ -218,7 +226,6 @@ class ReservationPageDialogFragment(
         }
 
         binding.reserveBtn.apply {
-            isEnabled = !itemIsEmpty()
             setOnClickListener {
                 auth = FirebaseAuth.getInstance()
                 val clientId = auth.currentUser?.uid
