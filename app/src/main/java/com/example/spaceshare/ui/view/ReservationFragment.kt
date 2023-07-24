@@ -87,7 +87,7 @@ class ReservationFragment : Fragment() {
         }
 
         // Fetch reservations data here or wherever appropriate in your app
-        viewModel.fetchReservations(User("0MBZORgi02MOPeMjf2iNIs7KU2z1", "first_name", "last_name"))
+        viewModel.fetchReservations(User(auth.currentUser!!.uid, "first_name", "last_name"))
 
     }
 
