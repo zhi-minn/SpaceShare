@@ -36,6 +36,7 @@ import com.example.spaceshare.models.ReservationStatus.APPROVED
 import com.example.spaceshare.models.ReservationStatus.CANCELLED
 import com.example.spaceshare.models.ReservationStatus.COMPLETED
 import com.example.spaceshare.models.ReservationStatus.DECLINED
+import com.example.spaceshare.ui.viewmodel.ListingViewModel
 
 @AndroidEntryPoint
 class ReservationFragment : Fragment() {
@@ -47,6 +48,12 @@ class ReservationFragment : Fragment() {
     private lateinit var binding: FragmentReservationBinding
     @Inject
     lateinit var viewModel: ReservationViewModel
+    @Inject
+    lateinit var listingViewModel: ListingViewModel
+
+    private lateinit var allReservations : List<Reservation>
+
+    private var showOnlyPending = false
 
 
     override fun onCreateView(
@@ -72,52 +79,76 @@ class ReservationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // TODO: Reservation classifier switching tab
-//        val tabLayout = view.findViewById<TabLayout>(R.id.tabLayout)
-//        val viewPager = view.findViewById<ViewPager2>(R.id.viewPager)
-
-//        val fragmentList = arrayListOf<Fragment>(
-//            AllOrdersFragment(),
-//            SuccessfulOrdersFragment(),
-//            PendingOrdersFragment()
-//        )
-
-//        val adapter = object : FragmentStateAdapter(childFragmentManager, lifecycle) {
-//            override fun getItemCount() = fragmentList.size
-//            override fun createFragment(position: Int) = fragmentList[position]
-//        }
-
-//        viewPager.adapter = adapter
-
-//        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-//            tab.text = when(position) {
-//                0 -> "All Orders"
-//                1 -> "Successful Orders"
-//                else -> "Pending Orders"
-//            }
-//        }.attach()
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
-        displayReservations()
+        configureBindings()
+        viewModel.reservationLiveData.observe(viewLifecycleOwner) { reservations ->
+            allReservations = reservations
+            displayReservations()
+        }
+
+        // Fetch reservations data here or wherever appropriate in your app
+        viewModel.fetchReservations(User("0MBZORgi02MOPeMjf2iNIs7KU2z1", "first_name", "last_name"))
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun configureBindings() {
+        binding.allReservationsFilter.setOnClickListener {
+            if (showOnlyPending) {
+                showOnlyPending = false
+                displayReservations()
+            }
+        }
+        binding.pendingReservationsFilter.setOnClickListener {
+            if (!showOnlyPending) {
+                showOnlyPending = true
+                displayReservations()
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun fetchReservations() {
+        viewModel.reservationLiveData.observe(viewLifecycleOwner) { reservations ->
+                allReservations = reservations
+            }
+        viewModel.fetchReservations(User("0MBZORgi02MOPeMjf2iNIs7KU2z1", "first_name", "last_name"))
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun displayReservations() {
-        viewModel.reservationLiveData.observe(viewLifecycleOwner) { reservations ->
+        val displayList = if (showOnlyPending) {
+            allReservations.filter { it.status == PENDING }
+        } else {
+            allReservations
+        }
+
+
             binding.reservationPage.removeAllViews()
             val photoList = listOf(
                 listOf("JPEG_20230619_181925_5939538432909368723.jpg_179d1f4f-856a-47e9-ae15-4466ca4fb64b"),
-                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"))
+                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
+                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
+                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
+                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
+                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
+                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
+                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
+                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626")
+            )
             var current = 0
-            for (reservation in reservations) {
+            for (reservation in displayList) {
+
                 val cardView = layoutInflater.inflate(R.layout.reservation_item, null) as CardView
-                val viewPager: ViewPager2 = cardView.findViewById(R.id.view_pager_reservation_images)
+                val viewPager: ViewPager2 =
+                    cardView.findViewById(R.id.view_pager_reservation_images)
                 val location: TextView = cardView.findViewById(R.id.reservation_location)
                 val period: TextView = cardView.findViewById(R.id.reservation_period)
                 val status: TextView = cardView.findViewById(R.id.reservation_status)
 
                 // get listing reference
-                val geoLocation = "Waterloo" // TODO: replace dummy values when listing detail is done
+                val geoLocation =
+                    "Waterloo" // TODO: replace dummy values when listing detail is done
                 val previewPhoto = photoList[current]
                 current++
 
@@ -138,13 +169,13 @@ class ReservationFragment : Fragment() {
 //                    }
 
 
-
-
                 location.text = geoLocation // TODO: get city by geo or add city to Listing model
                 if (reservation.startDate != null || reservation.endDate != null) {
                     period.text =
-                        formatDatePeriod(reservation.startDate ?: Timestamp(0, 0),
-                        reservation.endDate ?: Timestamp(0, 0))
+                        formatDatePeriod(
+                            reservation.startDate ?: Timestamp(0, 0),
+                            reservation.endDate ?: Timestamp(0, 0)
+                        )
                 } else {
                     period.text = "N/A"
                 }
@@ -158,7 +189,8 @@ class ReservationFragment : Fragment() {
                 }
 
                 if (previewPhoto != null) {
-                    viewPager.adapter = ImageAdapter(previewPhoto.map { ImageModel(imagePath = it) })
+                    viewPager.adapter =
+                        ImageAdapter(previewPhoto.map { ImageModel(imagePath = it) })
                 }
 
                 // Add the CardView to the LinearLayout
@@ -171,8 +203,14 @@ class ReservationFragment : Fragment() {
                 cardView.radius = 25.0F
                 binding.reservationPage.addView(cardView)
             }
-        }
-        viewModel.fetchReservations(User("j577YevJRoZHgsKCRC9i1RLACZL2", "first_name", "last_name"))
+
+
+
+
+
+
+
+
     }
 
 }

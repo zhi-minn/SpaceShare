@@ -6,32 +6,60 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/spaces_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Spaces"
-            android:textSize="40sp"
-            android:translationX="20dp"
-            android:translationY="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <ScrollView
-            android:layout_width="368dp"
-            android:layout_height="633dp"
-            android:layout_margin="@dimen/box_margin"
-            android:translationY="60dp">
+            <TextView
+                android:id="@+id/spaces_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Spaces"
+                android:textSize="40sp"
+                android:translationX="20dp"
+                android:translationY="20dp" />
 
             <LinearLayout
-                android:id="@+id/reservation_page"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:translationX="15dp"
+                android:translationY="30dp">
+
+                <Button
+                    android:id="@+id/allReservationsFilter"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:background="@color/colorPrimary"
+                    android:text="All"
+                    android:textSize="13dp" />
+
+                <Button
+                    android:id="@+id/pendingReservationsFilter"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:textSize="13dp"
+                    android:text="Pending" />
 
             </LinearLayout>
 
-        </ScrollView>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                android:layout_margin="@dimen/box_margin"
+                android:translationY="20dp">
+
+                <LinearLayout
+                    android:id="@+id/reservation_page"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"></LinearLayout>
+
+
+            </ScrollView>
+        </LinearLayout>
 
     </FrameLayout>
 
