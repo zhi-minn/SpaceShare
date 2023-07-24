@@ -123,53 +123,21 @@ class ReservationFragment : Fragment() {
             allReservations
         }
 
-
             binding.reservationPage.removeAllViews()
-            val photoList = listOf(
-                listOf("JPEG_20230619_181925_5939538432909368723.jpg_179d1f4f-856a-47e9-ae15-4466ca4fb64b"),
-                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
-                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
-                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
-                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
-                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
-                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
-                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626"),
-                listOf("JPEG_20230627_223955_5108499865851477468.jpg_495945b2-b7d6-4250-98c1-37e9aefff626")
-            )
-            var current = 0
+
             for (reservation in displayList) {
 
                 val cardView = layoutInflater.inflate(R.layout.reservation_item, null) as CardView
                 val viewPager: ViewPager2 =
                     cardView.findViewById(R.id.view_pager_reservation_images)
+                val title: TextView = cardView.findViewById(R.id.reservation_title)
                 val location: TextView = cardView.findViewById(R.id.reservation_location)
                 val period: TextView = cardView.findViewById(R.id.reservation_period)
                 val status: TextView = cardView.findViewById(R.id.reservation_status)
 
-                // get listing reference
-                val geoLocation =
-                    "Waterloo" // TODO: replace dummy values when listing detail is done
-                val previewPhoto = photoList[current]
-                current++
+                title.text = reservation.listingTitle
+                location.text = reservation.location
 
-//                val documentId = reservation.listingId
-//                val documentRef = db.collection("listings").document(documentId ?: "")
-//                documentRef.get().await()
-//                    .addOnSuccessListener { documentSnapshot ->
-//                        if (documentSnapshot.exists()) {
-//                            val data = documentSnapshot.data
-//                            geoLocation = (data?.get("location")?.toString() ?: null) as String
-//                            previewPhoto = (data?.get("photos") as? List<String>?)!!
-//                        } else {
-//                            throw Exception("Listing not found")
-//                        }
-//                    }
-//                    .addOnFailureListener { exception ->
-//                        throw exception
-//                    }
-
-
-                location.text = geoLocation // TODO: get city by geo or add city to Listing model
                 if (reservation.startDate != null || reservation.endDate != null) {
                     period.text =
                         formatDatePeriod(
@@ -188,9 +156,10 @@ class ReservationFragment : Fragment() {
                     else -> "ERROR"
                 }
 
-                if (previewPhoto != null) {
+                if (reservation.previewPhoto != null) {
+                    val photoAdapter : MutableList<String> = mutableListOf(reservation.previewPhoto)
                     viewPager.adapter =
-                        ImageAdapter(previewPhoto.map { ImageModel(imagePath = it) })
+                        ImageAdapter(photoAdapter.map { ImageModel(imagePath = it) })
                 }
 
                 // Add the CardView to the LinearLayout

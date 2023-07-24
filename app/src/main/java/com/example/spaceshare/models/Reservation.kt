@@ -30,7 +30,8 @@ data class Reservation(
     val spaceRequested: Double = 0.0,
     val status: ReservationStatus = ReservationStatus.PENDING,
     val location: String = "",
-    val title: String = "",
+    val listingTitle: String = "",
+    val previewPhoto: String? = null,
 //    val rating:Int? = null
 ) {
 }

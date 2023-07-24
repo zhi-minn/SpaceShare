@@ -38,6 +38,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 import com.example.spaceshare.models.ReservationStatus.PENDING
+import com.example.spaceshare.utils.GeocoderUtil
 import com.example.spaceshare.utils.MathUtil
 
 @AndroidEntryPoint
@@ -185,10 +186,24 @@ class ReservationPageDialogFragment(
             val totalDays = totalTime / (1000 * 60 * 60 * 24) + 1
             val totalCost = MathUtil.roundToTwoDecimalPlaces(listing.price * unit * totalDays)
 
+            val location = listing.location?.let { location ->
+                com.example.spaceshare.utils.GeocoderUtil.getGeneralLocation(location.latitude, location.longitude)
+            }
+
+            val previewPhoto = listing.photos[0]
+
             val reservation = Reservation(
-                hostId=listing.hostId, clientId=clientId, listingId=listing.id, totalCost = totalCost,
-                startDate=Timestamp(Date(startDate!!)), endDate=Timestamp(Date(endDate!!)),
-                spaceRequested=unit, status= PENDING)
+                hostId=listing.hostId,
+                clientId=clientId,
+                listingId=listing.id,
+                totalCost = totalCost,
+                startDate=Timestamp(Date(startDate!!)),
+                endDate=Timestamp(Date(endDate!!)),
+                spaceRequested=unit,
+                status= PENDING,
+                listingTitle=listing.title,
+                location=location!!,
+                previewPhoto=previewPhoto)
             reservationViewModel.reserveListing(reservation)
 
             // Show a confirmation dialog
