@@ -287,3 +287,6 @@
   + Add ID status on client listing
 * Minn 2 hours (2023-07-23) [Commit](https://github.com/zhi-minn/SpaceShare/pull/87)
   * Added revenue analytics
+* Youming 2 hours (2023-07-23) [Commit](https://github.com/zhi-minn/SpaceShare/commit/89e2c096f223178e09534c91e66aade0a7d0d3d8)
+  * Resolve Merge Reservation Page conflict
+  * Perfect the under-function logic.
