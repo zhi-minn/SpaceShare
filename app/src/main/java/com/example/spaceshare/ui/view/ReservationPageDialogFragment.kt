@@ -25,6 +25,7 @@ import com.example.spaceshare.models.toInt
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -39,11 +40,11 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ReservationPageDialogFragment(
     private val listing: Listing,
-    private val searchViewModel: SearchViewModel
+    private val searchViewModel: SearchViewModel?
 ): DialogFragment() {
     private var startDate : Long? = 0
     private var endDate : Long? = 0
-    private var unit: Double = 0.0
+    private var unit: Double = 1.0
 
     companion object {
         private val TAG = this::class.simpleName
@@ -124,7 +125,7 @@ class ReservationPageDialogFragment(
         binding.houseName.text = listing.title
 
         val formatter = SimpleDateFormat("MMM dd", Locale.getDefault())
-        if (searchViewModel == null) {
+        if (searchViewModel?.startTime?.value?.toInt() == 0) {
             val cal = Calendar.getInstance()
 
             // Get current date
@@ -137,7 +138,7 @@ class ReservationPageDialogFragment(
             binding.pickedDate.text = "$curDate - $curDatePlus30Days"
         } else {
             // Convert the startTime and endTime from Long to Date and format them
-            val startDate = Date(searchViewModel.startTime.value!!)
+            val startDate = Date(searchViewModel?.startTime?.value!!)
             val endDate = Date(searchViewModel.endTime.value!!)
 
             val formattedStartDate = formatter.format(startDate)
@@ -148,7 +149,7 @@ class ReservationPageDialogFragment(
 
         // Handle spaceRequired
         // Chang: This should be stored in ReservationViewModel
-        if (searchViewModel == null) {
+        if (searchViewModel?.spaceRequired?.value?.toInt() == 0) {
             binding.lugguageSize.text = "1.0 cubic"
         } else {
             binding.lugguageSize.text = "${searchViewModel.spaceRequired.value} cubic"
@@ -178,8 +179,7 @@ class ReservationPageDialogFragment(
             val reservation = Reservation(
                 hostId=listing.hostId, clientId=clientId, listingId=listing.id,
                 startDate=Timestamp(Date(startDate!!)), endDate=Timestamp(Date(endDate!!)),
-                unit=unit, status= com.example.spaceshare.models.ReservationStatus.PENDING.toInt())
-            )
+                spaceRequested =unit, status= com.example.spaceshare.models.ReservationStatus.PENDING.toInt())
             reservationViewModel.reserveListing(reservation)
 
             // Show a confirmation dialog
@@ -200,7 +200,18 @@ class ReservationPageDialogFragment(
     }
 
     private fun openDatePicker() {
+//        val constraintsBuilder = CalendarConstraints.Builder()
+//
+//        val dateRangePicker =
+//            MaterialDatePicker.Builder.dateRangePicker()
+//                .setTitleText("Select Dates")
+//                .setCalendarConstraints(constraintsBuilder.build())
+//                .build()
+        val now = MaterialDatePicker.todayInUtcMilliseconds()
+
+        // Validation that the date is after or equal to now
         val constraintsBuilder = CalendarConstraints.Builder()
+            .setValidator(DateValidatorPointForward.from(now))
 
         val dateRangePicker =
             MaterialDatePicker.Builder.dateRangePicker()
@@ -212,8 +223,10 @@ class ReservationPageDialogFragment(
             binding.pickedDate.text = dateRangePicker.headerText
             startDate = dateRangePicker.selection?.first
             endDate = dateRangePicker.selection?.second
-            searchViewModel.startTime.value = dateRangePicker.selection?.first
-            searchViewModel.endTime.value = dateRangePicker.selection?.second
+//            searchViewModel.startTime.value = dateRangePicker.selection?.first
+//            searchViewModel.endTime.value = dateRangePicker.selection?.second
+            searchViewModel?.setStartTime(dateRangePicker.selection?.first ?: 0)
+            searchViewModel?.setEndTime(dateRangePicker.selection?.second ?: 0)
         }
             // SearchViewModel should not be used here, this should be stored in ReservationViewModel
 //            dateRangePicker.selection?.first?.let { it1 -> searchViewModel.setStartTime(it1) }
@@ -230,6 +243,7 @@ class ReservationPageDialogFragment(
         val increaseButton: ImageButton = dialog.findViewById(R.id.btn_increase)
         val decreaseButton: ImageButton = dialog.findViewById(R.id.btn_decrease)
 
+        sizeValue.text = unit.toString()
         // Disable the decrease button initially if the size is already 0.5
         decreaseButton.isEnabled = sizeValue.text.toString().toDouble() > 0.5
 
@@ -250,6 +264,8 @@ class ReservationPageDialogFragment(
                     increaseButton.isEnabled = false
                 }
             }
+
+
         }
 
         decreaseButton.setOnClickListener {
@@ -272,6 +288,7 @@ class ReservationPageDialogFragment(
             val selectedValue = sizeValue.text.toString().toDouble()
             unit = selectedValue
             binding.lugguageSize.text = "$selectedValue cubic"
+            searchViewModel?.setSpaceRequired(selectedValue)
             dialog.dismiss()
         }
         dialog.show()

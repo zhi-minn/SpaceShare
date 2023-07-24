@@ -299,6 +299,10 @@ class SearchViewModel @Inject constructor(
         mutableSearchRadius.value = radius
     }
 
+    fun setSpaceRequired(unit: Double){
+        mutableSpaceRequired.value = unit
+    }
+
     private fun setHasFilterBeenApplied(beenApplied: Boolean) {
         mutableHasFilterBeenApplied.value = beenApplied
     }
