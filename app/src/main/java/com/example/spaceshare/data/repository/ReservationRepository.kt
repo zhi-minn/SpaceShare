@@ -12,4 +12,6 @@ interface ReservationRepository {
     suspend fun fetchReservations(user: User, asHost: Boolean): List<Reservation>
 
     suspend fun fetchCompletedReservationsByListing(listingId: String): List<Reservation>
+
+    suspend fun fetchUser(id : String) : User?
 }

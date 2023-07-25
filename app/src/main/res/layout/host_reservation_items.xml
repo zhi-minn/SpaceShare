@@ -52,15 +52,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Request Name: Jhon"
+                android:text="Request Name: John"
                 android:textAppearance="?android:textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/host_reservation_location"
+                android:id="@+id/host_reservation_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="House Location: XX"
+                android:text="Property title: XX"
                 android:textAppearance="?android:textAppearanceSmall" />
 
             <TextView
@@ -77,6 +77,14 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="Space Required: 1.5 cubic"
+                android:textAppearance="?android:textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/host_reservation_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="PENDING"
                 android:textAppearance="?android:textAppearanceMedium" />
         </LinearLayout>
 

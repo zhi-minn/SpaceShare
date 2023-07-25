@@ -38,6 +38,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 import com.example.spaceshare.models.ReservationStatus.PENDING
+import com.example.spaceshare.models.User
 import com.example.spaceshare.utils.GeocoderUtil
 import com.example.spaceshare.utils.MathUtil
 
@@ -50,6 +51,8 @@ class ReservationPageDialogFragment(
     private var endDate : Long? = 0
     private var unit: Double = 1.0
 
+    private var auth = FirebaseAuth.getInstance()
+
     companion object {
         private val TAG = this::class.simpleName
     }
@@ -57,9 +60,9 @@ class ReservationPageDialogFragment(
     @Inject
     lateinit var reservationViewModel: ReservationViewModel
 
-    private lateinit var auth: FirebaseAuth
-
     private lateinit var binding: DialogReservationPageBinding
+
+    private lateinit var client : User
 
 
     override fun onCreateView(
@@ -67,6 +70,11 @@ class ReservationPageDialogFragment(
         savedInstanceState: Bundle?
     ): View {
         binding = DialogReservationPageBinding.inflate(inflater, container, false)
+
+        reservationViewModel.userInfoLiveData.observe(viewLifecycleOwner) { user ->
+            client = user
+        }
+        reservationViewModel.fetchUserInfo(auth.currentUser!!.uid)
 
         // Get a reference to the Toolbar
         val toolbar: Toolbar = binding.root.findViewById(R.id.confirmPayToolbar)
@@ -203,7 +211,10 @@ class ReservationPageDialogFragment(
                 status= PENDING,
                 listingTitle=listing.title,
                 location=location!!,
-                previewPhoto=previewPhoto)
+                previewPhoto=previewPhoto,
+                clientFirstName=client.firstName,
+                clientLastName=client.lastName,
+                clientPhoto=client.photoPath)
             reservationViewModel.reserveListing(reservation)
 
             // Show a confirmation dialog
