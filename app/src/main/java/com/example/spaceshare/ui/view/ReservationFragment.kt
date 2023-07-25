@@ -17,6 +17,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.FragmentReservationBinding
+import com.example.spaceshare.manager.SharedPreferencesManager
+import com.example.spaceshare.manager.SharedPreferencesManager.isHostMode
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
@@ -108,11 +110,72 @@ class ReservationFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun displayReservations() {
-        val displayList = if (showOnlyPending) {
-            allReservations.filter { it.status == PENDING }
+        if (isHostMode.value!!) {
+            val displayList = if (showOnlyPending) {
+                allReservations.filter { it.status == ReservationStatus.PENDING }
+            } else {
+                allReservations
+            }
+
+            binding.reservationPage.removeAllViews()
+
+            for (reservation in displayList) {
+
+                val cardView = layoutInflater.inflate(R.layout.host_reservation_items, null) as CardView
+                val viewPager: ViewPager2 =
+                    cardView.findViewById(R.id.profileImage)
+                val name: TextView = cardView.findViewById(R.id.host_reservation_name)
+                val title: TextView = cardView.findViewById(R.id.host_reservation_title)
+                val period: TextView = cardView.findViewById(R.id.host_reservation_period)
+                val spaceRequested: TextView = cardView.findViewById(R.id.host_reservation_space_required)
+                val status: TextView = cardView.findViewById(R.id.host_reservation_status)
+
+                name.text = "Request From: ${reservation.clientFirstName}"
+                title.text = reservation.listingTitle
+                spaceRequested.text = reservation.spaceRequested.toString()
+
+                if (reservation.startDate != null || reservation.endDate != null) {
+                    period.text =
+                        formatDatePeriod(
+                            reservation.startDate ?: Timestamp(0, 0),
+                            reservation.endDate ?: Timestamp(0, 0)
+                        )
+                } else {
+                    period.text = "N/A"
+                }
+                status.text = when (reservation.status) {
+                    ReservationStatus.PENDING -> "Waiting for approval"
+                    ReservationStatus.APPROVED -> "Approved"
+                    ReservationStatus.DECLINED -> "Declined"
+                    ReservationStatus.CANCELLED -> "Cancelled"
+                    ReservationStatus.COMPLETED -> "Completed"
+                    else -> "ERROR"
+                }
+
+                // user profile photo
+                val clientPhoto : String? = reservation.clientPhoto
+                if (clientPhoto != null) {
+                    val photoAdapter : MutableList<String> = mutableListOf(clientPhoto)
+                    viewPager.adapter =
+                        ImageAdapter(photoAdapter.map { ImageModel(imagePath = it) })
+                }
+
+                // Add the CardView to the LinearLayout
+                val layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                layoutParams.setMargins(8, 32, 8, 32)
+                cardView.layoutParams = layoutParams
+                cardView.radius = 25.0F
+                binding.reservationPage.addView(cardView)
+            }
         } else {
-            allReservations
-        }
+            val displayList = if (showOnlyPending) {
+                allReservations.filter { it.status == PENDING }
+            } else {
+                allReservations
+            }
 
             binding.reservationPage.removeAllViews()
 
@@ -148,7 +211,7 @@ class ReservationFragment : Fragment() {
                 }
 
                 if (reservation.previewPhoto != null) {
-                    val photoAdapter : MutableList<String> = mutableListOf(reservation.previewPhoto)
+                    val photoAdapter: MutableList<String> = mutableListOf(reservation.previewPhoto)
                     viewPager.adapter =
                         ImageAdapter(photoAdapter.map { ImageModel(imagePath = it) })
                 }
@@ -163,6 +226,7 @@ class ReservationFragment : Fragment() {
                 cardView.radius = 25.0F
                 binding.reservationPage.addView(cardView)
             }
+        }
     }
 
 }
