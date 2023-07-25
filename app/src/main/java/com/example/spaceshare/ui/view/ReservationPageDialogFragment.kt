@@ -4,7 +4,6 @@ package com.example.spaceshare.ui.view
 import android.app.Dialog
 import android.content.Context
 import android.location.Geocoder
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -20,10 +18,8 @@ import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.DialogReservationPageBinding
-import com.example.spaceshare.models.Chat
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
-import com.example.spaceshare.models.Message
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.toInt
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
@@ -42,12 +38,8 @@ import java.util.Locale
 import javax.inject.Inject
 
 import com.example.spaceshare.models.ReservationStatus.PENDING
-import com.example.spaceshare.models.User
 import com.example.spaceshare.utils.GeocoderUtil
 import com.example.spaceshare.utils.MathUtil
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ktx.database
 
 @AndroidEntryPoint
 class ReservationPageDialogFragment(
@@ -58,8 +50,6 @@ class ReservationPageDialogFragment(
     private var endDate : Long? = 0
     private var unit: Double = 1.0
 
-    private var auth = FirebaseAuth.getInstance()
-
     companion object {
         private val TAG = this::class.simpleName
     }
@@ -67,23 +57,16 @@ class ReservationPageDialogFragment(
     @Inject
     lateinit var reservationViewModel: ReservationViewModel
 
+    private lateinit var auth: FirebaseAuth
+
     private lateinit var binding: DialogReservationPageBinding
 
-    private lateinit var client : User
-
-    private val realTimeDB = Firebase.database
-    private val baseMessagesRef = realTimeDB.reference.child("messages")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DialogReservationPageBinding.inflate(inflater, container, false)
-
-        reservationViewModel.userInfoLiveData.observe(viewLifecycleOwner) { user ->
-            client = user
-        }
-        reservationViewModel.fetchUserInfo(auth.currentUser!!.uid)
 
         // Get a reference to the Toolbar
         val toolbar: Toolbar = binding.root.findViewById(R.id.confirmPayToolbar)
@@ -186,7 +169,6 @@ class ReservationPageDialogFragment(
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun configureButtons() {
 
         binding.dateEdit.setOnClickListener { openDatePicker() }
@@ -210,15 +192,6 @@ class ReservationPageDialogFragment(
 
             val previewPhoto = listing.photos[0]
 
-            if (startDate!!.toInt() == 0) {
-                val cal = Calendar.getInstance()
-                startDate = cal.timeInMillis
-                cal.add(Calendar.DATE, 30)
-                endDate = cal.timeInMillis
-            }
-
-            val msgText = binding.messageToHost.text.toString()
-
             val reservation = Reservation(
                 hostId=listing.hostId,
                 clientId=clientId,
@@ -230,36 +203,8 @@ class ReservationPageDialogFragment(
                 status= PENDING,
                 listingTitle=listing.title,
                 location=location!!,
-                previewPhoto=previewPhoto,
-                clientFirstName=client.firstName,
-                clientLastName=client.lastName,
-                clientPhoto=client.photoPath,
-                message=msgText)
-
+                previewPhoto=previewPhoto)
             reservationViewModel.reserveListing(reservation)
-
-            val message = Message(
-                text = msgText,
-                senderName = "${client.firstName} ${client.lastName}",
-                senderId = clientId!!,
-                profilePhotoUrl = client.photoPath,
-                imageUrl = null
-                )
-
-//            val baseMessagesRef = realTimeDB.reference.child("messages")
-            baseMessagesRef.push().setValue(message)
-
-            val chat = Chat(
-                photoURL = previewPhoto,
-                hostId = listing.hostId,
-                associatedListingId = listing.id,
-                title = listing.title,
-                lastMessage = message,
-                members = listOf(listing.hostId!!, clientId),
-                createdAt = Timestamp.now()
-            )
-
-            reservationViewModel.sendMessage(chat)
 
             // Show a confirmation dialog
             showDialogThenDismiss()
