@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,10 +19,10 @@ import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.DialogReservationPageBinding
+import com.example.spaceshare.enums.DeclareItemType
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
-import com.example.spaceshare.models.toInt
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.google.android.material.datepicker.CalendarConstraints
@@ -35,7 +36,11 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.Objects
 import javax.inject.Inject
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 
 import com.example.spaceshare.models.ReservationStatus.PENDING
 import com.example.spaceshare.utils.GeocoderUtil
@@ -49,6 +54,7 @@ class ReservationPageDialogFragment(
     private var startDate : Long? = 0
     private var endDate : Long? = 0
     private var unit: Double = 1.0
+    private var itemTypes: MutableList<DeclareItemType> = mutableListOf()
 
     companion object {
         private val TAG = this::class.simpleName
@@ -61,13 +67,11 @@ class ReservationPageDialogFragment(
 
     private lateinit var binding: DialogReservationPageBinding
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DialogReservationPageBinding.inflate(inflater, container, false)
-
         // Get a reference to the Toolbar
         val toolbar: Toolbar = binding.root.findViewById(R.id.confirmPayToolbar)
         val toolbarTitle: TextView = binding.root.findViewById(R.id.toolbar_title)
@@ -95,7 +99,6 @@ class ReservationPageDialogFragment(
         val sizeDialog = Dialog(requireContext())
         sizeDialog.setContentView(R.layout.dialog_size_picker)
         sizeDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
-
     }
 
     object GeocoderUtil {
@@ -117,6 +120,43 @@ class ReservationPageDialogFragment(
         }
     }
 
+    private fun setEmptyCheck() {
+        binding.reserveBtn.isEnabled = !itemIsEmpty()
+    }
+
+    fun addItems(type: DeclareItemType) {
+        try {
+            val tmpResult = itemTypes.add(type)
+            Log.i(TAG, itemTypes.toString())
+            setEmptyCheck()
+            if (!tmpResult) {
+                throw Exception("Add item Error!")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
+        }
+    }
+
+    fun removeItems(type: DeclareItemType) {
+        try {
+            val tmpResult = itemTypes.remove(type)
+            Log.i(TAG, itemTypes.toString())
+            if (!tmpResult) {
+                throw Exception("Remove item Error!")
+            }
+            setEmptyCheck()
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
+        }
+    }
+
+    fun itemIsEmpty(): Boolean {
+        return itemTypes.isEmpty()
+    }
+
+    fun findItem(type: DeclareItemType): Boolean {
+        return itemTypes.contains(type)
+    }
 
     private fun configureBindings() {
         binding.viewPagerListingImages.adapter =
@@ -170,21 +210,27 @@ class ReservationPageDialogFragment(
 
 
     private fun configureButtons() {
-
         binding.dateEdit.setOnClickListener { openDatePicker() }
         binding.dates.setOnClickListener { openDatePicker() }
 
         binding.sizeEdit.setOnClickListener { openSizePicker() }
         binding.sizes.setOnClickListener { openSizePicker() }
 
-        binding.reserveBtn.setOnClickListener {
-            auth = FirebaseAuth.getInstance()
-            val clientId = auth.currentUser?.uid
+        binding.declareButton.setOnClickListener {
+            val itemDeclarationFragment = ItemDeclarationFragment(this)
+            itemDeclarationFragment.show(Objects.requireNonNull(childFragmentManager), "ItemDeclarationFragment")
+        }
 
-            // Calculate total cost for host analytics (since price is subject to possible change)
-            val totalTime = Date(endDate!!).time - Date(startDate!!).time
-            val totalDays = totalTime / (1000 * 60 * 60 * 24) + 1
-            val totalCost = MathUtil.roundToTwoDecimalPlaces(listing.price * unit * totalDays)
+        binding.reserveBtn.apply {
+            setEmptyCheck()
+            setOnClickListener {
+                auth = FirebaseAuth.getInstance()
+                val clientId = auth.currentUser?.uid
+
+                // Calculate total cost for host analytics (since price is subject to possible change)
+                val totalTime = Date(endDate!!).time - Date(startDate!!).time
+                val totalDays = totalTime / (1000 * 60 * 60 * 24) + 1
+                val totalCost = MathUtil.roundToTwoDecimalPlaces(listing.price * unit * totalDays)
 
             val location = listing.location?.let { location ->
                 com.example.spaceshare.utils.GeocoderUtil.getGeneralLocation(location.latitude, location.longitude)
@@ -203,11 +249,12 @@ class ReservationPageDialogFragment(
                 status= PENDING,
                 listingTitle=listing.title,
                 location=location!!,
-                previewPhoto=previewPhoto)
+                previewPhoto=previewPhoto,
+                items = itemTypes)
             reservationViewModel.reserveListing(reservation)
-
-            // Show a confirmation dialog
-            showDialogThenDismiss()
+                // Show a confirmation dialog
+                showDialogThenDismiss()
+            }
         }
     }
 

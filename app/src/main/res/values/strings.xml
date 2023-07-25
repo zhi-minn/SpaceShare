@@ -18,7 +18,7 @@
     <string name="post">Post</string>
     <string name="dialog_title_result">Result</string>
     <string name="dialog_button_close">Close</string>
-    <string name="reservation_status">Completed\Pending\Aproved\Cancled</string>
+    <string name="reservation_status">Completed\Pending\Approved\Canceled</string>
     <string name="reservation_period">YYYY/MM/DD</string>
     <string name="reservation_title">Street Name</string>
     <string name="location_permission_denied">Location permission denied</string>
@@ -56,4 +56,15 @@
     <string name="dialog_id_verified_true">Host is verified</string>
     <string name="dialog_id_verified_false">Host is not verified</string>
     <string name="sample_revenue_generated">Revenue to date: $102.33</string>
+    <string name="please_declare_your_items">Please Declare your items</string>
+    <string name="item_declaration_title">Please Declare your Items Here</string>
+    <string name="item_declaration_attention">Attention: \nYour item types declared here will be visible to your host.</string>
+    <string name="clothing">Clothing</string>
+    <string name="books_and_documents">Books and Documents</string>
+    <string name="small_furniture">Small Furniture</string>
+    <string name="sport_and_recreational_equipment">Sport and Recreational Equipment</string>
+    <string name="small_appliances">Small Appliances</string>
+    <string name="daily_necessaries">Daily Necessaries</string>
+    <string name="mementos_and_collectibles">Mementos and Collectibles</string>
+    <string name="others">Others</string>
 </resources>
