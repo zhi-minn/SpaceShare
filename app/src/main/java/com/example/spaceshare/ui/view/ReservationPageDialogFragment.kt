@@ -121,32 +121,17 @@ class ReservationPageDialogFragment(
     }
 
     private fun setEmptyCheck() {
-        binding.reserveBtn.isEnabled = !itemIsEmpty()
+        binding.reserveBtn.isEnabled = itemTypes.isNotEmpty()
     }
 
-    fun addItems(type: DeclareItemType, input: String) {
-        itemTypes[type] = input
+    fun updateItems(input: MutableMap<DeclareItemType, String>) {
+        itemTypes.clear()
+        itemTypes = input
+        setEmptyCheck()
     }
 
-    fun removeItems(type: DeclareItemType) {
-        try {
-            val tmpResult = itemTypes.remove(type)
-            Log.i(TAG, itemTypes.toString())
-            if (tmpResult == null) {
-                throw Exception("Remove item Error!")
-            }
-            setEmptyCheck()
-        } catch (e: Exception) {
-            Log.e(TAG, e.toString())
-        }
-    }
-
-    fun itemIsEmpty(): Boolean {
-        return itemTypes.isEmpty()
-    }
-
-    fun findItem(type: DeclareItemType): Boolean {
-        return itemTypes.contains(type)
+    fun getItems(): MutableMap<DeclareItemType, String> {
+        return itemTypes.toMutableMap()
     }
 
     private fun configureBindings() {

@@ -25,6 +25,7 @@ class ItemDeclarationFragment(
     }
 
     private lateinit var binding: DialogItemDeclarationBinding
+    private var items: MutableMap<DeclareItemType, String> = parentFragment.getItems()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,8 +46,16 @@ class ItemDeclarationFragment(
         sizeDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
     }
 
-    private fun setEmptyCheck() {
-        binding.doneButton.isEnabled = !parentFragment.itemIsEmpty()
+    private fun update() {
+        parentFragment.updateItems(items)
+    }
+
+    private fun removeItems(type: DeclareItemType) {
+        try {
+            items.remove(type) ?: throw Exception("Remove item Error!")
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
+        }
     }
 
     private fun configButtons() {
@@ -55,114 +64,120 @@ class ItemDeclarationFragment(
         }
 
         binding.clothingChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.ClOTHING)
+            isChecked = items.contains(DeclareItemType.ClOTHING)
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
                     binding.clothingDetails.visibility = View.VISIBLE
-                    parentFragment.addItems(DeclareItemType.ClOTHING, "")
+                    items[DeclareItemType.ClOTHING] = ""
                 } else {
                     binding.clothingDetails.visibility = View.GONE
-                    parentFragment.removeItems(DeclareItemType.ClOTHING)
+                    removeItems(DeclareItemType.ClOTHING)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.documentsChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.BOOKS_AND_DOCUMENTS)
+            isChecked = items.contains(DeclareItemType.BOOKS_AND_DOCUMENTS)
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.BOOKS_AND_DOCUMENTS, "")
+                    binding.documentsDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.BOOKS_AND_DOCUMENTS] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.BOOKS_AND_DOCUMENTS)
+                    binding.documentsDetails.visibility = View.GONE
+                    removeItems(DeclareItemType.BOOKS_AND_DOCUMENTS)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.furnitureChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.FURNITURE)
+            isChecked = items.contains(DeclareItemType.FURNITURE)
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.FURNITURE, "")
+                    binding.furnitureDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.FURNITURE] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.FURNITURE)
+                    binding.furnitureDetails.visibility = View.GONE
+                    removeItems(DeclareItemType.FURNITURE)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.sportAndRecreationalChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.SPORT_AND_RECREATIONAL)
+            isChecked = items.contains(DeclareItemType.SPORT_AND_RECREATIONAL)
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.SPORT_AND_RECREATIONAL, "")
+                    binding.sportAndRecreationalDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.SPORT_AND_RECREATIONAL] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.SPORT_AND_RECREATIONAL)
+                    binding.sportAndRecreationalDetails.visibility = View.GONE
+                    removeItems(DeclareItemType.SPORT_AND_RECREATIONAL)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.applianceChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.APPLIANCE)
+            isChecked = items.contains(DeclareItemType.APPLIANCE)
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.APPLIANCE, "")
+                    binding.applianceDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.APPLIANCE] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.APPLIANCE)
+                    binding.applianceDetails.visibility = View.GONE
+                    removeItems(DeclareItemType.APPLIANCE)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.necessaryChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.DAILY_NECESSARY)
+            isChecked = items.contains(DeclareItemType.DAILY_NECESSARY)
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.DAILY_NECESSARY, "")
+                    binding.necessaryDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.DAILY_NECESSARY] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.DAILY_NECESSARY)
+                    binding.necessaryDetails.visibility = View.GONE
+                    removeItems(DeclareItemType.DAILY_NECESSARY)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.mementosChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.MEMENTOS)
+            isChecked = items.contains(DeclareItemType.MEMENTOS)
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.MEMENTOS, "")
+                    binding.mementosDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.MEMENTOS] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.MEMENTOS)
+                    binding.mementosDetails.visibility = View.GONE
+                    removeItems(DeclareItemType.MEMENTOS)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.otherChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.OTHERS)
+            isChecked = items.contains(DeclareItemType.OTHERS)
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.OTHERS, "")
+                    binding.otherDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.OTHERS] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.OTHERS)
+                    binding.otherDetails.visibility = View.GONE
+                    removeItems(DeclareItemType.OTHERS)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.doneButton.apply {
-            setEmptyCheck()
             setOnClickListener {
+                update()
                 dismiss()
             }
         }
