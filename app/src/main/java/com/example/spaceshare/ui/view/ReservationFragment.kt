@@ -198,7 +198,6 @@ class ReservationFragment : Fragment() {
             binding.reservationPage.removeAllViews()
 
             for (reservation in displayList) {
-
                 val cardView = layoutInflater.inflate(R.layout.reservation_item, null) as CardView
                 val viewPager: ViewPager2 =
                     cardView.findViewById(R.id.view_pager_reservation_images)
@@ -245,6 +244,6 @@ class ReservationFragment : Fragment() {
                 binding.reservationPage.addView(cardView)
             }
         }
-    }
 
+    }
 }
