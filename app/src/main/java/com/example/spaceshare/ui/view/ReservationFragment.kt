@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.FragmentReservationBinding
@@ -39,6 +40,7 @@ import com.example.spaceshare.models.ReservationStatus.CANCELLED
 import com.example.spaceshare.models.ReservationStatus.COMPLETED
 import com.example.spaceshare.models.ReservationStatus.DECLINED
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
+import com.google.firebase.storage.FirebaseStorage
 
 @AndroidEntryPoint
 class ReservationFragment : Fragment() {
@@ -122,8 +124,6 @@ class ReservationFragment : Fragment() {
             for (reservation in displayList) {
 
                 val cardView = layoutInflater.inflate(R.layout.host_reservation_items, null) as CardView
-                val viewPager: ViewPager2 =
-                    cardView.findViewById(R.id.profileImage)
                 val name: TextView = cardView.findViewById(R.id.host_reservation_name)
                 val title: TextView = cardView.findViewById(R.id.host_reservation_title)
                 val period: TextView = cardView.findViewById(R.id.host_reservation_period)
@@ -155,9 +155,12 @@ class ReservationFragment : Fragment() {
                 // user profile photo
                 val clientPhoto : String? = reservation.clientPhoto
                 if (clientPhoto != null) {
-                    val photoAdapter : MutableList<String> = mutableListOf(clientPhoto)
-                    viewPager.adapter =
-                        ImageAdapter(photoAdapter.map { ImageModel(imagePath = it) })
+                    val storageRef =
+                        FirebaseStorage.getInstance().reference.child("profiles/${clientPhoto}")
+
+                    Glide.with(requireContext())
+                        .load(storageRef)
+                        .into(cardView.findViewById(R.id.profileImage))
                 }
 
                 // Add the CardView to the LinearLayout
