@@ -221,7 +221,8 @@ class ReservationPageDialogFragment(
                 previewPhoto=previewPhoto,
                 clientFirstName=client.firstName,
                 clientLastName=client.lastName,
-                clientPhoto=client.photoPath)
+                clientPhoto=client.photoPath,
+                message=binding.messageToHost.text.toString())
             reservationViewModel.reserveListing(reservation)
 
             // Show a confirmation dialog

@@ -37,6 +37,7 @@ data class Reservation(
     val clientFirstName: String? = null,
     val clientLastName: String? = null,
     val clientPhoto: String? = null,
+    val message: String? = null,
 //    val rating:Int? = null
 ) {
 }
