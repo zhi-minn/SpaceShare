@@ -33,7 +33,7 @@ data class Reservation(
     val location: String = "",
     val listingTitle: String = "",
     val previewPhoto: String? = null,
-    val items: MutableList<DeclareItemType>? = null
+    val items: Map<String, String>? = null
 //    val rating:Int? = null
 ) {
 }

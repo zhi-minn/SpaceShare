@@ -6,15 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogItemDeclarationBinding
 import com.example.spaceshare.enums.DeclareItemType
-import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ItemDeclarationFragment(
@@ -25,6 +22,7 @@ class ItemDeclarationFragment(
     }
 
     private lateinit var binding: DialogItemDeclarationBinding
+    private var items: MutableMap<DeclareItemType, String> = parentFragment.getItems()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +31,7 @@ class ItemDeclarationFragment(
     ): View {
         binding = DialogItemDeclarationBinding.inflate(inflater, container, false)
         configButtons()
+        configBindings()
         Log.i(TAG, viewLifecycleOwner.toString())
         return binding.root
     }
@@ -45,8 +44,16 @@ class ItemDeclarationFragment(
         sizeDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
     }
 
-    private fun setEmptyCheck() {
-        binding.doneButton.isEnabled = !parentFragment.itemIsEmpty()
+    private fun update() {
+        parentFragment.updateItems(items)
+    }
+
+    private fun removeItems(type: DeclareItemType) {
+        try {
+            items.remove(type) ?: throw Exception("Remove item Error!")
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
+        }
     }
 
     private fun configButtons() {
@@ -55,113 +62,238 @@ class ItemDeclarationFragment(
         }
 
         binding.clothingChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.ClOTHING)
+            isChecked = items.contains(DeclareItemType.ClOTHING)
+            if (isChecked) {
+                binding.clothingDetails.apply {
+                    visibility = View.VISIBLE
+                    setText(items[DeclareItemType.ClOTHING])
+                }
+            }
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.ClOTHING)
+                    binding.clothingDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.ClOTHING] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.ClOTHING)
+                    binding.clothingDetails.visibility = View.GONE
+                    binding.clothingDetails.setText("")
+                    removeItems(DeclareItemType.ClOTHING)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.documentsChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.BOOKS_AND_DOCUMENTS)
+            isChecked = items.contains(DeclareItemType.BOOKS_AND_DOCUMENTS)
+            if (isChecked) {
+                binding.documentsDetails.apply {
+                    visibility = View.VISIBLE
+                    setText(items[DeclareItemType.BOOKS_AND_DOCUMENTS])
+                }
+            }
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.BOOKS_AND_DOCUMENTS)
+                    binding.documentsDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.BOOKS_AND_DOCUMENTS] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.BOOKS_AND_DOCUMENTS)
+                    binding.documentsDetails.visibility = View.GONE
+                    binding.documentsDetails.setText("")
+                    removeItems(DeclareItemType.BOOKS_AND_DOCUMENTS)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.furnitureChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.FURNITURE)
+            isChecked = items.contains(DeclareItemType.FURNITURE)
+            if (isChecked) {
+                binding.furnitureDetails.apply {
+                    visibility = View.VISIBLE
+                    setText(items[DeclareItemType.FURNITURE])
+                }
+            }
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.FURNITURE)
+                    binding.furnitureDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.FURNITURE] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.FURNITURE)
+                    binding.furnitureDetails.visibility = View.GONE
+                    binding.furnitureDetails.setText("")
+                    removeItems(DeclareItemType.FURNITURE)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.sportAndRecreationalChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.SPORT_AND_RECREATIONAL)
+            isChecked = items.contains(DeclareItemType.SPORT_AND_RECREATIONAL)
+            if (isChecked) {
+                binding.sportAndRecreationalDetails.apply {
+                    visibility = View.VISIBLE
+                    setText(items[DeclareItemType.SPORT_AND_RECREATIONAL])
+                }
+            }
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.SPORT_AND_RECREATIONAL)
+                    binding.sportAndRecreationalDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.SPORT_AND_RECREATIONAL] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.SPORT_AND_RECREATIONAL)
+                    binding.sportAndRecreationalDetails.visibility = View.GONE
+                    binding.sportAndRecreationalDetails.setText("")
+                    removeItems(DeclareItemType.SPORT_AND_RECREATIONAL)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.applianceChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.APPLIANCE)
+            isChecked = items.contains(DeclareItemType.APPLIANCE)
+            if (isChecked) {
+                binding.applianceDetails.apply {
+                    visibility = View.VISIBLE
+                    setText(items[DeclareItemType.APPLIANCE])
+                }
+            }
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.APPLIANCE)
+                    binding.applianceDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.APPLIANCE] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.APPLIANCE)
+                    binding.applianceDetails.visibility = View.GONE
+                    binding.applianceDetails.setText("")
+                    removeItems(DeclareItemType.APPLIANCE)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.necessaryChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.DAILY_NECESSARY)
+            isChecked = items.contains(DeclareItemType.DAILY_NECESSARY)
+            if (isChecked) {
+                binding.necessaryDetails.apply {
+                    visibility = View.VISIBLE
+                    setText(items[DeclareItemType.DAILY_NECESSARY])
+                }
+            }
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.DAILY_NECESSARY)
+                    binding.necessaryDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.DAILY_NECESSARY] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.DAILY_NECESSARY)
+                    binding.necessaryDetails.visibility = View.GONE
+                    binding.necessaryDetails.setText("")
+                    removeItems(DeclareItemType.DAILY_NECESSARY)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.mementosChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.MEMENTOS)
+            isChecked = items.contains(DeclareItemType.MEMENTOS)
+            if (isChecked) {
+                binding.mementosDetails.apply {
+                    visibility = View.VISIBLE
+                    setText(items[DeclareItemType.MEMENTOS])
+                }
+            }
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.MEMENTOS)
+                    binding.mementosDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.MEMENTOS] = ""
                 } else {
-                    parentFragment.removeItems(DeclareItemType.MEMENTOS)
+                    binding.mementosDetails.visibility = View.GONE
+                    binding.mementosDetails.setText("")
+                    removeItems(DeclareItemType.MEMENTOS)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.otherChoose.apply {
-            isChecked = parentFragment.findItem(DeclareItemType.OTHERS)
+            isChecked = items.contains(DeclareItemType.OTHERS)
+            if (isChecked) {
+                binding.otherDetails.apply {
+                    visibility = View.VISIBLE
+                  setText(items[DeclareItemType.OTHERS])
+                }
+            }
             setOnCheckedChangeListener {
                     _, isChecked ->
-                if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.OTHERS)
+                if (isChecked && binding.otherDetails.text.toString() == "") {
+                    binding.otherDetails.visibility = View.VISIBLE
+                    items[DeclareItemType.OTHERS] = ""
+                    binding.doneButton.isEnabled = false
                 } else {
-                    parentFragment.removeItems(DeclareItemType.OTHERS)
+                    binding.otherDetails.visibility = View.GONE
+                    binding.otherDetails.setText("")
+                    removeItems(DeclareItemType.OTHERS)
                 }
-                setEmptyCheck()
             }
         }
 
         binding.doneButton.apply {
-            setEmptyCheck()
             setOnClickListener {
+                update()
                 dismiss()
+            }
+        }
+    }
+
+    private fun configBindings() {
+        binding.clothingDetails.apply {
+            maxWidth = binding.clothingBox1.width
+            addTextChangedListener {
+                items[DeclareItemType.ClOTHING] = it.toString()
+            }
+        }
+
+        binding.documentsDetails.apply {
+            maxWidth = binding.documentsBox1.width
+            addTextChangedListener {
+                items[DeclareItemType.BOOKS_AND_DOCUMENTS] = it.toString()
+            }
+        }
+
+        binding.furnitureDetails.apply {
+            maxWidth = binding.furnitureBox1.width
+            addTextChangedListener {
+                items[DeclareItemType.FURNITURE] = it.toString()
+            }
+        }
+
+        binding.sportAndRecreationalDetails.apply {
+            maxWidth = binding.sportAndRecreationalBox1.width
+            addTextChangedListener {
+                items[DeclareItemType.SPORT_AND_RECREATIONAL] = it.toString()
+            }
+        }
+
+        binding.applianceDetails.apply {
+            maxWidth = binding.applianceBox1.width
+            addTextChangedListener {
+                items[DeclareItemType.APPLIANCE] = it.toString()
+            }
+        }
+
+        binding.mementosDetails.apply {
+            maxWidth = binding.mementosBox1.width
+            addTextChangedListener {
+                items[DeclareItemType.MEMENTOS] = it.toString()
+            }
+        }
+
+        binding.necessaryDetails.apply {
+            maxWidth = binding.necessaryBox1.width
+            addTextChangedListener {
+                items[DeclareItemType.DAILY_NECESSARY] = it.toString()
+            }
+        }
+
+        binding.otherDetails.apply {
+            maxWidth = binding.otherBox1.width
+            addTextChangedListener {
+                items[DeclareItemType.OTHERS] = it.toString()
+                binding.doneButton.isEnabled =
+                    !(it.toString() == "" && binding.otherChoose.isChecked)
             }
         }
     }

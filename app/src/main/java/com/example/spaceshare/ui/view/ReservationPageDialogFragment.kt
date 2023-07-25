@@ -54,7 +54,7 @@ class ReservationPageDialogFragment(
     private var startDate : Long? = 0
     private var endDate : Long? = 0
     private var unit: Double = 1.0
-    private var itemTypes: MutableList<DeclareItemType> = mutableListOf()
+    private var itemTypes: MutableMap<DeclareItemType, String> = mutableMapOf()
 
     companion object {
         private val TAG = this::class.simpleName
@@ -121,41 +121,17 @@ class ReservationPageDialogFragment(
     }
 
     private fun setEmptyCheck() {
-        binding.reserveBtn.isEnabled = !itemIsEmpty()
+        binding.reserveBtn.isEnabled = itemTypes.isNotEmpty()
     }
 
-    fun addItems(type: DeclareItemType) {
-        try {
-            val tmpResult = itemTypes.add(type)
-            Log.i(TAG, itemTypes.toString())
-            setEmptyCheck()
-            if (!tmpResult) {
-                throw Exception("Add item Error!")
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, e.toString())
-        }
+    fun updateItems(input: MutableMap<DeclareItemType, String>) {
+        itemTypes.clear()
+        itemTypes = input
+        setEmptyCheck()
     }
 
-    fun removeItems(type: DeclareItemType) {
-        try {
-            val tmpResult = itemTypes.remove(type)
-            Log.i(TAG, itemTypes.toString())
-            if (!tmpResult) {
-                throw Exception("Remove item Error!")
-            }
-            setEmptyCheck()
-        } catch (e: Exception) {
-            Log.e(TAG, e.toString())
-        }
-    }
-
-    fun itemIsEmpty(): Boolean {
-        return itemTypes.isEmpty()
-    }
-
-    fun findItem(type: DeclareItemType): Boolean {
-        return itemTypes.contains(type)
+    fun getItems(): MutableMap<DeclareItemType, String> {
+        return itemTypes.toMutableMap()
     }
 
     private fun configureBindings() {
@@ -250,7 +226,7 @@ class ReservationPageDialogFragment(
                 listingTitle=listing.title,
                 location=location!!,
                 previewPhoto=previewPhoto,
-                items = itemTypes)
+                items = itemTypes.mapKeys { (key, _) -> key.toString()}.toMap())
             reservationViewModel.reserveListing(reservation)
                 // Show a confirmation dialog
                 showDialogThenDismiss()
@@ -262,7 +238,7 @@ class ReservationPageDialogFragment(
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Reservation Confirmation")
         builder.setMessage("Your reservation is complete!")
-        builder.setPositiveButton("OK") { dialog, which ->
+        builder.setPositiveButton("OK") { _, _ ->
             // Dismiss this DialogFragment when the user confirms
             this.dismiss()
         }
