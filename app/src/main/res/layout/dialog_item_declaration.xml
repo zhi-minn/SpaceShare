@@ -19,8 +19,8 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:contentDescription="close"
-            android:background="@color/fui_transparent"
             android:src="@drawable/close"
+            android:background="@color/baby_blue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,7 +61,8 @@
                 android:text="@string/item_declaration_attention"
                 android:textSize="20sp"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                android:scrollHorizontally="false"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clothing_layout"
@@ -79,17 +80,17 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clothing_box1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/clothing_choose"
-                    android:layout_marginLeft="@dimen/standard_component_margin">
+                    android:layout_marginStart="@dimen/standard_component_margin">
 
                     <TextView
                         android:id="@+id/clothing_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/clothing"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -97,13 +98,16 @@
 
                     <EditText
                         android:id="@+id/clothing_details"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text=""
-                        android:hint="@string/explanation_for_clothing"
-                        android:gravity="center"
+                        android:hint="@string/details_hint"
+                        android:gravity="left"
                         android:textSize="20sp"
                         android:visibility="gone"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:inputType="textMultiLine"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/clothing_text"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -126,16 +130,18 @@
                 </CheckBox>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/documents_box1"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/documents_choose"
-                    android:layout_marginLeft="@dimen/standard_component_margin">
+                    android:layout_marginStart="@dimen/standard_component_margin">
+
                     <TextView
                         android:id="@+id/documents_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/books_and_documents"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -143,13 +149,16 @@
 
                     <EditText
                         android:id="@+id/documents_details"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text=""
-                        android:hint="@string/explanation_for_documents"
-                        android:gravity="center"
+                        android:hint="@string/details_hint"
+                        android:gravity="left"
                         android:textSize="20sp"
                         android:visibility="gone"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:inputType="textMultiLine"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/documents_text"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -172,16 +181,18 @@
                 </CheckBox>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/furniture_box1"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/furniture_choose"
-                    android:layout_marginLeft="@dimen/standard_component_margin">
+                    android:layout_marginStart="@dimen/standard_component_margin">
+
                     <TextView
                         android:id="@+id/furniture_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/small_furniture"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -189,13 +200,16 @@
 
                     <EditText
                         android:id="@+id/furniture_details"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text=""
-                        android:hint="@string/explanation_for_furniture"
-                        android:gravity="center"
+                        android:hint="@string/details_hint"
+                        android:gravity="left"
                         android:textSize="20sp"
                         android:visibility="gone"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:inputType="textMultiLine"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/furniture_text"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -218,16 +232,18 @@
                 </CheckBox>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/sport_and_recreational_box1"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/sport_and_recreational_choose"
-                    android:layout_marginLeft="@dimen/standard_component_margin">
+                    android:layout_marginStart="@dimen/standard_component_margin">
+
                     <TextView
                         android:id="@+id/sport_and_recreational_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/sport_and_recreational_equipment"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -235,13 +251,16 @@
 
                     <EditText
                         android:id="@+id/sport_and_recreational_details"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text=""
-                        android:hint="@string/sport_and_recreational_equipment_explanation"
-                        android:gravity="center"
+                        android:hint="@string/details_hint"
+                        android:gravity="left"
                         android:textSize="20sp"
                         android:visibility="gone"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:inputType="textMultiLine"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/sport_and_recreational_text"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -264,16 +283,18 @@
                 </CheckBox>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/appliance_box1"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/appliance_choose"
-                    android:layout_marginLeft="@dimen/standard_component_margin">
+                    android:layout_marginStart="@dimen/standard_component_margin">
+
                     <TextView
                         android:id="@+id/appliance_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/small_appliances"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -281,13 +302,16 @@
 
                     <EditText
                         android:id="@+id/appliance_details"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text=""
-                        android:hint="@string/your_appliances_explanation"
-                        android:gravity="center"
+                        android:hint="@string/details_hint"
+                        android:gravity="left"
                         android:textSize="20sp"
                         android:visibility="gone"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:inputType="textMultiLine"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/appliance_text"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -310,16 +334,18 @@
                 </CheckBox>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/necessary_box1"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/necessary_choose"
-                    android:layout_marginLeft="@dimen/standard_component_margin">
+                    android:layout_marginStart="@dimen/standard_component_margin">
+
                     <TextView
                         android:id="@+id/necessary_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/daily_necessaries"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -327,13 +353,16 @@
 
                     <EditText
                         android:id="@+id/necessary_details"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text=""
-                        android:hint="@string/daily_necessaries_explanation"
-                        android:gravity="center"
+                        android:hint="@string/details_hint"
+                        android:gravity="left"
                         android:textSize="20sp"
                         android:visibility="gone"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:inputType="textMultiLine"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/necessary_text"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -356,16 +385,18 @@
                 </CheckBox>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/mementos_box1"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/mementos_choose"
-                    android:layout_marginLeft="@dimen/standard_component_margin">
+                    android:layout_marginStart="@dimen/standard_component_margin">
+
                     <TextView
                         android:id="@+id/mementos_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/mementos_and_collectibles"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -373,13 +404,16 @@
 
                     <EditText
                         android:id="@+id/mementos_details"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text=""
-                        android:hint="@string/mementos_and_collectibles_explanation"
-                        android:gravity="center"
+                        android:hint="@string/details_hint"
+                        android:gravity="left"
                         android:textSize="20sp"
                         android:visibility="gone"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:inputType="textMultiLine"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/mementos_text"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -402,16 +436,18 @@
                 </CheckBox>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/other_box1"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/other_choose"
-                    android:layout_marginLeft="@dimen/standard_component_margin">
+                    android:layout_marginStart="@dimen/standard_component_margin">
+
                     <TextView
                         android:id="@+id/other_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/others"
-                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sport_and_recreational_equipment"
+                        android:gravity="left"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -419,13 +455,16 @@
 
                     <EditText
                         android:id="@+id/other_details"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text=""
-                        android:hint="@string/other_explanation"
-                        android:gravity="center"
+                        android:hint="@string/other_hint"
+                        android:gravity="left"
                         android:textSize="20sp"
                         android:visibility="gone"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:inputType="textMultiLine"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/other_text"
                         app:layout_constraintBottom_toBottomOf="parent"/>

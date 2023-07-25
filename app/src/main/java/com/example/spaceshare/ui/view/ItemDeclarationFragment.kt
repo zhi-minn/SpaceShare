@@ -182,4 +182,10 @@ class ItemDeclarationFragment(
             }
         }
     }
+
+    private fun configBindings() {
+        binding.clothingDetails.apply {
+            // maxWidth =
+        }
+    }
 }
