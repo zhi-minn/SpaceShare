@@ -46,7 +46,7 @@ class ListingViewModel @Inject constructor(
             val listings = listingRepo.getUserListings(userId)
             Log.i("Listings", "Fetched $listings")
             _listingsLiveData.value = listings
-            filterListings(curQuer
+            filterListings(curQuery, curCriteria)
         }
     }
 

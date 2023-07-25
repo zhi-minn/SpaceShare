@@ -5,6 +5,7 @@ import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.data.repository.ReservationRepository
 import com.example.spaceshare.models.Booking
 import com.example.spaceshare.models.Reservation
+import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
 import com.example.spaceshare.models.Chat
 import com.google.firebase.Timestamp
@@ -42,10 +43,12 @@ class ReservationRepoImpl @Inject constructor(
                 listingRepo.updateListing(listing)
             }
 
-            reservationsCollection.add(reservation)
+            reservationsCollection
+                .document(reservation.id)
+                .set(reservation)
                 .addOnSuccessListener { documentReference ->
-                    Log.d("reservations", "Added reservation with id ${documentReference.id}")
-                    deferred.complete(documentReference.id)
+                    Log.d("reservations", "Added reservation with id ${reservation.id}")
+                    deferred.complete(reservation.id)
                 }
                 .addOnFailureListener { e ->
                     Log.w("reservations", "Error adding document", e)
@@ -145,29 +148,29 @@ class ReservationRepoImpl @Inject constructor(
     }
 
     override suspend fun setReservationStatus(reservation : Reservation, status : ReservationStatus) {
-        return withContext(Dispatchers.IO) {
-            val deferred = CompletableDeferred<String>()
-
-            val listing = listingRepo.getListing(reservation.listingId.toString())
-            if (listing != null) {
-                val newBooking = Booking(reservation.startDate, reservation.endDate, reservation.spaceRequested)
-                listing.bookings.add(newBooking)
-                listingRepo.updateListing(listing)
-            }
-
-            reservationsCollection.add(reservation)
-                .addOnSuccessListener { documentReference ->
-                    Log.d("reservations", "Added reservation with id ${documentReference.id}")
-                    deferred.complete(documentReference.id)
-                }
-                .addOnFailureListener { e ->
-                    Log.w("reservations", "Error adding document", e)
-                    deferred.completeExceptionally(e)
-                }
-
-            deferred.await()
-        }
+//        return withContext(Dispatchers.IO) {
+//            val deferred = CompletableDeferred<String>()
+//
+//            val listing = listingRepo.getListing(reservation.listingId.toString())
+//            if (listing != null) {
+//                val newBooking = Booking(reservation.startDate, reservation.endDate, reservation.spaceRequested)
+//                listing.bookings.add(newBooking)
+//                listingRepo.updateListing(listing)
+//            }
+//
+//            reservationsCollection.add(reservation)
+//                .addOnSuccessListener { documentReference ->
+//                    Log.d("reservations", "Added reservation with id ${documentReference.id}")
+//                    deferred.complete(documentReference.id)
+//                }
+//                .addOnFailureListener { e ->
+//                    Log.w("reservations", "Error adding document", e)
+//                    deferred.completeExceptionally(e)
+//                }
+//
+//            deferred.await()
     }
+
 
 //    override suspend fun fetchListings(reservations: List<Reservation>?): List<Listing> {
 //        val listingIds = reservations?.map { i -> i.listingId }
