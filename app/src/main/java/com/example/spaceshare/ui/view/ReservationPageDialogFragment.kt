@@ -319,7 +319,7 @@ class ReservationPageDialogFragment(
 //             reservationViewModel.reserveListing(reservation)
 //                 // Show a confirmation dialog
 //                 showDialogThenDismiss()
-//             }
+             }
 
         }
     }
