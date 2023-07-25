@@ -48,15 +48,16 @@ import com.example.spaceshare.utils.MathUtil
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class ReservationPageDialogFragment(
     private val listing: Listing,
     private val searchViewModel: SearchViewModel?
 ): DialogFragment() {
-    private var startDate : Long? = 0
-    private var endDate : Long? = 0
-    private var unit: Double = 1.0
+    private var startDate : Long? = null
+    private var endDate : Long? = null
+    private var unit: Double? = 1.0
 
     private var auth = FirebaseAuth.getInstance()
 
@@ -74,6 +75,7 @@ class ReservationPageDialogFragment(
     private val realTimeDB = Firebase.database
     private val baseMessagesRef = realTimeDB.reference.child("messages")
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -106,13 +108,41 @@ class ReservationPageDialogFragment(
     }
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, R.style.GenericDialogStyle)
+
+        if(searchViewModel != null) {
+            searchViewModel.let { model ->
+                model.startTime.value?.let { startTimeInMillis ->
+                    startDate = startTimeInMillis
+                }
+
+                model.endTime.value?.let { endTimeInMillis ->
+                    endDate = endTimeInMillis
+                }
+
+                model.spaceRequired.value?.let { spaceRequiredValue ->
+                    unit = spaceRequiredValue
+                }
+            }
+        } else {
+            // if searchViewModel is null, use current date for startDate
+            startDate = System.currentTimeMillis()
+
+            // set endDate to 30 days from now
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_MONTH, 30)
+            endDate = calendar.timeInMillis
+
+            // set default spaceRequired to 1.0
+            unit = 1.0
+        }
+
         val sizeDialog = Dialog(requireContext())
         sizeDialog.setContentView(R.layout.dialog_size_picker)
         sizeDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
-
     }
 
     object GeocoderUtil {
@@ -135,6 +165,56 @@ class ReservationPageDialogFragment(
     }
 
 
+//    private fun configureBindings() {
+//        binding.viewPagerListingImages.adapter =
+//            ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
+//
+//        binding.location.text = listing.location?.let { location ->
+//            GeocoderUtil.getCityName(requireContext(), location.latitude, location.longitude)
+//        }
+//
+//        binding.houseName.text = listing.title
+//
+//        val formatter = SimpleDateFormat("MMM dd", Locale.getDefault())
+//        if (searchViewModel?.startTime?.value?.toInt() == 0) {
+//            val cal = Calendar.getInstance()
+//
+//            // Get current date
+//            val curDate = formatter.format(cal.time)
+//
+//            // Add 30 days to current date
+//            cal.add(Calendar.DATE, 30)
+//            val curDatePlus30Days = formatter.format(cal.time)
+//
+//            binding.pickedDate.text = "$curDate - $curDatePlus30Days"
+//        } else {
+//            // Convert the startTime and endTime from Long to Date and format them
+//            val startDate = Date(searchViewModel?.startTime?.value!!)
+//            val endDate = Date(searchViewModel.endTime.value!!)
+//
+//            val formattedStartDate = formatter.format(startDate)
+//            val formattedEndDate = formatter.format(endDate)
+//
+//            binding.pickedDate.text = "$formattedStartDate - $formattedEndDate"
+//        }
+//
+//        // Handle spaceRequired
+//        // Chang: This should be stored in ReservationViewModel
+//        if (searchViewModel?.spaceRequired?.value?.toInt() == 0) {
+//            binding.lugguageSize.text = "1.0 cubic"
+//        } else {
+//            binding.lugguageSize.text = "${searchViewModel.spaceRequired.value} cubic"
+//        }
+//
+//        binding.dates.setOnClickListener {
+//            binding.dateEdit.performClick()
+//        }
+//
+//        binding.sizes.setOnClickListener {
+//            binding.sizeEdit.performClick()
+//        }
+//    }
+
     private fun configureBindings() {
         binding.viewPagerListingImages.adapter =
             ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
@@ -146,7 +226,13 @@ class ReservationPageDialogFragment(
         binding.houseName.text = listing.title
 
         val formatter = SimpleDateFormat("MMM dd", Locale.getDefault())
-        if (searchViewModel?.startTime?.value?.toInt() == 0) {
+
+        // Get date range from ReservationViewModel
+//        val startDate = reservationViewModel.startDate.value
+//        val endDate = reservationViewModel.endDate.value
+
+        // Handle dates
+        if (startDate == 0L) {
             val cal = Calendar.getInstance()
 
             // Get current date
@@ -158,23 +244,24 @@ class ReservationPageDialogFragment(
 
             binding.pickedDate.text = "$curDate - $curDatePlus30Days"
         } else {
-            // Convert the startTime and endTime from Long to Date and format them
-            val startDate = Date(searchViewModel?.startTime?.value!!)
-            val endDate = Date(searchViewModel.endTime.value!!)
-
-            val formattedStartDate = formatter.format(startDate)
-            val formattedEndDate = formatter.format(endDate)
+            // Convert the startDate and endDate from Long to Date and format them
+            val formattedStartDate = formatter.format(startDate?.let { Date(it) })
+            val formattedEndDate = formatter.format(endDate?.let { Date(it) })
 
             binding.pickedDate.text = "$formattedStartDate - $formattedEndDate"
         }
 
         // Handle spaceRequired
-        // Chang: This should be stored in ReservationViewModel
-        if (searchViewModel?.spaceRequired?.value?.toInt() == 0) {
+        // Get spaceRequired from ReservationViewModel
+//        val spaceRequired = reservationViewModel.spaceRequired.value
+
+        if (unit == 0.0) {
+            unit = 1.0
             binding.lugguageSize.text = "1.0 cubic"
         } else {
-            binding.lugguageSize.text = "${searchViewModel.spaceRequired.value} cubic"
+            binding.lugguageSize.text = "$unit cubic"
         }
+
 
         binding.dates.setOnClickListener {
             binding.dateEdit.performClick()
@@ -184,6 +271,7 @@ class ReservationPageDialogFragment(
             binding.sizeEdit.performClick()
         }
     }
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -202,7 +290,7 @@ class ReservationPageDialogFragment(
             // Calculate total cost for host analytics (since price is subject to possible change)
             val totalTime = Date(endDate!!).time - Date(startDate!!).time
             val totalDays = totalTime / (1000 * 60 * 60 * 24) + 1
-            val totalCost = MathUtil.roundToTwoDecimalPlaces(listing.price * unit * totalDays)
+            val totalCost = MathUtil.roundToTwoDecimalPlaces(listing.price * unit!! * totalDays)
 
             val location = listing.location?.let { location ->
                 com.example.spaceshare.utils.GeocoderUtil.getGeneralLocation(location.latitude, location.longitude)
@@ -219,24 +307,28 @@ class ReservationPageDialogFragment(
 
             val msgText = binding.messageToHost.text.toString()
 
-            val reservation = Reservation(
-                hostId=listing.hostId,
-                clientId=clientId,
-                listingId=listing.id,
-                totalCost = totalCost,
-                startDate=Timestamp(Date(startDate!!)),
-                endDate=Timestamp(Date(endDate!!)),
-                spaceRequested=unit,
-                status= PENDING,
-                listingTitle=listing.title,
-                location=location!!,
-                previewPhoto=previewPhoto,
-                clientFirstName=client.firstName,
-                clientLastName=client.lastName,
-                clientPhoto=client.photoPath,
-                message=msgText)
+            val reservation = unit?.let { it1 ->
+                Reservation(
+                    hostId=listing.hostId,
+                    clientId=clientId,
+                    listingId=listing.id,
+                    totalCost = totalCost,
+                    startDate=Timestamp(Date(startDate!!)),
+                    endDate=Timestamp(Date(endDate!!)),
+                    spaceRequested= it1,
+                    status= PENDING,
+                    listingTitle=listing.title,
+                    location=location!!,
+                    previewPhoto=previewPhoto,
+                    clientFirstName=client.firstName,
+                    clientLastName=client.lastName,
+                    clientPhoto=client.photoPath,
+                    message=msgText)
+            }
 
-            reservationViewModel.reserveListing(reservation)
+            if (reservation != null) {
+                reservationViewModel.reserveListing(reservation)
+            }
 
             val message = Message(
                 text = msgText,
