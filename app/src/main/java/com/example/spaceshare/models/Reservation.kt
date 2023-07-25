@@ -2,6 +2,7 @@ package com.example.spaceshare.models
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ServerTimestamp
+import java.util.UUID
 
 enum class ReservationStatus {
     PENDING,
@@ -20,7 +21,7 @@ inline fun <reified T : Enum<T>> T.toInt(): Int {
 }
 
 data class Reservation(
-    val id: String? = null,
+    val id: String = UUID.randomUUID().toString(),
     val hostId: String? = null,
     val clientId: String? = null,
     val listingId: String? = null,

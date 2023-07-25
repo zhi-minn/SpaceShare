@@ -144,6 +144,31 @@ class ReservationRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun setReservationStatus(reservation : Reservation, status : ReservationStatus) {
+        return withContext(Dispatchers.IO) {
+            val deferred = CompletableDeferred<String>()
+
+            val listing = listingRepo.getListing(reservation.listingId.toString())
+            if (listing != null) {
+                val newBooking = Booking(reservation.startDate, reservation.endDate, reservation.spaceRequested)
+                listing.bookings.add(newBooking)
+                listingRepo.updateListing(listing)
+            }
+
+            reservationsCollection.add(reservation)
+                .addOnSuccessListener { documentReference ->
+                    Log.d("reservations", "Added reservation with id ${documentReference.id}")
+                    deferred.complete(documentReference.id)
+                }
+                .addOnFailureListener { e ->
+                    Log.w("reservations", "Error adding document", e)
+                    deferred.completeExceptionally(e)
+                }
+
+            deferred.await()
+        }
+    }
+
 //    override suspend fun fetchListings(reservations: List<Reservation>?): List<Listing> {
 //        val listingIds = reservations?.map { i -> i.listingId }
 //        val tasks = mutableListOf<Task<Listing>>()

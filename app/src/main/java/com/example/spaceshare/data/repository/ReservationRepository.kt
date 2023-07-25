@@ -3,6 +3,7 @@ package com.example.spaceshare.data.repository
 import com.example.spaceshare.models.Chat
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
+import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
 import com.google.android.gms.tasks.Task
 
@@ -17,4 +18,6 @@ interface ReservationRepository {
     suspend fun fetchUser(id : String) : User?
 
     suspend fun setChat(chat : Chat) : String
+
+    suspend fun setReservationStatus(reservation : Reservation, status : ReservationStatus)
 }

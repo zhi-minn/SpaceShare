@@ -29,6 +29,9 @@ class ReservationViewModel @Inject constructor(
     private val _userInfoLiveData: MutableLiveData<User> = MutableLiveData()
     val userInfoLiveData: LiveData<User> = _userInfoLiveData
 
+    private val _setStatusSuccess: MutableLiveData<Boolean> = MutableLiveData()
+    val setStatusSuccess: LiveData<Boolean> = _setStatusSuccess
+
     fun fetchReservations(user: User) {
         viewModelScope.launch {
             val reservations = repo.fetchReservations(user, isHostMode.value ?: false)
@@ -70,6 +73,19 @@ class ReservationViewModel @Inject constructor(
 //                _chat.value = false
 //                null
 //            }
+        }
+    }
+
+    fun setReservationStatus(reservation : Reservation, status : ReservationStatus) {
+        viewModelScope.launch {
+            try {
+                repo.setReservationStatus(reservation, status)
+                _listingReserved.value = true
+
+            } catch (e: Exception) {
+                _listingReserved.value = false
+                null
+            }
         }
     }
 }
