@@ -1,6 +1,5 @@
 package com.example.spaceshare.ui.view
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,15 +14,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.FragmentReservationBinding
-import com.example.spaceshare.manager.SharedPreferencesManager.isHostMode
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
+import com.example.spaceshare.models.toInt
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 //import com.example.spaceshare.utils.ImageAdapter
 import com.google.firebase.auth.FirebaseAuth
@@ -39,8 +37,6 @@ import com.example.spaceshare.models.ReservationStatus.CANCELLED
 import com.example.spaceshare.models.ReservationStatus.COMPLETED
 import com.example.spaceshare.models.ReservationStatus.DECLINED
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
-import com.google.firebase.storage.FirebaseStorage
-import java.util.Objects
 
 @AndroidEntryPoint
 class ReservationFragment : Fragment() {
@@ -90,6 +86,7 @@ class ReservationFragment : Fragment() {
             displayReservations()
         }
 
+        // Fetch reservations data here or wherever appropriate in your app
         viewModel.fetchReservations(User(auth.currentUser!!.uid, "first_name", "last_name"))
 
     }
@@ -110,95 +107,25 @@ class ReservationFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun fetchReservations() {
+        viewModel.reservationLiveData.observe(viewLifecycleOwner) { reservations ->
+                allReservations = reservations
+            }
+        viewModel.fetchReservations(User("0MBZORgi02MOPeMjf2iNIs7KU2z1", "first_name", "last_name"))
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun displayReservations() {
-        if (isHostMode.value!!) {
-            val displayList = if (showOnlyPending) {
-                allReservations.filter { it.status == ReservationStatus.PENDING }
-            } else {
-                allReservations
-            }
-
-            binding.reservationPage.removeAllViews()
-
-            for (reservation in displayList) {
-
-                val cardView = layoutInflater.inflate(R.layout.host_reservation_items, null) as CardView
-                val name: TextView = cardView.findViewById(R.id.host_reservation_name)
-                val title: TextView = cardView.findViewById(R.id.host_reservation_title)
-                val period: TextView = cardView.findViewById(R.id.host_reservation_period)
-                val spaceRequested: TextView = cardView.findViewById(R.id.host_reservation_space_required)
-                val status: TextView = cardView.findViewById(R.id.host_reservation_status)
-
-                name.text = "Request From: ${reservation.clientFirstName}"
-                title.text = reservation.listingTitle
-                spaceRequested.text = "Space Required: ${reservation.spaceRequested.toString()} cubic"
-
-                if (reservation.startDate != null || reservation.endDate != null) {
-                    period.text = "Request Period: ${                        formatDatePeriod(
-                        reservation.startDate ?: Timestamp(0, 0),
-                        reservation.endDate ?: Timestamp(0, 0)
-                    )}"
-
-                } else {
-                    period.text = "N/A"
-                }
-                status.text = when (reservation.status) {
-                    ReservationStatus.PENDING -> "Waiting for approval"
-                    ReservationStatus.APPROVED -> "Approved"
-                    ReservationStatus.DECLINED -> "Declined"
-                    ReservationStatus.CANCELLED -> "Cancelled"
-                    ReservationStatus.COMPLETED -> "Completed"
-                    else -> "ERROR"
-                }
-
-                // user profile photo
-                val clientPhoto : String? = reservation.clientPhoto
-                if (clientPhoto != null) {
-                    val storageRef =
-                        FirebaseStorage.getInstance().reference.child("profiles/${clientPhoto}")
-
-                    Glide.with(requireContext())
-                        .load(storageRef)
-                        .into(cardView.findViewById(R.id.profileImage))
-                }
-
-                // Add the CardView to the LinearLayout
-                val layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                layoutParams.setMargins(8, 32, 8, 32)
-                cardView.layoutParams = layoutParams
-                cardView.radius = 25.0F
-
-                cardView.setOnClickListener{
-                    val hostReservationDialogFragment = HostReservationDialogFragment(reservation)
-//            val bundle = Bundle().apply {
-//                putInt("reservationId", reservationId)
-//            }
-//            dialogFragment.arguments = bundle
-//            reservationPageDialogFragment.show(supportFragmentManager, "ReservationDetailDialogFragment")
-                    hostReservationDialogFragment.show(
-                        Objects.requireNonNull(childFragmentManager),
-                        "HostReservationDialogFragment")
-                }
-
-
-                binding.reservationPage.addView(cardView)
-            }
+        val displayList = if (showOnlyPending) {
+            allReservations.filter { it.status == PENDING }
         } else {
-            val displayList = if (showOnlyPending) {
-                allReservations.filter { it.status == PENDING }
-            } else {
-                allReservations
-            }
+            allReservations
+        }
 
             binding.reservationPage.removeAllViews()
 
             for (reservation in displayList) {
-
                 val cardView = layoutInflater.inflate(R.layout.reservation_item, null) as CardView
                 val viewPager: ViewPager2 =
                     cardView.findViewById(R.id.view_pager_reservation_images)
@@ -229,7 +156,7 @@ class ReservationFragment : Fragment() {
                 }
 
                 if (reservation.previewPhoto != null) {
-                    val photoAdapter: MutableList<String> = mutableListOf(reservation.previewPhoto)
+                    val photoAdapter : MutableList<String> = mutableListOf(reservation.previewPhoto)
                     viewPager.adapter =
                         ImageAdapter(photoAdapter.map { ImageModel(imagePath = it) })
                 }
@@ -244,7 +171,5 @@ class ReservationFragment : Fragment() {
                 cardView.radius = 25.0F
                 binding.reservationPage.addView(cardView)
             }
-        }
     }
-
 }

@@ -56,14 +56,14 @@
                 android:id="@+id/divider5"
                 style="@style/HorizontalDivider"
                 android:layout_width="match_parent"
-                android:layout_height="13dp"
+                android:layout_height="10dp"
                 android:layout_marginTop="0dp"
                 android:scaleY="0.5"
                 app:layout_constraintTop_toBottomOf="@id/price" />
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="600dp"
                 android:layout_margin="10dp"
                 android:translationY="0dp">
 

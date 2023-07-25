@@ -4,15 +4,14 @@ package com.example.spaceshare.ui.view
 import android.app.Dialog
 import android.content.Context
 import android.location.Geocoder
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -20,12 +19,10 @@ import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.DialogReservationPageBinding
-import com.example.spaceshare.models.Chat
+import com.example.spaceshare.enums.DeclareItemType
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
-import com.example.spaceshare.models.Message
 import com.example.spaceshare.models.Reservation
-import com.example.spaceshare.models.toInt
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.google.android.material.datepicker.CalendarConstraints
@@ -39,15 +36,15 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.Objects
 import javax.inject.Inject
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 
 import com.example.spaceshare.models.ReservationStatus.PENDING
-import com.example.spaceshare.models.User
 import com.example.spaceshare.utils.GeocoderUtil
 import com.example.spaceshare.utils.MathUtil
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ktx.database
 
 @AndroidEntryPoint
 class ReservationPageDialogFragment(
@@ -57,8 +54,7 @@ class ReservationPageDialogFragment(
     private var startDate : Long? = 0
     private var endDate : Long? = 0
     private var unit: Double = 1.0
-
-    private var auth = FirebaseAuth.getInstance()
+    private var itemTypes: MutableList<DeclareItemType> = mutableListOf()
 
     companion object {
         private val TAG = this::class.simpleName
@@ -67,24 +63,15 @@ class ReservationPageDialogFragment(
     @Inject
     lateinit var reservationViewModel: ReservationViewModel
 
+    private lateinit var auth: FirebaseAuth
+
     private lateinit var binding: DialogReservationPageBinding
-
-    private lateinit var client : User
-
-    private val realTimeDB = Firebase.database
-    private val baseMessagesRef = realTimeDB.reference.child("messages")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DialogReservationPageBinding.inflate(inflater, container, false)
-
-        reservationViewModel.userInfoLiveData.observe(viewLifecycleOwner) { user ->
-            client = user
-        }
-        reservationViewModel.fetchUserInfo(auth.currentUser!!.uid)
-
         // Get a reference to the Toolbar
         val toolbar: Toolbar = binding.root.findViewById(R.id.confirmPayToolbar)
         val toolbarTitle: TextView = binding.root.findViewById(R.id.toolbar_title)
@@ -112,7 +99,6 @@ class ReservationPageDialogFragment(
         val sizeDialog = Dialog(requireContext())
         sizeDialog.setContentView(R.layout.dialog_size_picker)
         sizeDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
-
     }
 
     object GeocoderUtil {
@@ -134,6 +120,43 @@ class ReservationPageDialogFragment(
         }
     }
 
+    private fun setEmptyCheck() {
+        binding.reserveBtn.isEnabled = !itemIsEmpty()
+    }
+
+    fun addItems(type: DeclareItemType) {
+        try {
+            val tmpResult = itemTypes.add(type)
+            Log.i(TAG, itemTypes.toString())
+            setEmptyCheck()
+            if (!tmpResult) {
+                throw Exception("Add item Error!")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
+        }
+    }
+
+    fun removeItems(type: DeclareItemType) {
+        try {
+            val tmpResult = itemTypes.remove(type)
+            Log.i(TAG, itemTypes.toString())
+            if (!tmpResult) {
+                throw Exception("Remove item Error!")
+            }
+            setEmptyCheck()
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
+        }
+    }
+
+    fun itemIsEmpty(): Boolean {
+        return itemTypes.isEmpty()
+    }
+
+    fun findItem(type: DeclareItemType): Boolean {
+        return itemTypes.contains(type)
+    }
 
     private fun configureBindings() {
         binding.viewPagerListingImages.adapter =
@@ -186,38 +209,34 @@ class ReservationPageDialogFragment(
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun configureButtons() {
-
         binding.dateEdit.setOnClickListener { openDatePicker() }
         binding.dates.setOnClickListener { openDatePicker() }
 
         binding.sizeEdit.setOnClickListener { openSizePicker() }
         binding.sizes.setOnClickListener { openSizePicker() }
 
-        binding.reserveBtn.setOnClickListener {
-            auth = FirebaseAuth.getInstance()
-            val clientId = auth.currentUser?.uid
+        binding.declareButton.setOnClickListener {
+            val itemDeclarationFragment = ItemDeclarationFragment(this)
+            itemDeclarationFragment.show(Objects.requireNonNull(childFragmentManager), "ItemDeclarationFragment")
+        }
 
-            // Calculate total cost for host analytics (since price is subject to possible change)
-            val totalTime = Date(endDate!!).time - Date(startDate!!).time
-            val totalDays = totalTime / (1000 * 60 * 60 * 24) + 1
-            val totalCost = MathUtil.roundToTwoDecimalPlaces(listing.price * unit * totalDays)
+        binding.reserveBtn.apply {
+            setEmptyCheck()
+            setOnClickListener {
+                auth = FirebaseAuth.getInstance()
+                val clientId = auth.currentUser?.uid
+
+                // Calculate total cost for host analytics (since price is subject to possible change)
+                val totalTime = Date(endDate!!).time - Date(startDate!!).time
+                val totalDays = totalTime / (1000 * 60 * 60 * 24) + 1
+                val totalCost = MathUtil.roundToTwoDecimalPlaces(listing.price * unit * totalDays)
 
             val location = listing.location?.let { location ->
                 com.example.spaceshare.utils.GeocoderUtil.getGeneralLocation(location.latitude, location.longitude)
             }
 
             val previewPhoto = listing.photos[0]
-
-            if (startDate!!.toInt() == 0) {
-                val cal = Calendar.getInstance()
-                startDate = cal.timeInMillis
-                cal.add(Calendar.DATE, 30)
-                endDate = cal.timeInMillis
-            }
-
-            val msgText = binding.messageToHost.text.toString()
 
             val reservation = Reservation(
                 hostId=listing.hostId,
@@ -231,38 +250,11 @@ class ReservationPageDialogFragment(
                 listingTitle=listing.title,
                 location=location!!,
                 previewPhoto=previewPhoto,
-                clientFirstName=client.firstName,
-                clientLastName=client.lastName,
-                clientPhoto=client.photoPath,
-                message=msgText)
-
+                items = itemTypes)
             reservationViewModel.reserveListing(reservation)
-
-            val message = Message(
-                text = msgText,
-                senderName = "${client.firstName} ${client.lastName}",
-                senderId = clientId!!,
-                profilePhotoUrl = client.photoPath,
-                imageUrl = null
-                )
-
-//            val baseMessagesRef = realTimeDB.reference.child("messages")
-            baseMessagesRef.push().setValue(message)
-
-            val chat = Chat(
-                photoURL = previewPhoto,
-                hostId = listing.hostId,
-                associatedListingId = listing.id,
-                title = listing.title,
-                lastMessage = message,
-                members = listOf(listing.hostId!!, clientId),
-                createdAt = Timestamp.now()
-            )
-
-            reservationViewModel.sendMessage(chat)
-
-            // Show a confirmation dialog
-            showDialogThenDismiss()
+                // Show a confirmation dialog
+                showDialogThenDismiss()
+            }
         }
     }
 
