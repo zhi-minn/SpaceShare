@@ -86,6 +86,7 @@ class ReservationFragment : Fragment() {
             displayReservations()
         }
 
+        // Fetch reservations data here or wherever appropriate in your app
         viewModel.fetchReservations(User(auth.currentUser!!.uid, "first_name", "last_name"))
 
     }
@@ -104,6 +105,14 @@ class ReservationFragment : Fragment() {
                 displayReservations()
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun fetchReservations() {
+        viewModel.reservationLiveData.observe(viewLifecycleOwner) { reservations ->
+                allReservations = reservations
+            }
+        viewModel.fetchReservations(User("0MBZORgi02MOPeMjf2iNIs7KU2z1", "first_name", "last_name"))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -163,6 +172,14 @@ class ReservationFragment : Fragment() {
                 cardView.radius = 25.0F
                 binding.reservationPage.addView(cardView)
             }
+
+
+
+
+
+
+
+
     }
 
 }

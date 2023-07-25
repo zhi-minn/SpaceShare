@@ -25,18 +25,13 @@ data class Reservation(
     val clientId: String? = null,
     val listingId: String? = null,
     val totalCost: Double = 0.0,
-    @ServerTimestamp
     val startDate: Timestamp? = null,
-    @ServerTimestamp
     val endDate: Timestamp? = null,
     val spaceRequested: Double = 0.0,
     val status: ReservationStatus = ReservationStatus.PENDING,
     val location: String = "",
     val listingTitle: String = "",
     val previewPhoto: String? = null,
-    val clientFirstName: String? = null,
-    val clientLastName: String? = null,
-    val clientPhoto: String? = null,
 //    val rating:Int? = null
 ) {
 }

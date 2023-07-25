@@ -25,9 +25,6 @@ class ReservationViewModel @Inject constructor(
     private val _listingReserved: MutableLiveData<Boolean> = MutableLiveData()
     val listingReserved: LiveData<Boolean> = _listingReserved
 
-    private val _userInfoLiveData: MutableLiveData<User> = MutableLiveData()
-    val userInfoLiveData: LiveData<User> = _userInfoLiveData
-
     fun fetchReservations(user: User) {
         viewModelScope.launch {
             val reservations = repo.fetchReservations(user, isHostMode.value ?: false)
@@ -49,13 +46,6 @@ class ReservationViewModel @Inject constructor(
                 _listingReserved.value = false
                 null
             }
-        }
-    }
-
-    fun fetchUserInfo(id: String) {
-        viewModelScope.launch {
-            val info = repo.fetchUser(id)
-            _userInfoLiveData.value = info!!
         }
     }
 }
