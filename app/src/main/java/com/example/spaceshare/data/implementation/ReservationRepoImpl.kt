@@ -148,27 +148,19 @@ class ReservationRepoImpl @Inject constructor(
     }
 
     override suspend fun setReservationStatus(reservation : Reservation, status : ReservationStatus) {
-//        return withContext(Dispatchers.IO) {
-//            val deferred = CompletableDeferred<String>()
-//
-//            val listing = listingRepo.getListing(reservation.listingId.toString())
-//            if (listing != null) {
-//                val newBooking = Booking(reservation.startDate, reservation.endDate, reservation.spaceRequested)
-//                listing.bookings.add(newBooking)
-//                listingRepo.updateListing(listing)
-//            }
-//
-//            reservationsCollection.add(reservation)
-//                .addOnSuccessListener { documentReference ->
-//                    Log.d("reservations", "Added reservation with id ${documentReference.id}")
-//                    deferred.complete(documentReference.id)
-//                }
-//                .addOnFailureListener { e ->
-//                    Log.w("reservations", "Error adding document", e)
-//                    deferred.completeExceptionally(e)
-//                }
-//
-//            deferred.await()
+        val deferred = CompletableDeferred<Boolean>()
+        reservation.status = status
+        reservationsCollection.document(reservation.id)
+            .set(reservation)
+            .addOnSuccessListener {
+                Log.i(TAG, "Update success for Reservation with id ${reservation.id}")
+                deferred.complete(true)
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Failed to update Reservation: ${e.message}", e)
+                deferred.complete(false)
+            }
+        deferred.await()
     }
 
 

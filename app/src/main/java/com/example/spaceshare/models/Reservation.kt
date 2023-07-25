@@ -31,7 +31,7 @@ data class Reservation(
     @ServerTimestamp
     val endDate: Timestamp? = null,
     val spaceRequested: Double = 0.0,
-    val status: ReservationStatus = ReservationStatus.PENDING,
+    var status: ReservationStatus = ReservationStatus.PENDING,
     val location: String = "",
     val listingTitle: String = "",
     val previewPhoto: String? = null,

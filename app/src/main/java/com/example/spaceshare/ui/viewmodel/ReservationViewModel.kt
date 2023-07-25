@@ -80,10 +80,10 @@ class ReservationViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 repo.setReservationStatus(reservation, status)
-                _listingReserved.value = true
+                _setStatusSuccess.value = true
 
             } catch (e: Exception) {
-                _listingReserved.value = false
+                _setStatusSuccess.value = false
                 null
             }
         }

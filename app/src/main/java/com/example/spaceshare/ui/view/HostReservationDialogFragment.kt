@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -15,8 +16,10 @@ import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogHostReservationBinding
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
+import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.ui.viewmodel.MessagesViewModel
 import com.example.spaceshare.ui.viewmodel.ProfileViewModel
+import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +39,9 @@ class HostReservationDialogFragment(
     companion object {
         private val TAG = this::class.simpleName
     }
+
+    @Inject
+    lateinit var reservationViewModel: ReservationViewModel
 
     @Inject
     lateinit var messagesViewModel: MessagesViewModel
@@ -136,16 +142,14 @@ class HostReservationDialogFragment(
         }
 
         binding.acceptBtn.setOnClickListener {
-//            reservation.status = ReservationStatus.APPROVED // set status to approved
-//            updateReservationStatus(reservation) // update the status in the backend/database
-//            Toast.makeText(requireContext(), "You have accepted the request", Toast.LENGTH_LONG).show()
+            val status = ReservationStatus.APPROVED
+            reservationViewModel.setReservationStatus(reservation = reservation, status = status)
             showDialogThenDismiss(true)
         }
 
         binding.rejectBtn.setOnClickListener {
-//            reservation.status = ReservationStatus.DECLINED // set status to declined
-//            updateReservationStatus(reservation) // update the status in the backend/database
-//            Toast.makeText(requireContext(), "You have rejected the request", Toast.LENGTH_LONG).show()
+            val status = ReservationStatus.DECLINED
+            reservationViewModel.setReservationStatus(reservation = reservation, status = status)
             showDialogThenDismiss(false)
         }
     }
@@ -157,7 +161,7 @@ class HostReservationDialogFragment(
             builder.setMessage("You have accepted the request!")
         }
         else{
-            builder.setMessage("You have rejected the request!")
+            builder.setMessage("You have declined the request!")
         }
 
         builder.setPositiveButton("OK") { dialog, which ->
