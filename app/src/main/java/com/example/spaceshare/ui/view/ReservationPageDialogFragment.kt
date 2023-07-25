@@ -200,6 +200,13 @@ class ReservationPageDialogFragment(
 
             val previewPhoto = listing.photos[0]
 
+            if (startDate!!.toInt() == 0) {
+                val cal = Calendar.getInstance()
+                startDate = cal.timeInMillis
+                cal.add(Calendar.DATE, 30)
+                endDate = cal.timeInMillis
+            }
+
             val reservation = Reservation(
                 hostId=listing.hostId,
                 clientId=clientId,
