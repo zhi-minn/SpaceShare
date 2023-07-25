@@ -1,5 +1,6 @@
 package com.example.spaceshare.ui.view
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,13 +19,11 @@ import com.bumptech.glide.Glide
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.FragmentReservationBinding
-import com.example.spaceshare.manager.SharedPreferencesManager
 import com.example.spaceshare.manager.SharedPreferencesManager.isHostMode
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
-import com.example.spaceshare.models.toInt
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 //import com.example.spaceshare.utils.ImageAdapter
 import com.google.firebase.auth.FirebaseAuth
@@ -41,6 +40,7 @@ import com.example.spaceshare.models.ReservationStatus.COMPLETED
 import com.example.spaceshare.models.ReservationStatus.DECLINED
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
 import com.google.firebase.storage.FirebaseStorage
+import java.util.Objects
 
 @AndroidEntryPoint
 class ReservationFragment : Fragment() {
@@ -110,6 +110,7 @@ class ReservationFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun displayReservations() {
         if (isHostMode.value!!) {
@@ -132,14 +133,14 @@ class ReservationFragment : Fragment() {
 
                 name.text = "Request From: ${reservation.clientFirstName}"
                 title.text = reservation.listingTitle
-                spaceRequested.text = reservation.spaceRequested.toString()
+                spaceRequested.text = "Space Required: ${reservation.spaceRequested.toString()} cubic"
 
                 if (reservation.startDate != null || reservation.endDate != null) {
-                    period.text =
-                        formatDatePeriod(
-                            reservation.startDate ?: Timestamp(0, 0),
-                            reservation.endDate ?: Timestamp(0, 0)
-                        )
+                    period.text = "Request Period: ${                        formatDatePeriod(
+                        reservation.startDate ?: Timestamp(0, 0),
+                        reservation.endDate ?: Timestamp(0, 0)
+                    )}"
+
                 } else {
                     period.text = "N/A"
                 }
@@ -171,6 +172,20 @@ class ReservationFragment : Fragment() {
                 layoutParams.setMargins(8, 32, 8, 32)
                 cardView.layoutParams = layoutParams
                 cardView.radius = 25.0F
+
+                cardView.setOnClickListener{
+                    val hostReservationDialogFragment = HostReservationDialogFragment(reservation)
+//            val bundle = Bundle().apply {
+//                putInt("reservationId", reservationId)
+//            }
+//            dialogFragment.arguments = bundle
+//            reservationPageDialogFragment.show(supportFragmentManager, "ReservationDetailDialogFragment")
+                    hostReservationDialogFragment.show(
+                        Objects.requireNonNull(childFragmentManager),
+                        "HostReservationDialogFragment")
+                }
+
+
                 binding.reservationPage.addView(cardView)
             }
         } else {

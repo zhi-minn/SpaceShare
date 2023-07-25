@@ -50,7 +50,7 @@
 
                     <LinearLayout
                         android:id="@+id/linearLayout"
-                        android:layout_width="wrap_content"
+                        android:layout_width="179dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:layout_marginLeft="5dp"
@@ -58,11 +58,12 @@
 
                         <TextView
                             android:id="@+id/startTitle"
-                            android:layout_width="wrap_content"
+                            android:layout_width="112dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:ems="10"
-                            android:text="Start"
+                            android:text="Start Date"
+                            android:textSize="16sp"
                             tools:layout_conversion_absoluteHeight="19dp"
                             tools:layout_conversion_absoluteWidth="154dp"
                             tools:layout_editor_absoluteX="248dp"
@@ -78,12 +79,21 @@
                             android:inputType="text"
                             android:text="MMM DD YYYY"
                             android:textColor="#514B4B"
+                            android:textStyle="bold"
                             tools:layout_conversion_absoluteHeight="19dp"
                             tools:layout_conversion_absoluteWidth="154dp"
                             tools:layout_editor_absoluteX="248dp"
                             tools:layout_editor_absoluteY="97dp" />
 
                     </LinearLayout>
+
+
+                    <View
+                        android:id="@+id/divider10"
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/darker_gray"
+                        android:translationY="8dp" />
 
                     <LinearLayout
                         android:id="@+id/linearLayout2"
@@ -99,7 +109,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:ems="10"
-                            android:text="End"
+                            android:text="End Date"
+                            android:textSize="16sp"
                             tools:ignore="DuplicateIds"
                             tools:layout_conversion_absoluteHeight="19dp"
                             tools:layout_conversion_absoluteWidth="154dp"
@@ -116,6 +127,7 @@
                             android:inputType="text"
                             android:text="MMM DD YYYY"
                             android:textColor="#514B4B"
+                            android:textStyle="bold"
                             tools:layout_conversion_absoluteHeight="19dp"
                             tools:layout_conversion_absoluteWidth="154dp"
                             tools:layout_editor_absoluteX="248dp"
@@ -130,8 +142,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
                     android:layout_marginTop="@dimen/standard_component_margin"
-                    android:scaleY="0.5"
-                    app:layout_constraintTop_toBottomOf="@id/price" />
+                    android:scaleY="0.5" />
 
                 <LinearLayout
                     android:id="@+id/space_info"
@@ -175,6 +186,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp">
+
+                    <TextView
+                        android:id="@+id/messageTextView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/rounded_message_gray"
+                        android:maxWidth="250dp"
+                        android:padding="10dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@android:color/black"
+                        app:layout_constraintStart_toEndOf="@id/messengerImageView"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="This is a message" />
 
                     <TextView
                         android:id="@+id/messageTextView"
@@ -292,7 +317,7 @@
                                 android:text="Phone Number:" />
 
                             <TextView
-                                android:id="@+id/phone_number"
+                                android:id="@+id/phoneNumber"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="xxx-xxxx-xxxx" />
