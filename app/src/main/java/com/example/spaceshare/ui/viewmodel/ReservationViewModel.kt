@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spaceshare.data.repository.ReservationRepository
 import com.example.spaceshare.manager.SharedPreferencesManager.isHostMode
+import com.example.spaceshare.models.Chat
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
@@ -56,6 +57,19 @@ class ReservationViewModel @Inject constructor(
         viewModelScope.launch {
             val info = repo.fetchUser(id)
             _userInfoLiveData.value = info!!
+        }
+    }
+
+    fun sendMessage(chat : Chat) {
+        viewModelScope.launch {
+//            try {
+            repo.setChat(chat)
+//                _chat.value = true
+//
+//            } catch (e: Exception) {
+//                _chat.value = false
+//                null
+//            }
         }
     }
 }
