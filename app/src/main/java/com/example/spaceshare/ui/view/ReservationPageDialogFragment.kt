@@ -226,7 +226,7 @@ class ReservationPageDialogFragment(
                 listingTitle=listing.title,
                 location=location!!,
                 previewPhoto=previewPhoto,
-                items = itemTypes)
+                items = itemTypes.mapKeys { (key, _) -> key.toString()}.toMap())
             reservationViewModel.reserveListing(reservation)
                 // Show a confirmation dialog
                 showDialogThenDismiss()
@@ -238,7 +238,7 @@ class ReservationPageDialogFragment(
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Reservation Confirmation")
         builder.setMessage("Your reservation is complete!")
-        builder.setPositiveButton("OK") { dialog, which ->
+        builder.setPositiveButton("OK") { _, _ ->
             // Dismiss this DialogFragment when the user confirms
             this.dismiss()
         }
