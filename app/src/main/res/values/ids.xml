@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="start_date_box" type="id" />
+    <item name="start_title" type="id">start_title</item>
+    <item name="end_date" type="id">end_date</item>
+    <item name="client_info" type="id" />
+</resources>
