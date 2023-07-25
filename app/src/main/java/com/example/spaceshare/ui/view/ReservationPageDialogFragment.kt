@@ -252,9 +252,39 @@ class ReservationPageDialogFragment(
                 previewPhoto=previewPhoto,
                 items = itemTypes)
             reservationViewModel.reserveListing(reservation)
-                // Show a confirmation dialog
-                showDialogThenDismiss()
-            }
+
+
+            val message = Message(
+                text = msgText,
+                senderName = "${client.firstName} ${client.lastName}",
+                senderId = clientId!!,
+                profilePhotoUrl = client.photoPath,
+                imageUrl = null
+                )
+
+//            val baseMessagesRef = realTimeDB.reference.child("messages")
+            baseMessagesRef.push().setValue(message)
+
+            val chat = Chat(
+                photoURL = previewPhoto,
+                hostId = listing.hostId,
+                associatedListingId = listing.id,
+                title = listing.title,
+                lastMessage = message,
+                members = listOf(listing.hostId!!, clientId),
+                createdAt = Timestamp.now()
+            )
+
+            reservationViewModel.sendMessage(chat)
+
+            // Show a confirmation dialog
+            showDialogThenDismiss()
+//                 items = itemTypes)
+//             reservationViewModel.reserveListing(reservation)
+//                 // Show a confirmation dialog
+//                 showDialogThenDismiss()
+             }
+
         }
     }
 
