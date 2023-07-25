@@ -54,7 +54,7 @@ class ReservationPageDialogFragment(
     private var startDate : Long? = 0
     private var endDate : Long? = 0
     private var unit: Double = 1.0
-    private var itemTypes: MutableSet<DeclareItemType> = mutableSetOf()
+    private var itemTypes: MutableList<DeclareItemType> = mutableListOf()
 
     companion object {
         private val TAG = this::class.simpleName
