@@ -6,7 +6,6 @@ import com.example.spaceshare.data.repository.ReservationRepository
 import com.example.spaceshare.models.Booking
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.User
-import com.example.spaceshare.models.Chat
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CompletableDeferred
@@ -27,8 +26,7 @@ class ReservationRepoImpl @Inject constructor(
 
     private val reservationsCollection = db.collection("reservations")
     private val listingsCollection = db.collection("listings")
-    private val userCollection = db.collection("users")
-    private val chatCollection = db.collection("chats")
+
 
     override suspend fun createReservation(reservation: Reservation): String {
         return withContext(Dispatchers.IO) {
@@ -101,46 +99,6 @@ class ReservationRepoImpl @Inject constructor(
                 Log.e(TAG, "Error retrieving reservations by listing id $listingId: ${e.message}", e)
                 return@withContext emptyList()
             }
-        }
-    }
-
-    override suspend fun fetchUser(id : String): User? =
-        withContext(Dispatchers.IO) {
-            try {
-                val result = userCollection
-                    .whereEqualTo("id", id)
-                    .get()
-                    .await()
-
-                try {
-                    val document = result.documents[0]
-                    return@withContext document.toObject(User::class.java)
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error casting document to User object: ${e.message}")
-                    null
-                }
-
-            } catch (e: Exception) {
-                Log.e(TAG, "Error fetching User info: ${e.message}")
-                return@withContext null
-            }
-        }
-
-    override suspend fun setChat(chat: Chat): String {
-        return withContext(Dispatchers.IO) {
-            val deferred = CompletableDeferred<String>()
-
-            chatCollection.add(chat)
-                .addOnSuccessListener { documentReference ->
-                    Log.d("chats", "Added Chat with id ${documentReference.id}")
-                    deferred.complete(documentReference.id)
-                }
-                .addOnFailureListener { e ->
-                    Log.w("chats", "Error adding Chat", e)
-                    deferred.completeExceptionally(e)
-                }
-
-            deferred.await()
         }
     }
 
