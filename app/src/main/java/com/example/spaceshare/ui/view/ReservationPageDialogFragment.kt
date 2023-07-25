@@ -54,10 +54,7 @@ class ReservationPageDialogFragment(
     private var startDate : Long? = 0
     private var endDate : Long? = 0
     private var unit: Double = 1.0
-    private val _itemTypes: MutableLiveData<MutableSet<DeclareItemType>> = MutableLiveData(
-        mutableSetOf()
-    )
-    val itemTypes : LiveData<MutableSet<DeclareItemType>>  = _itemTypes
+    private var itemTypes: MutableSet<DeclareItemType> = mutableSetOf()
 
     companion object {
         private val TAG = this::class.simpleName
@@ -91,9 +88,6 @@ class ReservationPageDialogFragment(
             "By selecting the button below, I agree to the ground rules and policy established by SpaceShare"
         configureBindings()
         configureButtons()
-        this.itemTypes.observe(this) { set ->
-            binding.reserveBtn.isEnabled = set.isNotEmpty()
-        }
 
         return binding.root
     }
@@ -105,7 +99,6 @@ class ReservationPageDialogFragment(
         val sizeDialog = Dialog(requireContext())
         sizeDialog.setContentView(R.layout.dialog_size_picker)
         sizeDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
-
     }
 
     object GeocoderUtil {
@@ -127,10 +120,15 @@ class ReservationPageDialogFragment(
         }
     }
 
+    private fun setEmptyCheck() {
+        binding.reserveBtn.isEnabled = !itemIsEmpty()
+    }
+
     fun addItems(type: DeclareItemType) {
         try {
-            val tmpResult = _itemTypes.value!!.add(type)
+            val tmpResult = itemTypes.add(type)
             Log.i(TAG, itemTypes.toString())
+            setEmptyCheck()
             if (!tmpResult) {
                 throw Exception("Add item Error!")
             }
@@ -141,24 +139,23 @@ class ReservationPageDialogFragment(
 
     fun removeItems(type: DeclareItemType) {
         try {
-            val tmpResult = _itemTypes.value!!.remove(type)
+            val tmpResult = itemTypes.remove(type)
             Log.i(TAG, itemTypes.toString())
             if (!tmpResult) {
                 throw Exception("Remove item Error!")
             }
+            setEmptyCheck()
         } catch (e: Exception) {
             Log.e(TAG, e.toString())
         }
     }
 
-    /*
     fun itemIsEmpty(): Boolean {
-        return _itemTypes.value!!.isEmpty()
+        return itemTypes.isEmpty()
     }
-    */
 
     fun findItem(type: DeclareItemType): Boolean {
-        return _itemTypes.value!!.contains(type)
+        return itemTypes.contains(type)
     }
 
     private fun configureBindings() {
@@ -213,7 +210,6 @@ class ReservationPageDialogFragment(
 
 
     private fun configureButtons() {
-
         binding.dateEdit.setOnClickListener { openDatePicker() }
         binding.dates.setOnClickListener { openDatePicker() }
 
@@ -226,6 +222,7 @@ class ReservationPageDialogFragment(
         }
 
         binding.reserveBtn.apply {
+            setEmptyCheck()
             setOnClickListener {
                 auth = FirebaseAuth.getInstance()
                 val clientId = auth.currentUser?.uid
@@ -255,7 +252,6 @@ class ReservationPageDialogFragment(
                 previewPhoto=previewPhoto,
                 items = itemTypes)
             reservationViewModel.reserveListing(reservation)
-
                 // Show a confirmation dialog
                 showDialogThenDismiss()
             }

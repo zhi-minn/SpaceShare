@@ -307,11 +307,22 @@
                     android:scaleY="0.5"
                     app:layout_constraintTop_toBottomOf="@id/price" />
 
+
                 <LinearLayout
                     android:id="@+id/item_declaration"
                     android:layout_width="match_parent"
-                    android:layout_height="65dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/item_declaration_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="@string/item_declaration_title"
+                        android:textColor="#3E3939"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <Button
                         android:id="@+id/declare_button"

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.example.spaceshare.R
@@ -32,9 +33,7 @@ class ItemDeclarationFragment(
     ): View {
         binding = DialogItemDeclarationBinding.inflate(inflater, container, false)
         configButtons()
-        parentFragment.itemTypes.observe(this) { set ->
-            binding.doneButton.isEnabled = set.isNotEmpty()
-        }
+        Log.i(TAG, viewLifecycleOwner.toString())
         return binding.root
     }
 
@@ -44,6 +43,10 @@ class ItemDeclarationFragment(
         val sizeDialog = Dialog(requireContext())
         sizeDialog.setContentView(R.layout.dialog_size_picker)
         sizeDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+    }
+
+    private fun setEmptyCheck() {
+        binding.doneButton.isEnabled = !parentFragment.itemIsEmpty()
     }
 
     private fun configButtons() {
@@ -60,6 +63,7 @@ class ItemDeclarationFragment(
                 } else {
                     parentFragment.removeItems(DeclareItemType.ClOTHING)
                 }
+                setEmptyCheck()
             }
         }
 
@@ -72,6 +76,7 @@ class ItemDeclarationFragment(
                 } else {
                     parentFragment.removeItems(DeclareItemType.BOOKS_AND_DOCUMENTS)
                 }
+                setEmptyCheck()
             }
         }
 
@@ -84,6 +89,7 @@ class ItemDeclarationFragment(
                 } else {
                     parentFragment.removeItems(DeclareItemType.FURNITURE)
                 }
+                setEmptyCheck()
             }
         }
 
@@ -96,6 +102,7 @@ class ItemDeclarationFragment(
                 } else {
                     parentFragment.removeItems(DeclareItemType.SPORT_AND_RECREATIONAL)
                 }
+                setEmptyCheck()
             }
         }
 
@@ -108,6 +115,7 @@ class ItemDeclarationFragment(
                 } else {
                     parentFragment.removeItems(DeclareItemType.APPLIANCE)
                 }
+                setEmptyCheck()
             }
         }
 
@@ -120,6 +128,7 @@ class ItemDeclarationFragment(
                 } else {
                     parentFragment.removeItems(DeclareItemType.DAILY_NECESSARY)
                 }
+                setEmptyCheck()
             }
         }
 
@@ -132,6 +141,7 @@ class ItemDeclarationFragment(
                 } else {
                     parentFragment.removeItems(DeclareItemType.MEMENTOS)
                 }
+                setEmptyCheck()
             }
         }
 
@@ -144,11 +154,12 @@ class ItemDeclarationFragment(
                 } else {
                     parentFragment.removeItems(DeclareItemType.OTHERS)
                 }
+                setEmptyCheck()
             }
         }
 
         binding.doneButton.apply {
-            // isEnabled = !parentFragment.itemIsEmpty()
+            setEmptyCheck()
             setOnClickListener {
                 dismiss()
             }
