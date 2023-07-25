@@ -67,4 +67,12 @@
     <string name="daily_necessaries">Daily Necessaries</string>
     <string name="mementos_and_collectibles">Mementos and Collectibles</string>
     <string name="others">Others</string>
+    <string name="explanation_for_clothing">Please briefly describe your clothing</string>
+    <string name="explanation_for_documents">Please briefly describe your documents</string>
+    <string name="explanation_for_furniture">Please briefly describe your furniture</string>
+    <string name="other_explanation">Please briefly explain what your want to store else</string>
+    <string name="mementos_and_collectibles_explanation">Please briefly explain your mementos and collectibles</string>
+    <string name="daily_necessaries_explanation">Please briefly explain your daily necessaries</string>
+    <string name="your_appliances_explanation">Please briefly explain your appliances</string>
+    <string name="sport_and_recreational_equipment_explanation">Please briefly explain your sport and recreational equipment</string>
 </resources>

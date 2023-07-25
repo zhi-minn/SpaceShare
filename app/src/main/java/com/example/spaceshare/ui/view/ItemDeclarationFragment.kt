@@ -59,8 +59,10 @@ class ItemDeclarationFragment(
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.ClOTHING)
+                    binding.clothingDetails.visibility = View.VISIBLE
+                    parentFragment.addItems(DeclareItemType.ClOTHING, "")
                 } else {
+                    binding.clothingDetails.visibility = View.GONE
                     parentFragment.removeItems(DeclareItemType.ClOTHING)
                 }
                 setEmptyCheck()
@@ -72,7 +74,7 @@ class ItemDeclarationFragment(
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.BOOKS_AND_DOCUMENTS)
+                    parentFragment.addItems(DeclareItemType.BOOKS_AND_DOCUMENTS, "")
                 } else {
                     parentFragment.removeItems(DeclareItemType.BOOKS_AND_DOCUMENTS)
                 }
@@ -85,7 +87,7 @@ class ItemDeclarationFragment(
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.FURNITURE)
+                    parentFragment.addItems(DeclareItemType.FURNITURE, "")
                 } else {
                     parentFragment.removeItems(DeclareItemType.FURNITURE)
                 }
@@ -98,7 +100,7 @@ class ItemDeclarationFragment(
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.SPORT_AND_RECREATIONAL)
+                    parentFragment.addItems(DeclareItemType.SPORT_AND_RECREATIONAL, "")
                 } else {
                     parentFragment.removeItems(DeclareItemType.SPORT_AND_RECREATIONAL)
                 }
@@ -111,7 +113,7 @@ class ItemDeclarationFragment(
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.APPLIANCE)
+                    parentFragment.addItems(DeclareItemType.APPLIANCE, "")
                 } else {
                     parentFragment.removeItems(DeclareItemType.APPLIANCE)
                 }
@@ -124,7 +126,7 @@ class ItemDeclarationFragment(
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.DAILY_NECESSARY)
+                    parentFragment.addItems(DeclareItemType.DAILY_NECESSARY, "")
                 } else {
                     parentFragment.removeItems(DeclareItemType.DAILY_NECESSARY)
                 }
@@ -137,7 +139,7 @@ class ItemDeclarationFragment(
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.MEMENTOS)
+                    parentFragment.addItems(DeclareItemType.MEMENTOS, "")
                 } else {
                     parentFragment.removeItems(DeclareItemType.MEMENTOS)
                 }
@@ -150,7 +152,7 @@ class ItemDeclarationFragment(
             setOnCheckedChangeListener {
                     _, isChecked ->
                 if (isChecked) {
-                    parentFragment.addItems(DeclareItemType.OTHERS)
+                    parentFragment.addItems(DeclareItemType.OTHERS, "")
                 } else {
                     parentFragment.removeItems(DeclareItemType.OTHERS)
                 }

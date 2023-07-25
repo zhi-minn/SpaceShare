@@ -54,7 +54,7 @@ class ReservationPageDialogFragment(
     private var startDate : Long? = 0
     private var endDate : Long? = 0
     private var unit: Double = 1.0
-    private var itemTypes: MutableList<DeclareItemType> = mutableListOf()
+    private var itemTypes: MutableMap<DeclareItemType, String> = mutableMapOf()
 
     companion object {
         private val TAG = this::class.simpleName
@@ -124,24 +124,15 @@ class ReservationPageDialogFragment(
         binding.reserveBtn.isEnabled = !itemIsEmpty()
     }
 
-    fun addItems(type: DeclareItemType) {
-        try {
-            val tmpResult = itemTypes.add(type)
-            Log.i(TAG, itemTypes.toString())
-            setEmptyCheck()
-            if (!tmpResult) {
-                throw Exception("Add item Error!")
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, e.toString())
-        }
+    fun addItems(type: DeclareItemType, input: String) {
+        itemTypes[type] = input
     }
 
     fun removeItems(type: DeclareItemType) {
         try {
             val tmpResult = itemTypes.remove(type)
             Log.i(TAG, itemTypes.toString())
-            if (!tmpResult) {
+            if (tmpResult == null) {
                 throw Exception("Remove item Error!")
             }
             setEmptyCheck()
