@@ -26,7 +26,7 @@ class ReservationRepoImpl @Inject constructor(
 
     private val reservationsCollection = db.collection("reservations")
     private val listingsCollection = db.collection("listings")
-
+    private val userCollection = db.collection("users")
 
     override suspend fun createReservation(reservation: Reservation): String {
         return withContext(Dispatchers.IO) {
@@ -101,6 +101,28 @@ class ReservationRepoImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun fetchUser(id : String): User? =
+        withContext(Dispatchers.IO) {
+            try {
+                val result = userCollection
+                    .whereEqualTo("id", id)
+                    .get()
+                    .await()
+
+                try {
+                    val document = result.documents[0]
+                    return@withContext document.toObject(User::class.java)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error casting document to User object: ${e.message}")
+                    null
+                }
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Error fetching User info: ${e.message}")
+                return@withContext null
+            }
+        }
 
 //    override suspend fun fetchListings(reservations: List<Reservation>?): List<Listing> {
 //        val listingIds = reservations?.map { i -> i.listingId }
