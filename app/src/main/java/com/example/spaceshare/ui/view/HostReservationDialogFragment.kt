@@ -2,15 +2,14 @@ package com.example.spaceshare.ui.view
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogHostReservationBinding
@@ -18,6 +17,8 @@ import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.ui.viewmodel.MessagesViewModel
 import com.example.spaceshare.ui.viewmodel.ProfileViewModel
+import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class HostReservationDialogFragment(
     private val reservation: Reservation,
 //    private val listing: Listing
@@ -42,6 +44,8 @@ class HostReservationDialogFragment(
     lateinit var profileViewModel: ProfileViewModel
 
     private lateinit var binding: DialogHostReservationBinding
+
+    lateinit var listing:Listing
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -96,21 +100,41 @@ class HostReservationDialogFragment(
 
     private fun configureButtons(){
 
+        val db = FirebaseFirestore.getInstance()
+
+
+        reservation.listingId?.let {
+            db.collection("listings")
+                .document(it)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    listing = documentSnapshot.toObject(Listing::class.java)!!
+                    // You can now use `user`
+                    if (listing != null) {
+                        Log.d("listing id", listing.id)
+                    }
+
+                }
+                .addOnFailureListener { e -> Log.w("Error getting document", e) }
+        }
+
 //        binding.messageBtn.isGone = hideMessageHostButton
 
-//        binding.messageBtn.setOnClickListener {
-//            CoroutineScope(Dispatchers.IO).launch {
-//                val chat = messagesViewModel.createChatWithHost(listing)
-//                val chatDialogFragment = ChatDialogFragment(chat, shouldRefreshChatsList = false)
-//                chatDialogFragment.show(
-//                    childFragmentManager,
-//                    "chatDialog"
-//                )
-//            }
-//        }
-        binding.messageBtn.setOnClickListener{
-            //todo navigate to the message box with this client
+        binding.messageBtn.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val chat = reservation.clientId?.let { it1 ->
+                    messagesViewModel.createChatWithID(
+                        listing,
+                        it1
+                    )
+                }
+                chat?.let { it1 -> ChatDialogFragment(it1, shouldRefreshChatsList = false) }?.show(
+                    childFragmentManager,
+                    "chatDialog"
+                )
+            }
         }
+
         binding.acceptBtn.setOnClickListener {
 //            reservation.status = ReservationStatus.APPROVED // set status to approved
 //            updateReservationStatus(reservation) // update the status in the backend/database
