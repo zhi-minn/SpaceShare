@@ -83,6 +83,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/clothing_choose"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginStart="@dimen/standard_component_margin">
 
                     <TextView
@@ -134,6 +135,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/documents_choose"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginStart="@dimen/standard_component_margin">
 
                     <TextView
@@ -185,6 +187,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/furniture_choose"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginStart="@dimen/standard_component_margin">
 
                     <TextView
@@ -236,6 +239,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/sport_and_recreational_choose"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginStart="@dimen/standard_component_margin">
 
                     <TextView
@@ -272,6 +276,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/sport_and_recreational_layout"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="@dimen/drawable_start_padding">
 
                 <CheckBox
@@ -287,6 +292,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/appliance_choose"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginStart="@dimen/standard_component_margin">
 
                     <TextView
@@ -323,6 +329,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/appliance_layout"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="@dimen/drawable_start_padding">
 
                 <CheckBox
@@ -338,6 +345,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/necessary_choose"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginStart="@dimen/standard_component_margin">
 
                     <TextView
@@ -374,6 +382,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/necessary_layout"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="@dimen/drawable_start_padding">
 
                 <CheckBox
@@ -389,6 +398,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/mementos_choose"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginStart="@dimen/standard_component_margin">
 
                     <TextView
@@ -425,6 +435,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/mementos_layout"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="@dimen/drawable_start_padding">
 
                 <CheckBox
@@ -440,13 +451,14 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toEndOf="@id/other_choose"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginStart="@dimen/standard_component_margin">
 
                     <TextView
                         android:id="@+id/other_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/sport_and_recreational_equipment"
+                        android:text="@string/others"
                         android:gravity="left"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
