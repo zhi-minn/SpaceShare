@@ -43,11 +43,17 @@ import javax.inject.Inject
 
 import com.example.spaceshare.models.ReservationStatus.PENDING
 import com.example.spaceshare.models.User
+import com.example.spaceshare.ui.viewmodel.ChatViewModel
+import com.example.spaceshare.ui.viewmodel.MessagesViewModel
 import com.example.spaceshare.utils.GeocoderUtil
 import com.example.spaceshare.utils.MathUtil
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ktx.database
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+//import com.google.firebase.database.DatabaseReference
+//import com.google.firebase.database.ktx.database
 
 @AndroidEntryPoint
 class ReservationPageDialogFragment(
@@ -67,12 +73,18 @@ class ReservationPageDialogFragment(
     @Inject
     lateinit var reservationViewModel: ReservationViewModel
 
+    @Inject
+    lateinit var messagesViewModel: MessagesViewModel
+
+    @Inject
+    lateinit var chatViewModel: ChatViewModel
+
     private lateinit var binding: DialogReservationPageBinding
 
     private lateinit var client : User
 
-    private val realTimeDB = Firebase.database
-    private val baseMessagesRef = realTimeDB.reference.child("messages")
+//    private val realTimeDB = Firebase.database
+//    private val baseMessagesRef = realTimeDB.reference.child("messages")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -238,28 +250,37 @@ class ReservationPageDialogFragment(
 
             reservationViewModel.reserveListing(reservation)
 
-            val message = Message(
-                text = msgText,
-                senderName = "${client.firstName} ${client.lastName}",
-                senderId = clientId!!,
-                profilePhotoUrl = client.photoPath,
-                imageUrl = null
-                )
+            CoroutineScope(Dispatchers.IO).launch {
+                val chat = messagesViewModel.createChatWithHost(listing)
+                chatViewModel.setChat(chat)
+                chatViewModel.sendMessage(msgText)
+            }
 
-//            val baseMessagesRef = realTimeDB.reference.child("messages")
-            baseMessagesRef.push().setValue(message)
 
-            val chat = Chat(
-                photoURL = previewPhoto,
-                hostId = listing.hostId,
-                associatedListingId = listing.id,
-                title = listing.title,
-                lastMessage = message,
-                members = listOf(listing.hostId!!, clientId),
-                createdAt = Timestamp.now()
-            )
+//            val message = Message(
+//                text = msgText,
+//                senderName = "${client.firstName} ${client.lastName}",
+//                senderId = clientId!!,
+//                profilePhotoUrl = client.photoPath,
+//                imageUrl = null
+//                )
+//
+////            val baseMessagesRef = realTimeDB.reference.child("messages")
+//            baseMessagesRef.push().setValue(message)
+//
+//            val chat = Chat(
+//                photoURL = previewPhoto,
+//                hostId = listing.hostId,
+//                associatedListingId = listing.id,
+//                title = listing.title,
+//                lastMessage = message,
+//                members = listOf(listing.hostId!!, clientId),
+//                createdAt = Timestamp.now()
+//            )
+//
+//            reservationViewModel.sendMessage(chat)
 
-            reservationViewModel.sendMessage(chat)
+
 
             // Show a confirmation dialog
             showDialogThenDismiss()
