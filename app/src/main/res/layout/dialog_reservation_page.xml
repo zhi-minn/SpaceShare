@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/confirmPayToolbar"
+            android:id="@+id/ReservationToolbar"
             android:layout_width="match_parent"
             android:layout_height="58dp"
             android:background="@color/button_selector"
