@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material3.Snackbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -19,6 +20,7 @@ import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.ListingMetadataViewModel
 import com.example.spaceshare.ui.viewmodel.ListingMetadataViewModel.ListingMetadataDialogListener
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
+import com.example.spaceshare.utils.SnackbarUtil
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -91,6 +93,7 @@ class ListingsFragment : Fragment(), ListingMetadataDialogListener {
                 if (listings.isNotEmpty()) View.GONE else View.VISIBLE
             binding.btnFilter.isEnabled = listings.isNotEmpty()
         }
+
         listingViewModel.filteredListingsLiveData.observe(viewLifecycleOwner) { listings ->
             adapter.submitList(listings)
             adapter.notifyDataSetChanged()
@@ -99,6 +102,12 @@ class ListingsFragment : Fragment(), ListingMetadataDialogListener {
             }
         }
         listingViewModel.getUserListings(FirebaseAuth.getInstance().currentUser!!.uid)
+
+        listingViewModel.deleteResult.observe(viewLifecycleOwner) {
+            if (it.isSuccess) {
+                SnackbarUtil.showSuccessSnackbar(binding.root, it.message, resources)
+            }
+        }
 
         binding.searchTextView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

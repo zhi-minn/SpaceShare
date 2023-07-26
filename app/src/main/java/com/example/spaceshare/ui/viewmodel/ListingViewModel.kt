@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.Delete
 import com.example.spaceshare.consts.ListingConsts
 import com.example.spaceshare.data.repository.FirebaseStorageRepository
 import com.example.spaceshare.data.repository.ListingRepository
@@ -36,6 +37,13 @@ class ListingViewModel @Inject constructor(
 
     private val _listingRevenue: MutableLiveData<Double> = MutableLiveData(0.00)
     val listingRevenue: LiveData<Double> = _listingRevenue
+
+    data class DeleteResult(
+        val isSuccess: Boolean,
+        val message: String
+    )
+    private val _deleteResult: MutableLiveData<DeleteResult> = MutableLiveData()
+    val deleteResult: LiveData<DeleteResult> = _deleteResult
 
     private var curQuery: String = ""
     private var curCriteria: FilterCriteria = FilterCriteria()
@@ -168,27 +176,38 @@ class ListingViewModel @Inject constructor(
     }
 
      fun removeItem(listing: Listing) {
-         val updatedList = _listingsLiveData.value?.toMutableList()
-         updatedList?.remove(listing)
-         _listingsLiveData.value = updatedList ?: emptyList()
-         filterListings(curQuery, curCriteria)
+         // Check if any associated reservations first
          viewModelScope.launch {
-             // Delete listing
-             listingRepo.deleteListing(listing.id)
+             val upcomingReservations =
+                 reservationRepo.fetchUpcomingReservationByListingId(listing.id)
+             if (upcomingReservations.isNotEmpty()) {
+                 _deleteResult.value = DeleteResult(false, "Unable to delete listing with upcoming reservations. Consider deactivating the listing.")
+             } else {
+                 val updatedList = _listingsLiveData.value?.toMutableList()
+                 updatedList?.remove(listing)
+                 _listingsLiveData.value = updatedList ?: emptyList()
+                 filterListings(curQuery, curCriteria)
+                 viewModelScope.launch {
+                     // Delete listing
+                     listingRepo.deleteListing(listing.id)
 
-             // Delete corresponding images
-             for (filePath in listing.photos) {
-                 viewModelScope.async {
-                     try {
-                         firebaseStorageRepo.deleteFile("spaces", filePath)
-                     } catch (e: Exception) {
-                         Log.e("ListingViewModel", "Error deleting image: ${e.message}", e)
+                     // Delete corresponding images
+                     for (filePath in listing.photos) {
+                         viewModelScope.async {
+                             try {
+                                 firebaseStorageRepo.deleteFile("spaces", filePath)
+                             } catch (e: Exception) {
+                                 Log.e("ListingViewModel", "Error deleting image: ${e.message}", e)
+                             }
+                         }
                      }
+
+                     // Delete chats associated
+                     messagesRepo.deleteChatsByAssociatedListingId(listing.id)
+
+                     _deleteResult.value = DeleteResult(true, "Successfully deleted listing")
                  }
              }
-
-             // Delete chats associated
-             messagesRepo.deleteChatsByAssociatedListingId(listing.id)
          }
      }
 
