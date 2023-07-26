@@ -296,8 +296,13 @@
   * Updated Reservation model
   * Added new fields for reservation page
   * Updated reservation page view
- * Youming 12 hours (2023-07-24) [PR](https://github.com/zhi-minn/SpaceShare/pull/89)
+* Youming 12 hours (2023-07-24) [PR](https://github.com/zhi-minn/SpaceShare/pull/89)
   * add hosting reservation tab
   * add hosting reservation function
   * create host reservation items
-  * host now can accept and reject requests 
+  * host now can accept and reject requests
+* Chang 6 hours (2023-07-25) [PR](https://github.com/zhi-minn/SpaceShare/pull/99)
+  * Added shortlist functionality
+* Minn 1.5 hours (2023-07-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/97)[PR](https://github.com/zhi-minn/SpaceShare/pull/98)
+  * Delete associated chats when listing deleted
+  * Prevent listing deletion if there exists an upcoming reservation

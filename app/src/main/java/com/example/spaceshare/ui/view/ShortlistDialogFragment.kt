@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -17,9 +17,10 @@ import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ListingAdapter
 import com.example.spaceshare.adapters.ScrollToTopObserver
 import com.example.spaceshare.data.repository.ShortlistRepository
+import com.example.spaceshare.databinding.DialogShortlistBinding
 import com.example.spaceshare.databinding.FragmentSearchBinding
 import com.example.spaceshare.models.Listing
-import com.example.spaceshare.ui.viewmodel.SearchViewModel
+import com.example.spaceshare.ui.viewmodel.ShortlistViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
@@ -27,28 +28,31 @@ import java.util.Objects
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
-    companion object {
-        private val TAG = this::class.simpleName
-    }
-
-    private lateinit var binding: FragmentSearchBinding
-    private lateinit var navController: NavController
+class ShortlistDialogFragment() : DialogFragment() {
 
     @Inject
-    lateinit var searchViewModel: SearchViewModel
+    lateinit var shortlistViewModel: ShortlistViewModel
 
     @Inject
     lateinit var shortlistRepo: ShortlistRepository
 
+    private lateinit var binding: DialogShortlistBinding
+    private lateinit var navController: NavController
+
     private lateinit var adapter: ListingAdapter
     private lateinit var manager: LinearLayoutManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_FRAME, R.style.SlideLeftDialogStyle)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
+    ): View? {
+        // Inflate the layout for this fragment
+        binding = DataBindingUtil.inflate(inflater, R.layout.dialog_shortlist, container, false)
         binding.noListingView.visibility = View.GONE
         return binding.root
     }
@@ -57,31 +61,15 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = requireActivity().findNavController(R.id.main_nav_host_fragment)
 
-        configureSearchBar()
-        configureFilterButton()
+        configureButtons()
         configureRecyclerView()
         configureScrollToTopButton()
         configureListingObservers()
     }
 
-    private fun configureSearchBar() {
-        binding.searchIcon.setOnClickListener {
-            openSearchDialog()
-        }
-        binding.searchTextView.setOnClickListener {
-            openSearchDialog()
-        }
-    }
-
-    private fun openSearchDialog() {
-        val searchDialogFragment = SearchDialogFragment()
-        searchDialogFragment.show(Objects.requireNonNull(childFragmentManager), "searchDialog")
-    }
-
-    private fun configureFilterButton() {
-        binding.btnFilter.setOnClickListener {
-            val filterDialogFragment = ClientFilterDialogFragment()
-            filterDialogFragment.show(Objects.requireNonNull(childFragmentManager), "filterDialog")
+    private fun configureButtons() {
+        binding.btnBack.setOnClickListener {
+            this.dismiss()
         }
     }
 
@@ -93,7 +81,7 @@ class SearchFragment : Fragment() {
             object : ListingAdapter.ItemClickListener {
                 override fun onItemClick(listing: Listing) {
                     val clientListingDialogFragment =
-                        ClientListingDialogFragment(listing, searchViewModel)
+                        ClientListingDialogFragment(listing, searchViewModel = null)
                     clientListingDialogFragment.show(
                         Objects.requireNonNull(childFragmentManager),
                         "clientListingDialog"
@@ -146,7 +134,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun configureListingObservers() {
-        searchViewModel.filteredListings.observe(viewLifecycleOwner) { listings ->
+        shortlistViewModel.shortlistedListings.observe(viewLifecycleOwner) { listings ->
             binding.noListingView.visibility =
                 if (listings.isNotEmpty()) View.GONE else View.VISIBLE
             adapter.areEditButtonsGone = true

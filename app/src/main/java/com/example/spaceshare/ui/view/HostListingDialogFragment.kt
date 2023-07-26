@@ -18,6 +18,7 @@ import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
 import com.example.spaceshare.utils.GeocoderUtil
+import com.example.spaceshare.utils.SnackbarUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -99,11 +100,19 @@ class HostListingDialogFragment(
         }
     }
 
-    fun configureObservers() {
+    private fun configureObservers() {
         listingViewModel.listingRevenue.observe(viewLifecycleOwner) {
             binding.revenue.text = String.format("Revenue to date: $%.2f", it)
         }
         listingViewModel.fetchListingRevenue(listing.id)
+
+        listingViewModel.deleteResult.observe(viewLifecycleOwner) {
+            if (!it.isSuccess) {
+                SnackbarUtil.showErrorSnackbar(binding.root, it.message, resources)
+            } else {
+                this.dismiss()
+            }
+        }
     }
 
     private fun configureButtons() {
@@ -136,7 +145,6 @@ class HostListingDialogFragment(
                 .setMessage("Are you sure you want to delete this listing?")
                 .setPositiveButton("Delete") { _, _ ->
                     listingViewModel.removeItem(listing)
-                    this.dismiss()
                 }
                 .setNegativeButton("Cancel", null)
                 .create()

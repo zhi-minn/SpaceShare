@@ -290,11 +290,11 @@ class ListingMetadataViewModel @Inject constructor(
             val filteredListings = applyFilters(allListings)
 
             val listOfPricesPerCubicMetre = filteredListings.map { listing ->
-                listing.price / listing.spaceAvailable
+                listing.price
             }
 
             if (listOfPricesPerCubicMetre.isNotEmpty()) {
-                _recommendedPrice.value = listOfPricesPerCubicMetre.average() * _spaceAvailable.value!!
+                _recommendedPrice.value = listOfPricesPerCubicMetre.average()
             }
         }
     }
