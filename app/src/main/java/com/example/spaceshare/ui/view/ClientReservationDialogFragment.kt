@@ -8,8 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -32,6 +34,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -41,7 +46,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ClientReservationDialogFragment(
     private val reservation: Reservation,
-    private val listing: Listing
+    private val listing: Listing,
+    private val listener: OnReservationStatusChangedListener
 ) : DialogFragment(), OnMapReadyCallback {
 
     companion object {
@@ -58,6 +64,10 @@ class ClientReservationDialogFragment(
     lateinit var reservationViewModel: ReservationViewModel
 
     private lateinit var binding: DialogClientReservationBinding
+
+    interface OnReservationStatusChangedListener {
+        fun onStatusChanged()
+    }
 
 
     override fun onCreateView(
@@ -129,7 +139,46 @@ class ClientReservationDialogFragment(
                 reservationViewModel.setReservationRated(reservation,true)
             }
         }
+
+        binding.cancelBtn.setOnClickListener {
+            listener.onStatusChanged()
+            showConfirmCancelDialog()
+        }
     }
+
+    private fun showConfirmCancelDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Confirm Cancellation")
+        builder.setMessage("Are you sure you want to cancel your booking request?")
+
+
+        builder.setPositiveButton("Yes") { dialog, which ->
+            // cancel request and return space
+//            CoroutineScope(Dispatchers.IO).launch {
+//                reservationViewModel.cancelSpace(
+//                    reservation.spaceRequested, listing,
+//                    reservation.startDate!!.toDate().time, reservation.endDate!!.toDate().time
+//                )
+//            }
+//            reservationViewModel.setReservationStatus(reservation, ReservationStatus.CANCELLED)
+            showCancelSuccessDialog()
+            this.dismiss()
+        }
+
+        builder.setNegativeButton("No") { dialog, which ->
+        }
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    private fun showCancelSuccessDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Cancellation Complete")
+        builder.setMessage("Your booking has been successfully cancelled!")
+        val dialog = builder.create()
+        dialog.show()
+    }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -213,6 +262,14 @@ class ClientReservationDialogFragment(
 //        } else {
 //            binding.ratingBox.visibility = View.VISIBLE
 //        }
+
+        if (reservation.status == ReservationStatus.PENDING) {
+            binding.cancelBtn.visibility = View.VISIBLE
+        } else {
+            binding.cancelBtn.visibility = View.GONE
+        }
+
+
 
     }
 
