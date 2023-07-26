@@ -355,7 +355,24 @@
                 </LinearLayout>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/CancelButtonBox"-->
+<!--                    android:layout_width="349dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizonral">-->
+
+<!--                </LinearLayout>-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/cancelBtn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Button"-->
+<!--                    tools:layout_editor_absoluteX="136dp"-->
+<!--                    tools:layout_editor_absoluteY="768dp" />-->
+
+
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
