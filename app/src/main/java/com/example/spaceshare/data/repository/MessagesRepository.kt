@@ -25,5 +25,7 @@ interface MessagesRepository {
 
     suspend fun getChatById(chatId: String): Chat?
 
+    suspend fun deleteChatsByAssociatedListingId(listingId: String)
+
     fun getBaseMessagesRef(): DatabaseReference
 }
