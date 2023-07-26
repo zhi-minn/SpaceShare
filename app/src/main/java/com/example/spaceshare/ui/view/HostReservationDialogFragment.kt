@@ -32,7 +32,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HostReservationDialogFragment(
     private val reservation: Reservation,
-    private val listing: Listing
+    private val listing: Listing,
+    private val listener: OnReservationStatusChangedListener
 ) : DialogFragment(){
 
     companion object {
@@ -53,6 +54,9 @@ class HostReservationDialogFragment(
 
 //    lateinit var listing:Listing
 
+    interface OnReservationStatusChangedListener {
+        fun onStatusChanged()
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -151,12 +155,14 @@ class HostReservationDialogFragment(
         binding.acceptBtn.setOnClickListener {
             val status = ReservationStatus.APPROVED
             reservationViewModel.setReservationStatus(reservation = reservation, status = status)
+            listener.onStatusChanged()
             showDialogThenDismiss(true)
         }
 
         binding.rejectBtn.setOnClickListener {
             val status = ReservationStatus.DECLINED
             reservationViewModel.setReservationStatus(reservation = reservation, status = status)
+            listener.onStatusChanged()
             showDialogThenDismiss(false)
         }
     }
