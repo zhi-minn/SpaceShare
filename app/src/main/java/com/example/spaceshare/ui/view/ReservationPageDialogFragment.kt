@@ -377,13 +377,23 @@ class ReservationPageDialogFragment(
                     }
 
                     val reservation = unit?.let { it1 ->
+                        val calStart = Calendar.getInstance().apply {
+                            time = Date(startDate!!)
+                            add(Calendar.HOUR_OF_DAY, 4)
+                        }
+                        val calEnd = Calendar.getInstance().apply {
+                            time = Date(endDate!!)
+                            add(Calendar.HOUR_OF_DAY, 4)
+                        }
                         Reservation(
                             hostId = listing.hostId,
                             clientId = clientId,
                             listingId = listing.id,
                             totalCost = totalCost,
-                            startDate = Timestamp(Date(startDate!!)),
-                            endDate = Timestamp(Date(endDate!!)),
+//                            startDate = Timestamp(Date(startDate!!)),
+//                            endDate = Timestamp(Date(endDate!!)),
+                            startDate = Timestamp(calStart.time),
+                            endDate = Timestamp(calEnd.time),
                             spaceRequested = it1,
                             status = PENDING,
                             listingTitle = listing.title,
