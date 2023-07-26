@@ -110,9 +110,9 @@ class ReservationViewModel @Inject constructor(
         }
     }
 
-    fun reserveSpace(unit : Double, listing : Listing, startDate : Long, endDate : Long) {
-        viewModelScope.launch {
-            repo.reserveSpace(unit, listing, startDate, endDate)
+    suspend fun reserveSpace(unit : Double, listing : Listing, startDate : Long, endDate : Long): Boolean {
+        return withContext(Dispatchers.IO) {
+            return@withContext repo.reserveSpace(unit, listing, startDate, endDate)
         }
     }
 

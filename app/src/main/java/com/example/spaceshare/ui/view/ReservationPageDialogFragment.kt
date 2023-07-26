@@ -252,12 +252,16 @@ class ReservationPageDialogFragment(
         // Handle dates
         if (startDate == 0L) {
             val cal = Calendar.getInstance()
+            startDate = cal.timeInMillis
 
             // Get current date
             val curDate = formatter.format(cal.time)
 
             // Add 30 days to current date
             cal.add(Calendar.DATE, 30)
+
+            endDate = cal.timeInMillis
+
             val curDatePlus30Days = formatter.format(cal.time)
 
             binding.pickedDate.text = "$curDate - $curDatePlus30Days"
@@ -267,6 +271,11 @@ class ReservationPageDialogFragment(
             val formattedEndDate = formatter.format(endDate?.let { Date(it) })
 
             binding.pickedDate.text = "$formattedStartDate - $formattedEndDate"
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            unitAvailable = reservationViewModel.getAvailableSpace(listing, startDate!!, endDate!!)
+            binding.availableSpace.text = unitAvailable.toString()
         }
 
         // Handle spaceRequired
@@ -335,6 +344,13 @@ class ReservationPageDialogFragment(
             }
 
 
+            CoroutineScope(Dispatchers.IO).launch {
+                val spaceReservedSuccess = reservationViewModel.reserveSpace(unit!!, listing, startDate!!, endDate!!)
+                if (!spaceReservedSuccess) {
+                    showFailureDialog("Failed to reserve space, please adjust unit or reselect dates and try again")
+                }
+            }
+
             val reservation = unit?.let { it1 ->
                 Reservation(
                     hostId=listing.hostId,
@@ -363,8 +379,6 @@ class ReservationPageDialogFragment(
                 chatViewModel.setChat(chat)
                 chatViewModel.sendMessage(msgText)
             }
-
-            reservationViewModel.reserveSpace(unit!!, listing, startDate!!, endDate!!)
 
 
 //            val message = Message(

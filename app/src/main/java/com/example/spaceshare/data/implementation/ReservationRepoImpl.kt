@@ -188,31 +188,25 @@ class ReservationRepoImpl @Inject constructor(
 //        val startDateLong = getLongDateFromTimestamp(startDate)
 //        val endDateLong = getLongDateFromTimestamp(endDate)
 
-        val query = baseAvailableSpaceRef.child(listing.id)
+        val query = baseAvailableSpaceRef.child(listing.id).get().await()
 
         var spaceAvailable : Double = 0.0
 
-        query.get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val data = task.result?.value as? Map<Long, Double>
-                if (data != null) {
-                    val filteredData = data.filterKeys { date ->
-                        val longDate = date.toLong()
-                        longDate >= startDate && longDate <= endDate
-                    }
+        val data = query?.value as? Map<String, String>
 
-                    // Get the minimum space within the date range
-                    val minSpace = filteredData.minByOrNull { it.value }?.value
-
-                    spaceAvailable = minSpace!!
-                } else {
-                    // if the given dates are not booked
-                    spaceAvailable = listing.spaceAvailable
-                }
-            } else {
-                // if the listing doesn't already exist in db, no reservations have been made
-                spaceAvailable = listing.spaceAvailable
+        if (data != null) {
+            val filteredData = data.filterKeys { date ->
+                val longDate = date.toLong()
+                longDate in startDate..endDate
             }
+
+            // Get the minimum space within the date range
+            val minSpace = filteredData.minByOrNull { it.value.toDouble() }?.value?.toDouble()
+
+            spaceAvailable = minSpace!!
+        } else {
+            // if the given dates are not booked
+            spaceAvailable = listing.spaceAvailable
         }
 
         return spaceAvailable
@@ -242,10 +236,10 @@ class ReservationRepoImpl @Inject constructor(
 
         return try {
             val snapshot = query.get().await()
-            val data = snapshot.value as? Map<String, Double>
+            val data = snapshot.value as? Map<String, String>
 
             for (date in dateRange) {
-                val remainingSpace = (data?.get(date) ?: listing.spaceAvailable) - unit
+                val remainingSpace = ((data?.get(date)?.toDouble() ?: listing.spaceAvailable) - unit).toString()
                 baseAvailableSpaceRef.child(listing.id).child(date).setValue(remainingSpace)
             }
             true
