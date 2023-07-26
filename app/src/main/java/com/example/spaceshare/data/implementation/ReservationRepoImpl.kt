@@ -8,6 +8,7 @@ import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.ReservationStatus.APPROVED
+import com.example.spaceshare.models.ReservationStatus.PENDING
 import com.example.spaceshare.models.User
 import com.example.spaceshare.models.Chat
 import com.google.firebase.Timestamp
@@ -17,7 +18,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import java.util.Calendar
 import com.google.firebase.ktx.Firebase
@@ -36,7 +36,6 @@ class ReservationRepoImpl @Inject constructor(
 
 
     private val reservationsCollection = db.collection("reservations")
-    private val listingsCollection = db.collection("listings")
     private val userCollection = db.collection("users")
     private val chatCollection = db.collection("chats")
 
@@ -91,6 +90,31 @@ class ReservationRepoImpl @Inject constructor(
             }
         }
 
+    override suspend fun fetchUpcomingReservationByListingId(listingId: String): List<Reservation> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val result = reservationsCollection
+                    .whereEqualTo("listingId", listingId)
+                    .whereIn("status", listOf(PENDING, APPROVED))
+                    .whereGreaterThan("endDate", Timestamp.now())
+                    .get()
+                    .await()
+
+                return@withContext result.documents.mapNotNull { document ->
+                    try {
+                        document.toObject(Reservation::class.java)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error casting document to Reservation object: ${e.message}", e)
+                        null
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error retrieving upcoming reservations by listing id $listingId: ${e.message}", e)
+                return@withContext emptyList()
+            }
+        }
+    }
+
     override suspend fun fetchCompletedReservationsByListing(listingId: String): List<Reservation> {
         return withContext(Dispatchers.IO) {
             try {
@@ -110,7 +134,7 @@ class ReservationRepoImpl @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error retrieving reservations by listing id $listingId: ${e.message}", e)
+                Log.e(TAG, "Error retrieving completed reservations by listing id $listingId: ${e.message}", e)
                 return@withContext emptyList()
             }
         }

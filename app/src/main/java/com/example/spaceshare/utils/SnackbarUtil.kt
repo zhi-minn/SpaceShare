@@ -16,4 +16,13 @@ object SnackbarUtil {
         tv.setTextColor(resources.getColor(R.color.black, null))
         snackbar.show()
     }
+
+    fun showSuccessSnackbar(root: View, message: String, resources: Resources) {
+        val snackbar = Snackbar.make(root, message, Snackbar.LENGTH_SHORT)
+            .setBackgroundTint(resources.getColor(R.color.success_green, null))
+        val tv: TextView =
+            snackbar.view.findViewById(com.google.android.material.R.id.snackbar_text)
+        tv.setTextColor(resources.getColor(R.color.black, null))
+        snackbar.show()
+    }
 }
