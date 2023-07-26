@@ -252,6 +252,29 @@ class ReservationRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun cancelSpace(unit : Double, listing : Listing, startDate : Long, endDate : Long) : Boolean {
+//        val startDateLong = getLongDateFromTimestamp(startDate)
+//        val endDateLong = getLongDateFromTimestamp(endDate)
+        val dateRange = getDateRange(startDate, endDate)
+
+        val query = baseAvailableSpaceRef.child(listing.id)
+
+        return try {
+            val snapshot = query.get().await()
+            val data = snapshot.value as? Map<String, String>
+
+            for (date in dateRange) {
+                val remainingSpace = ((data?.get(date)?.toDouble() ?: 0.0) + unit).toString()
+                baseAvailableSpaceRef.child(listing.id).child(date).setValue(remainingSpace)
+            }
+
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error when reserving space in db", e)
+            false
+        }
+    }
+
 
 
     override suspend fun setReservationRated(reservation: Reservation, rated: Boolean) {

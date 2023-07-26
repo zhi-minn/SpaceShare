@@ -116,6 +116,12 @@ class ReservationViewModel @Inject constructor(
         }
     }
 
+    suspend fun cancelSpace(unit : Double, listing : Listing, startDate : Long, endDate : Long): Boolean {
+        return withContext(Dispatchers.IO) {
+            return@withContext repo.cancelSpace(unit, listing, startDate, endDate)
+        }
+    }
+
     fun setReservationRated(reservation : Reservation, rated : Boolean) {
         viewModelScope.launch {
             try {

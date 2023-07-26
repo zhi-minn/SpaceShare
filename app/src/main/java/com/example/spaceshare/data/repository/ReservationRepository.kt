@@ -26,4 +26,6 @@ interface ReservationRepository {
     suspend fun getAvailableSpace(listing : Listing, startDate : Long, endDate : Long) : Double
 
     suspend fun reserveSpace(unit : Double, listing : Listing, startDate : Long, endDate : Long) : Boolean
+
+    suspend fun cancelSpace(unit : Double, listing : Listing, startDate : Long, endDate : Long) : Boolean
 }
