@@ -17,6 +17,7 @@ import com.example.spaceshare.databinding.DialogHostReservationBinding
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
+import com.example.spaceshare.models.User
 import com.example.spaceshare.ui.viewmodel.MessagesViewModel
 import com.example.spaceshare.ui.viewmodel.ProfileViewModel
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
@@ -25,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
@@ -51,6 +53,7 @@ class HostReservationDialogFragment(
 
     private lateinit var binding: DialogHostReservationBinding
 
+    private lateinit var client : User
 
 //    lateinit var listing:Listing
 
@@ -110,25 +113,32 @@ class HostReservationDialogFragment(
     }
 
     private fun configureBindings() {
-
         val formatter = SimpleDateFormat("MMM dd yyyy", Locale.getDefault())
 
-        binding.start.text = reservation.startDate?.toDate()?.let { formatter.format(it) }
-        binding.end.text = reservation.endDate?.toDate()?.let { formatter.format(it) }
-        binding.textView5.text = reservation.spaceRequested.toString()
-        //todo: binding.messageTextView.text = reservation.message
-        binding.messageTextView.text = "this is a test msg" // delete after todo
-        binding.name.text = "${reservation.clientFirstName} ${reservation.clientLastName}"
-        binding.phoneNumber.text = "123-1234-1234" // todo: grab
-        binding.email.text = "123@gmail.com" //todo: grab
-        //todo:binding.verified.text = if (reservation.verified == true) "Yes" else "No"
+        CoroutineScope(Dispatchers.IO).launch {
+            client = reservation.clientId?.let { reservationViewModel.fetchUserInfo(it) }!!
 
-        if (reservation.status == ReservationStatus.PENDING) {
-            binding.decisionBox.visibility = View.VISIBLE
-        } else {
-            binding.decisionBox.visibility = View.GONE
+            withContext(Dispatchers.Main) {
+                binding.start.text = reservation.startDate?.toDate()?.let { formatter.format(it) }
+                binding.end.text = reservation.endDate?.toDate()?.let { formatter.format(it) }
+                binding.textView5.text = reservation.spaceRequested.toString()
+                binding.messageTextView.text = reservation.message
+                binding.name.text = "${client.firstName} ${client.lastName}"
+                binding.phoneNumber.text = if (client.phoneNumber == "")
+                    "No phone number provided" else client.phoneNumber
+                binding.email.text = if (client.email == null) "No email provided" else client.email
+
+                binding.verified.text = if (client.isVerified == 1) "Yes" else "No"
+
+                if (reservation.status == ReservationStatus.PENDING) {
+                    binding.decisionBox.visibility = View.VISIBLE
+                } else {
+                    binding.decisionBox.visibility = View.GONE
+                }
+            }
         }
     }
+
 
 
     private fun configureButtons(){

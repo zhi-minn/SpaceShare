@@ -96,10 +96,14 @@ class ReservationPageDialogFragment(
     ): View {
         binding = DialogReservationPageBinding.inflate(inflater, container, false)
 
-        reservationViewModel.userInfoLiveData.observe(viewLifecycleOwner) { user ->
-            client = user
+//        reservationViewModel.userInfoLiveData.observe(viewLifecycleOwner) { user ->
+//            client = user
+//        }
+//        reservationViewModel.fetchUserInfo(auth.currentUser!!.uid)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            client = reservationViewModel.fetchUserInfo(auth.currentUser!!.uid)!!
         }
-        reservationViewModel.fetchUserInfo(auth.currentUser!!.uid)
 
         // Get a reference to the Toolbar
         val toolbar: Toolbar = binding.root.findViewById(R.id.confirmPayToolbar)
@@ -323,7 +327,13 @@ class ReservationPageDialogFragment(
                 endDate = cal.timeInMillis
             }
 
-            val msgText = binding.messageToHost.text.toString()
+            var msgText = binding.messageToHost.text.toString()
+
+            // If user didn't input any message, set a default greeting message
+            if (msgText.isBlank()) {
+                msgText = "Hi, I'm interested in renting your space."
+            }
+
 
             val reservation = unit?.let { it1 ->
                 Reservation(
