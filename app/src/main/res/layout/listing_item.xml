@@ -26,7 +26,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="350dp"
                     tools:itemCount="3"
-                    tools:orientation="horizontal" />
+                    tools:orientation="horizontal" >
+                </androidx.viewpager2.widget.ViewPager2>
+
+                <ImageButton
+                    android:id="@+id/btnShortlist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@color/fui_transparent"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/twotone_star_36" />
 
                 <me.relex.circleindicator.CircleIndicator3
                     android:id="@+id/imageIndicator"

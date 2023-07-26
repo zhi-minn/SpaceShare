@@ -36,7 +36,7 @@ class ChatViewModel @Inject constructor(
     private lateinit var chat: Chat
     private lateinit var chatDBRef: DatabaseReference
     private lateinit var currentUser: User
-    private lateinit var currentUserPhotoURL: String
+    private var currentUserPhotoURL: String = ""
 
     private lateinit var associatedListing: Listing
     private lateinit var hostUser: User

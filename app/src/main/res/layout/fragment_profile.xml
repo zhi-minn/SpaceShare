@@ -78,6 +78,18 @@
             app:layout_constraintTop_toBottomOf="@id/btnEditAccount" />
 
         <TextView
+            android:id="@+id/btnShortlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/standard_component_margin"
+            android:text="Shortlist"
+            android:textSize="@dimen/button_text"
+            android:drawableStart="@drawable/baseline_star_border_24"
+            android:drawablePadding="@dimen/drawable_start_padding"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@id/divider1" />
+
+        <TextView
             android:id="@+id/btnPreferences"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -87,7 +99,7 @@
             android:drawableStart="@drawable/preferences"
             android:drawablePadding="@dimen/drawable_start_padding"
             android:gravity="center_vertical"
-            app:layout_constraintTop_toBottomOf="@id/divider1" />
+            app:layout_constraintTop_toBottomOf="@id/btnShortlist" />
 
         <TextView
             android:id="@+id/btnLogout"
