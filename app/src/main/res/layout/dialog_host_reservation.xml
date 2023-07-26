@@ -173,6 +173,152 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/item_types"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/declared_item_types"
+                        android:textColor="#3E3939"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/clothing_items_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:inputType="textMultiLine"
+                        android:text="Clothing Descriptions"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:textColor="#3E3939"
+                        android:textSize="18sp"
+                        android:textStyle="normal"
+                        android:visibility= "gone"/>
+
+                    <TextView
+                        android:id="@+id/documents_items_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:inputType="textMultiLine"
+                        android:text="Books and Documents Descriptions"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:textColor="#3E3939"
+                        android:textSize="18sp"
+                        android:textStyle="normal"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/furniture_items_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:inputType="textMultiLine"
+                        android:text="Furniture Description"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:textColor="#3E3939"
+                        android:textSize="18sp"
+                        android:textStyle="normal"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/sport_and_recreational_items_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:inputType="textMultiLine"
+                        android:text="Sport and Recreational Description"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:textColor="#3E3939"
+                        android:textSize="18sp"
+                        android:textStyle="normal"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/appliance_items_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:inputType="textMultiLine"
+                        android:text="Small Appliance Description"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:textColor="#3E3939"
+                        android:textSize="18sp"
+                        android:textStyle="normal"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/necessary_items_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:inputType="textMultiLine"
+                        android:text="Daily Necessary Description"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:textColor="#3E3939"
+                        android:textSize="18sp"
+                        android:textStyle="normal"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/mementos_items_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:inputType="textMultiLine"
+                        android:text="Mementos Description"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:textColor="#3E3939"
+                        android:textSize="18sp"
+                        android:textStyle="normal"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/other_items_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:inputType="textMultiLine"
+                        android:text="Other Description"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
+                        android:textColor="#3E3939"
+                        android:textSize="18sp"
+                        android:textStyle="normal"
+                        android:visibility="gone"/>
+
+                </LinearLayout>
+
                 <View
                     android:id="@+id/divider4"
                     style="@style/HorizontalDivider"
