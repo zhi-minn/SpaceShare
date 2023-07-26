@@ -296,7 +296,7 @@
   * Updated Reservation model
   * Added new fields for reservation page
   * Updated reservation page view
- * Youming 12 hours (2023-07-24) [PR](https://github.com/zhi-minn/SpaceShare/pull/89)
+* Youming 12 hours (2023-07-24) [PR](https://github.com/zhi-minn/SpaceShare/pull/89)
   * add hosting reservation tab
   * add hosting reservation function
   * create host reservation items
