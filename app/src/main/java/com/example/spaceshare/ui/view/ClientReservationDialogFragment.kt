@@ -96,33 +96,6 @@ class ClientReservationDialogFragment(
 
         var thumbsClicked = false
 
-//        thumbsUpButton.setOnClickListener {
-//            if (!thumbsClicked) {
-//                val newListing = listing.copy()
-//                newListing.likes += 1
-//                listingViewModel.updateListing(newListing)
-//
-//
-//
-//                thumbsClicked = true
-//
-//                reservationViewModel.setReservationRated(reservation,true)
-//            }
-//            thumbsUpButton.startAnimation(animScaleUp)
-//            thumbsUpButton.startAnimation(animScaleDown)
-//        }
-//
-//        thumbsDownButton.setOnClickListener {
-//            if (!thumbsClicked) {
-//                // Just animate the thumbsDownButton, no updates are performed
-//
-//                thumbsClicked = true
-//                reservationViewModel.setReservationRated(reservation,true)
-//            }
-//            thumbsDownButton.startAnimation(animScaleUp)
-//            thumbsDownButton.startAnimation(animScaleDown)
-//        }
-
         thumbsUpButton.setOnClickListener {
             if (!thumbsClicked) {
                 val newListing = listing.copy()
@@ -133,6 +106,9 @@ class ClientReservationDialogFragment(
                 thumbsUpButton.startAnimation(animScaleDown)
                 thumbsUpButton.setImageResource(R.drawable.like_clicked)
 
+                // fix likes real time
+                var curLikes = (listing.likes + 1).toString()
+                binding.likes.text = curLikes
                 thumbsClicked = true
                 reservation.rated = true
                 reservationViewModel.setReservationRated(reservation,true)

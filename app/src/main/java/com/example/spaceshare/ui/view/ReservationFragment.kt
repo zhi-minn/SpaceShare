@@ -130,6 +130,14 @@ class ReservationFragment : Fragment(),HostReservationDialogFragment.OnReservati
 
             binding.reservationPage.removeAllViews()
 
+            if (displayList.isEmpty()) {
+                binding.noReservationPromt.text = "You currently have no requests."
+                binding.noListingView.visibility = View.VISIBLE
+            } else {
+                binding.noListingView.visibility = View.GONE
+            }
+
+
             for (reservation in displayList) {
 
                 val cardView = layoutInflater.inflate(R.layout.host_reservation_items, null) as CardView
@@ -197,6 +205,7 @@ class ReservationFragment : Fragment(),HostReservationDialogFragment.OnReservati
 
                             cardView.setOnClickListener{
                                 val hostReservationDialogFragment = HostReservationDialogFragment(reservation, listingPassIn, this)
+//                                val hostReservationDialogFragment = HostReservationDialogFragment(reservation, this)
                                 hostReservationDialogFragment.show(
                                     Objects.requireNonNull(childFragmentManager),
                                     "HostReservationDialogFragment")
@@ -234,6 +243,14 @@ class ReservationFragment : Fragment(),HostReservationDialogFragment.OnReservati
             }
 
             binding.reservationPage.removeAllViews()
+
+            // Check if there are no reservations and display the appropriate view
+            if (displayList.isEmpty()) {
+                binding.noReservationPromt.text = "You currently have no reservations."
+                binding.noListingView.visibility = View.VISIBLE
+            } else {
+                binding.noListingView.visibility = View.GONE
+            }
 
             for (reservation in displayList) {
 
@@ -286,34 +303,6 @@ class ReservationFragment : Fragment(),HostReservationDialogFragment.OnReservati
                 binding.reservationPage.addView(cardView)
 
                 val db = FirebaseFirestore.getInstance()
-//                lateinit var listingPassIn:Listing
-//
-//                reservation.listingId?.let {
-//                    db.collection("listings")
-//                        .document(it)
-//                        .get()
-//                        .addOnSuccessListener { documentSnapshot ->
-//                            listingPassIn = documentSnapshot.toObject(Listing::class.java)!!
-//                            // You can now use `user`
-//                            if (listingPassIn != null) {
-//                                Log.d("listing id", listingPassIn.id)
-//                            }
-//
-//                        }
-//                        .addOnFailureListener { e -> Log.w("Error getting document", e) }
-//                }
-//
-//                cardView.setOnClickListener{
-//                    val clientReservationDialogFragment = ClientReservationDialogFragment(reservation, listingPassIn)
-////            val bundle = Bundle().apply {
-////                putInt("reservationId", reservationId)
-////            }
-////            dialogFragment.arguments = bundle
-////            reservationPageDialogFragment.show(supportFragmentManager, "ReservationDetailDialogFragment")
-//                    clientReservationDialogFragment.show(
-//                        Objects.requireNonNull(childFragmentManager),
-//                        "ClientReservationDialogFragment")
-//                }
                 reservation.listingId?.let {
                     db.collection("listings")
                         .document(it)

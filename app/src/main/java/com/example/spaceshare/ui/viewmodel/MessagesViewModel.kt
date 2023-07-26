@@ -70,7 +70,7 @@ class MessagesViewModel @Inject constructor(
     }
     suspend fun createChatWithID(listing: Listing, sendeeID: String): Chat {
         return withContext(Dispatchers.IO) {
-            val memberIds = listOf(sendeeID, currentUser.id)
+            val memberIds = listOf(currentUser.id, sendeeID)
 
             val photoRef = FirebaseStorage.getInstance()
                 .reference
@@ -80,7 +80,7 @@ class MessagesViewModel @Inject constructor(
             val chat = messagesRepo.createChat(
                 listing.title,
                 chatPhotoURL,
-                sendeeID,
+                currentUser.id,
                 listing.id,
                 memberIds as List<String>
             )
