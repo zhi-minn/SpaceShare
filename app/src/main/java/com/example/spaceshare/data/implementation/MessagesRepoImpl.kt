@@ -109,6 +109,34 @@ class MessagesRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteChatsByAssociatedListingId(listingId: String) {
+        withContext(Dispatchers.IO) {
+            // Delete chat data in Firestore
+            chatsCollection.whereEqualTo("associatedListingId", listingId).get()
+                .addOnSuccessListener { querySnapshot ->
+                    for (document in querySnapshot) {
+                        try {
+                            val chat = document.toObject(Chat::class.java)
+                            // Delete channel in Realtime DB
+                            baseMessagesRef.child(chat.id).removeValue()
+                                .addOnSuccessListener {
+                                    Log.i(TAG, "Deleted chat channel associated with listing $listingId")
+                                }
+                                .addOnFailureListener {e ->
+                                    Log.e(TAG, "Error deleting chat channel associated with listing $listingId: ${e.message}", e)
+                                }
+                            document.reference.delete()
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error deleting chat: ${e.message}", e)
+                        }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "Error getting documents: ${e.message}", e)
+                }
+        }
+    }
+
     override suspend fun getChatsByMemberIds(memberIds: List<String>): List<Chat> =
         withContext(Dispatchers.IO) {
             try {
