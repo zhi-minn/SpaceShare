@@ -264,6 +264,7 @@ class ReservationPageDialogFragment(
 
         // Handle dates
         if (startDate == 0L) {
+
             val cal = Calendar.getInstance()
             startDate = cal.timeInMillis
 
@@ -279,6 +280,19 @@ class ReservationPageDialogFragment(
 
             binding.pickedDate.text = "$curDate - $curDatePlus30Days"
         } else {
+
+            val calStart = Calendar.getInstance().apply {
+                time = Date(startDate!!)
+                add(Calendar.HOUR_OF_DAY, 4)
+            }
+
+            startDate = calStart.timeInMillis
+
+            val calEnd = Calendar.getInstance().apply {
+                time = Date(endDate!!)
+                add(Calendar.HOUR_OF_DAY, 4)
+            }
+            endDate = calEnd.timeInMillis
             // Convert the startDate and endDate from Long to Date and format them
             val formattedStartDate = formatter.format(startDate?.let { Date(it) })
             val formattedEndDate = formatter.format(endDate?.let { Date(it) })
@@ -377,23 +391,15 @@ class ReservationPageDialogFragment(
                     }
 
                     val reservation = unit?.let { it1 ->
-                        val calStart = Calendar.getInstance().apply {
-                            time = Date(startDate!!)
-                            add(Calendar.HOUR_OF_DAY, 4)
-                        }
-                        val calEnd = Calendar.getInstance().apply {
-                            time = Date(endDate!!)
-                            add(Calendar.HOUR_OF_DAY, 4)
-                        }
                         Reservation(
                             hostId = listing.hostId,
                             clientId = clientId,
                             listingId = listing.id,
                             totalCost = totalCost,
-//                            startDate = Timestamp(Date(startDate!!)),
-//                            endDate = Timestamp(Date(endDate!!)),
-                            startDate = Timestamp(calStart.time),
-                            endDate = Timestamp(calEnd.time),
+                            startDate = Timestamp(Date(startDate!!)),
+                            endDate = Timestamp(Date(endDate!!)),
+//                            startDate = Timestamp(calStart.time),
+//                            endDate = Timestamp(calEnd.time),
                             spaceRequested = it1,
                             status = PENDING,
                             listingTitle = listing.title,
@@ -471,6 +477,18 @@ class ReservationPageDialogFragment(
             binding.pickedDate.text = dateRangePicker.headerText
             startDate = dateRangePicker.selection?.first
             endDate = dateRangePicker.selection?.second
+
+            val calStart = Calendar.getInstance().apply {
+                time = Date(startDate!!)
+                add(Calendar.HOUR_OF_DAY, 4)
+            }
+            val calEnd = Calendar.getInstance().apply {
+                time = Date(endDate!!)
+                add(Calendar.HOUR_OF_DAY, 4)
+            }
+
+            startDate = calStart.timeInMillis
+            endDate = calEnd.timeInMillis
 //            searchViewModel.startTime.value = dateRangePicker.selection?.first
 //            searchViewModel.endTime.value = dateRangePicker.selection?.second
             searchViewModel?.setStartTime(dateRangePicker.selection?.first ?: 0)
