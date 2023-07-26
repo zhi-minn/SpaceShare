@@ -508,6 +508,7 @@ class ReservationPageDialogFragment(
                 if (value > unitAvailable) {
                     showFailureDialog("Not enough space available for the selected dates. \n Please edit your space or adjust dates.")
                     value -= 0.5
+                    sizeValue.text = value.toString()
                     increaseButton.isEnabled = false
                 }
             }
