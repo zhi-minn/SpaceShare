@@ -1,5 +1,6 @@
 package com.example.spaceshare.models
 
+import com.example.spaceshare.enums.DeclareItemType
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.UUID
@@ -39,6 +40,8 @@ data class Reservation(
     val clientLastName: String? = null,
     val clientPhoto: String? = null,
     val message: String? = null,
-    var rated:Boolean = false // likes will only goes up when user click thumbs_up when rating,clicking thumbs_down won't do anything.
+    var rated:Boolean = false, // likes will only goes up when user click thumbs_up when rating,clicking thumbs_down won't do anything
+    val items: Map<String, String>? = null
+//    val rating:Int? = null
 ) {
 }

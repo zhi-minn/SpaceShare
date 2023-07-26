@@ -39,7 +39,12 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.Objects
 import javax.inject.Inject
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.example.spaceshare.enums.DeclareItemType
 
 import com.example.spaceshare.models.ReservationStatus.PENDING
 import com.example.spaceshare.models.User
@@ -61,6 +66,8 @@ class ReservationPageDialogFragment(
     private var startDate : Long? = null
     private var endDate : Long? = null
     private var unit: Double? = 1.0
+
+    private var itemTypes: MutableMap<DeclareItemType, String> = mutableMapOf()
 
     private var unitAvailable: Double = 10.0
 
@@ -232,6 +239,19 @@ class ReservationPageDialogFragment(
 //            binding.sizeEdit.performClick()
 //        }
 //    }
+    private fun setEmptyCheck() {
+        binding.reserveBtn.isEnabled = itemTypes.isNotEmpty()
+    }
+
+    fun updateItems(input: MutableMap<DeclareItemType, String>) {
+        itemTypes.clear()
+        itemTypes = input
+        setEmptyCheck()
+    }
+
+    fun getItems(): MutableMap<DeclareItemType, String> {
+        return itemTypes.toMutableMap()
+    }
 
     private fun configureBindings() {
         binding.viewPagerListingImages.adapter =
@@ -310,104 +330,90 @@ class ReservationPageDialogFragment(
         binding.sizeEdit.setOnClickListener { openSizePicker() }
         binding.sizes.setOnClickListener { openSizePicker() }
 
-        binding.reserveBtn.setOnClickListener {
+        binding.declareButton.setOnClickListener {
+            val itemDeclarationFragment = ItemDeclarationFragment(this)
+            itemDeclarationFragment.show(
+                Objects.requireNonNull(childFragmentManager),
+                "ItemDeclarationFragment"
+            )
+        }
 
-//            if (unit!! > listing.currentSpaceAvailble) {
-//                showFailureDialogThenDismiss("Not enough space available for selected dates. \n Please edit your space or adjust your booking dates.")
-//            }
-            auth = FirebaseAuth.getInstance()
-            val clientId = auth.currentUser?.uid
+        binding.reserveBtn.apply {
+            setEmptyCheck()
+            setOnClickListener {
+                auth = FirebaseAuth.getInstance()
+                val clientId = auth.currentUser?.uid
 
-            // Calculate total cost for host analytics (since price is subject to possible change)
-            val totalTime = Date(endDate!!).time - Date(startDate!!).time
-            val totalDays = totalTime / (1000 * 60 * 60 * 24) + 1
-            val totalCost = MathUtil.roundToTwoDecimalPlaces(listing.price * unit!! * totalDays)
+                // Calculate total cost for host analytics (since price is subject to possible change)
+                val totalTime = Date(endDate!!).time - Date(startDate!!).time
+                val totalDays = totalTime / (1000 * 60 * 60 * 24) + 1
+                val totalCost = MathUtil.roundToTwoDecimalPlaces(listing.price * unit!! * totalDays)
 
-            val location = listing.location?.let { location ->
-                com.example.spaceshare.utils.GeocoderUtil.getGeneralLocation(location.latitude, location.longitude)
-            }
-
-            val previewPhoto = listing.photos[0]
-
-            if (startDate!!.toInt() == 0) {
-                val cal = Calendar.getInstance()
-                startDate = cal.timeInMillis
-                cal.add(Calendar.DATE, 30)
-                endDate = cal.timeInMillis
-            }
-
-            var msgText = binding.messageToHost.text.toString()
-
-            // If user didn't input any message, set a default greeting message
-            if (msgText.isBlank()) {
-                msgText = "Hi, I'm interested in renting your space."
-            }
-
-
-            CoroutineScope(Dispatchers.IO).launch {
-                val spaceReservedSuccess = reservationViewModel.reserveSpace(unit!!, listing, startDate!!, endDate!!)
-                if (!spaceReservedSuccess) {
-                    showFailureDialog("Failed to reserve space, please adjust unit or reselect dates and try again")
+                val location = listing.location?.let { location ->
+                    com.example.spaceshare.utils.GeocoderUtil.getGeneralLocation(
+                        location.latitude,
+                        location.longitude
+                    )
                 }
+
+                val previewPhoto = listing.photos[0]
+
+                if (startDate!!.toInt() == 0) {
+                    val cal = Calendar.getInstance()
+                    startDate = cal.timeInMillis
+                    cal.add(Calendar.DATE, 30)
+                    endDate = cal.timeInMillis
+                }
+
+                var msgText = binding.messageToHost.text.toString()
+
+                // If user didn't input any message, set a default greeting message
+                if (msgText.isBlank()) {
+                    msgText = "Hi, I'm interested in renting your space."
+                }
+
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val spaceReservedSuccess =
+                        reservationViewModel.reserveSpace(unit!!, listing, startDate!!, endDate!!)
+                    if (!spaceReservedSuccess) {
+                        showFailureDialog("Failed to reserve space, please adjust unit or reselect dates and try again")
+                    }
+                }
+
+                val reservation = unit?.let { it1 ->
+                    Reservation(
+                        hostId = listing.hostId,
+                        clientId = clientId,
+                        listingId = listing.id,
+                        totalCost = totalCost,
+                        startDate = Timestamp(Date(startDate!!)),
+                        endDate = Timestamp(Date(endDate!!)),
+                        spaceRequested = it1,
+                        status = PENDING,
+                        listingTitle = listing.title,
+                        location = location!!,
+                        previewPhoto = previewPhoto,
+                        clientFirstName = client.firstName,
+                        clientLastName = client.lastName,
+                        clientPhoto = client.photoPath,
+                        message = msgText,
+                        items = itemTypes.mapKeys { (key, _) -> key.toString() }.toMap()
+                    )
+                }
+
+                if (reservation != null) {
+                    reservationViewModel.reserveListing(reservation)
+                }
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val chat = messagesViewModel.createChatWithHost(listing)
+                    chatViewModel.setChat(chat)
+                    chatViewModel.sendMessage(msgText)
+                }
+                // Show a confirmation dialog
+                showDialogThenDismiss()
             }
-
-            val reservation = unit?.let { it1 ->
-                Reservation(
-                    hostId=listing.hostId,
-                    clientId=clientId,
-                    listingId=listing.id,
-                    totalCost = totalCost,
-                    startDate=Timestamp(Date(startDate!!)),
-                    endDate=Timestamp(Date(endDate!!)),
-                    spaceRequested=it1,
-                    status=PENDING,
-                    listingTitle=listing.title,
-                    location=location!!,
-                    previewPhoto=previewPhoto,
-                    clientFirstName=client.firstName,
-                    clientLastName=client.lastName,
-                    clientPhoto=client.photoPath,
-                    message=msgText)
-            }
-
-            if (reservation != null) {
-                reservationViewModel.reserveListing(reservation)
-            }
-
-            CoroutineScope(Dispatchers.IO).launch {
-                val chat = messagesViewModel.createChatWithHost(listing)
-                chatViewModel.setChat(chat)
-                chatViewModel.sendMessage(msgText)
-            }
-
-
-//            val message = Message(
-//                text = msgText,
-//                senderName = "${client.firstName} ${client.lastName}",
-//                senderId = clientId!!,
-//                profilePhotoUrl = client.photoPath,
-//                imageUrl = null
-//                )
-//
-////            val baseMessagesRef = realTimeDB.reference.child("messages")
-//            baseMessagesRef.push().setValue(message)
-//
-//            val chat = Chat(
-//                photoURL = previewPhoto,
-//                hostId = listing.hostId,
-//                associatedListingId = listing.id,
-//                title = listing.title,
-//                lastMessage = message,
-//                members = listOf(listing.hostId!!, clientId),
-//                createdAt = Timestamp.now()
-//            )
-//
-//            reservationViewModel.sendMessage(chat)
-
-
-
-            // Show a confirmation dialog
-            showDialogThenDismiss()
         }
     }
 

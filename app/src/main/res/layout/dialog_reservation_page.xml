@@ -396,6 +396,40 @@
                 </LinearLayout>
 
                 <View
+                    android:id="@+id/divider6"
+                    style="@style/HorizontalDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="@dimen/standard_component_margin"
+                    android:scaleY="0.5"
+                    app:layout_constraintTop_toBottomOf="@id/price" />
+
+                <LinearLayout
+                    android:id="@+id/item_declaration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/item_declaration_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="@string/item_declaration_title"
+                        android:textColor="#3E3939"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                    <Button
+                        android:id="@+id/declare_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/item_declaration_title" />
+                </LinearLayout>
+
+                <View
                     android:id="@+id/divider7"
                     style="@style/HorizontalDivider"
                     android:layout_width="match_parent"
