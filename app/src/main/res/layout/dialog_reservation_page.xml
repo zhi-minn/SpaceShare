@@ -126,7 +126,7 @@
                 <LinearLayout
                     android:id="@+id/order_info"
                     android:layout_width="match_parent"
-                    android:layout_height="189dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TextView
@@ -263,6 +263,47 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/availableSpaceBlock"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/availableSpaceText"
+                            android:duplicateParentState="true"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:ems="7"
+                            android:inputType="text"
+                            android:text="Available Units: "
+                            android:textColor="#2C2C2C" />
+
+                        <TextView
+                            android:id="@+id/availableSpace"
+                            android:duplicateParentState="true"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:ems="3"
+                            android:inputType="text"
+                            android:text="5.5"
+                            android:textColor="#2C2C2C"
+                            android:textStyle="bold"/>
+
                     </LinearLayout>
 
                 </LinearLayout>
