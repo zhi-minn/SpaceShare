@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ListingAdapter
 import com.example.spaceshare.adapters.ScrollToTopObserver
+import com.example.spaceshare.data.repository.ShortlistRepository
 import com.example.spaceshare.databinding.FragmentSearchBinding
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
@@ -36,6 +37,10 @@ class SearchFragment : Fragment() {
 
     @Inject
     lateinit var searchViewModel: SearchViewModel
+
+    @Inject
+    lateinit var shortlistRepo: ShortlistRepository
+
     private lateinit var adapter: ListingAdapter
     private lateinit var manager: LinearLayoutManager
 
@@ -83,16 +88,20 @@ class SearchFragment : Fragment() {
     private fun configureRecyclerView() {
         manager = LinearLayoutManager(requireContext())
 
-        adapter = ListingAdapter(childFragmentManager, object : ListingAdapter.ItemClickListener {
-            override fun onItemClick(listing: Listing) {
-                val clientListingDialogFragment =
-                    ClientListingDialogFragment(listing, searchViewModel)
-                clientListingDialogFragment.show(
-                    Objects.requireNonNull(childFragmentManager),
-                    "clientListingDialog"
-                )
-            }
-        })
+        adapter = ListingAdapter(
+            childFragmentManager,
+            object : ListingAdapter.ItemClickListener {
+                override fun onItemClick(listing: Listing) {
+                    val clientListingDialogFragment =
+                        ClientListingDialogFragment(listing, searchViewModel)
+                    clientListingDialogFragment.show(
+                        Objects.requireNonNull(childFragmentManager),
+                        "clientListingDialog"
+                    )
+                }
+            },
+            shortlistRepo = shortlistRepo
+        )
 
         adapter.registerAdapterDataObserver(
             ScrollToTopObserver(binding.recyclerView, adapter, manager)
