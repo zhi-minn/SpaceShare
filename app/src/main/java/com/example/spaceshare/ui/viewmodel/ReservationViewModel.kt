@@ -59,11 +59,15 @@ class ReservationViewModel @Inject constructor(
         }
     }
 
-    fun fetchUserInfo(id: String) {
-        viewModelScope.launch {
-            val info = repo.fetchUser(id)
-            _userInfoLiveData.value = info!!
+    suspend fun fetchUserInfo(id: String): User? {
+//        viewModelScope.launch {
+//            val info = repo.fetchUser(id)
+//            _userInfoLiveData.value = info!!
+//        }
+        return withContext(Dispatchers.IO) {
+            return@withContext repo.fetchUser(id)
         }
+
     }
 
     fun sendMessage(chat : Chat) {
