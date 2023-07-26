@@ -141,7 +141,7 @@ class ClientReservationDialogFragment(
         }
 
         binding.cancelBtn.setOnClickListener {
-            listener.onStatusChanged()
+
             showConfirmCancelDialog()
         }
     }
@@ -160,7 +160,8 @@ class ClientReservationDialogFragment(
 //                    reservation.startDate!!.toDate().time, reservation.endDate!!.toDate().time
 //                )
 //            }
-//            reservationViewModel.setReservationStatus(reservation, ReservationStatus.CANCELLED)
+            reservationViewModel.setReservationStatus(reservation, ReservationStatus.CANCELLED)
+            listener.onStatusChanged()
             showCancelSuccessDialog()
             this.dismiss()
         }
