@@ -32,8 +32,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HostReservationDialogFragment(
     private val reservation: Reservation,
-//    private val listing: Listing
-
+    private val listing: Listing
 ) : DialogFragment(){
 
     companion object {
@@ -51,7 +50,8 @@ class HostReservationDialogFragment(
 
     private lateinit var binding: DialogHostReservationBinding
 
-    lateinit var listing:Listing
+
+//    lateinit var listing:Listing
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,6 +85,24 @@ class HostReservationDialogFragment(
         val sizeDialog = Dialog(requireContext())
         sizeDialog.setContentView(R.layout.dialog_size_picker)
         sizeDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+
+//        val db = FirebaseFirestore.getInstance()
+//
+//
+//        reservation.listingId?.let {
+//            db.collection("listings")
+//                .document(it)
+//                .get()
+//                .addOnSuccessListener { documentSnapshot ->
+//                    listing = documentSnapshot.toObject(Listing::class.java)!!
+//                    // You can now use `user`
+//                    if (listing != null) {
+//                        Log.d("listing id", listing.id)
+//                    }
+//
+//                }
+//                .addOnFailureListener { e -> Log.w("Error getting document", e) }
+//        }
     }
 
     private fun configureBindings() {
@@ -101,28 +119,17 @@ class HostReservationDialogFragment(
         binding.email.text = "123@gmail.com" //todo: grab
         //todo:binding.verified.text = if (reservation.verified == true) "Yes" else "No"
 
+        if (reservation.status == ReservationStatus.PENDING) {
+            binding.decisionBox.visibility = View.VISIBLE
+        } else {
+            binding.decisionBox.visibility = View.GONE
+        }
     }
 
 
     private fun configureButtons(){
 
-        val db = FirebaseFirestore.getInstance()
 
-
-        reservation.listingId?.let {
-            db.collection("listings")
-                .document(it)
-                .get()
-                .addOnSuccessListener { documentSnapshot ->
-                    listing = documentSnapshot.toObject(Listing::class.java)!!
-                    // You can now use `user`
-                    if (listing != null) {
-                        Log.d("listing id", listing.id)
-                    }
-
-                }
-                .addOnFailureListener { e -> Log.w("Error getting document", e) }
-        }
 
 //        binding.messageBtn.isGone = hideMessageHostButton
 

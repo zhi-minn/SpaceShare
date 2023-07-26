@@ -1,63 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="4dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <TextView
+            android:id="@+id/reservation_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="0.3"
-            android:orientation="vertical">
+            android:padding="8dp"
+            android:text="Title"
+            android:textAppearance="?android:textAppearanceMedium"
+            app:layout_constraintBottom_toTopOf="@+id/reservation_location"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
-            <TextView
-                android:id="@+id/reservation_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Title"
-                android:textAppearance="?android:textAppearanceMedium" />
+        <TextView
+            android:id="@+id/reservation_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/reservation_title"
+            android:textAppearance="?android:textAppearanceSmall"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/reservation_title" />
 
-            <TextView
-                android:id="@+id/reservation_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/reservation_title"
-                android:textAppearance="?android:textAppearanceSmall" />
+        <TextView
+            android:id="@+id/reservation_period"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/reservation_period"
+            android:textAppearance="?android:textAppearanceSmall"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/reservation_location" />
 
-            <TextView
-                android:id="@+id/reservation_period"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/reservation_period"
-                android:textAppearance="?android:textAppearanceSmall" />
 
-            <TextView
-                android:id="@+id/reservation_status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/reservation_status"
-                android:textAppearance="?android:textAppearanceMedium" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/reservation_status"
+            android:layout_width="209dp"
+            android:layout_height="59dp"
+            android:padding="8dp"
+            android:text="@string/reservation_status"
+            android:textAppearance="?android:textAppearanceMedium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/reservation_progress_bar" />
+
+        <ProgressBar
+            android:id="@+id/reservation_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/view_pager_reservation_images"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager_reservation_images"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.7"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/reservation_status"
+            app:layout_constraintTop_toTopOf="parent"
             tools:itemCount="3"
             tools:orientation="horizontal" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

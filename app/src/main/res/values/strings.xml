@@ -56,4 +56,6 @@
     <string name="dialog_id_verified_true">Host is verified</string>
     <string name="dialog_id_verified_false">Host is not verified</string>
     <string name="sample_revenue_generated">Revenue to date: $102.33</string>
+    <string name="thumbs_down">thumbs_down</string>
+    <string name="thumbs_up">thumbs_up</string>
 </resources>

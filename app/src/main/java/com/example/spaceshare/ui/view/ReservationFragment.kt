@@ -3,10 +3,12 @@ package com.example.spaceshare.ui.view
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
@@ -21,6 +23,7 @@ import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.FragmentReservationBinding
 import com.example.spaceshare.manager.SharedPreferencesManager.isHostMode
 import com.example.spaceshare.models.ImageModel
+import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
@@ -130,6 +133,9 @@ class ReservationFragment : Fragment() {
                 val period: TextView = cardView.findViewById(R.id.host_reservation_period)
                 val spaceRequested: TextView = cardView.findViewById(R.id.host_reservation_space_required)
                 val status: TextView = cardView.findViewById(R.id.host_reservation_status)
+                val progressBar: ProgressBar = cardView.findViewById(R.id.reservation_progress_bar)
+                progressBar.visibility = View.VISIBLE
+
 
                 name.text = "Request From: ${reservation.clientFirstName}"
                 title.text = reservation.listingTitle
@@ -173,17 +179,44 @@ class ReservationFragment : Fragment() {
                 cardView.layoutParams = layoutParams
                 cardView.radius = 25.0F
 
-                cardView.setOnClickListener{
-                    val hostReservationDialogFragment = HostReservationDialogFragment(reservation)
-//            val bundle = Bundle().apply {
-//                putInt("reservationId", reservationId)
-//            }
-//            dialogFragment.arguments = bundle
-//            reservationPageDialogFragment.show(supportFragmentManager, "ReservationDetailDialogFragment")
-                    hostReservationDialogFragment.show(
-                        Objects.requireNonNull(childFragmentManager),
-                        "HostReservationDialogFragment")
+                val db = FirebaseFirestore.getInstance()
+                reservation.listingId?.let {
+                    db.collection("listings")
+                        .document(it)
+                        .get()
+                        .addOnSuccessListener { documentSnapshot ->
+                            val listingPassIn = documentSnapshot.toObject(Listing::class.java)!!
+                            // You can now use `listingPassIn`
+                            if (listingPassIn != null) {
+                                Log.d("listing id", listingPassIn.id)
+
+                            cardView.setOnClickListener{
+                                val hostReservationDialogFragment = HostReservationDialogFragment(reservation, listingPassIn)
+                                hostReservationDialogFragment.show(
+                                    Objects.requireNonNull(childFragmentManager),
+                                    "HostReservationDialogFragment")
+                            }
+                            }
+
+                            progressBar.visibility = View.GONE
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("Error getting document", e)
+                            progressBar.visibility = View.GONE
+                        }
                 }
+
+//                cardView.setOnClickListener{
+//                    val hostReservationDialogFragment = HostReservationDialogFragment(reservation)
+////            val bundle = Bundle().apply {
+////                putInt("reservationId", reservationId)
+////            }
+////            dialogFragment.arguments = bundle
+////            reservationPageDialogFragment.show(supportFragmentManager, "ReservationDetailDialogFragment")
+//                    hostReservationDialogFragment.show(
+//                        Objects.requireNonNull(childFragmentManager),
+//                        "HostReservationDialogFragment")
+//                }
 
 
                 binding.reservationPage.addView(cardView)
@@ -206,6 +239,9 @@ class ReservationFragment : Fragment() {
                 val location: TextView = cardView.findViewById(R.id.reservation_location)
                 val period: TextView = cardView.findViewById(R.id.reservation_period)
                 val status: TextView = cardView.findViewById(R.id.reservation_status)
+                val progressBar: ProgressBar = cardView.findViewById(R.id.reservation_progress_bar)
+                progressBar.visibility = View.VISIBLE
+
 
                 title.text = reservation.listingTitle
                 location.text = reservation.location
@@ -243,6 +279,62 @@ class ReservationFragment : Fragment() {
                 cardView.layoutParams = layoutParams
                 cardView.radius = 25.0F
                 binding.reservationPage.addView(cardView)
+
+                val db = FirebaseFirestore.getInstance()
+//                lateinit var listingPassIn:Listing
+//
+//                reservation.listingId?.let {
+//                    db.collection("listings")
+//                        .document(it)
+//                        .get()
+//                        .addOnSuccessListener { documentSnapshot ->
+//                            listingPassIn = documentSnapshot.toObject(Listing::class.java)!!
+//                            // You can now use `user`
+//                            if (listingPassIn != null) {
+//                                Log.d("listing id", listingPassIn.id)
+//                            }
+//
+//                        }
+//                        .addOnFailureListener { e -> Log.w("Error getting document", e) }
+//                }
+//
+//                cardView.setOnClickListener{
+//                    val clientReservationDialogFragment = ClientReservationDialogFragment(reservation, listingPassIn)
+////            val bundle = Bundle().apply {
+////                putInt("reservationId", reservationId)
+////            }
+////            dialogFragment.arguments = bundle
+////            reservationPageDialogFragment.show(supportFragmentManager, "ReservationDetailDialogFragment")
+//                    clientReservationDialogFragment.show(
+//                        Objects.requireNonNull(childFragmentManager),
+//                        "ClientReservationDialogFragment")
+//                }
+                reservation.listingId?.let {
+                    db.collection("listings")
+                        .document(it)
+                        .get()
+                        .addOnSuccessListener { documentSnapshot ->
+                            val listingPassIn = documentSnapshot.toObject(Listing::class.java)!!
+                            // You can now use `listingPassIn`
+                            if (listingPassIn != null) {
+                                Log.d("listing id", listingPassIn.id)
+
+                                cardView.setOnClickListener {
+                                    val clientReservationDialogFragment = ClientReservationDialogFragment(reservation, listingPassIn)
+                                    clientReservationDialogFragment.show(
+                                        Objects.requireNonNull(childFragmentManager),
+                                        "ClientReservationDialogFragment")
+                                }
+                            }
+
+                            progressBar.visibility = View.GONE
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("Error getting document", e)
+                            progressBar.visibility = View.GONE
+                        }
+                }
+
             }
         }
     }

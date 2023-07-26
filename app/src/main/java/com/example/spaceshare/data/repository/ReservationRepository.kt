@@ -20,4 +20,5 @@ interface ReservationRepository {
     suspend fun setChat(chat : Chat) : String
 
     suspend fun setReservationStatus(reservation : Reservation, status : ReservationStatus)
+    suspend fun setReservationRated(reservation: Reservation, rated: Boolean)
 }

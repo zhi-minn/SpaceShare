@@ -163,6 +163,22 @@ class ReservationRepoImpl @Inject constructor(
         deferred.await()
     }
 
+    override suspend fun setReservationRated(reservation: Reservation, rated: Boolean) {
+        val deferred = CompletableDeferred<Boolean>()
+        reservation.rated = rated
+        reservationsCollection.document(reservation.id)
+            .set(reservation)
+            .addOnSuccessListener {
+                Log.i(TAG, "Update success for Reservation with id ${reservation.id}")
+                deferred.complete(true)
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Failed to update Reservation: ${e.message}", e)
+                deferred.complete(false)
+            }
+        deferred.await()
+    }
+
 
 //    override suspend fun fetchListings(reservations: List<Reservation>?): List<Listing> {
 //        val listingIds = reservations?.map { i -> i.listingId }
