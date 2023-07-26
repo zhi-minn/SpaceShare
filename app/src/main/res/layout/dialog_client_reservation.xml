@@ -243,6 +243,7 @@
                 <!-- Description -->
 
                 <!-- MapView -->
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/mapCard"
                     android:layout_width="match_parent"
@@ -354,25 +355,18 @@
 
                 </LinearLayout>
 
-
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/CancelButtonBox"-->
-<!--                    android:layout_width="349dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="horizonral">-->
-
-<!--                </LinearLayout>-->
-
-<!--                <Button-->
-<!--                    android:id="@+id/cancelBtn"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Button"-->
-<!--                    tools:layout_editor_absoluteX="136dp"-->
-<!--                    tools:layout_editor_absoluteY="768dp" />-->
+                <Button
+                    android:id="@+id/cancelBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:backgroundTint="@color/light_red"
+                    android:text="Cancel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ratingBox" />
 
 
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

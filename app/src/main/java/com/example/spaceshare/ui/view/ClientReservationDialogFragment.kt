@@ -33,6 +33,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
+import java.text.SimpleDateFormat
+import java.util.Locale
 import java.util.Objects
 import javax.inject.Inject
 
@@ -148,6 +150,11 @@ class ClientReservationDialogFragment(
 
     private fun configureBindings() {
 
+        val formatter = SimpleDateFormat("MMM dd yyyy", Locale.getDefault())
+
+        binding.start.text = reservation.startDate?.toDate()?.let { formatter.format(it) }
+        binding.end.text = reservation.endDate?.toDate()?.let { formatter.format(it) }
+
         binding.viewPagerListingImages.adapter = ImageAdapter(listing.photos.map { ImageModel(imagePath = it) })
         binding.imageIndicator.setViewPager(binding.viewPagerListingImages)
         binding.titleText.text = listing.title
@@ -182,17 +189,30 @@ class ClientReservationDialogFragment(
             }
         }
 
-        if (reservation.status != ReservationStatus.APPROVED) {
+
+
+//        if (reservation.status != ReservationStatus.APPROVED || reservation.rated) {
+//            binding.ratingBox.visibility = View.GONE
+//        } else {
+//            binding.ratingBox.visibility = View.VISIBLE
+//        }
+        val currentTimestamp = System.currentTimeMillis()
+
+        if (reservation.status != ReservationStatus.APPROVED
+            || reservation.rated
+            || (reservation.startDate?.toDate()?.time ?: Long.MAX_VALUE) > currentTimestamp
+        ) {
             binding.ratingBox.visibility = View.GONE
         } else {
             binding.ratingBox.visibility = View.VISIBLE
         }
 
-        if (reservation.rated) {
-            binding.ratingBox.visibility = View.GONE
-        } else {
-            binding.ratingBox.visibility = View.VISIBLE
-        }
+
+//        if (reservation.rated) {
+//            binding.ratingBox.visibility = View.GONE
+//        } else {
+//            binding.ratingBox.visibility = View.VISIBLE
+//        }
 
     }
 
