@@ -154,12 +154,12 @@ class ClientReservationDialogFragment(
 
         builder.setPositiveButton("Yes") { dialog, which ->
             // cancel request and return space
-//            CoroutineScope(Dispatchers.IO).launch {
-//                reservationViewModel.cancelSpace(
-//                    reservation.spaceRequested, listing,
-//                    reservation.startDate!!.toDate().time, reservation.endDate!!.toDate().time
-//                )
-//            }
+            CoroutineScope(Dispatchers.IO).launch {
+                reservationViewModel.cancelSpace(
+                    reservation.spaceRequested, listing,
+                    reservation.startDate!!.toDate().time, reservation.endDate!!.toDate().time
+                )
+            }
             reservationViewModel.setReservationStatus(reservation, ReservationStatus.CANCELLED)
             listener.onStatusChanged()
             showCancelSuccessDialog()
