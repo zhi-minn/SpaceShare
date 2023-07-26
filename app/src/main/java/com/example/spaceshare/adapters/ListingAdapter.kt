@@ -19,6 +19,7 @@ class ListingAdapter(
 ) : ListAdapter<Listing, ListingAdapter.ViewHolder>(DiffCallback()) {
 
     var areEditButtonsGone = false
+    var areShortlistButtonsGone = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -48,6 +49,9 @@ class ListingAdapter(
 
             // Whether to show the edit button
             binding.btnEdit.isGone = areEditButtonsGone
+
+            // Whether to show the shortlist button
+            binding.btnShortlist.isGone = areShortlistButtonsGone
 
             // Set click listeners
             binding.btnEdit.setOnClickListener {

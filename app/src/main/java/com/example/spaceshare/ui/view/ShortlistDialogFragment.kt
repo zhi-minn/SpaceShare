@@ -130,6 +130,7 @@ class ShortlistDialogFragment() : DialogFragment() {
             binding.noListingView.visibility =
                 if (listings.isNotEmpty()) View.GONE else View.VISIBLE
             adapter.areEditButtonsGone = true
+            adapter.areShortlistButtonsGone = false
             adapter.submitList(listings)
         }
     }
