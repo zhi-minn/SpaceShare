@@ -492,8 +492,8 @@ class ReservationPageDialogFragment(
         // Disable the decrease button initially if the size is already 0.5
         decreaseButton.isEnabled = sizeValue.text.toString().toDouble() > 0.5
 
-        // Disable the increase button initially if the size is already 100
-        increaseButton.isEnabled = sizeValue.text.toString().toDouble() < unitAvailable
+        // Disable the increase button initially if the size is already unitAvailable
+//        increaseButton.isEnabled = sizeValue.text.toString().toDouble() < unitAvailable
 
         increaseButton.setOnClickListener {
             var value = sizeValue.text.toString().toDouble()
@@ -506,7 +506,7 @@ class ReservationPageDialogFragment(
 
                 // Disable increase button if the size reaches 100
                 if (value > unitAvailable) {
-                    showFailureDialog("Not enough space available for the selected dates. \n Please edit your space or adjust dates.")
+                    showFailureDialog("Not enough space available for the selected dates. \nPlease edit your space or adjust dates.")
                     value -= 0.5
                     sizeValue.text = value.toString()
                     increaseButton.isEnabled = false
