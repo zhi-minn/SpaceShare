@@ -6,6 +6,7 @@ import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
 import com.google.android.gms.tasks.Task
+import com.google.firebase.Timestamp
 
 interface ReservationRepository {
 
@@ -20,4 +21,8 @@ interface ReservationRepository {
     suspend fun setChat(chat : Chat) : String
 
     suspend fun setReservationStatus(reservation : Reservation, status : ReservationStatus)
+
+    suspend fun getAvailableSpace(listing : Listing, startDate : Long, endDate : Long) : Double
+
+    suspend fun reserveSpace(unit : Double, listing : Listing, startDate : Long, endDate : Long) : Boolean
 }

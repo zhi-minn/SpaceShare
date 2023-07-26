@@ -32,6 +32,9 @@ class ReservationViewModel @Inject constructor(
     private val _setStatusSuccess: MutableLiveData<Boolean> = MutableLiveData()
     val setStatusSuccess: LiveData<Boolean> = _setStatusSuccess
 
+    private val _spaceAvailable: MutableLiveData<Double> = MutableLiveData()
+    val spaceAvailable: LiveData<Double> = _spaceAvailable
+
     fun fetchReservations(user: User) {
         viewModelScope.launch {
             val reservations = repo.fetchReservations(user, isHostMode.value ?: false)
@@ -81,11 +84,28 @@ class ReservationViewModel @Inject constructor(
             try {
                 repo.setReservationStatus(reservation, status)
                 _setStatusSuccess.value = true
-
             } catch (e: Exception) {
                 _setStatusSuccess.value = false
                 null
             }
+        }
+    }
+
+    fun getAvailableSpace(listing : Listing, startDate : Long, endDate : Long) {
+        viewModelScope.launch {
+            try {
+                val space = repo.getAvailableSpace(listing, startDate, endDate)
+                _spaceAvailable.value = space
+            } catch (e: Exception) {
+                _spaceAvailable.value = 0.0
+                null
+            }
+        }
+    }
+
+    fun reserveSpace(unit : Double, listing : Listing, startDate : Long, endDate : Long) {
+        viewModelScope.launch {
+            repo.reserveSpace(unit, listing, startDate, endDate)
         }
     }
 }

@@ -4,8 +4,10 @@ import android.util.Log
 import com.example.spaceshare.data.repository.ListingRepository
 import com.example.spaceshare.data.repository.ReservationRepository
 import com.example.spaceshare.models.Booking
+import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
+import com.example.spaceshare.models.ReservationStatus.APPROVED
 import com.example.spaceshare.models.User
 import com.example.spaceshare.models.Chat
 import com.google.firebase.Timestamp
@@ -15,7 +17,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import com.example.spaceshare.models.ReservationStatus.APPROVED
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import java.util.Calendar
+import com.google.firebase.ktx.Firebase
 
 class ReservationRepoImpl @Inject constructor(
     db: FirebaseFirestore,
@@ -25,6 +30,10 @@ class ReservationRepoImpl @Inject constructor(
     companion object {
         private val TAG = this::class.simpleName
     }
+
+    private val realTimeDB = Firebase.database
+    private val baseAvailableSpaceRef = realTimeDB.reference.child("currentSpaceAvailable")
+
 
     private val reservationsCollection = db.collection("reservations")
     private val listingsCollection = db.collection("listings")
@@ -162,6 +171,91 @@ class ReservationRepoImpl @Inject constructor(
             }
         deferred.await()
     }
+
+    private fun getLongDateFromTimestamp(timestamp: Timestamp): Long {
+        val date = timestamp.toDate()
+
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.get(Calendar.MONTH) + 1
+        val year = calendar.get(Calendar.YEAR)
+
+        return year * 10000L + month * 100L + day
+    }
+
+    override suspend fun getAvailableSpace(listing : Listing, startDate : Long, endDate : Long) : Double {
+//        val startDateLong = getLongDateFromTimestamp(startDate)
+//        val endDateLong = getLongDateFromTimestamp(endDate)
+
+        val query = baseAvailableSpaceRef.child(listing.id)
+
+        var spaceAvailable : Double = 0.0
+
+        query.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val data = task.result?.value as? Map<Long, Double>
+                if (data != null) {
+                    val filteredData = data.filterKeys { date ->
+                        val longDate = date.toLong()
+                        longDate >= startDate && longDate <= endDate
+                    }
+
+                    // Get the minimum space within the date range
+                    val minSpace = filteredData.minByOrNull { it.value }?.value
+
+                    spaceAvailable = minSpace!!
+                } else {
+                    // if the given dates are not booked
+                    spaceAvailable = listing.spaceAvailable
+                }
+            } else {
+                // if the listing doesn't already exist in db, no reservations have been made
+                spaceAvailable = listing.spaceAvailable
+            }
+        }
+
+        return spaceAvailable
+    }
+    private fun getDateRange(startDate: Long, endDate: Long): List<String> {
+        val dates = mutableListOf<String>()
+        var currentDate = startDate
+        while (currentDate <= endDate) {
+            dates.add(currentDate.toString())
+            currentDate += (24 * 60 * 60 * 1000) // Increment by one day in milliseconds
+        }
+        return dates
+    }
+
+    override suspend fun reserveSpace(unit : Double, listing : Listing, startDate : Long, endDate : Long) : Boolean {
+        val currentSpace = getAvailableSpace(listing, startDate, endDate)
+
+//        val startDateLong = getLongDateFromTimestamp(startDate)
+//        val endDateLong = getLongDateFromTimestamp(endDate)
+        val dateRange = getDateRange(startDate, endDate)
+
+        if (currentSpace < unit) {
+            return false
+        }
+
+        val query = baseAvailableSpaceRef.child(listing.id)
+
+        return try {
+            val snapshot = query.get().await()
+            val data = snapshot.value as? Map<String, Double>
+
+            for (date in dateRange) {
+                val remainingSpace = (data?.get(date) ?: listing.spaceAvailable) - unit
+                baseAvailableSpaceRef.child(listing.id).child(date).setValue(remainingSpace)
+            }
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error when reserving space in db", e)
+            false
+        }
+    }
+
+
 
 
 //    override suspend fun fetchListings(reservations: List<Reservation>?): List<Listing> {

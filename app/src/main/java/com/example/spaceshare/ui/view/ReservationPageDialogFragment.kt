@@ -44,6 +44,7 @@ import javax.inject.Inject
 import com.example.spaceshare.models.ReservationStatus.PENDING
 import com.example.spaceshare.models.User
 import com.example.spaceshare.ui.viewmodel.ChatViewModel
+import com.example.spaceshare.ui.viewmodel.ListingViewModel
 import com.example.spaceshare.ui.viewmodel.MessagesViewModel
 import com.example.spaceshare.utils.GeocoderUtil
 import com.example.spaceshare.utils.MathUtil
@@ -51,9 +52,6 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
-//import com.google.firebase.database.DatabaseReference
-//import com.google.firebase.database.ktx.database
 
 @AndroidEntryPoint
 class ReservationPageDialogFragment(
@@ -64,6 +62,8 @@ class ReservationPageDialogFragment(
     private var endDate : Long? = null
     private var unit: Double? = 1.0
 
+    private var unitAvailable: Double = 10.0
+
     private var auth = FirebaseAuth.getInstance()
 
     companion object {
@@ -72,6 +72,9 @@ class ReservationPageDialogFragment(
 
     @Inject
     lateinit var reservationViewModel: ReservationViewModel
+
+    @Inject
+    lateinit var listingViewModel: ListingViewModel
 
     @Inject
     lateinit var messagesViewModel: MessagesViewModel
@@ -295,6 +298,10 @@ class ReservationPageDialogFragment(
         binding.sizes.setOnClickListener { openSizePicker() }
 
         binding.reserveBtn.setOnClickListener {
+
+//            if (unit!! > listing.currentSpaceAvailble) {
+//                showFailureDialogThenDismiss("Not enough space available for selected dates. \n Please edit your space or adjust your booking dates.")
+//            }
             auth = FirebaseAuth.getInstance()
             val clientId = auth.currentUser?.uid
 
@@ -326,8 +333,8 @@ class ReservationPageDialogFragment(
                     totalCost = totalCost,
                     startDate=Timestamp(Date(startDate!!)),
                     endDate=Timestamp(Date(endDate!!)),
-                    spaceRequested= it1,
-                    status= PENDING,
+                    spaceRequested=it1,
+                    status=PENDING,
                     listingTitle=listing.title,
                     location=location!!,
                     previewPhoto=previewPhoto,
@@ -390,6 +397,14 @@ class ReservationPageDialogFragment(
         dialog.show()
     }
 
+    private fun showFailureDialog(message : String) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Reservation Failed")
+        builder.setMessage(message)
+        val dialog = builder.create()
+        dialog.show()
+    }
+
     private fun openDatePicker() {
 //        val constraintsBuilder = CalendarConstraints.Builder()
 //
@@ -418,7 +433,16 @@ class ReservationPageDialogFragment(
 //            searchViewModel.endTime.value = dateRangePicker.selection?.second
             searchViewModel?.setStartTime(dateRangePicker.selection?.first ?: 0)
             searchViewModel?.setEndTime(dateRangePicker.selection?.second ?: 0)
+
+            reservationViewModel.spaceAvailable.observe(viewLifecycleOwner) { space ->
+                unitAvailable = space
+                binding.availableSpace.text = unitAvailable.toString()
+            }
+
+            reservationViewModel.getAvailableSpace(listing, startDate!!, endDate!!)
         }
+
+
             // SearchViewModel should not be used here, this should be stored in ReservationViewModel
 //            dateRangePicker.selection?.first?.let { it1 -> searchViewModel.setStartTime(it1) }
 //            dateRangePicker.selection?.second?.let { it1 -> searchViewModel.setEndTime(it1) }
@@ -439,11 +463,11 @@ class ReservationPageDialogFragment(
         decreaseButton.isEnabled = sizeValue.text.toString().toDouble() > 0.5
 
         // Disable the increase button initially if the size is already 100
-        increaseButton.isEnabled = sizeValue.text.toString().toDouble() < 100
+        increaseButton.isEnabled = sizeValue.text.toString().toDouble() < unitAvailable
 
         increaseButton.setOnClickListener {
             var value = sizeValue.text.toString().toDouble()
-            if (value < 100) {
+            if (value <= unitAvailable) {
                 value += 0.5
                 sizeValue.text = value.toString()
 
@@ -451,7 +475,9 @@ class ReservationPageDialogFragment(
                 decreaseButton.isEnabled = true
 
                 // Disable increase button if the size reaches 100
-                if (value >= 100) {
+                if (value > unitAvailable) {
+                    showFailureDialog("Not enough space available for the selected dates. \n Please edit your space or adjust dates.")
+                    value -= 0.5
                     increaseButton.isEnabled = false
                 }
             }
