@@ -46,7 +46,7 @@ import com.google.firebase.storage.FirebaseStorage
 import java.util.Objects
 
 @AndroidEntryPoint
-class ReservationFragment : Fragment(),HostReservationDialogFragment.OnReservationStatusChangedListener {
+class ReservationFragment : Fragment(),HostReservationDialogFragment.OnReservationStatusChangedListener, ClientReservationDialogFragment.OnReservationStatusChangedListener {
 
     private val db = FirebaseFirestore.getInstance()
     private var auth = FirebaseAuth.getInstance()
@@ -314,7 +314,7 @@ class ReservationFragment : Fragment(),HostReservationDialogFragment.OnReservati
                                 Log.d("listing id", listingPassIn.id)
 
                                 cardView.setOnClickListener {
-                                    val clientReservationDialogFragment = ClientReservationDialogFragment(reservation, listingPassIn)
+                                    val clientReservationDialogFragment = ClientReservationDialogFragment(reservation, listingPassIn, this)
                                     clientReservationDialogFragment.show(
                                         Objects.requireNonNull(childFragmentManager),
                                         "ClientReservationDialogFragment")
