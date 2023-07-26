@@ -1,6 +1,7 @@
 package com.example.spaceshare.ui.view
 
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -18,6 +20,7 @@ import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
+import com.example.spaceshare.ui.viewmodel.ChatViewModel
 import com.example.spaceshare.ui.viewmodel.MessagesViewModel
 import com.example.spaceshare.ui.viewmodel.ProfileViewModel
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
@@ -51,6 +54,9 @@ class HostReservationDialogFragment(
     @Inject
     lateinit var profileViewModel: ProfileViewModel
 
+    @Inject
+    lateinit var chatViewModel: ChatViewModel
+
     private lateinit var binding: DialogHostReservationBinding
 
     private lateinit var client : User
@@ -60,6 +66,7 @@ class HostReservationDialogFragment(
     interface OnReservationStatusChangedListener {
         fun onStatusChanged()
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -141,6 +148,7 @@ class HostReservationDialogFragment(
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun configureButtons(){
 
 
@@ -166,6 +174,22 @@ class HostReservationDialogFragment(
             val status = ReservationStatus.APPROVED
             reservationViewModel.setReservationStatus(reservation = reservation, status = status)
             listener.onStatusChanged()
+
+            val acceptMsgText = "I've accepted your request, looking forward to host you!"
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val chat = reservation.clientId?.let { it1 ->
+                    messagesViewModel.createChatWithID(
+                        listing,
+                        it1
+                    )
+                }
+                if (chat != null) {
+                    chatViewModel.setChat(chat)
+                }
+                chatViewModel.sendMessage(acceptMsgText)
+            }
+
             showDialogThenDismiss(true)
         }
 
@@ -173,6 +197,22 @@ class HostReservationDialogFragment(
             val status = ReservationStatus.DECLINED
             reservationViewModel.setReservationStatus(reservation = reservation, status = status)
             listener.onStatusChanged()
+
+            val rejectMsgText = "Sorry, I can't accept your request right now. Hope to see you again."
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val chat = reservation.clientId?.let { it1 ->
+                    messagesViewModel.createChatWithID(
+                        listing,
+                        it1
+                    )
+                }
+                if (chat != null) {
+                    chatViewModel.setChat(chat)
+                }
+                chatViewModel.sendMessage(rejectMsgText)
+            }
+
             showDialogThenDismiss(false)
         }
     }
@@ -181,7 +221,7 @@ class HostReservationDialogFragment(
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Request Confirmation")
         if (isAccepted){
-            builder.setMessage("You have accepted the request!")
+            builder.setMessage("You have accepted the request and sent a welcome message to the client!")
         }
         else{
             builder.setMessage("You have declined the request!")
