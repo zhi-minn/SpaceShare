@@ -29,6 +29,7 @@
             android:id="@+id/reservation_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:padding="8dp"
             android:text="@string/reservation_title"
             android:textAppearance="?android:textAppearanceSmall"
@@ -39,6 +40,7 @@
             android:id="@+id/reservation_period"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:padding="8dp"
             android:text="@string/reservation_period"
             android:textAppearance="?android:textAppearanceSmall"
@@ -50,11 +52,12 @@
             android:id="@+id/reservation_status"
             android:layout_width="209dp"
             android:layout_height="59dp"
+            android:layout_marginTop="16dp"
             android:padding="8dp"
             android:text="@string/reservation_status"
             android:textAppearance="?android:textAppearanceMedium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reservation_progress_bar" />
+            app:layout_constraintTop_toBottomOf="@+id/reservation_period" />
 
         <ProgressBar
             android:id="@+id/reservation_progress_bar"
