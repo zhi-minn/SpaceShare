@@ -200,7 +200,13 @@ class HostReservationDialogFragment(
 
             val rejectMsgText = "Sorry, I can't accept your request right now. Hope to see you again."
 
-            CoroutineScope(Dispatchers.IO).launch {
+            var cancelSpaceSuccess : Boolean = false
+            CoroutineScope(Dispatchers.Main).launch {
+                cancelSpaceSuccess = withContext(Dispatchers.IO) {
+                    reservationViewModel.cancelSpace(reservation.spaceRequested, listing,
+                        reservation.startDate!!.toDate().time, reservation.endDate!!.toDate().time)
+                }
+
                 val chat = reservation.clientId?.let { it1 ->
                     messagesViewModel.createChatWithID(
                         listing,
