@@ -20,12 +20,9 @@ import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.adapters.ImageAdapter
 import com.example.spaceshare.databinding.DialogReservationPageBinding
-import com.example.spaceshare.models.Chat
 import com.example.spaceshare.models.ImageModel
 import com.example.spaceshare.models.Listing
-import com.example.spaceshare.models.Message
 import com.example.spaceshare.models.Reservation
-import com.example.spaceshare.models.toInt
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
 import com.example.spaceshare.ui.viewmodel.SearchViewModel
 import com.google.android.material.datepicker.CalendarConstraints
@@ -41,9 +38,6 @@ import java.util.Date
 import java.util.Locale
 import java.util.Objects
 import javax.inject.Inject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.example.spaceshare.enums.DeclareItemType
 
 import com.example.spaceshare.models.ReservationStatus.PENDING
@@ -51,12 +45,11 @@ import com.example.spaceshare.models.User
 import com.example.spaceshare.ui.viewmodel.ChatViewModel
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
 import com.example.spaceshare.ui.viewmodel.MessagesViewModel
-import com.example.spaceshare.utils.GeocoderUtil
 import com.example.spaceshare.utils.MathUtil
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class ReservationPageDialogFragment(
@@ -373,53 +366,56 @@ class ReservationPageDialogFragment(
                 }
 
                 var spaceReservedSuccess : Boolean = false
-                CoroutineScope(Dispatchers.IO).launch {
-                    spaceReservedSuccess =
+                CoroutineScope(Dispatchers.Main).launch {
+                    spaceReservedSuccess = withContext(Dispatchers.IO) {
                         reservationViewModel.reserveSpace(unit!!, listing, startDate!!, endDate!!)
-                }
+                    }
 
-                if (!spaceReservedSuccess) {
-                    showFailureDialog("No available space for selected dates. \nPlease adjust units or reselect dates and try again.")
-                    return@setOnClickListener
-                }
+                    if (!spaceReservedSuccess) {
+                        showFailureDialog("No available space for selected dates. \nPlease adjust units or reselect dates and try again.")
+                        return@launch
+                    }
 
-                val reservation = unit?.let { it1 ->
-                    Reservation(
-                        hostId = listing.hostId,
-                        clientId = clientId,
-                        listingId = listing.id,
-                        totalCost = totalCost,
-                        startDate = Timestamp(Date(startDate!!)),
-                        endDate = Timestamp(Date(endDate!!)),
-                        spaceRequested = it1,
-                        status = PENDING,
-                        listingTitle = listing.title,
-                        location = location!!,
-                        previewPhoto = previewPhoto,
-                        clientFirstName = client.firstName,
-                        clientLastName = client.lastName,
-                        clientPhoto = client.photoPath,
-                        message = msgText,
-                        items = itemTypes.mapKeys { (key, _) -> key.toString() }.toMap()
-                    )
-                }
+                    val reservation = unit?.let { it1 ->
+                        Reservation(
+                            hostId = listing.hostId,
+                            clientId = clientId,
+                            listingId = listing.id,
+                            totalCost = totalCost,
+                            startDate = Timestamp(Date(startDate!!)),
+                            endDate = Timestamp(Date(endDate!!)),
+                            spaceRequested = it1,
+                            status = PENDING,
+                            listingTitle = listing.title,
+                            location = location!!,
+                            previewPhoto = previewPhoto,
+                            clientFirstName = client.firstName,
+                            clientLastName = client.lastName,
+                            clientPhoto = client.photoPath,
+                            message = msgText,
+                            items = itemTypes.mapKeys { (key, _) -> key.toString() }.toMap()
+                        )
+                    }
 
-                if (reservation != null) {
-                    reservationViewModel.reserveListing(reservation)
-                }
+                    if (reservation != null) {
+                        reservationViewModel.reserveListing(reservation)
+                    }
 
-                CoroutineScope(Dispatchers.IO).launch {
                     val chat = messagesViewModel.createChatWithHost(listing)
                     chatViewModel.setChat(chat)
                     chatViewModel.sendMessage(msgText)
+
+                    // Show a confirmation dialog
+                    showDialogThenDismiss(spaceReservedSuccess)
                 }
-                // Show a confirmation dialog
-                showDialogThenDismiss()
             }
         }
     }
 
-    private fun showDialogThenDismiss() {
+    private fun showDialogThenDismiss(spaceReservedSuccess: Boolean) {
+        if(!spaceReservedSuccess){
+            return
+        }
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Reservation Confirmation")
         builder.setMessage("Your reservation is complete!")
