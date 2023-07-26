@@ -67,4 +67,6 @@
     <string name="daily_necessaries">Daily Necessaries</string>
     <string name="mementos_and_collectibles">Mementos and Collectibles</string>
     <string name="others">Others</string>
+    <string name="details_hint">Add more details here.</string>
+    <string name="other_hint">Please briefly introduce your items.</string>
 </resources>
