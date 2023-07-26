@@ -110,8 +110,9 @@ class SearchViewModel @Inject constructor(
                     spaceRequired.value!!, searchGeopoint,
                     queryRadius, startTimestamp, endTimestamp
                 )
-            val searchResults = listingRepo.searchListings(criteria)
-            mutableSearchResults.value = applyForcedClientSearchFilters(searchResults)
+            val repoSearchResults = listingRepo.searchListings(criteria)
+            Log.d(TAG, searchResults.toString())
+            mutableSearchResults.value = applyForcedClientSearchFilters(repoSearchResults)
 
             // Check filter criteria for invalid values, then apply it if necessary
             var filterBeenApplied = hasFilterBeenApplied.value
@@ -121,6 +122,9 @@ class SearchViewModel @Inject constructor(
             if (filterBeenApplied) {
                 checkFilterCriteriaMaxValues()
                 filterByFilterCriteria()
+            }
+            else {
+                mutableFilteredListings.value = sortByDistance(searchResults.value.orEmpty())
             }
         }
     }
