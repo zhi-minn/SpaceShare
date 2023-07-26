@@ -354,6 +354,8 @@ class ReservationPageDialogFragment(
                 chatViewModel.sendMessage(msgText)
             }
 
+            reservationViewModel.reserveSpace(unit!!, listing, startDate!!, endDate!!)
+
 
 //            val message = Message(
 //                text = msgText,
@@ -434,12 +436,10 @@ class ReservationPageDialogFragment(
             searchViewModel?.setStartTime(dateRangePicker.selection?.first ?: 0)
             searchViewModel?.setEndTime(dateRangePicker.selection?.second ?: 0)
 
-            reservationViewModel.spaceAvailable.observe(viewLifecycleOwner) { space ->
-                unitAvailable = space
+            CoroutineScope(Dispatchers.IO).launch {
+                unitAvailable = reservationViewModel.getAvailableSpace(listing, startDate!!, endDate!!)
                 binding.availableSpace.text = unitAvailable.toString()
             }
-
-            reservationViewModel.getAvailableSpace(listing, startDate!!, endDate!!)
         }
 
 

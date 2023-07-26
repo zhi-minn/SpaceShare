@@ -11,9 +11,9 @@ import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.models.User
-import com.example.spaceshare.models.toInt
-import com.google.firebase.Timestamp
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ReservationViewModel @Inject constructor(
@@ -91,15 +91,18 @@ class ReservationViewModel @Inject constructor(
         }
     }
 
-    fun getAvailableSpace(listing : Listing, startDate : Long, endDate : Long) {
-        viewModelScope.launch {
-            try {
-                val space = repo.getAvailableSpace(listing, startDate, endDate)
-                _spaceAvailable.value = space
-            } catch (e: Exception) {
-                _spaceAvailable.value = 0.0
-                null
-            }
+    suspend fun getAvailableSpace(listing : Listing, startDate : Long, endDate : Long): Double {
+//        viewModelScope.launch {
+//            try {
+//                val space = repo.getAvailableSpace(listing, startDate, endDate)
+//                _spaceAvailable.value = space
+//            } catch (e: Exception) {
+//                _spaceAvailable.value = 0.0
+//                null
+//            }
+//        }
+        return withContext(Dispatchers.IO) {
+            return@withContext repo.getAvailableSpace(listing, startDate, endDate)
         }
     }
 
