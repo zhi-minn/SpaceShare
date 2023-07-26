@@ -83,6 +83,12 @@ class ProfileFragment : Fragment() {
             preferencesDialogFragment.show(Objects.requireNonNull(childFragmentManager), "preferencesDialog")
         }
 
+        // Shortlist
+        binding.btnShortlist.setOnClickListener {
+            val shortlistDialogFragment = ShortlistDialogFragment()
+            shortlistDialogFragment.show(Objects.requireNonNull(childFragmentManager), "shortlistDialog")
+        }
+
         // Logout
         binding.btnLogout.setOnClickListener {
             /**
