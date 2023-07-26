@@ -69,4 +69,6 @@
     <string name="others">Others</string>
     <string name="details_hint">Add more details here.</string>
     <string name="other_hint">Please briefly introduce your items.</string>
+    <string name="thumbs_down">thumbs_down</string>
+    <string name="thumbs_up">thumbs_up</string>
 </resources>

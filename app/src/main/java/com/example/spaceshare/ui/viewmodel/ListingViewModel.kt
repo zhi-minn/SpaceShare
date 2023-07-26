@@ -16,6 +16,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 import com.example.spaceshare.consts.ListingConsts.DEFAULT_MAX_PRICE
+import com.example.spaceshare.data.repository.MessagesRepository
 import com.example.spaceshare.data.repository.ReservationRepository
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -23,6 +24,7 @@ import java.math.RoundingMode
 class ListingViewModel @Inject constructor(
     private val listingRepo: ListingRepository,
     private val reservationRepo: ReservationRepository,
+    private val messagesRepo: MessagesRepository,
     private val firebaseStorageRepo: FirebaseStorageRepository
 ): ViewModel() {
 
@@ -172,7 +174,7 @@ class ListingViewModel @Inject constructor(
          filterListings(curQuery, curCriteria)
          viewModelScope.launch {
              // Delete listing
-             listingRepo.deleteListing(listing.id!!)
+             listingRepo.deleteListing(listing.id)
 
              // Delete corresponding images
              for (filePath in listing.photos) {
@@ -184,6 +186,9 @@ class ListingViewModel @Inject constructor(
                      }
                  }
              }
+
+             // Delete chats associated
+             messagesRepo.deleteChatsByAssociatedListingId(listing.id)
          }
      }
 

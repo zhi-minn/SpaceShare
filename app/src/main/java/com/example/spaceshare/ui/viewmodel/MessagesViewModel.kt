@@ -68,4 +68,23 @@ class MessagesViewModel @Inject constructor(
             return@withContext chat
         }
     }
+    suspend fun createChatWithID(listing: Listing, sendeeID: String): Chat {
+        return withContext(Dispatchers.IO) {
+            val memberIds = listOf(sendeeID, currentUser.id)
+
+            val photoRef = FirebaseStorage.getInstance()
+                .reference
+                .child("spaces/${listing.photos.first()}")
+            val chatPhotoURL = photoRef.downloadUrl.await().toString()
+
+            val chat = messagesRepo.createChat(
+                listing.title,
+                chatPhotoURL,
+                sendeeID,
+                listing.id,
+                memberIds as List<String>
+            )
+            return@withContext chat
+        }
+    }
 }

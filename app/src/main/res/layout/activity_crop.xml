@@ -24,7 +24,7 @@
             app:layout_constraintDimensionRatio="h,1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/confirmPayToolbar"
+            app:layout_constraintTop_toBottomOf="@id/ReservationToolbar"
             >
 
         </com.takusemba.cropme.CropLayout>
