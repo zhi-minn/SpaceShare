@@ -316,3 +316,9 @@
 * Minn 1.5 hours (2023-07-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/97)[PR](https://github.com/zhi-minn/SpaceShare/pull/98)
   * Delete associated chats when listing deleted
   * Prevent listing deletion if there exists an upcoming reservation
+* Youming 20 hours (2023-07-25 -> 2023-07-26) [commit](https://github.com/zhi-minn/SpaceShare/commit/62d86e5712e048c22dda477642dcb00b1e483097)
+  * Add rating system
+  * fix UI (updating real-time)
+  * fix cancel logic
+  * add client reservation detailed fragment
+  * debugging host reservation
