@@ -201,7 +201,10 @@ class ReservationRepoImpl @Inject constructor(
             }
 
             // Get the minimum space within the date range
-            val minSpace = filteredData.minByOrNull { it.value.toDouble() }?.value?.toDouble()
+            var minSpace : Double = listing.spaceAvailable
+            if (filteredData.isNotEmpty()) {
+                minSpace = filteredData.minByOrNull { it.value.toDouble() }?.value?.toDouble()!!
+            }
 
             spaceAvailable = minSpace!!
         } else {

@@ -355,7 +355,7 @@
                             android:imeOptions="actionDone"
                             android:inputType="textMultiLine"
                             android:maxLength="300"
-                            android:hint="Enter here" />
+                            android:hint="Hi, I'm interested in renting your space." />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
