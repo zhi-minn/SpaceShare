@@ -270,7 +270,7 @@ class ReservationRepoImpl @Inject constructor(
 
             true
         } catch (e: Exception) {
-            Log.e(TAG, "Error when reserving space in db", e)
+            Log.e(TAG, "Error when returning space in db", e)
             false
         }
     }
