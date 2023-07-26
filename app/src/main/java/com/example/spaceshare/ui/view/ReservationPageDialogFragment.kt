@@ -372,13 +372,15 @@ class ReservationPageDialogFragment(
                     msgText = "Hi, I'm interested in renting your space."
                 }
 
-
+                var spaceReservedSuccess : Boolean = false
                 CoroutineScope(Dispatchers.IO).launch {
-                    val spaceReservedSuccess =
+                    spaceReservedSuccess =
                         reservationViewModel.reserveSpace(unit!!, listing, startDate!!, endDate!!)
-                    if (!spaceReservedSuccess) {
-                        showFailureDialog("Failed to reserve space, please adjust unit or reselect dates and try again")
-                    }
+                }
+
+                if (!spaceReservedSuccess) {
+                    showFailureDialog("No available space for selected dates. \nPlease adjust units or reselect dates and try again.")
+                    return@setOnClickListener
                 }
 
                 val reservation = unit?.let { it1 ->
@@ -433,6 +435,8 @@ class ReservationPageDialogFragment(
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Reservation Failed")
         builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, which ->
+        }
         val dialog = builder.create()
         dialog.show()
     }
