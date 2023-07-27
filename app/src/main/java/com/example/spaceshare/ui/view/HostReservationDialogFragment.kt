@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogHostReservationBinding
+import com.example.spaceshare.enums.DeclareItemType
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
 import com.example.spaceshare.models.ReservationStatus
@@ -89,7 +90,6 @@ class HostReservationDialogFragment(
         configureButtons()
 
         return binding.root
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,6 +119,10 @@ class HostReservationDialogFragment(
 //        }
     }
 
+    private fun findItemType(type: DeclareItemType): Boolean {
+        return reservation.items!!.contains(type.toString())
+    }
+
     private fun configureBindings() {
         val formatter = SimpleDateFormat("MMM dd yyyy", Locale.getDefault())
 
@@ -129,6 +133,106 @@ class HostReservationDialogFragment(
                 binding.start.text = reservation.startDate?.toDate()?.let { formatter.format(it) }
                 binding.end.text = reservation.endDate?.toDate()?.let { formatter.format(it) }
                 binding.textView5.text = reservation.spaceRequested.toString()
+                binding.clothingItemsList.apply {
+                    visibility = if (findItemType(DeclareItemType.ClOTHING)) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
+                    text = if (reservation.items?.get(DeclareItemType.ClOTHING.toString()) == "") {
+                        "Clothing"
+                    } else {
+                        "Clothing: " + reservation.items?.get(DeclareItemType.ClOTHING.toString() + ".")
+                    }
+                }
+
+                binding.documentsItemsList.apply {
+                    visibility = if (findItemType(DeclareItemType.BOOKS_AND_DOCUMENTS)) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
+                    text = if (reservation.items?.get(DeclareItemType.BOOKS_AND_DOCUMENTS.toString()) == "") {
+                        "Books and Documents"
+                    } else {
+                        "Books and Documents: " + reservation.items?.get(DeclareItemType.BOOKS_AND_DOCUMENTS.toString() + ".")
+                    }
+                }
+
+                binding.furnitureItemsList.apply {
+                    visibility = if (findItemType(DeclareItemType.FURNITURE)) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
+                    text = if (reservation.items?.get(DeclareItemType.FURNITURE.toString()) == "") {
+                        "Small Furniture"
+                    } else {
+                        "Small Furniture: " + reservation.items?.get(DeclareItemType.FURNITURE.toString() + ".")
+                    }
+                }
+
+                binding.sportAndRecreationalItemsList.apply {
+                    visibility = if (findItemType(DeclareItemType.SPORT_AND_RECREATIONAL)) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
+                    text = if (reservation.items?.get(DeclareItemType.SPORT_AND_RECREATIONAL.toString()) == "") {
+                        "Sport and Recreational Equipment"
+                    } else {
+                        "Sport and Recreational Equipment: " + reservation.items?.get(DeclareItemType.SPORT_AND_RECREATIONAL.toString() + ".")
+                    }
+                }
+
+                binding.applianceItemsList.apply {
+                    visibility = if (findItemType(DeclareItemType.APPLIANCE)) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
+                    text = if (reservation.items?.get(DeclareItemType.APPLIANCE.toString()) == "") {
+                        "Small Appliances"
+                    } else {
+                        "Small Appliances: " + reservation.items?.get(DeclareItemType.APPLIANCE.toString() + ".")
+                    }
+                }
+
+                binding.necessaryItemsList.apply {
+                    visibility = if (findItemType(DeclareItemType.DAILY_NECESSARY)) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
+                    text = if (reservation.items?.get(DeclareItemType.DAILY_NECESSARY.toString()) == "") {
+                        "Daily Necessaries"
+                    } else {
+                        "Daily Necessaries: " + reservation.items?.get(DeclareItemType.DAILY_NECESSARY.toString() + ".")
+                    }
+                }
+
+                binding.mementosItemsList.apply {
+                    visibility = if (findItemType(DeclareItemType.MEMENTOS)) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
+                    text = if (reservation.items?.get(DeclareItemType.MEMENTOS.toString()) == "") {
+                        "Mementos and Collectibles"
+                    } else {
+                        "Mementos and Collectibles: " + reservation.items?.get(DeclareItemType.MEMENTOS.toString() + ".")
+                    }
+                }
+
+                binding.otherItemsList.apply {
+                    visibility = if (findItemType(DeclareItemType.OTHERS)) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
+                    "Others: " + reservation.items?.get(DeclareItemType.OTHERS.toString() + ".")
+                }
+
                 binding.messageTextView.text = reservation.message
                 binding.name.text = "${client.firstName} ${client.lastName}"
                 binding.phoneNumber.text = if (client.phoneNumber == "")
