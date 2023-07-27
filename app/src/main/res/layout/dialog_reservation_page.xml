@@ -373,7 +373,7 @@
 
                 <LinearLayout
                     android:layout_width="396dp"
-                    android:layout_height="86dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TextView
