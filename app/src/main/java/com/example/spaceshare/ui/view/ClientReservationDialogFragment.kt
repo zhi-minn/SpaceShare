@@ -41,6 +41,7 @@ import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.Objects
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -239,13 +240,6 @@ class ClientReservationDialogFragment(
             }
         }
 
-
-
-//        if (reservation.status != ReservationStatus.APPROVED || reservation.rated) {
-//            binding.ratingBox.visibility = View.GONE
-//        } else {
-//            binding.ratingBox.visibility = View.VISIBLE
-//        }
         val currentTimestamp = System.currentTimeMillis()
 
         if (reservation.status != ReservationStatus.APPROVED
@@ -257,21 +251,23 @@ class ClientReservationDialogFragment(
             binding.ratingBox.visibility = View.VISIBLE
         }
 
-
-//        if (reservation.rated) {
-//            binding.ratingBox.visibility = View.GONE
+//
+//        if (reservation.status == ReservationStatus.PENDING) {
+//            binding.cancelBtn.visibility = View.VISIBLE
 //        } else {
-//            binding.ratingBox.visibility = View.VISIBLE
+//            binding.cancelBtn.visibility = View.GONE
 //        }
 
-        if (reservation.status == ReservationStatus.PENDING) {
-            binding.cancelBtn.visibility = View.VISIBLE
-        } else {
+
+        val reservationCreationTimePlus12Hours = (reservation.reservationDate?.toDate()?.time ?: Long.MAX_VALUE) + TimeUnit.HOURS.toMillis(12)
+        val reservationStartTimeMinus48Hours = (reservation.startDate?.toDate()?.time ?: Long.MAX_VALUE) - TimeUnit.HOURS.toMillis(48)
+
+        if (reservation.status != ReservationStatus.PENDING
+            && (currentTimestamp > reservationCreationTimePlus12Hours || currentTimestamp > reservationStartTimeMinus48Hours)) {
             binding.cancelBtn.visibility = View.GONE
+        } else {
+            binding.cancelBtn.visibility = View.VISIBLE
         }
-
-
-
     }
 
     override fun onMapReady(map: GoogleMap) {
