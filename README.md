@@ -322,3 +322,7 @@
   * fix cancel logic
   * add client reservation detailed fragment
   * debugging host reservation
+* Calvin 6 hours (2023-07-26) [Commit](https://github.com/zhi-minn/SpaceShare/commit/60dd5477b554c0353e81c6404a7f4319a9f43d75)[Commit](https://github.com/zhi-minn/SpaceShare/commit/1f98722f5018a11de28cc6d22d964b52ef4f7b20)[Commit](https://github.com/zhi-minn/SpaceShare/commit/f1d5efd1c91256868e6e039783cf702e70ef932b)
+  * Added cancellation feature for pending Reservations for clients
+  * Added returning preserved space logic for cancelled and declined requests
+  * bug fixes and touch ups before demo
