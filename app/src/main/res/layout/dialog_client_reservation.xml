@@ -373,7 +373,7 @@
                     android:backgroundTint="@color/light_green"
                     android:text="Pay Now"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ratingBox" />
+                    app:layout_constraintTop_toBottomOf="@+id/cancelBtn" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

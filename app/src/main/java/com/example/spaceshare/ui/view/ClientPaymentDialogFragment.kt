@@ -100,7 +100,9 @@ class ClientPaymentDialogFragment(
 //                Objects.requireNonNull(childFragmentManager),
 //                "ClientPaymentDialogFragment"
 //            )
-            reservationViewModel.setReservationPaid(reservation, true)
+            CoroutineScope(Dispatchers.Main).launch {
+                reservationViewModel.setReservationPaid(reservation, true)
+            }
             showPaymentCompletedDialog()
         }
     }
