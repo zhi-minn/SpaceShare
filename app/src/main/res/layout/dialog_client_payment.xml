@@ -206,7 +206,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/info_layout2"
                 android:layout_width="352dp"
-                android:layout_height="72dp"
+                android:layout_height="200dp"
                 android:layout_marginStart="5dp"
                 android:translationY="-30dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -237,22 +237,86 @@
                     android:inputType="text"
                     android:text="200  CAD  x  5  nights"
                     android:textColor="@color/black"
+                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/price_details_title" />
 
                 <TextView
+                    android:id="@+id/tax_text"
+                    android:layout_width="164dp"
+                    android:layout_height="20dp"
+                    android:ems="10"
+                    android:text="Taxes 13%"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@+id/price_calculation_text"
+                    tools:layout_editor_absoluteX="10dp" />
+
+                <TextView
                     android:id="@+id/price_calculation_amount"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="20dp"
                     android:ems="10"
                     android:gravity="right"
-                    android:text="1000 CAD"
-                    android:textSize="16sp"
+                    android:text="1000  CAD"
+                    android:textSize="14sp"
                     android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:layout_marginEnd="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/price_calculation_text"
                     tools:layout_editor_absoluteY="38dp" />
+
+                <TextView
+                    android:id="@+id/tax_amount"
+                    android:layout_width="168dp"
+                    android:layout_height="21dp"
+                    android:ems="10"
+                    android:gravity="right"
+                    android:text="130  CAD"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/tax_text"
+                    tools:layout_editor_absoluteY="58dp" />
+
+                <View
+                    android:id="@+id/total_price_divider"
+                    style="@style/HorizontalDivider"
+                    android:layout_width="100dp"
+                    android:layout_height="2dp"
+                    android:background="@color/black"
+                    android:translationY="5dp"
+                    app:layout_constraintTop_toBottomOf="@+id/tax_amount"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/total_price_tax"
+                    android:layout_width="164dp"
+                    android:layout_height="20dp"
+                    android:ems="10"
+                    android:text="Total"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:translationY="5dp"
+                    tools:layout_editor_absoluteX="10dp"
+                    tools:layout_editor_absoluteY="86dp" />
+
+                <TextView
+                    android:id="@+id/total_price"
+                    android:layout_width="168dp"
+                    android:layout_height="21dp"
+                    android:ems="10"
+                    android:gravity="right"
+                    android:text="1130  CAD"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:translationY="5dp"
+                    app:layout_constraintStart_toEndOf="@+id/tax_text"
+                    tools:layout_editor_absoluteY="86dp" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

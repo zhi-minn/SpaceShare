@@ -152,7 +152,11 @@ class ClientReservationDialogFragment(
 //                Objects.requireNonNull(childFragmentManager),
 //                "ItemDeclarationFragment"
 //            )
-            val clientPaymentDialogFragment = ClientPaymentDialogFragment(this)
+            val clientPaymentDialogFragment = ClientPaymentDialogFragment(reservation, listing)
+            clientPaymentDialogFragment.show(
+                Objects.requireNonNull(childFragmentManager),
+               "ClientPaymentDialogFragment"
+            )
         }
     }
 
@@ -203,7 +207,7 @@ class ClientReservationDialogFragment(
     }
 
     private fun configureButtons() {
-        .btnBack.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             this.dismiss()
         }
     }

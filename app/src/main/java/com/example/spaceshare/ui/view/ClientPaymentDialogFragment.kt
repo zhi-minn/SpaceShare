@@ -1,62 +1,33 @@
 package com.example.spaceshare.ui.view
 
-import MapDialogFragment
-import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
-import com.example.spaceshare.R
-import com.example.spaceshare.adapters.ImageAdapter
-import com.example.spaceshare.databinding.DialogClientReservationBinding
-import com.example.spaceshare.enums.Amenity
-import com.example.spaceshare.models.ImageModel
+import com.example.spaceshare.databinding.DialogClientPaymentBinding
 import com.example.spaceshare.models.Listing
 import com.example.spaceshare.models.Reservation
-import com.example.spaceshare.models.ReservationStatus
 import com.example.spaceshare.ui.viewmodel.ListingViewModel
-import com.example.spaceshare.ui.viewmodel.ProfileViewModel
 import com.example.spaceshare.ui.viewmodel.ReservationViewModel
-import com.example.spaceshare.utils.GeocoderUtil
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.text.SimpleDateFormat
-import java.util.Locale
+import java.time.Instant
+import java.util.Date
 import java.util.Objects
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
-class ClientReservationDialogFragment(
+class ClientPaymentDialogFragment(
     private val reservation: Reservation,
-    private val listing: Listing,
-    private val listener: OnReservationStatusChangedListener
-) : DialogFragment(), OnMapReadyCallback {
+    private val listing: Listing
+) : DialogFragment() {
 
     companion object {
         private val TAG = this::class.simpleName
     }
-
-    @Inject
-    lateinit var profileViewModel: ProfileViewModel
 
     @Inject
     lateinit var listingViewModel: ListingViewModel
@@ -64,35 +35,19 @@ class ClientReservationDialogFragment(
     @Inject
     lateinit var reservationViewModel: ReservationViewModel
 
-    private lateinit var binding: DialogClientReservationBinding
-
-    interface OnReservationStatusChangedListener {
-        fun onStatusChanged()
-    }
+    private lateinit var binding: DialogClientPaymentBinding
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DialogClientReservationBinding.inflate(inflater, container, false)
-
-        binding.mapView.onCreate(savedInstanceState)
-        binding.mapView.getMapAsync(this)
-
-        // Get a reference to the Toolbar
-
-
-        // Set the navigation icon and click listener
-//        toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.arrow_left)
-//        toolbar.setNavigationOnClickListener { dismiss() } // dismiss the DialogFragment when the back navigation icon is pressed
-//
-//        // Set the title
-//        toolbarTitle.text = "Reservation"
+        binding = DialogClientPaymentBinding.inflate(inflater, container, false)
 
         configureBindings()
-        configureButtons()
+//        configureButtons()
 
         return binding.root
 
@@ -101,59 +56,41 @@ class ClientReservationDialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val thumbsUpButton: ImageView = view.findViewById(R.id.thumbs_up)
-        val thumbsDownButton: ImageView = view.findViewById(R.id.thumbs_down)
-
-        val animScaleUp = AnimationUtils.loadAnimation(context, R.anim.scale_up)
-        val animScaleDown = AnimationUtils.loadAnimation(context, R.anim.scale_down)
-
-        var thumbsClicked = false
-
-        thumbsUpButton.setOnClickListener {
-            if (!thumbsClicked) {
-                val newListing = listing.copy()
-                newListing.likes += 1
-                listingViewModel.updateListing(newListing)
-
-                thumbsUpButton.startAnimation(animScaleUp)
-                thumbsUpButton.startAnimation(animScaleDown)
-                thumbsUpButton.setImageResource(R.drawable.like_clicked)
-
-                // fix likes real time
-                var curLikes = (listing.likes + 1).toString()
-                binding.likes.text = curLikes
-                thumbsClicked = true
-                reservation.rated = true
-                reservationViewModel.setReservationRated(reservation,true)
-            }
+        binding.confirmPayBtn.setOnClickListener {
+            val clientPaymentDialogFragment = ClientPaymentDialogFragment(reservation, listing)
+            clientPaymentDialogFragment.show(
+                Objects.requireNonNull(childFragmentManager),
+                "ClientPaymentDialogFragment"
+            )
         }
+    }
 
-        thumbsDownButton.setOnClickListener {
-            if (!thumbsClicked) {
-                // Just animate the thumbsDownButton, no updates are performed
-                thumbsDownButton.startAnimation(animScaleUp)
-                thumbsDownButton.startAnimation(animScaleDown)
-                thumbsDownButton.setImageResource(R.drawable.dislike_clicked)
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun configureBindings() {
+        val totalTime = reservation.endDate!!.toDate().time - reservation.startDate!!.toDate().time
+        val totalDays = totalTime / (1000 * 60 * 60 * 24) + 1
 
-                thumbsClicked = true
-                reservation.rated = true
-                reservationViewModel.setReservationRated(reservation,true)
-            }
-        }
+        binding.priceCalculationText.text = formatPriceText(listing.price.toString(), totalDays.toString())
+        binding.priceCalculationAmount.text = formatWithCurrency(reservation.totalCost.toInt().toString())
 
-        binding.cancelBtn.setOnClickListener {
+        val ONTARIO_TAX = 13 // TODO: generate tax based on region
+        binding.taxText.text = formatTaxText(ONTARIO_TAX.toString())
+        val tax = (reservation.totalCost * ONTARIO_TAX / 100).toInt()
+        binding.taxAmount.text = formatWithCurrency(tax.toString())
 
-            showConfirmCancelDialog()
-        }
+        binding.totalPrice.text = formatWithCurrency((reservation.totalCost.toInt() + tax).toString())
+    }
 
-        binding.payBtn.setOnClickListener {
-//            val itemDeclarationFragment = ItemDeclarationFragment(this)
-//            itemDeclarationFragment.show(
-//                Objects.requireNonNull(childFragmentManager),
-//                "ItemDeclarationFragment"
-//            )
-            val clientPaymentDialogFragment = ClientPaymentDialogFragment(this)
-        }
+    private fun formatWithCurrency(price : String): String {
+        return "$price  CAD"
+    }
+
+    private fun formatPriceText(pricePerDay : String, days : String): String {
+        return formatWithCurrency(pricePerDay) + "  x  $days  nights"
+    }
+
+    private fun formatTaxText(tax: String): String {
+        return "Taxes $tax%"
     }
 
 
