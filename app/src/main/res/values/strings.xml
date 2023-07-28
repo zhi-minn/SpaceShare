@@ -74,4 +74,5 @@
     <string name="declared_item_types">Declared Item Types:</string>
     <string name="cancel_policy">Cancellation Policy:\n\n1. During the pending period: If your reservation status is "Pending", you can cancel your reservation at any point without penalty.\n\n2. After the pending period (Reservation Confirmed): Once your reservation status is no longer "Pending" and has been confirmed, you can cancel your reservation without penalty up to 48 hours before the reservation start date and time, but this cancellation option is only available for 12 hours after the reservation has been made.\n\n3. Less than 48 hours before the reservation starts: If you cancel your reservation less than 48 hours before the start, no cancellation is allowed. This is to ensure that the host can manage their space effectively and that other clients do not miss out on potential reservation slots.</string>
     <string name="confirm_payment">Confirm Payment</string>
+    <string name="pay_instruction">We currently don\'t process payments. Please directly transfer the payment to host\'s account below: </string>
 </resources>
