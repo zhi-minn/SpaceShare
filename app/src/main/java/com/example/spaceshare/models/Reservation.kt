@@ -41,7 +41,7 @@ data class Reservation(
     var rated:Boolean = false, // likes will only goes up when user click thumbs_up when rating,clicking thumbs_down won't do anything
     val items: Map<String, String>? = null,
     val reservationDate: Timestamp = Timestamp.now(),
-    val paymentCompleted: Boolean = false,
+    var paymentCompleted: Boolean = false,
 //    val rating:Int? = null
 ) {
 }

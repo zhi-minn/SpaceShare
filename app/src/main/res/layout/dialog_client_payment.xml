@@ -297,7 +297,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="@color/light_green"
-                android:text="Pay Now"
+                android:text="I've completed the payment"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 

@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import android.graphics.Typeface
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.example.spaceshare.R
 import com.example.spaceshare.databinding.DialogClientPaymentBinding
@@ -94,11 +95,13 @@ class ClientPaymentDialogFragment(
         super.onViewCreated(view, savedInstanceState)
 
         binding.confirmPayBtn.setOnClickListener {
-            val clientPaymentDialogFragment = ClientPaymentDialogFragment(reservation, listing)
-            clientPaymentDialogFragment.show(
-                Objects.requireNonNull(childFragmentManager),
-                "ClientPaymentDialogFragment"
-            )
+//            val clientPaymentDialogFragment = ClientPaymentDialogFragment(reservation, listing)
+//            clientPaymentDialogFragment.show(
+//                Objects.requireNonNull(childFragmentManager),
+//                "ClientPaymentDialogFragment"
+//            )
+            reservationViewModel.setReservationPaid(reservation, true)
+            showPaymentCompletedDialog()
         }
     }
 
@@ -155,6 +158,17 @@ class ClientPaymentDialogFragment(
 
     private fun formatTaxText(tax: String): String {
         return "Taxes $tax%"
+    }
+
+    private fun showPaymentCompletedDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Thank you!")
+        builder.setMessage("The host will soon reach out to you about check-in details!")
+        builder.setPositiveButton("OK") { dialog, which ->
+            this.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 
 
