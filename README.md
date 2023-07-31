@@ -326,3 +326,10 @@
   * Added cancellation feature for pending Reservations for clients
   * Added returning preserved space logic for cancelled and declined requests
   * bug fixes and touch ups before demo
+* Calvin 4 hours (2023-07-28) [Commit](https://github.com/zhi-minn/SpaceShare/commit/d6403dcbd04d47f6fbcbd77ab44582cef6a1d0f2) [Commit](https://github.com/zhi-minn/SpaceShare/commit/a82ccc1cc5cd705296961435453e105247d7c964)
+  * Client payment page
+  * ui + backend
+  * Updated Reservation model
+* Youming 2 hours (2023-07-29) [Commit](https://github.com/zhi-minn/SpaceShare/commit/c14e08cfa0006e97fa4e595684f31479795d7831)
+  * Fix ClientPaymentDialogFragment UI
+  * fix ClientPay logic

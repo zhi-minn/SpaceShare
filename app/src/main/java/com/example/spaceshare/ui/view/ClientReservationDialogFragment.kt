@@ -145,6 +145,19 @@ class ClientReservationDialogFragment(
 
             showConfirmCancelDialog()
         }
+
+        binding.payBtn.setOnClickListener {
+//            val itemDeclarationFragment = ItemDeclarationFragment(this)
+//            itemDeclarationFragment.show(
+//                Objects.requireNonNull(childFragmentManager),
+//                "ItemDeclarationFragment"
+//            )
+            val clientPaymentDialogFragment = ClientPaymentDialogFragment(reservation, listing)
+            clientPaymentDialogFragment.show(
+                Objects.requireNonNull(childFragmentManager),
+               "ClientPaymentDialogFragment"
+            )
+        }
     }
 
     private fun showConfirmCancelDialog() {
@@ -267,6 +280,13 @@ class ClientReservationDialogFragment(
             binding.cancelBtn.visibility = View.GONE
         } else {
             binding.cancelBtn.visibility = View.VISIBLE
+        }
+
+        if (reservation.status == ReservationStatus.APPROVED &&
+            !reservation.paymentCompleted) {
+            binding.payBtn.visibility = View.VISIBLE
+        } else {
+            binding.payBtn.visibility = View.GONE
         }
     }
 

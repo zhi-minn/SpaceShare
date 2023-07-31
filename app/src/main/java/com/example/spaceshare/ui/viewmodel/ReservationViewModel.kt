@@ -132,4 +132,15 @@ class ReservationViewModel @Inject constructor(
             }
         }
     }
+
+    fun setReservationPaid(reservation : Reservation, paid : Boolean) {
+        viewModelScope.launch {
+            try {
+                repo.setReservationRated(reservation, paid)
+
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
 }

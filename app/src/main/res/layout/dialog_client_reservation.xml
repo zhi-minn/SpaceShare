@@ -365,6 +365,16 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ratingBox" />
 
+                <Button
+                    android:id="@+id/payBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:backgroundTint="@color/light_green"
+                    android:text="Pay Now"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cancelBtn" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

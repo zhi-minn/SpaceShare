@@ -142,7 +142,7 @@ class HostReservationDialogFragment(
                     text = if (reservation.items?.get(DeclareItemType.ClOTHING.toString()) == "") {
                         "Clothing"
                     } else {
-                        "Clothing: " + reservation.items?.get(DeclareItemType.ClOTHING.toString() + ".")
+                        "Clothing"
                     }
                 }
 
@@ -155,7 +155,7 @@ class HostReservationDialogFragment(
                     text = if (reservation.items?.get(DeclareItemType.BOOKS_AND_DOCUMENTS.toString()) == "") {
                         "Books and Documents"
                     } else {
-                        "Books and Documents: " + reservation.items?.get(DeclareItemType.BOOKS_AND_DOCUMENTS.toString() + ".")
+                        "Books and Documents"
                     }
                 }
 
@@ -168,7 +168,7 @@ class HostReservationDialogFragment(
                     text = if (reservation.items?.get(DeclareItemType.FURNITURE.toString()) == "") {
                         "Small Furniture"
                     } else {
-                        "Small Furniture: " + reservation.items?.get(DeclareItemType.FURNITURE.toString() + ".")
+                        "Small Furniture"
                     }
                 }
 
@@ -181,7 +181,7 @@ class HostReservationDialogFragment(
                     text = if (reservation.items?.get(DeclareItemType.SPORT_AND_RECREATIONAL.toString()) == "") {
                         "Sport and Recreational Equipment"
                     } else {
-                        "Sport and Recreational Equipment: " + reservation.items?.get(DeclareItemType.SPORT_AND_RECREATIONAL.toString() + ".")
+                        "Sport and Recreational Equipment"
                     }
                 }
 
@@ -194,7 +194,7 @@ class HostReservationDialogFragment(
                     text = if (reservation.items?.get(DeclareItemType.APPLIANCE.toString()) == "") {
                         "Small Appliances"
                     } else {
-                        "Small Appliances: " + reservation.items?.get(DeclareItemType.APPLIANCE.toString() + ".")
+                        "Small Appliances"
                     }
                 }
 
@@ -207,7 +207,7 @@ class HostReservationDialogFragment(
                     text = if (reservation.items?.get(DeclareItemType.DAILY_NECESSARY.toString()) == "") {
                         "Daily Necessaries"
                     } else {
-                        "Daily Necessaries: " + reservation.items?.get(DeclareItemType.DAILY_NECESSARY.toString() + ".")
+                        "Daily Necessaries"
                     }
                 }
 
@@ -220,7 +220,7 @@ class HostReservationDialogFragment(
                     text = if (reservation.items?.get(DeclareItemType.MEMENTOS.toString()) == "") {
                         "Mementos and Collectibles"
                     } else {
-                        "Mementos and Collectibles: " + reservation.items?.get(DeclareItemType.MEMENTOS.toString() + ".")
+                        "Mementos and Collectibles"
                     }
                 }
 
@@ -230,7 +230,7 @@ class HostReservationDialogFragment(
                     } else {
                         View.GONE
                     }
-                    "Others: " + reservation.items?.get(DeclareItemType.OTHERS.toString() + ".")
+                    text = "Others"
                 }
 
                 binding.messageTextView.text = reservation.message
