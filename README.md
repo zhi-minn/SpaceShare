@@ -306,3 +306,6 @@
 * Minn 1.5 hours (2023-07-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/97)[PR](https://github.com/zhi-minn/SpaceShare/pull/98)
   * Delete associated chats when listing deleted
   * Prevent listing deletion if there exists an upcoming reservation
+* Youming 2 hours (2023-07-29) [Commit](https://github.com/zhi-minn/SpaceShare/commit/c14e08cfa0006e97fa4e595684f31479795d7831)
+  * Fix ClientPaymentDialogFragment UI
+  * fix ClientPay logic
