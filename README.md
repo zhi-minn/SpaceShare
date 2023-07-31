@@ -296,16 +296,40 @@
   * Updated Reservation model
   * Added new fields for reservation page
   * Updated reservation page view
+* Calvin 7 hours (2023-07-24) [Commit]([0106c57d26c4dccbd2f199f4e2524572bd434644](https://github.com/zhi-minn/SpaceShare/commit/0106c57d26c4dccbd2f199f4e2524572bd434644))[Commit](https://github.com/zhi-minn/SpaceShare/commit/01720b38a0d5f245da7c71f07da1d1710689aa30)
+  * Added fetch user, send message logic for host reservation page
+  * Host reservation page ui update
+  * Bug fixs and ui updates
 * Youming 12 hours (2023-07-24) [PR](https://github.com/zhi-minn/SpaceShare/pull/89)
   * add hosting reservation tab
   * add hosting reservation function
   * create host reservation items
   * host now can accept and reject requests
+* Calvin 12 hours (2023-07-25) [Commit](https://github.com/zhi-minn/SpaceShare/commit/628c3dadb123ba45b28864da773954fd668cfc8c)[Commit](https://github.com/zhi-minn/SpaceShare/commit/1e9b89169cf16045b186ee062e2b2919429faebc#diff-dc52dbfdf4a5091e41a6127a738f0e0694898a35687144f2d95b34a77dd5a043)[Commit](https://github.com/zhi-minn/SpaceShare/commit/068d42b07ec36ab4fe4ac3a0e31444ebcf3c75e3)[Commit](https://github.com/zhi-minn/SpaceShare/commit/bb4bf1153dc134b3b84cc126aa82c81972899973)[Commit](https://github.com/zhi-minn/SpaceShare/commit/dd3796332f78c478a93539251592dec700541581)
+  * Refactored id field in Reservation model to be unique id
+  * Added backend host approve/decline request logic
+  * Designed and implemented algorithm for current available space using realtime db
+  * Configured binding for Host Reservation Page
+  * Client Reservation Page ui fixes
 * Chang 6 hours (2023-07-25) [PR](https://github.com/zhi-minn/SpaceShare/pull/99)
   * Added shortlist functionality
 * Minn 1.5 hours (2023-07-26) [PR](https://github.com/zhi-minn/SpaceShare/pull/97)[PR](https://github.com/zhi-minn/SpaceShare/pull/98)
   * Delete associated chats when listing deleted
   * Prevent listing deletion if there exists an upcoming reservation
+* Youming 20 hours (2023-07-25 -> 2023-07-26) [commit](https://github.com/zhi-minn/SpaceShare/commit/62d86e5712e048c22dda477642dcb00b1e483097)
+  * Add rating system
+  * fix UI (updating real-time)
+  * fix cancel logic
+  * add client reservation detailed fragment
+  * debugging host reservation
+* Calvin 6 hours (2023-07-26) [Commit](https://github.com/zhi-minn/SpaceShare/commit/60dd5477b554c0353e81c6404a7f4319a9f43d75)[Commit](https://github.com/zhi-minn/SpaceShare/commit/1f98722f5018a11de28cc6d22d964b52ef4f7b20)[Commit](https://github.com/zhi-minn/SpaceShare/commit/f1d5efd1c91256868e6e039783cf702e70ef932b)
+  * Added cancellation feature for pending Reservations for clients
+  * Added returning preserved space logic for cancelled and declined requests
+  * bug fixes and touch ups before demo
+* Calvin 4 hours (2023-07-28) [Commit](https://github.com/zhi-minn/SpaceShare/commit/d6403dcbd04d47f6fbcbd77ab44582cef6a1d0f2) [Commit](https://github.com/zhi-minn/SpaceShare/commit/a82ccc1cc5cd705296961435453e105247d7c964)
+  * Client payment page
+  * ui + backend
+  * Updated Reservation model
 * Youming 2 hours (2023-07-29) [Commit](https://github.com/zhi-minn/SpaceShare/commit/c14e08cfa0006e97fa4e595684f31479795d7831)
   * Fix ClientPaymentDialogFragment UI
   * fix ClientPay logic
